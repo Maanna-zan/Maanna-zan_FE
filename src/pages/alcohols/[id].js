@@ -18,7 +18,7 @@ const Alcohol = () => {
       const { data } = await apis.get(`/posts/${query.id}`, {
         headers: {
           // 'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${token}`,
+          refresh_token: `${token}`,
         },
       });
       console.log('data', data.data);
@@ -29,23 +29,23 @@ const Alcohol = () => {
     onSuccess: () => {},
   });
 
-  const checkToken = async () => {
-    const token = cookies.get('refresh_token');
-    apis.get('/user', {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-  };
+  // const checkToken = async () => {
+  //   const token = cookies.get('refresh_token');
+  //   apis.get('/user', {
+  //     headers: {
+  //       refresh_token: `${token}`,
+  //     },
+  //   });
+  // };
 
-  //가드 토큰 없으면 보내줘
-  useEffect(() => {
-    const refresh_token = cookies.get('refresh_token');
-    if (!refresh_token) {
-      router.push('/signin');
-    }
-    checkToken();
-  }, []);
+  // //가드 토큰 없으면 보내줘///
+  // useEffect(() => {
+  //   const refresh_token = cookies.get('refresh_token');
+  //   if (!refresh_token) {
+  //     router.push('/signin');
+  //   }
+  //   checkToken();
+  // }, []);
 
   return (
     <div>
