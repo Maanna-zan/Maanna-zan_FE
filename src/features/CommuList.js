@@ -4,8 +4,10 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { apis } from '../shared/axios';
 import { cookies } from '../shared/cookie';
+import Alcohols from '../pages/alcohols';
+import Search from '../pages/alcohols/search';
 
-const AlcoholList = () => {
+const CommuList = () => {
   const go = useRouter();
   //토큰은 어세스나 리프레시 토큰 둘 중 하나만 헤더로 보여주면 된다.
   const token = cookies.get('refresh_token');
@@ -17,6 +19,7 @@ const AlcoholList = () => {
         headers: {
           // 'Content-Type': 'multipart/form-data',
           refresh_token: `${token}`,
+          //   Authorization: `Bearer ${token}`,
         },
       });
       console.log('data', data);
@@ -53,6 +56,7 @@ const AlcoholList = () => {
           >
             <h1>{alcohol.storename}</h1>
             <div>{alcohol.id}</div>
+            <div>{alcohol.likecnt}</div>
             <img src={alcohol.image} alt={alcohol.storename} />
             <div>{alcohol.description}</div>
           </div>
@@ -61,4 +65,4 @@ const AlcoholList = () => {
   );
 };
 
-export default AlcoholList;
+export default CommuList;
