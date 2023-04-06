@@ -1,13 +1,7 @@
-import AlcoholList from '@features/AlcocolList';
 import React from 'react';
 
 const Alcohols = () => {
-  return (
-    <div>
-      index
-      <AlcoholList />
-    </div>
-  );
+  return <div>index</div>;
 };
 
 export default Alcohols;
