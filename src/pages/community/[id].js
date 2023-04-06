@@ -13,7 +13,7 @@ const CommunityId = () => {
   const token = cookies.get('refresh_token');
 
   const { data, isLoading, isError, isSuccess } = useQuery({
-    queryKey: ['GET_ALCHOL'],
+    queryKey: ['GET_COMMU'],
     queryFn: async () => {
       const { data } = await apis.get(`/posts/${query.id}`, {
         headers: {
@@ -51,6 +51,7 @@ const CommunityId = () => {
     <div>
       innn
       <div>{data?.id}</div>
+      <div>{data?.likecnt}</div>
       <div>{data?.storename}</div>
       <div>{data?.nickname}</div>
       <img src={data?.image} alt={data?.storename} />

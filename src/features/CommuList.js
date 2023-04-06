@@ -1,11 +1,8 @@
 import React from 'react';
 import { useQuery } from 'react-query';
-import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { apis } from '../shared/axios';
 import { cookies } from '../shared/cookie';
-import Alcohols from '../pages/alcohols';
-import Search from '../pages/alcohols/search';
 
 const CommuList = () => {
   const go = useRouter();
@@ -13,7 +10,7 @@ const CommuList = () => {
   const token = cookies.get('refresh_token');
   console.log('token', token);
   const { data, isLoading, isError, isSuccess } = useQuery({
-    queryKey: ['GET_ALCHOLS'],
+    queryKey: ['GET_COMMUS'],
     queryFn: async () => {
       const data = await apis.get('/posts', {
         headers: {
@@ -47,18 +44,18 @@ const CommuList = () => {
     <div>
       AlcholList
       {data &&
-        data.map((alcohol) => (
+        data.map((community) => (
           <div
-            key={alcohol.id}
+            key={community.id}
             onClick={() => {
-              go.push(`/alcohols/${alcohol.id}`);
+              go.push(`/community/${community.id}`);
             }}
           >
-            <h1>{alcohol.storename}</h1>
-            <div>{alcohol.id}</div>
-            <div>{alcohol.likecnt}</div>
-            <img src={alcohol.image} alt={alcohol.storename} />
-            <div>{alcohol.description}</div>
+            <h1>{community.storename}</h1>
+            <div>{community.id}</div>
+            <div>{community.likecnt}</div>
+            <img src={community.image} alt={community.storename} />
+            <div>{community.description}</div>
           </div>
         ))}
     </div>
