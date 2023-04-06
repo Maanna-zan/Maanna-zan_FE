@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { lightTheme } from '@components/theme/lightTheme';
 
-const StyledInput = styled.input`
+const StyledBox = styled.div`
   background-color: ${(props) => props.backgroundColor};
   width: ${(props) => props.width};
   margin: ${(props) => props.margin};
@@ -39,7 +39,7 @@ const StyledInput = styled.input`
 //     onClick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 //   }
 
-export const InputText = ({
+export const BoxText = ({
   block = false,
   size = 'md',
   variant = 'default',
@@ -66,20 +66,16 @@ export const InputText = ({
   // about size
   switch (size) {
     case 'sm':
-      padding = '10px 16px';
-      fontSize = '14px';
+      padding = '15px';
       break;
     case 'md':
-      padding = '11px 20px';
-      fontSize = '14px';
+      padding = '18px 12px 18px 10px';
       break;
     case 'lg':
       padding = '12px 24px';
-      fontSize = '16px';
       break;
     case 'xl':
       padding = '14px 30px';
-      fontSize = '20px';
       break;
   }
 
@@ -91,34 +87,14 @@ export const InputText = ({
   // about style 폰트컬러설정다시
   switch (variant) {
     case 'default':
-      backgroundColor = lightTheme.white;
+      backgroundColor = lightTheme.gray50;
       fontColor = lightTheme.gray200;
       borderStyle = 'solid';
       borderWidth = '1px';
       borderColor = lightTheme.gray400;
-      hoverBackgroundColor = lightTheme.white;
-      hoverBorderColor = lightTheme.gray;
-      hoverFontColor = lightTheme.fontColorDark;
-      break;
-    case 'primary':
-      backgroundColor = lightTheme.primaryNormal;
-      fontColor = lightTheme.white;
-      borderStyle = 'solid';
-      borderWidth = '1px';
-      borderColor = lightTheme.primaryNormal;
-      hoverBackgroundColor = lightTheme.primaryHeavy;
-      hoverBorderColor = lightTheme.primaryHeavy;
-      hoverFontColor = lightTheme.white;
-      break;
-    case 'primaryBolder':
-      backgroundColor = lightTheme.white;
-      fontColor = lightTheme.primaryHeavy;
-      borderStyle = 'solid';
-      borderWidth = '1px';
-      borderColor = lightTheme.primaryNormal;
-      hoverBackgroundColor = lightTheme.primaryNormal;
-      hoverBorderColor = lightTheme.primaryNormal;
-      hoverFontColor = lightTheme.white;
+      hoverBackgroundColor = lightTheme.gray50;
+      hoverBorderColor = lightTheme.gray50;
+      hoverFontColor = lightTheme.gray50;
       break;
     case 'grayBox':
       backgroundColor = lightTheme.white;
@@ -141,7 +117,7 @@ export const InputText = ({
   }
 
   return (
-    <StyledInput
+    <StyledBox
       backgroundColor={backgroundColor}
       fontSize={fontSize}
       width={width}
@@ -158,6 +134,6 @@ export const InputText = ({
       {...props}
     >
       {label}
-    </StyledInput>
+    </StyledBox>
   );
 };
