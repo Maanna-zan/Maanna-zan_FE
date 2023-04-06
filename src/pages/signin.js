@@ -4,8 +4,7 @@ import { apis } from '../shared/axios';
 import { cookies } from '../shared/cookie';
 import { useRouter } from 'next/router';
 import jwtDecode from 'jwt-decode';
-import { StyledButton } from '@components/Atoms/Button';
-import { ButtonText } from '@components/Atoms/Button';
+
 const SignIn = () => {
   const router = useRouter();
   const [user, setUser] = React.useState({
@@ -84,13 +83,6 @@ const SignIn = () => {
       >
         회원가입
       </button>
-      <ButtonText
-        label="Click me"
-        size="md"
-        variant="primary"
-        active={true}
-        onClick={() => console.log('Button clicked!')}
-      />
     </div>
   );
 };

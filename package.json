@@ -6,9 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "lint": "next lint"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.3",
@@ -26,16 +24,5 @@
     "react-redux": "^8.0.5",
     "styled-components": "^5.3.9",
     "universal-cookie": "^4.0.4"
-  },
-  "devDependencies": {
-    "@storybook/addon-essentials": "7.0.2",
-    "@storybook/addon-interactions": "7.0.2",
-    "@storybook/addon-links": "7.0.2",
-    "@storybook/blocks": "7.0.2",
-    "@storybook/nextjs": "7.0.2",
-    "@storybook/react": "7.0.2",
-    "@storybook/testing-library": "0.0.14-next.2",
-    "eslint-plugin-storybook": "^0.6.11",
-    "storybook": "7.0.2"
   }
 }
