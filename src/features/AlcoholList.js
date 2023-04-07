@@ -1,25 +1,20 @@
 import React from 'react';
 import { useQuery } from 'react-query';
-import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { apis } from '../shared/axios';
 import { cookies } from '../shared/cookie';
-import Alcohols from '../pages/alcohols';
-import Search from '../pages/alcohols/search';
 
-const CommuList = () => {
+const AlcoholList = () => {
   const go = useRouter();
   //토큰은 어세스나 리프레시 토큰 둘 중 하나만 헤더로 보여주면 된다.
   const token = cookies.get('refresh_token');
   console.log('token', token);
   const { data, isLoading, isError, isSuccess } = useQuery({
-    queryKey: ['GET_ALCHOLS'],
+    queryKey: ['GET_ALCOHOLS'],
     queryFn: async () => {
       const data = await apis.get('/posts', {
         headers: {
-          // 'Content-Type': 'multipart/form-data',
           refresh_token: `${token}`,
-          //   Authorization: `Bearer ${token}`,
         },
       });
       console.log('data', data);
@@ -65,4 +60,4 @@ const CommuList = () => {
   );
 };
 
-export default CommuList;
+export default AlcoholList;
