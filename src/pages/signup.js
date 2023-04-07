@@ -22,7 +22,6 @@ const SignUp = () => {
     phoneNumber: '',
     email: '',
     password: '',
-
     birth: '',
   });
   const changHandler = (event) => {
@@ -52,6 +51,7 @@ const SignUp = () => {
       alert(error.response.data.message);
     },
     onSuccess: () => {
+      alert('회원가입 완료했습니다');
       router.push('/signin');
     },
   });
@@ -193,7 +193,6 @@ const SignUp = () => {
         onChange={handlePasswordChange}
         required
       />
-      {<p style={{ color: 'red' }}>비밀번호 확인해주세요.</p>}
       {passwordError && (
         <p style={{ color: 'red' }}>비밀번호가 일치하지 않습니다.</p>
       )}

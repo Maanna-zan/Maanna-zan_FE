@@ -8,6 +8,7 @@ import Alcohols from '.';
 
 const Alcohol = () => {
   const queryClient = useQueryClient();
+  const router = useRouter();
   const { query } = useRouter();
   console.log('query', query);
 
@@ -50,18 +51,25 @@ const Alcohol = () => {
 
   return (
     <div>
+      <button
+        onClick={() => {
+          router.push('/alcohols');
+        }}
+      >
+        뒤로가기
+      </button>
       innn
-      <div>{data?.id}</div>
-      <div>{data?.likecnt}</div>
-      <div>{data?.storename}</div>
-      <div>{data?.nickname}</div>
-      <img src={data?.image} alt={data?.storename} />
-      <div>{data?.likecnt}</div>
-      <div>{data?.title}</div>
-      <div>{data?.description}</div>
+      <div>id{data?.id}</div>
+      <div>like{data?.like}</div>
+      <div>storename{data?.storename}</div>
+      <div>nickname{data?.nickname}</div>
+      <img src={data?.s3Url} alt={data?.storename} />
+      <div>likecnt{data?.likecnt}</div>
+      <div>title{data?.title}</div>
+      <div>description{data?.description}</div>
       <div>소주{data?.soju}</div>
       <div>맥주{data?.beer}</div>
-      <div>생성일{data?.createAt.substr(0, 10)}</div>
+      {/* <div>생성일{data?.createAt.substr(0, 10)}</div> */}
     </div>
   );
 };
