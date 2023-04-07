@@ -22,7 +22,6 @@ const SignUp = () => {
     phoneNumber: '',
     email: '',
     password: '',
-
     birth: '',
   });
   const changHandler = (event) => {
@@ -193,7 +192,6 @@ const SignUp = () => {
         onChange={handlePasswordChange}
         required
       />
-      {<p style={{ color: 'red' }}>비밀번호 확인해주세요.</p>}
       {passwordError && (
         <p style={{ color: 'red' }}>비밀번호가 일치하지 않습니다.</p>
       )}
