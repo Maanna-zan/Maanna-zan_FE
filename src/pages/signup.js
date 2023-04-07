@@ -1,21 +1,42 @@
 import { apis } from '../shared/axios';
-import React from 'react';
+import React, { useState } from 'react';
 import { useMutation } from 'react-query';
 import { useRouter } from 'next/router';
+import { useConfirm } from '../hook/useConfirm';
 
 const SignUp = () => {
   const router = useRouter();
+
+  // 비동기서버통신을 위한 커스텀 훅
+  const [confirm] = useConfirm();
+  const confirmEmail = () => {
+    confirm({ type: 'email', value: user.email });
+  };
+  const confirmNickName = () => {
+    confirm({ type: 'nickName', value: user.nickName });
+  };
+
   const [user, setUser] = React.useState({
     userName: '',
     nickName: '',
     phoneNumber: '',
     email: '',
     password: '',
+
     birth: '',
   });
   const changHandler = (event) => {
     const { name, value } = event.target;
     setUser((pre) => ({ ...pre, [name]: value }));
+  };
+  const [passwordError, setPasswordError] = useState(false);
+  const handlePasswordChange = (e) => {
+    const { name, value } = e.target;
+    setUser((pre) => ({ ...pre, [name]: value }));
+
+    if (name === 'checkPassword') {
+      setPasswordError(user.password !== value);
+    }
   };
 
   // passwordCheck 빼고 나머지 라는 뜻
@@ -99,6 +120,7 @@ const SignUp = () => {
         justifyContent: 'center',
         flexDirection: 'column',
         // alignContent: 'center',
+        gap: '10px',
       }}
     >
       회원가입
@@ -119,6 +141,9 @@ const SignUp = () => {
         maxLength="16"
         required
       />
+      <button type="button" onClick={confirmNickName}>
+        중복확인
+      </button>
       <p>
         /2자 이상 16자 이하, 영어 또는 숫자 또는 한글로 구성해야 하며 / 한글
         초성 및 모음은 허가하지 않음
@@ -144,19 +169,35 @@ const SignUp = () => {
         onChange={changHandler}
         required
       />
+      <button type="button" onClick={confirmEmail}>
+        중복확인
+      </button>
+      <p>
+        알파벳은 소문자, 대문자 혼합사용 가능하며 / 숫자, 알파벳, 특수문자는
+        하나이상씩 사용해야 하며 / 최소 8글자 최대 20글자로 구성되어야 한다
+      </p>
       <input
         type="password"
         name="password"
         value={user.password}
         placeholder="비밀번호를 입력해주세요."
-        onChange={changHandler}
+        onChange={handlePasswordChange}
         maxLength="20"
         required
       />
-      <p>
-        알파벳은 소문자, 대문자 혼합사용 가능하며 / 숫자, 알파벳, 특수문자는
-        하나이상씩 사용해야 하며 / 최소 8글자 최대 20글자로 구성되어야 한다
-      </p>
+      <input
+        type="password"
+        name="checkPassword"
+        // value={user.checkPassword}
+        placeholder="비밀번호를 확인해주세요."
+        onChange={handlePasswordChange}
+        required
+      />
+      {<p style={{ color: 'red' }}>비밀번호 확인해주세요.</p>}
+      {passwordError && (
+        <p style={{ color: 'red' }}>비밀번호가 일치하지 않습니다.</p>
+      )}
+      {!passwordError && <p style={{ color: 'red' }}>비밀번호가 일치합니다.</p>}
       <input
         type="text"
         name="birth"
