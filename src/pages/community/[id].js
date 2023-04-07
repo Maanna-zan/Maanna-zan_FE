@@ -1,6 +1,6 @@
 import React from 'react';
 const CommunityId = () => {
-  return <div>innn</div>;
+  return <div>CommunityId</div>;
 };
 
 export default CommunityId;
