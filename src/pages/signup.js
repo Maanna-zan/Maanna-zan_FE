@@ -51,6 +51,7 @@ const SignUp = () => {
       alert(error.response.data.message);
     },
     onSuccess: () => {
+      alert('회원가입 완료했습니다');
       router.push('/signin');
     },
   });
