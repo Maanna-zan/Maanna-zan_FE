@@ -1,54 +1,35 @@
 import React from 'react';
 import styled from 'styled-components';
-import { lightTheme } from '@components/theme/lightTheme';
+import { lightTheme } from '@components/Themes/theme';
 
 const StyledInput = styled.input`
+  border-radius: 10px;
+  /* height: 40px; */
   background-color: ${(props) => props.backgroundColor};
   width: ${(props) => props.width};
-  margin: ${(props) => props.margin};
+  outline: none;
   padding: ${(props) => props.padding};
-  font-size: ${(props) => props.fontSize};
-  border-radius: 5px;
-  color: ${(props) => props.fontColor};
   border-width: ${(props) => props.borderWidth};
   border-color: ${(props) => props.borderColor};
   border-style: solid;
-
-  &:hover {
-    background-color: ${(props) => props.hoverBackgroundColor};
-    border-color: ${(props) => props.hoverBorderColor};
-    color: ${(props) => props.hoverFontColor};
-    transition: 0.3s ease-in-out;
-    cursor: ${(props) => (props.disabled ? 'default' : 'pointer')};
+  ::placeholder {
+    color: #333;
   }
-
-  &.active {
-    background-color: ${(props) => props.hoverBackgroundColor};
-    border-color: ${(props) => props.hoverBorderColor};
-    transition: 0.3s ease-in-out;
-    color: ${(props) => props.hoverFontColor};
+  &:focus {
+    outline: ${(props) => props.focusBorderColor};
+    ::placeholder {
+      color: transparent;
+    }
   }
-  /* 
-  svg {
-    margin: 0px 12px;
-  } */
 `;
-// interface ButtonProps {
-//     size?: "sm" | "md" | "lg";
-//     variant?: "default" | "primary" | "danger" | "ghost";
-//     onClick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
-//   }
-
-export const InputText = ({
+export const InputArea = ({
+  type,
+  placeholder = '',
+  value,
   block = false,
   size = 'md',
   variant = 'default',
-  fontWeight,
-  label,
-  margin = '0px 0px',
-  active = false,
-  disabled = false,
-  onClick,
+  onChange,
   ...props
 }) => {
   let padding = '0px';
@@ -58,12 +39,11 @@ export const InputText = ({
   let fontColor = '';
   let borderWidth = '1px';
   let borderColor = '';
-  let borderStyle = 'soild';
-  let hoverBackgroundColor = 'inherit';
-  let hoverBorderColor = 'inherit';
-  let hoverFontColor = 'inherit';
+  let borderStyle = 'solid';
+  let focusBackgroundColor = 'inherit';
+  let focusBorderColor = 'inherit';
+  let focusFontColor = 'inherit';
 
-  // about size
   switch (size) {
     case 'sm':
       padding = '10px 16px';
@@ -82,82 +62,70 @@ export const InputText = ({
       fontSize = '20px';
       break;
   }
-
-  // about full width
   if (block) {
     width = '100%';
   }
 
-  // about style 폰트컬러설정다시
   switch (variant) {
     case 'default':
-      backgroundColor = lightTheme.white;
-      fontColor = lightTheme.gray200;
+      backgroundColor = lightTheme.WHITE;
+      fontColor = lightTheme.GRAY_200;
       borderStyle = 'solid';
       borderWidth = '1px';
-      borderColor = lightTheme.gray400;
-      hoverBackgroundColor = lightTheme.white;
-      hoverBorderColor = lightTheme.gray;
-      hoverFontColor = lightTheme.fontColorDark;
+      borderColor = lightTheme.GRAY_400;
+      focusBackgroundColor = lightTheme.WHITE;
+      focusBorderColor = lightTheme.GRAY_200;
+      focusFontColor = lightTheme.fontColorDark;
       break;
     case 'primary':
-      backgroundColor = lightTheme.primaryNormal;
-      fontColor = lightTheme.white;
+      backgroundColor = lightTheme.PRIMARY_NORMAL;
+      fontColor = lightTheme.WHITE;
       borderStyle = 'solid';
       borderWidth = '1px';
-      borderColor = lightTheme.primaryNormal;
-      hoverBackgroundColor = lightTheme.primaryHeavy;
-      hoverBorderColor = lightTheme.primaryHeavy;
-      hoverFontColor = lightTheme.white;
+      borderColor = lightTheme.PRIMARY_NORMAL;
+      focusBackgroundColor = lightTheme.PRIMARY_HEAVY;
+      focusBorderColor = lightTheme.PRIMARY_HEAVY;
+      focusFontColor = lightTheme.WHITE;
       break;
     case 'primaryBolder':
-      backgroundColor = lightTheme.white;
-      fontColor = lightTheme.primaryHeavy;
+      backgroundColor = lightTheme.WHITE;
+      fontColor = lightTheme.PRIMARY_HEAVY;
       borderStyle = 'solid';
       borderWidth = '1px';
-      borderColor = lightTheme.primaryNormal;
-      hoverBackgroundColor = lightTheme.primaryNormal;
-      hoverBorderColor = lightTheme.primaryNormal;
-      hoverFontColor = lightTheme.white;
+      borderColor = lightTheme.PRIMARY_NORMAL;
+      focusBackgroundColor = lightTheme.PRIMARY_NORMAL;
+      focusBorderColor = lightTheme.PRIMARY_NORMAL;
+      focusFontColor = lightTheme.WHITE;
       break;
-    case 'grayBox':
-      backgroundColor = lightTheme.white;
-      fontColor = lightTheme.primaryHeavy;
+    case 'grayButton':
+      backgroundColor = lightTheme.WHITE;
+      fontColor = lightTheme.PRIMARY_HEAVY;
       borderStyle = 'solid';
       borderWidth = '1px';
-      borderColor = lightTheme.primaryNormal;
-      hoverBackgroundColor = lightTheme.primaryNormal;
-      hoverBorderColor = lightTheme.primaryNormal;
-      hoverFontColor = lightTheme.white;
+      borderColor = lightTheme.PRIMARY_NORMAL;
+      focusBackgroundColor = lightTheme.PRIMARY_NORMAL;
+      focusBorderColor = lightTheme.PRIMARY_NORMAL;
+      focusFontColor = lightTheme.WHITE;
       break;
-    case 'grayBoxBolder':
-      backgroundColor = lightTheme.secondary;
-      fontColor = lightTheme.primary;
-      borderStyle = 'solid';
-      borderWidth = '1px';
-      borderColor = lightTheme.primary;
-      hoverBackgroundColor = lightTheme.secondary;
-      hoverBorderColor = lightTheme.secondary;
   }
-
   return (
     <StyledInput
       backgroundColor={backgroundColor}
       fontSize={fontSize}
       width={width}
       padding={padding}
-      margin={margin}
       fontColor={fontColor}
-      hoverBackgroundColor={hoverBackgroundColor}
+      focusBackgroundColor={focusBackgroundColor}
       borderWidth={borderWidth}
       borderColor={borderColor}
       borderStyle={borderStyle}
-      hoverBorderColor={hoverBorderColor}
-      hoverFontColor={hoverFontColor}
-      disabled={disabled}
+      focusBorderColor={focusBorderColor}
+      focusFontColor={focusFontColor}
+      type={type}
+      placeholder={placeholder}
+      value={value}
+      onChange={onChange}
       {...props}
-    >
-      {label}
-    </StyledInput>
+    ></StyledInput>
   );
 };

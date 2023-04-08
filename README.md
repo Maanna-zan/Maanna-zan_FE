@@ -44,3 +44,14 @@ npx storybook@next init
 <!-- storybook start방법  http://localhost:6006/ 으로자동으로 열림-->
 
 yarn storybook
+
+- [feat] : 새로운 기능 추가
+- [fix] : 버그 수정
+- [docs] : 문서 수정
+- [style] : 코드 포맷팅, 세미콜론 누락, 코드 변경이 없는 경우, 스타일 변경 (포매팅 수정, 들여쓰기 추가, …)
+- [refactor] : 코드 리펙토링
+- [test] : 테스트 코드, 리펙토링 테스트 코드 추가
+- [build] : 빌드 관련 파일 수정
+- [ci] : CI 설정 파일 수정
+- [perf] : 성능 개선
+- [chore] : 빌드 업무 수정, 패키지 매니저 수정

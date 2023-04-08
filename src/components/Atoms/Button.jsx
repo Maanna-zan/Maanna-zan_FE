@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { lightTheme } from '@components/theme/lightTheme';
+import { lightTheme } from '@components/Themes/theme';
 
 const StyledButton = styled.button`
   background-color: ${(props) => props.backgroundColor};
@@ -8,7 +8,7 @@ const StyledButton = styled.button`
   margin: ${(props) => props.margin};
   padding: ${(props) => props.padding};
   font-size: ${(props) => props.fontSize};
-  border-radius: 5px;
+  border-radius: 10px;
   color: ${(props) => props.fontColor};
   border-width: ${(props) => props.borderWidth};
   border-color: ${(props) => props.borderColor};
@@ -28,16 +28,7 @@ const StyledButton = styled.button`
     transition: 0.3s ease-in-out;
     color: ${(props) => props.hoverFontColor};
   }
-  /* 
-  svg {
-    margin: 0px 12px;
-  } */
 `;
-// interface ButtonProps {
-//     size?: "sm" | "md" | "lg";
-//     variant?: "default" | "primary" | "danger" | "ghost";
-//     onClick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
-//   }
 
 export const ButtonText = ({
   block = false,
@@ -88,56 +79,65 @@ export const ButtonText = ({
     width = '100%';
   }
 
-  // about style 폰트컬러설정다시
   switch (variant) {
     case 'default':
-      backgroundColor = lightTheme.white;
-      fontColor = lightTheme.gray200;
+      backgroundColor = lightTheme.WHITE;
+      fontColor = lightTheme.GRAY_200;
       borderStyle = 'solid';
       borderWidth = '1px';
-      borderColor = lightTheme.gray400;
-      hoverBackgroundColor = lightTheme.white;
-      hoverBorderColor = lightTheme.gray;
+      borderColor = lightTheme.GRAY_400;
+      hoverBackgroundColor = lightTheme.WHITE;
+      hoverBorderColor = lightTheme.GRAY_200;
       hoverFontColor = lightTheme.fontColorDark;
       break;
     case 'primary':
-      backgroundColor = lightTheme.primaryNormal;
-      fontColor = lightTheme.white;
+      backgroundColor = lightTheme.PRIMARY_NORMAL;
+      fontColor = lightTheme.WHITE;
       borderStyle = 'solid';
       borderWidth = '1px';
-      borderColor = lightTheme.primaryNormal;
-      hoverBackgroundColor = lightTheme.primaryHeavy;
-      hoverBorderColor = lightTheme.primaryHeavy;
-      hoverFontColor = lightTheme.white;
+      borderColor = lightTheme.PRIMARY_NORMAL;
+      hoverBackgroundColor = lightTheme.PRIMARY_HEAVY;
+      hoverBorderColor = lightTheme.PRIMARY_HEAVY;
+      hoverFontColor = lightTheme.WHITE;
       break;
     case 'primaryBolder':
-      backgroundColor = lightTheme.white;
-      fontColor = lightTheme.primaryHeavy;
+      backgroundColor = lightTheme.WHITE;
+      fontColor = lightTheme.PRIMARY_HEAVY;
       borderStyle = 'solid';
       borderWidth = '1px';
-      borderColor = lightTheme.primaryNormal;
-      hoverBackgroundColor = lightTheme.primaryNormal;
-      hoverBorderColor = lightTheme.primaryNormal;
-      hoverFontColor = lightTheme.white;
+      borderColor = lightTheme.PRIMARY_NORMAL;
+      hoverBackgroundColor = lightTheme.PRIMARY_NORMAL;
+      hoverBorderColor = lightTheme.PRIMARY_NORMAL;
+      hoverFontColor = lightTheme.WHITE;
       break;
     case 'grayButton':
-      backgroundColor = lightTheme.white;
-      fontColor = lightTheme.primaryHeavy;
+      backgroundColor = lightTheme.WHITE;
+      fontColor = lightTheme.PRIMARY_HEAVY;
       borderStyle = 'solid';
       borderWidth = '1px';
-      borderColor = lightTheme.primaryNormal;
-      hoverBackgroundColor = lightTheme.primaryNormal;
-      hoverBorderColor = lightTheme.primaryNormal;
-      hoverFontColor = lightTheme.white;
+      borderColor = lightTheme.PRIMARY_NORMAL;
+      hoverBackgroundColor = lightTheme.PRIMARY_NORMAL;
+      hoverBorderColor = lightTheme.PRIMARY_NORMAL;
+      hoverFontColor = lightTheme.WHITE;
+    case 'borderColorWhite':
+      backgroundColor = lightTheme.WHITE;
+      fontColor = lightTheme.BLACK;
+      borderStyle = 'solid';
+      borderWidth = '1px';
+      borderColor = lightTheme.WHITE;
+      hoverBackgroundColor = lightTheme.PRIMARY_NORMAL;
+      hoverBorderColor = lightTheme.PRIMARY_NORMAL;
+      hoverFontColor = lightTheme.WHITE;
       break;
-    case 'grayButtonBolder':
-      backgroundColor = lightTheme.secondary;
-      fontColor = lightTheme.primary;
-      borderStyle = 'solid';
-      borderWidth = '1px';
-      borderColor = lightTheme.primary;
-      hoverBackgroundColor = lightTheme.secondary;
-      hoverBorderColor = lightTheme.secondary;
+    // case 'grayButtonBolder':
+    //   backgroundColor = lightTheme.SECONDARY;
+    //   fontColor = lightTheme.PRIMARY;
+    //   borderStyle = 'solid';
+    //   borderWidth = '1px';
+    //   borderColor = lightTheme.PRIMARY;
+    //   hoverBackgroundColor = lightTheme.SECONDARY;
+    //   hoverBorderColor = lightTheme.SECONDARY;
+    //   break;
   }
 
   return (
