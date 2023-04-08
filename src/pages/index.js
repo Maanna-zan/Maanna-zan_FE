@@ -4,6 +4,7 @@ import styled from 'styled-components';
 
 const App = (props) => {
   console.log(props);
+
   //정보 저장 or DOM 접근
   const letterDivRefs = useRef([]);
   console.log('letterDivRefs', letterDivRefs);
@@ -56,6 +57,7 @@ const App = (props) => {
       </LetterDiv>
     </BodyDiv>
   );
+
 };
 
 export default App;
