@@ -30,25 +30,36 @@ const AlcoholList = () => {
     },
   });
 
-  const checkToken = async () => {
-    const response = await apis.get('/login', {
-      headers: {
-        refresh_token: `${token}`,
-      },
-    });
-    return response;
-  };
+  // const checkToken = async () => {
+  //   const response = await apis.get('/login', {
+  //     headers: {
+  //       refresh_token: `${token}`,
+  //     },
+  //   });
+  //   return response;
+  // };
 
-  //가드 토큰 없으면 보내줘
-  useEffect(() => {
-    const token = cookies.get('refresh_token');
-    if (!token) {
-      router.push('/signin');
-    }
-    checkToken();
-  }, []);
+  // //가드 토큰 없으면 보내줘
+  // useEffect(() => {
+  //   const token = cookies.get('refresh_token');
+  //   if (!token) {
+  //     router.push('/signin');
+  //   }
+  //   checkToken();
+  // }, []);
+  // 로그아웃 버튼 클릭 핸들러
+  // 토큰 삭제 함수
+  const deleteTokens = () => {
+    cookies.remove('access_token');
+    cookies.remove('refresh_token');
+  };
+  const handleLogout = () => {
+    deleteTokens();
+    router.push('/signin');
+  };
   return (
     <div>
+      <button onClick={handleLogout}>로그아웃</button>
       AlcholList
       {data &&
         data.map((alcohol) => (
