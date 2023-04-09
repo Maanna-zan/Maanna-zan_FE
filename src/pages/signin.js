@@ -9,6 +9,7 @@ import { ButtonText } from '@components/Atoms/Button';
 import { InputArea } from '@components/Atoms/Input';
 import { Header } from '@components/Organisms/Header';
 import { MainSearch } from '@components/Molecules/MainSearch';
+import { HeadInfo } from '@components/Atoms/SEO/HeadInfo';
 
 const SignIn = () => {
   const router = useRouter();
@@ -61,6 +62,7 @@ const SignIn = () => {
 
   return (
     <div>
+      <HeadInfo title="만나잔에 오신걸 환영합니다! 로그인해주세요~"/>
       <Header></Header>
       로그인
       <InputArea

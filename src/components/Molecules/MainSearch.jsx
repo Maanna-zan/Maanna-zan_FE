@@ -1,7 +1,6 @@
 import React from 'react';
 import { InputArea } from '@components/Atoms/Input';
 import { AiOutlineSearch } from 'react-icons/ai';
-import { ButtonText } from '@components/Atoms/Button';
 import styled from 'styled-components';
 export const MainSearch = () => {
   return (

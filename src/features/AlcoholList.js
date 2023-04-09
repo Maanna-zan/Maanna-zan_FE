@@ -13,15 +13,14 @@ const AlcoholList = () => {
     queryKey: ['GET_ALCOHOLS'],
     queryFn: async () => {
       const data = await apis.get('/posts', {
-        headers: {
-          refresh_token: `${token}`,
-        },
+        //   headers: {
+        //     refresh_token: `${token}`,
+        //   },
       });
       console.log('data', data);
       return data.data;
     },
   });
-
   //   const checkToken = async () => {
   //     apis.get('/user', {
   //       headers: {
