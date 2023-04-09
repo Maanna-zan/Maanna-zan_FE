@@ -65,6 +65,7 @@ const CommunityList = () => {
       <div></div>
     </div>
   );
+
 };
 
 export default CommunityList;
