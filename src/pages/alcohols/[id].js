@@ -38,7 +38,6 @@ const Alcohol = () => {
       >
         뒤로가기
       </button>
-      innn
       <div>id{data?.id}</div>
       <div>like{data?.like}</div>
       <div>storename{data?.storename}</div>
