@@ -4,11 +4,12 @@ import { apis } from '../shared/axios';
 import { cookies } from '../shared/cookie';
 import { useRouter } from 'next/router';
 import jwtDecode from 'jwt-decode';
-import { StyledButton } from '@components/Atoms/Button';
 import { ButtonText } from '@components/Atoms/Button';
+import { InputText } from '@components/Atoms/Input';
 import { InputArea } from '@components/Atoms/Input';
 import { Header } from '@components/Organisms/Header';
 import { MainSearch } from '@components/Molecules/MainSearch';
+
 
 const SignIn = () => {
   const router = useRouter();
@@ -63,40 +64,51 @@ const SignIn = () => {
     <div>
       <Header></Header>
       로그인
-      <InputArea
+
+      <InputText
+
         type="text"
+        size="md"
         name="email"
         value={user.email}
         onChange={changHandler}
         placeholder="id를 입력하세요"
       />
-      <InputArea
+
+      <InputText
+        size="md"
         type="password"
         name="password"
         value={user.password}
         onChange={changHandler}
         placeholder="비밀번호를 입력하세요"
       />
-      <button
-        onClick={() => {
-          register(user);
-        }}
-      >
-        로그인
-      </button>
-      <button
-        onClick={() => {
-          router.push('/signup');
-        }}
-      >
-        회원가입
-      </button>
       <ButtonText
-        label="Click me"
+        label="로그인"
         size="md"
         variant="primary"
         active={true}
-        onClick={() => console.log('Button clicked!')}
+        onClick={() => {
+          register(user);
+        }}
+      />
+      <ButtonText
+        label="회원가입"
+        size="md"
+        variant="primary"
+        active={true}
+        onClick={() => {
+          router.push('/signup');
+        }}
+      />
+      <ButtonText
+        label="비밀번호 찾기"
+        size="md"
+        variant="primary"
+        active={true}
+        onClick={() => {
+          router.push('/searchpassword');
+        }}
       />
       <MainSearch></MainSearch>
     </div>
