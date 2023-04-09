@@ -60,7 +60,6 @@ const SignIn = () => {
 
   return (
     <div>
-      <Header></Header>
       로그인
       <div
         style={{
