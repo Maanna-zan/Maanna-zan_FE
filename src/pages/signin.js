@@ -4,8 +4,9 @@ import { apis } from '../shared/axios';
 import { cookies } from '../shared/cookie';
 import { useRouter } from 'next/router';
 import jwtDecode from 'jwt-decode';
-import { StyledButton } from '@components/Atoms/Button';
 import { ButtonText } from '@components/Atoms/Button';
+import { InputText } from '@components/Atoms/Input';
+
 const SignIn = () => {
   const router = useRouter();
   const [user, setUser] = React.useState({
@@ -58,38 +59,46 @@ const SignIn = () => {
   return (
     <div>
       로그인
-      <input
+      <InputText
         type="text"
+        size="md"
         name="email"
         value={user.email}
         onChange={changHandler}
       />
-      <input
+      <InputText
+        size="md"
         type="password"
         name="password"
         value={user.password}
         onChange={changHandler}
       />
-      <button
-        onClick={() => {
-          register(user);
-        }}
-      >
-        로그인
-      </button>
-      <button
-        onClick={() => {
-          router.push('/signup');
-        }}
-      >
-        회원가입
-      </button>
       <ButtonText
-        label="Click me"
+        label="로그인"
         size="md"
         variant="primary"
         active={true}
-        onClick={() => console.log('Button clicked!')}
+        onClick={() => {
+          register(user);
+        }}
+      />
+      <ButtonText
+        label="회원가입"
+        size="md"
+        variant="primary"
+        active={true}
+        onClick={() => {
+          router.push('/signup');
+        }}
+      />
+      <ButtonText
+        label="비밀번호 찾기"
+        size="md"
+        variant="primary"
+        active={true}
+        onClick={() => {
+          router.push('/searchpassword');
+        }}
       />
     </div>
   );

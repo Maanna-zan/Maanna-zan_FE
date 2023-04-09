@@ -155,6 +155,7 @@ export const ButtonText = ({
       hoverBorderColor={hoverBorderColor}
       hoverFontColor={hoverFontColor}
       disabled={disabled}
+      onClick={disabled ? undefined : onClick} // 이 부분 추가
       {...props}
     >
       {label}
