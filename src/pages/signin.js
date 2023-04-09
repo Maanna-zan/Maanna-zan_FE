@@ -6,6 +6,10 @@ import { useRouter } from 'next/router';
 import jwtDecode from 'jwt-decode';
 import { ButtonText } from '@components/Atoms/Button';
 import { InputText } from '@components/Atoms/Input';
+import { InputArea } from '@components/Atoms/Input';
+import { Header } from '@components/Organisms/Header';
+import { MainSearch } from '@components/Molecules/MainSearch';
+
 
 const SignIn = () => {
   const router = useRouter();
@@ -20,7 +24,7 @@ const SignIn = () => {
   };
 
   // passwordCheck 빼고 나머지 라는 뜻
-  //3번째 옵션 config
+  //3번째 옵션 config;'////////////////////
   const { mutate: register, status } = useMutation({
     mutationFn: async (user) => {
       const data = await apis.post('/users/login', user);
@@ -58,20 +62,26 @@ const SignIn = () => {
 
   return (
     <div>
+      <Header></Header>
       로그인
+
       <InputText
+
         type="text"
         size="md"
         name="email"
         value={user.email}
         onChange={changHandler}
+        placeholder="id를 입력하세요"
       />
+
       <InputText
         size="md"
         type="password"
         name="password"
         value={user.password}
         onChange={changHandler}
+        placeholder="비밀번호를 입력하세요"
       />
       <ButtonText
         label="로그인"
@@ -100,6 +110,7 @@ const SignIn = () => {
           router.push('/searchpassword');
         }}
       />
+      <MainSearch></MainSearch>
     </div>
   );
 };
