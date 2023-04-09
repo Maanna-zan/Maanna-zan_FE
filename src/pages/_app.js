@@ -1,15 +1,15 @@
 import '../styles/globals.css';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { ThemeProvider } from 'styled-components';
-
+import { SeoLayout } from '@components/Atoms/SEO/SeoLayout';
 const queryClient = new QueryClient();
 
 export default function App({ Component, pageProps }) {
   return (
-    // <ThemeProvider theme={{ lightTheme }}>
     <QueryClientProvider client={queryClient}>
-      <Component {...pageProps} />
+      <SeoLayout>
+        <Component {...pageProps} />
+      </SeoLayout>
     </QueryClientProvider>
-    // </ThemeProvider>
   );
 }
