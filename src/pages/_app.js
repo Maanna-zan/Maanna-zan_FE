@@ -1,5 +1,5 @@
 import '../styles/globals.css';
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ThemeProvider } from 'styled-components';
 import { SeoLayout } from '@components/Atoms/SEO/SeoLayout';
 const queryClient = new QueryClient();
