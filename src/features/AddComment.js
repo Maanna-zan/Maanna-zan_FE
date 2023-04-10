@@ -4,7 +4,7 @@ import { apis } from '../shared/axios';
 import { useMutation } from 'react-query';
 import { cookies } from '../shared/cookie';
 
-const AddContent = () => {
+const AddComment = () => {
   const router = useRouter();
   const { query } = useRouter();
   console.log('query', query);
@@ -53,4 +53,4 @@ const AddContent = () => {
   );
 };
 
-export default AddContent;
+export default AddComment;
