@@ -51,7 +51,7 @@ const CommentsList = () => {
   //삭제
   const { mutate: deleteComment } = useMutation({
     mutationFn: async (id) => {
-      await apis.delete(`/posts/${query.id}/comments/${id}`, {
+      await apis.delete(`/posts/comments/${id}`, {
         headers: {
           refresh_token: `${token}`,
         },
@@ -65,7 +65,7 @@ const CommentsList = () => {
   //수정
   const { mutate: updateContent } = useMutation({
     mutationFn: async ({ id, payload }) => {
-      apis.patch(`/posts/${query.id}/comments/${id}`, payload, {
+      apis.patch(`/posts/comments/${id}`, payload, {
         headers: {
           refresh_token: `${token}`,
         },

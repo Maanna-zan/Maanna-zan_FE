@@ -3,7 +3,7 @@ import { useQuery } from 'react-query';
 import { useRouter } from 'next/router';
 import { apis } from '../../shared/axios';
 import { cookies } from '../../shared/cookie';
-import AddContent from '@features/AddContent';
+import AddComment from '@features/AddComment';
 import CommentsList from '@features/CommentsList';
 
 const Alcohol = () => {
@@ -49,7 +49,7 @@ const Alcohol = () => {
       <div>소주{data?.soju}</div>
       <div>맥주{data?.beer}</div>
       <div>생성일{data?.modifiedAt.substr(0, 10)}</div>
-      <AddContent />
+      <AddComment />
       <CommentsList />
     </div>
   );
