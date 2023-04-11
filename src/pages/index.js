@@ -1,4 +1,5 @@
 import { HeadInfo } from '@components/Atoms/SEO/HeadInfo';
+import { Header } from '@components/Organisms/Header';
 import React, { useEffect, useRef } from 'react';
 
 const App = () => {

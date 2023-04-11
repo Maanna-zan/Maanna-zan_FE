@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { cookies } from '../../shared/cookie';
 import { apis } from '../../shared/axios';
 import { useRouter } from 'next/router';
-import { useMutation } from 'react-query';
-
+import { useMutation } from '@tanstack/react-query';
 const Changenick = () => {
   const router = useRouter();
   const [password, setPassword] = useState('');

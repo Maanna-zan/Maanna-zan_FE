@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { apis } from '../shared/axios';
-import { useMutation } from 'react-query';
+import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 
 const searchpassword = () => {
