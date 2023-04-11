@@ -1,5 +1,5 @@
 import React from 'react';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { cookies } from '../../shared/cookie';
 import { apis } from '../../shared/axios';
 import { useRouter } from 'next/router';
@@ -33,8 +33,7 @@ const MyPage = () => {
       <div>{data?.email}</div>
       <div>{data?.birth}</div>
       <div>{data?.phoneNumber}</div>
-      <div>{data?.postCnt}</div>
-      <div>{data?.posts}</div>
+      <div>postCnt:{data?.postCnt}</div>
       <button
         onClick={() => {
           router.push('/mypage/changepw');

@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { cookies } from '../../shared/cookie';
 import { useRouter } from 'next/router';
+import PortalExample from '@components/Modals/PortalExample';
 
 export const LinkToNav = () => {
   const router = useRouter();
@@ -43,13 +44,7 @@ export const LinkToNav = () => {
         </>
       ) : (
         <Link href="/signin">
-          <ButtonText
-            variant="borderColorWhite"
-            label={'로그인'}
-            onClick={() => {
-              setIsLoginMode(true);
-            }}
-          ></ButtonText>
+          <PortalExample />
         </Link>
       )}
       <Link href="/signup">

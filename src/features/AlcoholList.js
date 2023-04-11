@@ -6,6 +6,7 @@ import { cookies } from '../shared/cookie';
 import { useEffect } from 'react';
 
 const AlcoholList = () => {
+  const token = cookies.get('refresh_token');
   const checkToken = async () => {
     const response = await apis.get('/login', {
       headers: {
