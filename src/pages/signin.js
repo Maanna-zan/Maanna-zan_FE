@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { useMutation } from 'react-query';
+import { useMutation } from '@tanstack/react-query';
 import { apis } from '../shared/axios';
 import { cookies } from '../shared/cookie';
 import { useRouter } from 'next/router';

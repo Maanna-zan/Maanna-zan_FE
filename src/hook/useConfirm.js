@@ -1,5 +1,5 @@
 import { apis } from '../shared/axios';
-import { useMutation } from 'react-query';
+import { useMutation } from '@tanstack/react-query';
 
 export const useConfirm = () => {
   const { mutate: confirm, status } = useMutation({

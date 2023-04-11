@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { apis } from '../shared/axios';
-import { useMutation } from 'react-query';
+import { useMutation } from '@tanstack/react-query';
 import { cookies } from '../shared/cookie';
 
 const AddComment = () => {
