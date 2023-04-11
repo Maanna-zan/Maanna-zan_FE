@@ -20,6 +20,7 @@ export const Post = ({ post, onSubmit }) => {
 
   const deletePostHandler = (id) => {
     deletePost(id);
+    router.reload();
   };
   const changeInputHandler = (e) => {
     const { value, name } = e.target;
