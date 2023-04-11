@@ -7,6 +7,7 @@ import { useEffect } from 'react';
 
 const AlcoholList = () => {
   const token = cookies.get('refresh_token');
+  const router = useRouter();
   const checkToken = async () => {
     const response = await apis.get('/login', {
       headers: {
