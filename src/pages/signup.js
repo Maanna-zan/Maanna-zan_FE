@@ -1,6 +1,6 @@
 import { apis } from '../shared/axios';
 import React, { useState } from 'react';
-import { useMutation } from 'react-query';
+import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import { useConfirm } from '../hook/useConfirm';
 import { HeadInfo } from '@components/Atoms/SEO/HeadInfo';

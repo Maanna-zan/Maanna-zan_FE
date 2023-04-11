@@ -17,28 +17,31 @@ const CommunityList = () => {
   if (!posts || postIsLoading) return <div>로딩중...</div>;
 
   return (
-    <div>
-      CommunityList
-      {posts.map((post) => (
-        <Post
-          post={post}
-          key={post.id}
-          // onClick={() => {
-          //   go(`/community/${post.id}`);
-          // }}
-        >
-          <h1>가게이름임</h1>
-          <div>{post.storename}</div>
-          <h1>글제목임</h1>
-          <div>{post.title}</div>
-          {/* <div>{post.id}</div>
+    <>
+      <div>
+        CommunityList
+        {posts.map((post) => (
+          <Post
+            post={post}
+            key={post.id}
+            apiId={post.id}
+            // onClick={() => {
+            //   go(`/community/${post.id}`);
+            // }}
+          >
+            <h1>가게이름임</h1>
+            <div>{post.storename}</div>
+            <h1>글제목임</h1>
+            <div>{post.title}</div>
+            {/* <div>{post.id}</div>
           <div>{post.likecnt}</div>
           <img src={post.image} alt={post.storename} /> */}
-          <div>{post.description}</div>
-          <div>nickname---{post.nickname}</div>
-        </Post>
-      ))}
-    </div>
+            <div>{post.description}</div>
+            <div>nickname---{post.nickname}</div>
+          </Post>
+        ))}
+      </div>
+    </>
   );
 };
 

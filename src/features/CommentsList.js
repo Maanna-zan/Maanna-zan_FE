@@ -1,7 +1,7 @@
 import React from 'react';
 import { useRouter } from 'next/router';
-import { useMutation } from 'react-query';
-import { useQuery, useQueryClient } from 'react-query';
+import { useMutation } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { apis } from '../shared/axios';
 import { cookies } from '../shared/cookie';
 import { useState } from 'react';

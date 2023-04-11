@@ -5,14 +5,14 @@ import { useDeletePost } from '../../hook/post/useDeletePost';
 import { useUpdatePost } from '../../hook/post/useUpdatePost';
 import { useRouter } from 'next/router';
 
-export const Post = ({ post, onSubmit }) => {
+export const Post = ({ post, onSubmit, apiId }) => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [newPost, setNewPost] = useState({
     storename: post.storename,
     title: post.title,
     description: post.description,
     image: post.image,
-    // apiId: post.apiId,
+    apiId: apiId,
   });
 
   const { deletePost } = useDeletePost();
@@ -98,8 +98,8 @@ export const Post = ({ post, onSubmit }) => {
           <div>{post?.description}</div>
           <button onClick={() => setIsEditMode(!isEditMode)}>수정</button>
           <button onClick={() => deletePostHandler(post.id)}>삭제</button>
-
-          {/* <button
+          {/* 
+          <button
             onClick={() => {
               router.push(`/community/add`);
             }}

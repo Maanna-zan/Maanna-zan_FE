@@ -6,27 +6,43 @@ import { apis } from '../../shared/axios';
 const AddPostForm = () => {
   const router = useRouter();
   const token = cookies.get('refresh_token');
+
   const [post, setPost] = useState({
     storename: '',
     title: '',
     description: '',
+    apiId: '',
   });
+
   const changeInputHandler = (e) => {
     const { value, name } = e.target;
     setPost((pre) => ({ ...pre, [name]: value }));
   };
-  const { mutate, isSuccess, onMutate, onSuccess } = useMutation({
-    mutationFn: async (payload) => {
-      const data = await apis.post('/posts', payload, {
-        headers: {
-          refresh_token: `${token}`,
+  const { mutate } = useMutation({
+    mutationFn: async (payload, id) => {
+      console.log('payload', payload);
+      console.log('id', id);
+
+      const data = await apis.post(
+        '/posts',
+        {
+          storename: payload.post.storename,
+          title: payload.post.title,
+          description: payload.post.description,
+          apiId: 1,
         },
-      });
+        {
+          headers: {
+            refresh_token: `${token}`,
+          },
+        },
+      );
       console.log('dataAdd------------>', data);
       return data;
     },
     onSuccess: (data) => {
-      router.push('/community');
+      // const apiId = data.id;
+      // router.push('/community');
     },
   });
 
@@ -56,10 +72,10 @@ const AddPostForm = () => {
       <button
         // disabled={isLoading}
         onClick={() => {
-          mutate(post);
+          mutate({ post });
         }}
       >
-        등록중
+        등록
       </button>
     </div>
   );
