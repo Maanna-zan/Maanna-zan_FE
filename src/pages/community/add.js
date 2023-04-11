@@ -23,20 +23,11 @@ const AddPostForm = () => {
       console.log('payload', payload);
       console.log('id', id);
 
-      const data = await apis.post(
-        '/posts',
-        {
-          storename: payload.post.storename,
-          title: payload.post.title,
-          description: payload.post.description,
-          apiId: 1,
+      const data = await apis.post('/posts', payload, {
+        headers: {
+          refresh_token: `${token}`,
         },
-        {
-          headers: {
-            refresh_token: `${token}`,
-          },
-        },
-      );
+      });
       console.log('dataAdd------------>', data);
       return data;
     },
@@ -72,7 +63,7 @@ const AddPostForm = () => {
       <button
         // disabled={isLoading}
         onClick={() => {
-          mutate({ post });
+          mutate(post);
         }}
       >
         등록

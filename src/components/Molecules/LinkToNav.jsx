@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { cookies } from '../../shared/cookie';
 import { useRouter } from 'next/router';
 import PortalExample from '@components/Modals/PortalExample';
+import SignUpPortalExample from '@components/Modals/SignUpPortalExample';
 
 export const LinkToNav = () => {
   const router = useRouter();
@@ -16,7 +17,7 @@ export const LinkToNav = () => {
   };
   const handleLogout = () => {
     deleteTokens();
-    router.push('/signin');
+    router.push('/');
   };
   const access_token = cookies.get('access_token');
   useEffect(() => {
@@ -43,13 +44,11 @@ export const LinkToNav = () => {
           ></ButtonText>
         </>
       ) : (
-        <Link href="/signin">
-          <PortalExample />
-        </Link>
+        <PortalExample />
       )}
-      <Link href="/signup">
-        <ButtonText variant="borderColorWhite" label={'회원가입'}></ButtonText>
-      </Link>
+
+      <SignUpPortalExample />
+
       <Link href="/mypage">
         <ButtonText
           variant="borderColorWhite"

@@ -6,6 +6,7 @@ import { useUpdatePost } from '../../hook/post/useUpdatePost';
 import { useRouter } from 'next/router';
 
 export const Post = ({ post, onSubmit, apiId }) => {
+  // console.log('newPost', post);
   const [isEditMode, setIsEditMode] = useState(false);
   const [newPost, setNewPost] = useState({
     storename: post.storename,
@@ -33,6 +34,7 @@ export const Post = ({ post, onSubmit, apiId }) => {
     setIsEditMode(false);
   };
   const router = useRouter(); // initialize the router instance
+
   return (
     <div>
       {isEditMode ? (
