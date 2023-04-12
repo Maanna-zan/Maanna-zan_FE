@@ -12,8 +12,7 @@ export const useConfirm = () => {
       console.log('type1', data.config.data.split('"')[3]);
       if (data.config.data.split('"')[3].includes('@')) {
         alert(`${data.config.data.split('"')[3]}은 사용가능한 이메일 입니다.`);
-      }
-      {
+      } else {
         alert(`${data.config.data.split('"')[3]}은 사용가능한 닉네임 입니다.`);
       }
     },

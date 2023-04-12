@@ -8,14 +8,17 @@ import { cookies } from '../shared/cookie';
 const CommunityList = () => {
   const go = useRouter();
   //토큰은 어세스나 리프레시 토큰 둘 중 하나만 헤더로 보여주면 된다.
-  const token = cookies.get('access_token');
+  const access_token = cookies.get('access_token');
+  const refresh_token = cookies.get('refresh_token');
+
   console.log('token', token);
   const { data, isLoading, isError, isSuccess } = useQuery({
     queryKey: ['GET_COMMUNITY'],
     queryFn: async () => {
       const data = await apis.get('/posts', {
         headers: {
-          access_token: `${token}`,
+          access_token: `${access_token}`,
+          refresh_token: `${refresh_token}`,
         },
       });
       console.log('data--------------', data);
