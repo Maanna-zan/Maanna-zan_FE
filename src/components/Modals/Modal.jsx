@@ -1,20 +1,20 @@
 import React from 'react';
-import { InputArea } from '@components/Atoms/Input';
-import { ButtonText } from '@components/Atoms/Button';
-import { useRouter } from 'next/router';
-import jwtDecode from 'jwt-decode';
+import { useMutation } from '@tanstack/react-query';
 import { apis } from '@shared/axios';
 import { cookies } from '@shared/cookie';
-import { useMutation } from '@tanstack/react-query';
+import jwtDecode from 'jwt-decode';
+import { useRouter } from 'next/router';
 import styled from 'styled-components';
+import { InputArea } from '@components/Atoms/Input';
+import { ButtonText } from '@components/Atoms/Button';
 
 export default function Modal({ onClose }) {
   const router = useRouter();
+
   const [user, setUser] = React.useState({
     email: '',
     password: '',
   });
-
   const changHandler = (event) => {
     const { name, value } = event.target;
     setUser((pre) => ({ ...pre, [name]: value }));
@@ -32,7 +32,17 @@ export default function Modal({ onClose }) {
       alert(`${decoded.sub}로그인 성공 했습니다❤️`);
       cookies.set('access_token', data.headers.access_token, { path: '/' });
       cookies.set('refresh_token', data.headers.refresh_token, { path: '/' });
-      // cookies.set('email', decoded.sub, { path: '/' });
+    },
+    onSuccess: () => {
+      router.push('/');
+    },
+  });
+
+  const { mutate: kakao } = useMutation({
+    mutationFn: async (user) => {
+      const data = await apis.post('/OAuth/Kakao', user);
+      //디코드 활용
+      console.log('data', data);
     },
     onSuccess: () => {
       router.push('/');
@@ -41,14 +51,9 @@ export default function Modal({ onClose }) {
   return (
     <ModalDiv className="modal">
       <div className="modal-overlay">
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-          }}
-        >
+        <InnerDiv>
           <InputArea
+            className="InputArea"
             type="text"
             size="md"
             name="email"
@@ -57,6 +62,7 @@ export default function Modal({ onClose }) {
             placeholder="id를 입력하세요"
           />
           <InputArea
+            className="InputArea"
             size="md"
             type="password"
             name="password"
@@ -64,46 +70,53 @@ export default function Modal({ onClose }) {
             onChange={changHandler}
             placeholder="비밀번호를 입력하세요"
           />
-          <div>
-            <ButtonText
-              label="로그인"
-              size="md"
-              variant="primary"
-              active={true}
-              onClick={() => {
-                register(user);
-              }}
-            />
-            {/* <ButtonText
-              label="회원가입"
-              size="md"
-              variant="primary"
-              active={true}
-              onClick={() => {
-                router.push('/signup');
-              }}
-            /> */}
-            <ButtonText
-              label="비밀번호 찾기"
-              size="md"
-              variant="primary"
-              active={true}
+          <EttingDiv>
+            <div className="loginKeepGoing">
+              <input type="radio" />
+              <label htmlFor="name">로그인 유지</label>
+            </div>
+
+            <FindButton
               onClick={() => {
                 router.push('/searchpassword');
               }}
-            />
-          </div>
+            >
+              비밀번호 찾기
+            </FindButton>
+          </EttingDiv>
+
+          <ButtonText
+            style={{ marginTop: '30px' }}
+            label="로그인"
+            size="md"
+            variant="primary"
+            active={true}
+            onClick={() => {
+              register(user);
+            }}
+          />
+          <ButtonText
+            label="카카오 로그인"
+            size="md"
+            variant="primary"
+            active={true}
+            onClick={() => {
+              kakao(user);
+            }}
+          />
+
           <button
             style={{
               cursor: 'pointer',
               border: 'none',
               backgroundColor: 'transparent',
+              color: '#9fa4a9',
             }}
             onClick={onClose}
           >
             Close
           </button>
-        </div>
+        </InnerDiv>
       </div>
     </ModalDiv>
   );
@@ -115,9 +128,9 @@ const ModalDiv = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(128, 128, 128, 0.5);
+  background-color: #c9cdd2;
+  mix-blend-mode: darken;
   z-index: 999;
-
   .modal-overlay {
     padding: 20px 40px;
     border-radius: 20px;
@@ -130,6 +143,44 @@ const ModalDiv = styled.div`
     justify-content: center;
     background-color: rgba(255, 255, 255);
     z-index: 1000;
+    max-width: 400px;
+    min-width: 280px;
+    width: 50%;
+    border: 1px solid #939aa0;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
+`;
+
+const InnerDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  row-gap: 10px;
+  .InputArea {
+    border-color: #9fa4a9;
+    width: 250px;
+    display: flex;
+    justify-items: center;
+  }
+`;
+
+const EttingDiv = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  .loginKeepGoing {
+    color: #9fa4a9;
+    display: flex;
+    align-items: center;
+    size: 10px;
+    font-size: 11px;
+  }
+`;
+const FindButton = styled.button`
+  border: none;
+  color: #9fa4a9;
+  background-color: transparent;
+  width: fit-content;
+  font-size: 11px;
 `;
