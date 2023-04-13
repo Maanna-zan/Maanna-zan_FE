@@ -25,7 +25,7 @@ const AddPostForm = () => {
         headers: {
           'Content-Type': 'multipart/form-data',
           access_token: `${access_token}`,
-          refresh_token: `${refresh_token}`,
+          // refresh_token: `${refresh_token}`,
         },
       });
       console.log('dataAdd------------>', data);

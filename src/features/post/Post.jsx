@@ -32,6 +32,7 @@ export const Post = ({ post, onSubmit, apiId }) => {
     y: post.y,
   });
   const queryClient = useQueryClient();
+
   const access_token = cookies.get('access_token');
   const refresh_token = cookies.get('refresh_token');
 
@@ -62,7 +63,7 @@ export const Post = ({ post, onSubmit, apiId }) => {
       apis.put(`/posts/like/${postId}`, {
         headers: {
           access_token: `${access_token}`,
-          refresh_token: `${refresh_token}`,
+          // refresh_token: `${refresh_token}`,
         },
       }),
     {
