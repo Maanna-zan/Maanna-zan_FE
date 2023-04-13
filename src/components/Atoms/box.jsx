@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { lightTheme } from '@components/Themes/theme';
+import { LightTheme } from '@components/Themes/theme';
 
 const StyledBox = styled.div`
   background-color: ${(props) => props.backgroundColor};
@@ -78,33 +78,33 @@ export const BoxText = ({
   // about style 폰트컬러설정다시
   switch (variant) {
     case 'default':
-      backgroundColor = lightTheme.GRAY_50;
-      fontColor = lightTheme.GRAY_200;
+      backgroundColor = LightTheme.GRAY_50;
+      fontColor = LightTheme.GRAY_200;
       borderStyle = 'solid';
       borderWidth = '1px';
-      borderColor = lightTheme.GRAY_400;
-      hoverBackgroundColor = lightTheme.GRAY_50;
-      hoverBorderColor = lightTheme.GRAY_50;
-      hoverFontColor = lightTheme.GRAY_50;
+      borderColor = LightTheme.GRAY_400;
+      hoverBackgroundColor = LightTheme.GRAY_50;
+      hoverBorderColor = LightTheme.GRAY_50;
+      hoverFontColor = LightTheme.GRAY_50;
       break;
     case 'grayBox':
-      backgroundColor = lightTheme.GRAY_50;
-      fontColor = lightTheme.GRAY_50;
+      backgroundColor = LightTheme.GRAY_50;
+      fontColor = LightTheme.GRAY_50;
       borderStyle = 'solid';
       borderWidth = '1px';
-      borderColor = lightTheme.GRAY_50;
-      hoverBackgroundColor = lightTheme.GRAY_50;
-      hoverBorderColor = lightTheme.GRAY_50;
-      hoverFontColor = lightTheme.GRAY_50;
+      borderColor = LightTheme.GRAY_50;
+      hoverBackgroundColor = LightTheme.GRAY_50;
+      hoverBorderColor = LightTheme.GRAY_50;
+      hoverFontColor = LightTheme.GRAY_50;
       break;
     case 'grayBoxBolder':
-      backgroundColor = lightTheme.secondary;
-      fontColor = lightTheme.primary;
+      backgroundColor = LightTheme.secondary;
+      fontColor = LightTheme.primary;
       borderStyle = 'solid';
       borderWidth = '1px';
-      borderColor = lightTheme.primary;
-      hoverBackgroundColor = lightTheme.secondary;
-      hoverBorderColor = lightTheme.secondary;
+      borderColor = LightTheme.primary;
+      hoverBackgroundColor = LightTheme.secondary;
+      hoverBorderColor = LightTheme.secondary;
   }
 
   return (
