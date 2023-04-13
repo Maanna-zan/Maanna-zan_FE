@@ -1,12 +1,12 @@
 import { createGlobalStyle } from 'styled-components';
-
+import { LightTheme } from '@components/Themes/theme';
 export const GlobalStyles = createGlobalStyle`
 
 
-    ${reset}
+
     * {
         box-sizing:border-box;
-        font-family: 'Pretendard', sans-serif;
+        font-family: 'Pretendard', sans-serif ;
         
     }
     input {
@@ -15,7 +15,7 @@ export const GlobalStyles = createGlobalStyle`
     }
     body {
       //global
-      /* font-family: ${(props) => props.theme.font_kor};*/
+      font-family: ${() => LightTheme.FONT_KOR};
      margin: 0; padding: 0;
       @media  screen and  (max-width: 600px) {
         h1{

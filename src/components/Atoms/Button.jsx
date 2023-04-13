@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { lightTheme } from '@components/Themes/theme';
+import { LightTheme } from '@components/Themes/theme';
 
 const StyledButton = styled.button`
   background-color: ${(props) => props.backgroundColor};
@@ -81,62 +81,62 @@ export const ButtonText = ({
 
   switch (variant) {
     case 'default':
-      backgroundColor = lightTheme.WHITE;
-      fontColor = lightTheme.GRAY_200;
+      backgroundColor = LightTheme.WHITE;
+      fontColor = LightTheme.GRAY_200;
       borderStyle = 'solid';
       borderWidth = '1px';
-      borderColor = lightTheme.GRAY_400;
-      hoverBackgroundColor = lightTheme.WHITE;
-      hoverBorderColor = lightTheme.GRAY_200;
-      hoverFontColor = lightTheme.fontColorDark;
+      borderColor = LightTheme.GRAY_400;
+      hoverBackgroundColor = LightTheme.WHITE;
+      hoverBorderColor = LightTheme.GRAY_200;
+      hoverFontColor = LightTheme.fontColorDark;
       break;
     case 'primary':
-      backgroundColor = lightTheme.PRIMARY_NORMAL;
-      fontColor = lightTheme.WHITE;
+      backgroundColor = LightTheme.PRIMARY_NORMAL;
+      fontColor = LightTheme.WHITE;
       borderStyle = 'solid';
       borderWidth = '1px';
-      borderColor = lightTheme.PRIMARY_NORMAL;
-      hoverBackgroundColor = lightTheme.PRIMARY_HEAVY;
-      hoverBorderColor = lightTheme.PRIMARY_HEAVY;
-      hoverFontColor = lightTheme.WHITE;
+      borderColor = LightTheme.PRIMARY_NORMAL;
+      hoverBackgroundColor = LightTheme.PRIMARY_HEAVY;
+      hoverBorderColor = LightTheme.PRIMARY_HEAVY;
+      hoverFontColor = LightTheme.WHITE;
       break;
     case 'primaryBolder':
-      backgroundColor = lightTheme.WHITE;
-      fontColor = lightTheme.PRIMARY_HEAVY;
+      backgroundColor = LightTheme.WHITE;
+      fontColor = LightTheme.PRIMARY_HEAVY;
       borderStyle = 'solid';
       borderWidth = '1px';
-      borderColor = lightTheme.PRIMARY_NORMAL;
-      hoverBackgroundColor = lightTheme.PRIMARY_NORMAL;
-      hoverBorderColor = lightTheme.PRIMARY_NORMAL;
-      hoverFontColor = lightTheme.WHITE;
+      borderColor = LightTheme.PRIMARY_NORMAL;
+      hoverBackgroundColor = LightTheme.PRIMARY_NORMAL;
+      hoverBorderColor = LightTheme.PRIMARY_NORMAL;
+      hoverFontColor = LightTheme.WHITE;
       break;
     case 'grayButton':
-      backgroundColor = lightTheme.WHITE;
-      fontColor = lightTheme.PRIMARY_HEAVY;
+      backgroundColor = LightTheme.WHITE;
+      fontColor = LightTheme.PRIMARY_HEAVY;
       borderStyle = 'solid';
       borderWidth = '1px';
-      borderColor = lightTheme.PRIMARY_NORMAL;
-      hoverBackgroundColor = lightTheme.PRIMARY_NORMAL;
-      hoverBorderColor = lightTheme.PRIMARY_NORMAL;
-      hoverFontColor = lightTheme.WHITE;
+      borderColor = LightTheme.PRIMARY_NORMAL;
+      hoverBackgroundColor = LightTheme.PRIMARY_NORMAL;
+      hoverBorderColor = LightTheme.PRIMARY_NORMAL;
+      hoverFontColor = LightTheme.WHITE;
     case 'borderColorWhite':
-      backgroundColor = lightTheme.WHITE;
-      fontColor = lightTheme.BLACK;
+      backgroundColor = LightTheme.WHITE;
+      fontColor = LightTheme.BLACK;
       borderStyle = 'solid';
       borderWidth = '1px';
-      borderColor = lightTheme.WHITE;
-      hoverBackgroundColor = lightTheme.PRIMARY_NORMAL;
-      hoverBorderColor = lightTheme.PRIMARY_NORMAL;
-      hoverFontColor = lightTheme.WHITE;
+      borderColor = LightTheme.WHITE;
+      hoverBackgroundColor = LightTheme.PRIMARY_NORMAL;
+      hoverBorderColor = LightTheme.PRIMARY_NORMAL;
+      hoverFontColor = LightTheme.WHITE;
       break;
     // case 'grayButtonBolder':
-    //   backgroundColor = lightTheme.SECONDARY;
-    //   fontColor = lightTheme.PRIMARY;
+    //   backgroundColor = LightTheme.SECONDARY;
+    //   fontColor = LightTheme.PRIMARY;
     //   borderStyle = 'solid';
     //   borderWidth = '1px';
-    //   borderColor = lightTheme.PRIMARY;
-    //   hoverBackgroundColor = lightTheme.SECONDARY;
-    //   hoverBorderColor = lightTheme.SECONDARY;
+    //   borderColor = LightTheme.PRIMARY;
+    //   hoverBackgroundColor = LightTheme.SECONDARY;
+    //   hoverBorderColor = LightTheme.SECONDARY;
     //   break;
   }
 

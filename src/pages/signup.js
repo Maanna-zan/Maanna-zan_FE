@@ -1,6 +1,6 @@
 import { apis } from '../shared/axios';
 import React, { useState } from 'react';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation } from 'react-query';
 import { useRouter } from 'next/router';
 import { useConfirm } from '../hook/useConfirm';
 import { HeadInfo } from '@components/Atoms/SEO/HeadInfo';
@@ -124,7 +124,7 @@ const SignUp = () => {
         gap: '10px',
       }}
     >
-      <HeadInfo title="로그인해주세요!" />
+      <HeadInfo title="만나잔에 오신걸 환영합니다! 회원가입해주세요~" />
       회원가입
       <input
         type="text"

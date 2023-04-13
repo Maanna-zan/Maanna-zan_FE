@@ -2,7 +2,7 @@
 //import { DefaultTheme } from 'styled-components';
 import styled from 'styled-components';
 
-export const lightTheme = {
+export const LightTheme = {
   //color system
   WHITE: '#FFFFFF',
   BLACK: '#000000',
@@ -41,5 +41,21 @@ export const lightTheme = {
   FONT_TERTIARY: '#E8EBED',
   FONT_CAUTION: '#BDBDBD',
 
-  FONT_KOR: "AppleSD', sans-serif",
+  //font weight(bold 600 --> medium)
+  FONT_BOLD: '700',
+  FONT_REGULAR: '400',
+  FONT_MEDIUM: '600',
+
+  //font size (이거는 line-height값임)
+  FONT_SIZE_1: '1rem',
+  FONT_SIZE_2: '0.875rem',
+
+  //font height (이거는 line-height값임)
+  FONT_HEIGHT_1: '1.125rem',
+  FONT_HEIGHT_2: '1.5rem',
 };
+// 피그마에 폰트 클릭하면 나옴 그에 맞는거 위에 만들어둠!
+// --label1-bold: 700 1rem/1.5rem
+// --label1-regular: 400 1rem/1.5rem
+// --label2-bold: 600 0.875rem/1.125rem
+// --label2-regular: 400 0.875rem/1.125rem

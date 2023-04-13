@@ -1,19 +1,22 @@
 import React from 'react';
 import styled from 'styled-components';
-import { lightTheme } from '@components/Themes/theme';
+import { LightTheme } from '@components/Themes/theme';
 
 const StyledInput = styled.input`
   border-radius: 10px;
+  overflow: hidden;
+  box-sizing: border-box;
   /* height: 40px; */
   background-color: ${(props) => props.backgroundColor};
   width: ${(props) => props.width};
-  outline: none;
+  border: 1px solid;
   padding: ${(props) => props.padding};
   border-width: ${(props) => props.borderWidth};
   border-color: ${(props) => props.borderColor};
   border-style: solid;
+  color: black;
   ::placeholder {
-    color: #333;
+    color: ${(props) => props.placeColor};
   }
   &:focus {
     outline: ${(props) => props.focusBorderColor};
@@ -26,6 +29,7 @@ export const InputArea = ({
   type,
   placeholder = '',
   value,
+  label,
   block = false,
   size = 'md',
   variant = 'default',
@@ -43,15 +47,15 @@ export const InputArea = ({
   let focusBackgroundColor = 'inherit';
   let focusBorderColor = 'inherit';
   let focusFontColor = 'inherit';
-
+  let placeColor = '';
   switch (size) {
-    case 'sm':
-      padding = '10px 16px';
+    case 'df':
+      padding = '12px 8px';
       fontSize = '14px';
       break;
-    case 'md':
-      padding = '11px 20px';
-      fontSize = '14px';
+    case 'leftIcon':
+      padding = '12px 8px 12px 48px';
+      fontSize = LightTheme.FONT_SIZE_2;
       break;
     case 'lg':
       padding = '12px 24px';
@@ -68,44 +72,36 @@ export const InputArea = ({
 
   switch (variant) {
     case 'default':
-      backgroundColor = lightTheme.WHITE;
-      fontColor = lightTheme.GRAY_200;
-      borderStyle = 'solid';
-      borderWidth = '1px';
-      borderColor = lightTheme.GRAY_400;
-      focusBackgroundColor = lightTheme.WHITE;
-      focusBorderColor = lightTheme.GRAY_200;
-      focusFontColor = lightTheme.fontColorDark;
+      backgroundColor = LightTheme.WHITE;
+      fontColor = LightTheme.GRAY_200;
+      borderColor = LightTheme.GRAY_400;
+      focusBackgroundColor = LightTheme.WHITE;
+      focusBorderColor = LightTheme.GRAY_200;
+      placeColor = LightTheme.BLACK;
       break;
     case 'primary':
-      backgroundColor = lightTheme.PRIMARY_NORMAL;
-      fontColor = lightTheme.WHITE;
-      borderStyle = 'solid';
-      borderWidth = '1px';
-      borderColor = lightTheme.PRIMARY_NORMAL;
-      focusBackgroundColor = lightTheme.PRIMARY_HEAVY;
-      focusBorderColor = lightTheme.PRIMARY_HEAVY;
-      focusFontColor = lightTheme.WHITE;
+      backgroundColor = LightTheme.PRIMARY_NORMAL;
+      fontColor = LightTheme.WHITE;
+      borderColor = LightTheme.PRIMARY_NORMAL;
+      focusBackgroundColor = LightTheme.PRIMARY_HEAVY;
+      focusBorderColor = LightTheme.PRIMARY_HEAVY;
+      placeColor = LightTheme.BLACK;
       break;
     case 'primaryBolder':
-      backgroundColor = lightTheme.WHITE;
-      fontColor = lightTheme.PRIMARY_HEAVY;
-      borderStyle = 'solid';
-      borderWidth = '1px';
-      borderColor = lightTheme.PRIMARY_NORMAL;
-      focusBackgroundColor = lightTheme.PRIMARY_NORMAL;
-      focusBorderColor = lightTheme.PRIMARY_NORMAL;
-      focusFontColor = lightTheme.WHITE;
+      backgroundColor = LightTheme.WHITE;
+      fontColor = LightTheme.PRIMARY_HEAVY;
+      borderColor = LightTheme.PRIMARY_NORMAL;
+      focusBackgroundColor = LightTheme.PRIMARY_NORMAL;
+      focusBorderColor = LightTheme.PRIMARY_NORMAL;
+      placeColor = LightTheme.FONT_SECONDARY;
       break;
     case 'grayButton':
-      backgroundColor = lightTheme.WHITE;
-      fontColor = lightTheme.PRIMARY_HEAVY;
-      borderStyle = 'solid';
-      borderWidth = '1px';
-      borderColor = lightTheme.PRIMARY_NORMAL;
-      focusBackgroundColor = lightTheme.PRIMARY_NORMAL;
-      focusBorderColor = lightTheme.PRIMARY_NORMAL;
-      focusFontColor = lightTheme.WHITE;
+      backgroundColor = LightTheme.WHITE;
+      fontColor = LightTheme.PRIMARY_HEAVY;
+      borderColor = LightTheme.PRIMARY_NORMAL;
+      focusBackgroundColor = LightTheme.PRIMARY_NORMAL;
+      focusBorderColor = LightTheme.PRIMARY_NORMAL;
+      placeColor = LightTheme.FONT_SECONDARY;
       break;
   }
   return (
@@ -126,6 +122,8 @@ export const InputArea = ({
       value={value}
       onChange={onChange}
       {...props}
-    ></StyledInput>
+    >
+      {label}
+    </StyledInput>
   );
 };

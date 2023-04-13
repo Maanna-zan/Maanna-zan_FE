@@ -1,7 +1,6 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 import { ServerStyleSheet } from 'styled-components';
-import Script from 'next/script'
-
+import Script from 'next/script';
 export default class MyDocument extends Document {
   static async getInitialProps(ctx) {
     const sheet = new ServerStyleSheet();
@@ -43,9 +42,9 @@ export default class MyDocument extends Document {
           <Main />
           <NextScript />
           <Script
-          src={`//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=${process.env.NEXT_PUBILC_KAKAOMAP_KEY}&libraries=services,clusterer,drawing`}
-          strategy="beforeInteractive"
-        />
+            src={`//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=${process.env.NEXT_PUBILC_KAKAOMAP_KEY}&libraries=services,clusterer,drawing`}
+            strategy="beforeInteractive"
+          />
         </body>
       </Html>
     );

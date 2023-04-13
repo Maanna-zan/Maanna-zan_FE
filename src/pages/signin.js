@@ -1,12 +1,15 @@
 import React, { useEffect } from 'react';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation } from 'react-query';
 import { apis } from '../shared/axios';
 import { cookies } from '../shared/cookie';
 import { useRouter } from 'next/router';
 import jwtDecode from 'jwt-decode';
+import { StyledButton } from '@components/Atoms/Button';
 import { ButtonText } from '@components/Atoms/Button';
 import { InputArea } from '@components/Atoms/Input';
+import { Header } from '@components/Organisms/Header';
 import { MainSearch } from '@components/Molecules/MainSearch';
+import { HeadInfo } from '@components/Atoms/SEO/HeadInfo';
 
 const SignIn = () => {
   const router = useRouter();
@@ -38,7 +41,7 @@ const SignIn = () => {
       router.push('/');
     },
   });
-  ////////////////
+
   //가드
   // useEffect(() => {
   //   const token = cookies.get('refresh_token');
@@ -59,63 +62,44 @@ const SignIn = () => {
 
   return (
     <div>
+      <HeadInfo title="만나잔에 오신걸 환영합니다! 로그인해주세요~" />
+      <Header></Header>
       로그인
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
+      <InputArea
+        type="text"
+        name="email"
+        value={user.email}
+        onChange={changHandler}
+        placeholder="id를 입력하세요"
+      />
+      <InputArea
+        type="password"
+        name="password"
+        value={user.password}
+        onChange={changHandler}
+        placeholder="비밀번호를 입력하세요"
+      />
+      <button
+        onClick={() => {
+          register(user);
         }}
       >
-        <InputArea
-          type="text"
-          size="md"
-          name="email"
-          value={user.email}
-          onChange={changHandler}
-          placeholder="id를 입력하세요"
-        />
-        <InputArea
-          size="md"
-          type="password"
-          name="password"
-          value={user.password}
-          onChange={changHandler}
-          placeholder="비밀번호를 입력하세요"
-        />
-        <div>
-          <ButtonText
-            label="로그인"
-            size="md"
-            variant="primary"
-            active={true}
-            onClick={() => {
-              register(user);
-            }}
-          />
-          <ButtonText
-            label="회원가입"
-            size="md"
-            variant="primary"
-            active={true}
-            onClick={() => {
-              router.push('/signup');
-            }}
-          />
-          <ButtonText
-            label="비밀번호 찾기"
-            size="md"
-            variant="primary"
-            active={true}
-            onClick={() => {
-              router.push('/searchpassword');
-            }}
-          />
-        </div>
-      </div>
-      <br />
-      <br />
-      <br />
+        로그인
+      </button>
+      <button
+        onClick={() => {
+          router.push('/signup');
+        }}
+      >
+        회원가입
+      </button>
+      <ButtonText
+        label="Click me"
+        size="md"
+        variant="primary"
+        active={true}
+        onClick={() => console.log('Button clicked!')}
+      />
       <MainSearch></MainSearch>
     </div>
   );
