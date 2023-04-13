@@ -32,13 +32,13 @@ const CommentsList = () => {
     deleteComment(id);
   };
 
-  const token = cookies.get('refresh_token');
+  const token = cookies.get('access_token');
   const { data, isLoading, isError, isSuccess } = useQuery({
     queryKey: ['GET_COMMENTS'],
     queryFn: async () => {
       const { data } = await apis.get(`/posts/${query.id}`, {
         headers: {
-          refresh_token: `${token}`,
+          Access_Token: `${token}`,
         },
       });
       //   console.log('data', data.data.commentList);
@@ -53,7 +53,7 @@ const CommentsList = () => {
     mutationFn: async (id) => {
       await apis.delete(`/posts/comments/${id}`, {
         headers: {
-          refresh_token: `${token}`,
+          Access_Token: `${token}`,
         },
       });
     },
@@ -67,7 +67,7 @@ const CommentsList = () => {
     mutationFn: async ({ id, payload }) => {
       apis.patch(`/posts/comments/${id}`, payload, {
         headers: {
-          refresh_token: `${token}`,
+          Access_Token: `${token}`,
         },
       });
     },

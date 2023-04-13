@@ -3,28 +3,30 @@ import { useQuery } from '@tanstack/react-query';
 import { cookies } from '../../shared/cookie';
 import { apis } from '../../shared/axios';
 import { useRouter } from 'next/router';
+import instance from '@shared/instance';
 
 const MyPage = () => {
   const router = useRouter();
-  const token = cookies.get('refresh_token');
-  console.log('token', token);
+  const token = cookies.get('access_token');
+  const refresh_token = cookies.get('refresh_token');
   const { data, isLoading, isError, isSuccess } = useQuery({
     queryKey: ['GET_MYPAGE'],
     queryFn: async () => {
-      const { data } = await apis.get('/my-page', {
+      const { data } = await instance.get('/my-page', {
         headers: {
-          refresh_token: `${token}`,
+          Access_Token: `${token}`,
         },
       });
+
       console.log('data', data.data);
       return data.data;
     },
     // onError 콜백 함수 구현
     onError: (error) => {
-      console.error(error);
-      // 에러 처리
+      console.log('error', error);
     },
   });
+
   return (
     <div key={data?.id}>
       MyPage

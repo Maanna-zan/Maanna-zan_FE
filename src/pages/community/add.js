@@ -5,8 +5,7 @@ import { cookies } from '../../shared/cookie';
 import { apis } from '../../shared/axios';
 const AddPostForm = () => {
   const router = useRouter();
-  const refresh_token = cookies.get('refresh_token');
-  const access_token = cookies.get('access_token');
+  const token = cookies.get('access_token');
 
   const [post, setPost] = useState({
     storename: '',
@@ -26,8 +25,7 @@ const AddPostForm = () => {
 
       const data = await apis.post('/posts', payload, {
         headers: {
-          refresh_token: `${refresh_token}`,
-          access_token: `${access_token}`,
+          Access_Token: `${token}`,
         },
       });
       console.log('dataAdd------------>', data);

@@ -6,14 +6,12 @@ import { cookies } from '../shared/cookie';
 import { useEffect } from 'react';
 
 const AlcoholList = () => {
-  const access_token = cookies.get('access_token');
-  const refresh_token = cookies.get('refresh_token');
+  const token = cookies.get('access_token');
   const router = useRouter();
   const checkToken = async () => {
     const response = await apis.get('/login', {
       headers: {
-        refresh_token: `${refresh_token}`,
-        access_token: `${access_token}`,
+        Access_Token: `${token}`,
       },
     });
     return response;
@@ -21,7 +19,7 @@ const AlcoholList = () => {
 
   //가드 토큰 없으면 보내줘
   useEffect(() => {
-    const token = cookies.get('refresh_token');
+    const token = cookies.get('access_token');
     if (!token) {
       router.push('/signin');
     }
