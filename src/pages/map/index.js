@@ -44,12 +44,12 @@ export const MapMain = () => {
     console.log('values->', values);
   };
 
-  const token = cookies.get('refresh_token');
+  const token = cookies.get('access_token');
   const { mutate, isLoading } = useMutation({
     mutationFn: async (location) => {
       console.log('location->', location[0].latlng);
       const data = await apis.post(
-        '/api/find',
+        '/find',
         {
           x: location[0]?.latlng?.lat,
           y: location[0]?.latlng?.lng,
@@ -62,7 +62,7 @@ export const MapMain = () => {
         },
         {
           headers: {
-            refresh_token: `${token}`,
+            access_token: `${token}`,
           },
         },
       );

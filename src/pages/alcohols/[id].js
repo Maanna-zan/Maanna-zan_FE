@@ -10,7 +10,7 @@ const Alcohol = () => {
   const router = useRouter();
   const { query } = useRouter();
   console.log('query', query);
-  const token = cookies.get('refresh_token');
+  const token = cookies.get('access_token');
 
   const { data, isLoading, isError, isSuccess } = useQuery({
     queryKey: ['GET_ALCOHOL'],
@@ -18,7 +18,7 @@ const Alcohol = () => {
       const { data } = await apis.get(`/posts/${query.id}`, {
         headers: {
           // 'Content-Type': 'multipart/form-data',
-          refresh_token: `${token}`,
+          Access_Token: `${token}`,
         },
       });
       // console.log('data', data.data);

@@ -17,12 +17,12 @@ const AddComment = () => {
   };
 
   //create!
-  const token = cookies.get('refresh_token');
+  const token = cookies.get('access_token');
   const { mutate, isLoading, isSuccess, isIdle } = useMutation({
     mutationFn: async (payload) => {
       const data = await apis.post(`/posts/${query.id}/comments`, payload, {
         headers: {
-          refresh_token: `${token}`,
+          Access_Token: `${token}`,
         },
       });
       console.log('payload', payload);

@@ -20,6 +20,7 @@ export default function Modal({ onClose }) {
     setUser((pre) => ({ ...pre, [name]: value }));
   };
 
+  //access는 헤더로 refresh는 로컬스토리지로
   // passwordCheck 빼고 나머지 라는 뜻
   //3번째 옵션 config;'////////////////////
   const { mutate: register, status } = useMutation({
@@ -39,8 +40,8 @@ export default function Modal({ onClose }) {
   });
 
   const { mutate: kakao } = useMutation({
-    mutationFn: async (user) => {
-      const data = await apis.post('/OAuth/Kakao', user);
+    mutationFn: async () => {
+      const data = await apis.post('/OAuth/Kakao');
       //디코드 활용
       console.log('data', data);
     },
@@ -48,6 +49,7 @@ export default function Modal({ onClose }) {
       router.push('/');
     },
   });
+
   return (
     <ModalDiv className="modal">
       <div className="modal-overlay">
@@ -101,7 +103,7 @@ export default function Modal({ onClose }) {
             variant="primary"
             active={true}
             onClick={() => {
-              kakao(user);
+              kakao();
             }}
           />
 

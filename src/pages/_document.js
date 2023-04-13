@@ -1,6 +1,7 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 import { ServerStyleSheet } from 'styled-components';
 import Script from 'next/script';
+
 export default class MyDocument extends Document {
   static async getInitialProps(ctx) {
     const sheet = new ServerStyleSheet();
@@ -37,6 +38,7 @@ export default class MyDocument extends Document {
             as="style"
             href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/static/pretendard.css"
           />
+          <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
         </Head>
         <body>
           <Main />
