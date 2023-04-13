@@ -1,6 +1,7 @@
 import { HeadInfo } from '@components/Atoms/SEO/HeadInfo';
-import { Header } from '@components/Organisms/Header';
+import FirstPage from '@features/FirstPage';
 import React, { useEffect, useRef } from 'react';
+import styled from 'styled-components';
 
 const App = () => {
   return (

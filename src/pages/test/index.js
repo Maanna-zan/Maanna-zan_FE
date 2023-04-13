@@ -5,7 +5,7 @@ import React from 'react';
 const Test = () => {
   return (
     <>
-      <Header></Header>
+      <Header />
       <SectionMain />
     </>
   );

@@ -6,7 +6,9 @@ import { apis } from '../../shared/axios';
 import { keys } from '@utils/createQueryKey';
 
 export const useDeletePost = () => {
+
   const token = cookies.get('access_token');
+
   const queryClient = useQueryClient();
   const { mutate: deletePost } = useMutation(
     (id) =>
