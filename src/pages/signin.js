@@ -6,7 +6,6 @@ import { useRouter } from 'next/router';
 import jwtDecode from 'jwt-decode';
 import { ButtonText } from '@components/Atoms/Button';
 import { InputArea } from '@components/Atoms/Input';
-import { Header } from '@components/Organisms/Header';
 import { MainSearch } from '@components/Molecules/MainSearch';
 
 const SignIn = () => {
@@ -39,7 +38,7 @@ const SignIn = () => {
       router.push('/');
     },
   });
-
+  ////////////////
   //가드
   // useEffect(() => {
   //   const token = cookies.get('refresh_token');

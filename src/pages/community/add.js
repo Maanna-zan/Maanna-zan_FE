@@ -90,5 +90,4 @@ const AddPostForm = () => {
     </div>
   );
 };
-
 export default AddPostForm;
