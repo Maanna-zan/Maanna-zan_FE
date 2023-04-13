@@ -1,10 +1,12 @@
+import { SectionMain } from '@components/Templates/SectionMain';
+import { Header } from '@components/Organisms/Header';
 import React from 'react';
-import { TestTemplate } from '@components/Templates/TestTemplate';
 
 const Test = () => {
   return (
     <>
-      <TestTemplate />
+      <Header />
+      <SectionMain />
     </>
   );
 };
