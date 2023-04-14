@@ -12,8 +12,8 @@ export const useGetPost = () => {
     queryFn: async () => {
       const data = await apis.get('/posts', {
         headers: {
-          access_token: `${access_token}`,
-          // refresh_token: `${refresh_token}`,
+          // access_token: `${access_token}`,
+          refresh_token: `${refresh_token}`,
         },
       });
       console.log('data--------------', data);
