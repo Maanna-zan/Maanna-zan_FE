@@ -60,7 +60,7 @@ export const Post = ({ post, onSubmit, apiId }) => {
 
   const { mutate: likePost } = useMutation(
     (postId) =>
-      apis.put(`/posts/like/${postId}`, {
+      apis.put(`/posts/like/${postId}`, null, {
         headers: {
           access_token: `${access_token}`,
           // refresh_token: `${refresh_token}`,

@@ -44,8 +44,8 @@ export const LinkToNav = () => {
     },
     // onError 콜백 함수 구현
     onError: (error) => {
-      console.error(error);
-      // 에러 처리
+      console.log(error);
+      // // 에러 처리
       if (error.response.data.statusCode === 401) {
         const refreshToken = cookies.get('refresh_token');
         if (refreshToken) {

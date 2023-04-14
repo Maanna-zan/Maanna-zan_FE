@@ -3,6 +3,8 @@ import { cookies } from '../../shared/cookie';
 import { apis } from '../../shared/axios';
 import { useRouter } from 'next/router';
 import { useMutation } from '@tanstack/react-query';
+import { ButtonText } from '@components/Atoms/Button';
+import { InputArea } from '@components/Atoms/Input';
 const Changenick = () => {
   const router = useRouter();
   const [password, setPassword] = useState('');
@@ -26,8 +28,9 @@ const Changenick = () => {
     },
     // onError 콜백 함수 구현
     onError: (error) => {
-      console.error(error);
-      // 에러 처리
+      console.log(error.response);
+      // // 에러 처리
+      alert('중복된 닉네임이 있습니다.');
     },
     onSuccess: () => {
       alert('닉네임 변경이 완료됐습니다.');
@@ -37,20 +40,19 @@ const Changenick = () => {
   return (
     <div>
       changenickName
-      <input
+      <InputArea
         type="text"
         name="nickName"
         value={password.nickName}
         onChange={changePWInputHandler}
       />
-      <button
+      <ButtonText
+        label="닉네임변경"
         disabled={isLoading}
         onClick={() => {
           mutate(password);
         }}
-      >
-        닉네임 변경
-      </button>
+      />
     </div>
   );
 };

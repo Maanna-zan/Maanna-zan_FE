@@ -1,11 +1,10 @@
 import React from 'react';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import { apis } from '../shared/axios';
 import { cookies } from '../shared/cookie';
 
 const AlcoholList = () => {
-
   const go = useRouter();
   //토큰은 어세스나 리프레시 토큰 둘 중 하나만 헤더로 보여주면 된다.
   const token = cookies.get('refresh_token');
@@ -58,5 +57,6 @@ const AlcoholList = () => {
         ))}
     </div>
   );
+};
 
 export default AlcoholList;
