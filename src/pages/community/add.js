@@ -5,6 +5,7 @@ import { cookies } from '../../shared/cookie';
 import { apis } from '../../shared/axios';
 const AddPostForm = () => {
   const router = useRouter();
+
   const [post, setPost] = useState({
     storename: '',
     title: '',
@@ -23,9 +24,11 @@ const AddPostForm = () => {
     mutationFn: async (payload) => {
       const data = await apis.post('/posts', payload, {
         headers: {
+
           'Content-Type': 'multipart/form-data',
           access_token: `${access_token}`,
           // refresh_token: `${refresh_token}`,
+
         },
       });
       console.log('dataAdd------------>', data);

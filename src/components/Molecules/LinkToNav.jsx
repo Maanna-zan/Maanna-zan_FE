@@ -6,6 +6,9 @@ import { cookies } from '../../shared/cookie';
 import { useRouter } from 'next/router';
 import PortalExample from '@components/Modals/PortalExample';
 import SignUpPortalExample from '@components/Modals/SignUpPortalExample';
+import { useQuery } from '@tanstack/react-query';
+import { apis } from '@shared/axios';
+import instance from '@shared/instance';
 
 export const LinkToNav = () => {
   const router = useRouter();
@@ -13,16 +16,49 @@ export const LinkToNav = () => {
   // 토큰 삭제 함수
   const deleteTokens = () => {
     cookies.remove('access_token');
-    cookies.remove('refresh_token');
   };
   const handleLogout = () => {
     deleteTokens();
     router.push('/');
   };
-  const access_token = cookies.get('access_token');
+  const token = cookies.get('access_token');
+  const refresh_token = cookies.get('refresh_token');
+  console.log('access_token', token);
+  console.log('refresh_token', refresh_token);
+
   useEffect(() => {
-    setIsLoginMode(!!access_token);
-  }, [access_token]);
+    setIsLoginMode(!!token);
+  }, [token]);
+
+  const { data, isLoading, isError, isSuccess } = useQuery({
+    queryKey: ['GET_MYPAGE'],
+    queryFn: async () => {
+      const { data } = await apis.get('/my-page', {
+        headers: {
+          Access_Token: `${token}`,
+        },
+      });
+
+      console.log('data', data.data);
+      return data.data;
+    },
+    // onError 콜백 함수 구현
+    onError: (error) => {
+      console.log(error);
+      // // 에러 처리
+      if (error.response.data.statusCode === 401) {
+        const refreshToken = cookies.get('refresh_token');
+        if (refreshToken) {
+          const data = instance.get('/my-page', {
+            headers: {
+              refresh_token: `${refreshToken}`,
+            },
+          });
+          return data;
+        }
+      }
+    },
+  });
 
   return (
     <nav>
@@ -52,7 +88,7 @@ export const LinkToNav = () => {
       <Link href="/mypage">
         <ButtonText
           variant="borderColorWhite"
-          label={'마이페이지'}
+          label={`${data?.userName}님`}
         ></ButtonText>
       </Link>
     </nav>

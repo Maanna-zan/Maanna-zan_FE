@@ -3,6 +3,8 @@ import { cookies } from '../../shared/cookie';
 import { apis } from '../../shared/axios';
 import { useRouter } from 'next/router';
 import { useMutation } from '@tanstack/react-query';
+import { InputArea } from '@components/Atoms/Input';
+import { ButtonText } from '@components/Atoms/Button';
 
 const Changepw = () => {
   const router = useRouter();
@@ -38,20 +40,19 @@ const Changepw = () => {
   return (
     <div>
       changepw
-      <input
+      <InputArea
         type="password"
         name="password"
         value={password.password}
         onChange={changePWInputHandler}
       />
-      <button
+      <ButtonText
+        label="비밀번호 변경"
         disabled={isLoading}
         onClick={() => {
           mutate(password);
         }}
-      >
-        비밀번호 변경
-      </button>
+      />
     </div>
   );
 };

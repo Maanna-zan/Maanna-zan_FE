@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { apis } from '@shared/axios';
-import { HeadInfo } from '@components/Atoms/SEO/HeadInfo';
 import { useMutation } from '@tanstack/react-query';
-import { useConfirm } from '../../hook/useConfirm';
-import { InputArea } from '@components/Atoms/Input';
-import { ButtonText } from '@components/Atoms/Button';
 import styled from 'styled-components';
+import { HeadInfo } from '@components/Atoms/SEO/HeadInfo';
+import { ButtonText } from '@components/Atoms/Button';
+import { InputArea } from '@components/Atoms/Input';
+import { useConfirm } from '../../hook/useConfirm';
+
 //회원정보 기입시 각각 주의사항
 import UserNameAlert from '@features/signUpAlert/UserNameAlert';
 import NickNameAlert from '../../features/signUpAlert/NickNameAlert';
@@ -17,7 +18,7 @@ import BirthAlert from '@features/signUpAlert/BirthAlert';
 
 export default function SignUpModal({ onClose }) {
   const router = useRouter();
-  //회원가입 다음 버튼 눌렀을 때
+  //회원가입 다음 버튼 눌렀을 때햣
   const [next, setNext] = React.useState(false);
 
   // 비동기서버통신을 위한 커스텀 훅
@@ -245,10 +246,14 @@ export default function SignUpModal({ onClose }) {
             required
           />
           {passwordError && (
-            <p style={{ color: 'red' }}>비밀번호가 일치하지 않습니다.</p>
+            <p style={{ color: 'red', fontSize: '12px', marginTop: '-5px' }}>
+              비밀번호가 일치하지 않습니다.
+            </p>
           )}
           {!passwordError && (
-            <p style={{ color: 'red' }}>비밀번호가 일치합니다.</p>
+            <p style={{ color: 'red', fontSize: '12px', marginTop: '-5px' }}>
+              비밀번호가 일치합니다.
+            </p>
           )}
           {next ? (
             <>
@@ -342,7 +347,6 @@ const ModalDiv = styled.div`
   height: 100%;
   background-color: #c9cdd2;
   mix-blend-mode: darken;
-
   z-index: 999;
 
   .modal-overlay {

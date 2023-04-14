@@ -1,57 +1,37 @@
-// import axios from 'axios';
-// import { cookies } from './cookie';
+import axios from 'axios';
+import { cookies } from './cookie';
 
-// const instance = axios.create({
-//   baseURL: 'http://3.34.179.86/',
-// });
+const instance = axios.create({
+  baseURL: 'http://3.34.179.86',
+});
 
-// // //응답받고 실행
-// // instance.interceptors.response.use(
-// //   (response) => {
-// //     return response;
-// //   },
-// //   async (error) => {
-// //     const originalRequest = error.config;
+instance.interceptors.response.use(
+  (response) => {
+    const newAccessToken = response.headers.access_token;
+    if (newAccessToken) {
+      cookies.set('access_token', newAccessToken);
+    }
+    return response;
+  },
+  async (error) => {
+    const originalRequest = error.config;
 
-// //     if (error.response.status === 401 && !originalRequest._retry) {
-// //       originalRequest._retry = true;
+    if (error.response.data.statusCode === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
 
-// //       // 리프레시 토큰을 가져옵니다.
-// //       const refreshToken = localStorage.getItem('refresh_token');
+      const refreshToken = cookies.get('refresh_token');
+      if (refreshToken) {
+        headers.refresh_token = `${refreshToken}`;
+        const accessToken = response.data.access_token;
+        cookies.set('access_token', accessToken);
+        originalRequest.headers.cookies = `${accessToken}`;
+        return axios(originalRequest);
+      }
+    }
 
-// //     }
+    return Promise.reject(error);
+  },
+);
 
-// //     return Promise.reject(error);
-// //   },
-// // );
+export default instance;
 
-// // export default instance;
-// // 요청 전에 헤더에 리프레시 토큰 추가
-// instance.interceptors.request.use((config) => {
-//   const refreshToken = localStorage.getItem('refresh_token');
-//   if (refreshToken) {
-//     config.headers.refresh_token = Bearer`${refreshToken}`;
-//   }
-//   return config;
-// });
-
-// // 응답 처리
-// instance.interceptors.response.use(
-//   (response) => {
-//     return response;
-//   },
-//   async (error) => {
-//     const originalRequest = error.config;
-
-//     if (error.response.status === 401 && !originalRequest._retry) {
-//       originalRequest._retry = true;
-
-//       // 리프레시 토큰을 가져옵니다.
-//       const refreshToken = localStorage.getItem('refresh_token');
-//     }
-
-//     return Promise.reject(error);
-//   },
-// );
-
-// export default instance;

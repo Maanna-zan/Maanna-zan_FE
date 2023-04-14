@@ -4,16 +4,17 @@ import { keys } from '@utils/createQueryKey';
 import { useQuery } from '@tanstack/react-query';
 import { cookies } from '@shared/cookie';
 export const useGetPost = () => {
-  const access_token = cookies.get('access_token');
-  const refresh_token = cookies.get('refresh_token');
+
+  const token = cookies.get('access_token');
+
 
   const { data, isLoading, isError } = useQuery({
     queryKey: keys.GET_POSTS,
     queryFn: async () => {
       const data = await apis.get('/posts', {
         headers: {
-          // access_token: `${access_token}`,
-          refresh_token: `${refresh_token}`,
+          access_token: `${token}`,
+
         },
       });
       console.log('data--------------', data);
