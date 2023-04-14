@@ -13,7 +13,6 @@ export const useGetPost = () => {
     queryFn: async () => {
       const data = await apis.get('/posts', {
         headers: {
-
           access_token: `${token}`,
 
         },
