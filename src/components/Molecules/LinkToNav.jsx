@@ -16,6 +16,7 @@ export const LinkToNav = () => {
   // 토큰 삭제 함수
   const deleteTokens = () => {
     cookies.remove('access_token');
+    cookies.remove('refresh_token');
   };
   const handleLogout = () => {
     deleteTokens();
