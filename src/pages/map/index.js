@@ -3,6 +3,11 @@ import { Map, MapMarker } from 'react-kakao-maps-sdk';
 import { useMutation } from '@tanstack/react-query';
 import { apis } from '@shared/axios';
 import { cookies } from '@shared/cookie';
+import { InputArea } from '@components/Atoms/Input';
+import { FlexRow } from '@components/Atoms/Flex';
+import styled from 'styled-components';
+import { WebWrapper, WebWrapperHeight } from '@components/Atoms/Wrapper';
+import { ButtonText } from '@components/Atoms/Button';
 
 export const MapMain = () => {
   //  지도 초기 위치 및 위도경도 state값
@@ -98,9 +103,11 @@ export const MapMain = () => {
   };
 
   return (
-    <div>
+    <WebWrapper>
+      <WebWrapperHeight>
+      <FlexRow style={{ justifyContent: 'space-between' }}>
       <div>
-        <Map center={center} style={{ width: '90vw', height: '560px' }}>
+        <Map center={center} style={{ width: '690px', height: '803px', top:'179', left:'360' }}>
           {positions.map((position, index) => (
             <MapMarker
               key={index}
@@ -129,67 +136,93 @@ export const MapMain = () => {
         </Map>
       </div>
       
-      <div>
-        <div>
-          A :{' '}
-          <input
-            name="1"
-            type="text"
-            value={searchAddress1}
-            onChange={(e) => setSearchAddress1(e.target.value)}
+      <contentWrapper>
+        <h1>
+          친구와 본인의 위치를 입력해주세요.
+        </h1>
+        <p>
+        중간 위치에 있는 맛집을 찾아드립니다.
+        </p>
+        <InputArea
+        placeholder='이 버튼을 눌러 위치를 추가해주세요.'
+        variant='default'
+        size='leftIcon'
+        />
+
+        <ButtonWrapper>
+          <ButtonText
+          size='lg'
+          variant='default'
           >
-            {/* {positions[0].latlng} */}
-          </input>
-          <button onClick={() => SearchMap(searchAddress1)}>확인</button>
-        </div>
-        <div>
-          B :{' '}
-          <input
-            name="2"
-            type="text"
-            value={searchAddress2}
-            onChange={(e) => setSearchAddress2(e.target.value)}
-          />
-          <button onClick={() => SearchMap(searchAddress2)}>확인</button>
-        </div>
-        <div>
-          C :{' '}
-          <input
-            name="3"
-            type="text"
-            value={searchAddress3}
-            onChange={(e) => setSearchAddress3(e.target.value)}
-          />
-          <button onClick={() => SearchMap(searchAddress3)}>확인</button>
-        </div>
-        <div>
-          D :{' '}
-          <input
-            name="4"
-            type="text"
-            value={searchAddress4}
-            onChange={(e) => setSearchAddress4(e.target.value)}
-          />
-          <button onClick={() => SearchMap(searchAddress4)}>확인</button>
-          <button
-            onClick={() => {
-              setSearchAddress4('');
-            }}
-          >
-            cancel
-          </button>
-        </div>
-        <div>
-          <button
+            추가하기
+          </ButtonText>
+          <ButtonText
+            size='lg'
+            variant='primary'
             onClick={() => {
               mutate(positions);
             }}
           >
             중간위치찾기
-          </button>
-        </div>
-      </div>
-    </div>
+          </ButtonText>
+        </ButtonWrapper>
+      </contentWrapper>
+      </FlexRow>
+      </WebWrapperHeight>
+    </WebWrapper>
   );
 };
 export default MapMain;
+const contentWrapper = styled.div`
+`
+const InputWrapper = styled.div`
+`
+const ButtonWrapper = styled.div`
+`
+
+
+
+{/* <InputWrapper>
+<div>
+  A :{' '}
+  <input
+    name="1"
+    type="text"
+    value={searchAddress1}
+    onChange={(e) => setSearchAddress1(e.target.value)}
+  >
+    {positions[0].latlng}
+  </input>
+  <button onClick={() => SearchMap(searchAddress1)}>확인</button>
+</div>
+<div>
+  B :{' '}
+  <input
+    name="2"
+    type="text"
+    value={searchAddress2}
+    onChange={(e) => setSearchAddress2(e.target.value)}
+  />
+  <button onClick={() => SearchMap(searchAddress2)}>확인</button>
+</div>
+<div>
+  C :{' '}
+  <input
+    name="3"
+    type="text"
+    value={searchAddress3}
+    onChange={(e) => setSearchAddress3(e.target.value)}
+  />
+  <button onClick={() => SearchMap(searchAddress3)}>확인</button>
+</div>
+<div>
+  D :{' '}
+  <input
+    name="4"
+    type="text"
+    value={searchAddress4}
+    onChange={(e) => setSearchAddress4(e.target.value)}
+  />
+  <button onClick={() => SearchMap(searchAddress4)}>확인</button>
+</div>
+</InputWrapper> */}
