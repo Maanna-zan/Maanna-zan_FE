@@ -4,8 +4,8 @@ import { HeadInfo } from '@components/Atoms/SEO/HeadInfo';
 const Alcohols = () => {
   return (
     <div>
-      <HeadInfo title="만나잔에 오신걸 환영합니다!" />
-      <AlcoholList />
+      <HeadInfo title="만나잔에 오신걸 환영합니다! " />
+      <AlcoholList apiId={'7885177'} />
     </div>
   );
 };
