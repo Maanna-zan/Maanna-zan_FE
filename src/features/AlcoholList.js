@@ -5,13 +5,17 @@ import { apis } from '../shared/axios';
 import { cookies } from '../shared/cookie';
 // import ShareApiBtn from '../hook/shareBtn/ShareApiBtn';
 import { useGetStore } from '../hook/alcohol/useGetStore';
+import { useGetAllStore } from '../hook/alcohol/useGetAllStore';
 import ShareApiBtn from '../hook/shareBtn/shareApiBtn';
+import Link from 'next/link';
 
-const AlcoholList = ({ apiId }) => {
-  const go = useRouter();
-  const { store, storeIsLoading, isError } = useGetStore(apiId);
-  console.log('store__data', store);
-  if (storeIsLoading) {
+const AlcoholList = () => {
+  const router = useRouter();
+  const { apiId } = router.query;
+  const { page = 1 } = router.query;
+  const { storeAll, storeIsAllLoading, isError } = useGetAllStore(page, 16);
+
+  if (storeIsAllLoading) {
     return <div>Loading...</div>;
   }
 
@@ -21,35 +25,26 @@ const AlcoholList = ({ apiId }) => {
 
   return (
     <>
-      {
-        //Array.isArray(store) &&
-        store?.map((store) => (
-          <div
-            key={store?.id}
-            onClick={() => {
-              go.push(`/alcohols/${store?.id}`);
-            }}
+      {storeAll?.map((store) => (
+        <div
+          key={store.id}
+          onClick={() => {
+            router.push(`/alcohols/${store.apiId}`);
+          }}
+        >
+          <h1>{store.address_name}</h1>
+          <div>{store.id}</div>
+          <div>{store.likecnt}</div>
+          <img src={store.image} alt={store.place_name} />
+          <div>{store.description}</div>
+          <ShareApiBtn
+            url={`http://localhost:3000/stores/${store.apiId}`}
+            title={store.place_name}
           >
-            <h1>{store?.address_name}</h1>
-            <div>{store?.id}</div>
-            <div>{store?.likecnt}</div>
-            <img src={store?.image} alt={store?.place_name} />
-            <div>{store?.description}</div>
-            <ShareApiBtn
-              url={`http://localhost:3000/stores/${store.id}`}
-              title={store?.place_name}
-            />
-
-            <ShareApiBtn
-              url={`http://localhost:3000/stores/${store.id}`}
-              title={store?.place_name}
-              text={'Check out this page'}
-            >
-              공유하기
-            </ShareApiBtn>
-          </div>
-        ))
-      }
+            공유하기
+          </ShareApiBtn>
+        </div>
+      ))}
     </>
   );
 };
