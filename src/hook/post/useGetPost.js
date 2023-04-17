@@ -4,9 +4,7 @@ import { keys } from '@utils/createQueryKey';
 import { useQuery } from '@tanstack/react-query';
 import { cookies } from '@shared/cookie';
 export const useGetPost = () => {
-
   const token = cookies.get('access_token');
-
 
   const { data, isLoading, isError } = useQuery({
     queryKey: keys.GET_POSTS,
@@ -14,7 +12,6 @@ export const useGetPost = () => {
       const data = await apis.get('/posts', {
         headers: {
           access_token: `${token}`,
-
         },
       });
       console.log('data--------------', data);
