@@ -1,4 +1,3 @@
-import axios from 'axios';
 import React, { useRef, useState } from 'react';
 import { Map, MapMarker } from 'react-kakao-maps-sdk';
 import { useMutation } from '@tanstack/react-query';
@@ -16,10 +15,8 @@ export const MapMain = () => {
   const [searchAddress2, setSearchAddress2] = useState('');
   const [searchAddress3, setSearchAddress3] = useState('');
   const [searchAddress4, setSearchAddress4] = useState('');
-  //  검색 Button Handler 1
-  const searchAddressButtonHandler1 = (e) => {
-    setSearchAddress1(e.target.value);
-  };
+  //  중간 지점 마커 state
+  const [midPoint, setMidPoint] = useState(null);
   //  마커 찍어 줄 state
   const [positions, setPositions] = useState([]);
   const [location, setLocation] = useState({
@@ -32,19 +29,8 @@ export const MapMain = () => {
     x4: '',
     y4: '',
   });
-  //  ChangeInputHandler
-  const changeInputHandler = (e) => {
-    const name = e.target.name;
-    const values = positions;
-    setLocation((pre) => ({
-      ...pre,
-      [`x${name}`]: values.lat,
-      [`y${name}`]: values.lng,
-    }));
-    console.log('values->', values);
-  };
 
-  const token = cookies.get('access_token');
+  const token = cookies.get('refresh_token');
   const { mutate, isLoading } = useMutation({
     mutationFn: async (location) => {
       console.log('location->', location[0].latlng);
@@ -62,7 +48,7 @@ export const MapMain = () => {
         },
         {
           headers: {
-            access_token: `${token}`,
+            refresh_token: `${token}`,
           },
         },
       );
@@ -77,6 +63,11 @@ export const MapMain = () => {
       const response = data.data.message;
       console.log('response', response);
       alert(response);
+      const lat = data.data.data.lat;
+      const lng = data.data.data.lng;
+      const newMidPoint = {lat, lng};
+      console.log("newMidPoint",newMidPoint);
+      setMidPoint(newMidPoint);
     },
   });
 
@@ -98,8 +89,10 @@ export const MapMain = () => {
             latlng: { lat: newSearch.y, lng: newSearch.x },
           },
         ]);
+        console.log('newSearch->', newSearch);
+        console.log('positions->', positions);
       }
-      console.log('positions->', positions);
+      
     };
     ps.keywordSearch(`${searchAddress}`, placesSearchCB);
   };
@@ -122,17 +115,20 @@ export const MapMain = () => {
               title={position.title} // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
             />
           ))}
+          {midPoint && (
+            <MapMarker
+              position={midPoint}
+              image={{
+                src:
+                  'MaannajanLogo.png',
+                size: { width: 30, height: 38 },
+              }}
+              title="중간지점"
+            />
+          )}
         </Map>
       </div>
-
-      <div>
-        <input
-          name="search1"
-          value={location.searchAddress1}
-          onChange={searchAddressButtonHandler1}
-        />
-        <button onClick={() => SearchMap(searchAddress1)}>검색</button>
-      </div>
+      
       <div>
         <div>
           A :{' '}
