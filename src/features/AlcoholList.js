@@ -1,61 +1,56 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import { apis } from '../shared/axios';
 import { cookies } from '../shared/cookie';
+// import ShareApiBtn from '../hook/shareBtn/ShareApiBtn';
+import { useGetStore } from '../hook/alcohol/useGetStore';
+import ShareApiBtn from '../hook/shareBtn/shareApiBtn';
 
-const AlcoholList = () => {
+const AlcoholList = ({ apiId }) => {
   const go = useRouter();
-  //토큰은 어세스나 리프레시 토큰 둘 중 하나만 헤더로 보여주면 된다.
-  const token = cookies.get('refresh_token');
-  console.log('token', token);
-  const { data, isLoading, isError, isSuccess } = useQuery({
-    queryKey: ['GET_ALCOHOLS'],
-    queryFn: async () => {
-      const data = await apis.get('/posts', {
-        //   headers: {
-        //     refresh_token: `${token}`,
-        //   },
-      });
-      console.log('data', data);
-      return data.data;
-    },
-  });
-  //   const checkToken = async () => {
-  //     apis.get('/user', {
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     });
-  //   };
+  const { store, storeIsLoading, isError } = useGetStore(apiId);
+  console.log('store__data', store);
+  if (storeIsLoading) {
+    return <div>Loading...</div>;
+  }
 
-  //   //가드 토큰 없으면 보내줘
-  //   useEffect(() => {
-  //     const refresh_token = cookies.get('refresh_token');
-  //     if (!refresh_token) {
-  //       router.push('/signin');
-  //     }
-  //     checkToken();
-  //   }, []);
+  if (isError) {
+    return <div>Error occurred while fetching data</div>;
+  }
+
   return (
-    <div>
-      AlcholList
-      {data &&
-        data.map((alcohol) => (
+    <>
+      {
+        //Array.isArray(store) &&
+        store?.map((store) => (
           <div
-            key={alcohol.id}
+            key={store?.id}
             onClick={() => {
-              go.push(`/alcohols/${alcohol.id}`);
+              go.push(`/alcohols/${store?.id}`);
             }}
           >
-            <h1>{alcohol.storename}</h1>
-            <div>{alcohol.id}</div>
-            <div>{alcohol.likecnt}</div>
-            <img src={alcohol.image} alt={alcohol.storename} />
-            <div>{alcohol.description}</div>
+            <h1>{store?.address_name}</h1>
+            <div>{store?.id}</div>
+            <div>{store?.likecnt}</div>
+            <img src={store?.image} alt={store?.place_name} />
+            <div>{store?.description}</div>
+            <ShareApiBtn
+              url={`http://localhost:3000/stores/${store.id}`}
+              title={store?.place_name}
+            />
+
+            <ShareApiBtn
+              url={`http://localhost:3000/stores/${store.id}`}
+              title={store?.place_name}
+              text={'Check out this page'}
+            >
+              공유하기
+            </ShareApiBtn>
           </div>
-        ))}
-    </div>
+        ))
+      }
+    </>
   );
 };
 
