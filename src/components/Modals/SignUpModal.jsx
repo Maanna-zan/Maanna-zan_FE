@@ -345,8 +345,7 @@ const ModalDiv = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: #c9cdd2;
-  mix-blend-mode: darken;
+  background-color: #6a758152;
   z-index: 999;
 
   .modal-overlay {
@@ -359,7 +358,7 @@ const ModalDiv = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: rgba(255, 255, 255);
+    background-color: white;
     z-index: 1000;
     max-width: 600px;
     min-width: 380px;

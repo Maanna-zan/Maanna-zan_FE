@@ -40,8 +40,8 @@ export default function Modal({ onClose }) {
   });
 
   const { mutate: kakao } = useMutation({
-    mutationFn: async () => {
-      const data = await apis.post('/OAuth/Kakao');
+    mutationFn: async (user) => {
+      const data = await apis.post('/OAuth/Kakao', user);
       //디코드 활용
       console.log('data', data);
     },
@@ -97,6 +97,16 @@ export default function Modal({ onClose }) {
               register(user);
             }}
           />
+          <ButtonText
+            style={{ marginTop: '30px' }}
+            label="카카오로그인"
+            size="md"
+            variant="primary"
+            active={true}
+            onClick={() => {
+              kakao(user);
+            }}
+          />
 
           <button
             style={{
@@ -121,8 +131,7 @@ const ModalDiv = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: #c9cdd2;
-  mix-blend-mode: darken;
+  background-color: #6a758152;
   z-index: 999;
   .modal-overlay {
     padding: 20px 40px;

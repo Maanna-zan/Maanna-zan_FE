@@ -9,6 +9,7 @@ import SettingPortalExample from '@components/Modals/SettingPortalExample';
 import FindPost from '@features/mypage/FindPost';
 import Log from '@features/mypage/Log';
 import Save from '@features/mypage/Save';
+import { WebWrapper } from '@components/Atoms/Wrapper';
 
 const MyPage = () => {
   const router = useRouter();
@@ -34,108 +35,222 @@ const MyPage = () => {
   });
 
   return (
-    <>
-      <div key={data?.id}>
-        MyPage
-        <div style={{ display: 'flex' }}>
-          <h1>{data?.userName}님</h1>
-          <SettingPortalExample data={data} />
-        </div>
-        <div>게시글 {data?.postCnt}</div>
-      </div>
+    <div style={{ zIndex: '200' }}>
+      <WebWrapper>
+        <UserDiv key={data?.id}>
+          <div className="userSetting">
+            <UserNameP>
+              <Span>{data?.userName}</Span>님
+            </UserNameP>
+            <SettingPortalExample data={data} />
+          </div>
+          <p className="postsCount">
+            게시글 <span className="spanPostsCount">{data?.postCnt}</span>
+          </p>
+        </UserDiv>
+      </WebWrapper>
       {settingMyPage === 'log' ? (
         <>
-          <div style={{ display: 'flex', gap: '5px', alignContent: 'center' }}>
-            <p
-              onClick={() => {
-                setSettingMyPage('log');
-              }}
+          <WebWrapper>
+            <div
+              style={{ display: 'flex', gap: '40px', alignContent: 'center' }}
             >
-              기록
-            </p>
-            <p
-              onClick={() => {
-                setSettingMyPage('post');
-              }}
-            >
-              내가 작성한 글 보기
-            </p>
-            <p
-              onClick={() => {
-                setSettingMyPage('save');
-              }}
-            >
-              보관함
-            </p>
-          </div>
+              <p
+                style={{ color: 'red' }}
+                onClick={() => {
+                  setSettingMyPage('log');
+                }}
+              >
+                기록
+              </p>
+              <p
+                onClick={() => {
+                  setSettingMyPage('post');
+                }}
+              >
+                내가 작성한 글 보기
+              </p>
+              <p
+                onClick={() => {
+                  setSettingMyPage('like');
+                }}
+              >
+                좋아요
+              </p>
+            </div>
+          </WebWrapper>
           <BottomDiv>
-            <Log />
+            <WebWrapper>
+              <Log />
+            </WebWrapper>
           </BottomDiv>
         </>
       ) : settingMyPage === 'post' ? (
         <>
-          <div style={{ display: 'flex', gap: '5px', alignContent: 'center' }}>
-            <p
-              onClick={() => {
-                setSettingMyPage('log');
+          <WebWrapper>
+            <div
+              style={{
+                display: 'flex',
+                gap: '40px',
+                alignContent: 'center',
               }}
             >
-              기록
-            </p>
-            <p
-              onClick={() => {
-                setSettingMyPage('post');
-              }}
-            >
-              내가 작성한 글 보기
-            </p>
-            <p
-              onClick={() => {
-                setSettingMyPage('save');
-              }}
-            >
-              보관함
-            </p>
-          </div>
+              <p
+                onClick={() => {
+                  setSettingMyPage('log');
+                }}
+              >
+                기록
+              </p>
+              <p
+                style={{ color: 'red' }}
+                onClick={() => {
+                  setSettingMyPage('post');
+                }}
+              >
+                내가 작성한 글 보기
+              </p>
+              <p
+                onClick={() => {
+                  setSettingMyPage('like');
+                }}
+              >
+                좋아요
+              </p>
+            </div>
+          </WebWrapper>
+
           <BottomDiv>
-            <FindPost />
+            <WebWrapper></WebWrapper>
+          </BottomDiv>
+        </>
+      ) : settingMyPage === 'like' ? (
+        <>
+          <WebWrapper>
+            <div
+              style={{
+                display: 'flex',
+                gap: '40px',
+                alignContent: 'center',
+              }}
+            >
+              <p
+                onClick={() => {
+                  setSettingMyPage('log');
+                }}
+              >
+                기록
+              </p>
+              <p
+                onClick={() => {
+                  setSettingMyPage('post');
+                }}
+              >
+                내가 작성한 글 보기
+              </p>
+              <p
+                style={{ color: 'red' }}
+                onClick={() => {
+                  setSettingMyPage('like');
+                }}
+              >
+                좋아요
+              </p>
+            </div>
+          </WebWrapper>
+
+          <BottomDiv>
+            <WebWrapper>
+              <FindPost />
+            </WebWrapper>
           </BottomDiv>
         </>
       ) : (
         <>
-          <div style={{ display: 'flex', gap: '5px', alignContent: 'center' }}>
-            <p
-              onClick={() => {
-                setSettingMyPage('log');
-              }}
+          <WebWrapper>
+            <div
+              style={{ display: 'flex', gap: '10px', alignContent: 'center' }}
             >
-              기록
-            </p>
-            <p
-              onClick={() => {
-                setSettingMyPage('post');
-              }}
-            >
-              내가 작성한 글 보기
-            </p>
-            <p
-              onClick={() => {
-                setSettingMyPage('save');
-              }}
-            >
-              보관함
-            </p>
-          </div>
+              <p
+                onClick={() => {
+                  setSettingMyPage('log');
+                }}
+              >
+                기록
+              </p>
+              <p
+                onClick={() => {
+                  setSettingMyPage('post');
+                }}
+              >
+                내가 작성한 글 보기
+              </p>
+              <p
+                onClick={() => {
+                  setSettingMyPage('like');
+                }}
+              >
+                좋아요
+              </p>
+              <p
+                style={{ color: 'red' }}
+                onClick={() => {
+                  setSettingMyPage('save');
+                }}
+              >
+                보관함
+              </p>
+            </div>
+          </WebWrapper>
+
           <BottomDiv>
-            <Save data={data} />
+            <WebWrapper>
+              <Save data={data} />
+            </WebWrapper>
           </BottomDiv>
         </>
       )}
-    </>
+    </div>
   );
 };
 
 export default MyPage;
+
+const UserDiv = styled.div`
+  margin-top: 49px;
+  .userSetting {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .postsCount {
+    margin-top: -18px;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 18px;
+  }
+  .spanPostsCount {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 18px;
+    margin-left: 10px;
+  }
+`;
+
+const UserNameP = styled.p`
+  font-family: 'Pretendard';
+  font-style: normal;
+  line-height: 36px;
+  font-size: 28px;
+`;
+const Span = styled.span`
+  font-style: normal;
+  line-height: 36px;
+  font-weight: 700;
+  font-size: 28px;
+`;
 const BottomDiv = styled.div`
   width: 100%;
   height: 727px;

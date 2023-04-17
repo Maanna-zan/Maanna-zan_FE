@@ -7,7 +7,14 @@ export default function SettingPortalExample({ data }) {
   const [showModal, setShowModal] = useState(false);
   return (
     <>
-      <div onClick={() => setShowModal(true)}>setting</div>
+      <div onClick={() => setShowModal(true)}>
+        {' '}
+        <img
+          style={{ width: '20px', height: '20px' }}
+          src="Group 2000.png"
+          alt="유저 설정버튼 입니다."
+        />
+      </div>
       {showModal &&
         createPortal(
           <SettingModal data={data} onClose={() => setShowModal(false)} />,
