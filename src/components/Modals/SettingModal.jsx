@@ -96,20 +96,40 @@ export default function SettingModal({ onClose, data }) {
   return (
     <ModalDiv className="modal">
       <div className="modal-overlay">
-        {isEditMode === 'password' ? (
+        <img
+          style={{
+            position: 'fixed',
+            right: '20px',
+            top: '20px',
+            // display: 'flex',
+            // justifyContent: 'flex-end',
+            width: '12px',
+            height: '12px',
+          }}
+          onClick={onClose}
+          src="Group 1972.png"
+          alt="취소 버튼"
+        />
+        {isEditMode === 'profile' ? (
           <InnerDiv>
             <EttingDiv>
               <h3>계정 설정</h3>
             </EttingDiv>
-            <div style={{ display: 'flex' }}>
+            <ModeParentsDiv>
+              <div className="modeDiv">
+                <p
+                  className="modeP"
+                  onClick={() => {
+                    setIsEditMode('profile');
+                  }}
+                >
+                  프로필 설정
+                </p>
+                <Hr />
+              </div>
+
               <p
-                onClick={() => {
-                  setIsEditMode('profile');
-                }}
-              >
-                프로필 설정
-              </p>
-              <p
+                className="unModeP"
                 onClick={() => {
                   setIsEditMode('password');
                 }}
@@ -117,15 +137,77 @@ export default function SettingModal({ onClose, data }) {
                 비밀번호 설정
               </p>
               <p
+                className="unModeP"
                 onClick={() => {
                   setIsEditMode('env');
                 }}
               >
                 환경설정
               </p>
-            </div>
+            </ModeParentsDiv>
+            <div>닉네임</div>
+            <InputArea
+              size="lg"
+              variant="default"
+              type="text"
+              name="nickName"
+              value={password.nickName}
+              onChange={changePWInputHandler}
+            />
+            <div>이메일</div>
+            <InputDiv>{data.email}</InputDiv>
+
+            <BottomHr />
+            <ButtonText
+              label="저장하기"
+              variant="primary"
+              active={true}
+              disabled={isLoading}
+              onClick={() => {
+                nickName(password);
+                onClose();
+              }}
+            />
+          </InnerDiv>
+        ) : isEditMode === 'password' ? (
+          <InnerDiv>
+            <EttingDiv>
+              <h3>계정 설정</h3>
+            </EttingDiv>
+            <ModeParentsDiv>
+              <p
+                className="unModeP"
+                onClick={() => {
+                  setIsEditMode('profile');
+                }}
+              >
+                프로필 설정
+              </p>
+              <div className="modeDiv">
+                <p
+                  className="modeP"
+                  onClick={() => {
+                    setIsEditMode('password');
+                  }}
+                >
+                  비밀번호 설정
+                </p>
+                <Hr />
+              </div>
+
+              <p
+                className="unModeP"
+                onClick={() => {
+                  setIsEditMode('env');
+                }}
+              >
+                환경설정
+              </p>
+            </ModeParentsDiv>
             <p>새 비밀번호</p>
             <InputArea
+              size="lg"
+              variant="default"
               type="password"
               name="password"
               placeholder="비밀번호를 입력해주세요."
@@ -136,6 +218,8 @@ export default function SettingModal({ onClose, data }) {
             />
             <p>비밀번호 확인</p>
             <InputArea
+              size="lg"
+              variant="default"
               type="password"
               name="checkPassword"
               placeholder="비밀번호를 확인해주세요."
@@ -152,16 +236,23 @@ export default function SettingModal({ onClose, data }) {
                 비밀번호가 일치합니다.
               </p>
             )}
-            <ButtonText
-              label="비밀번호 변경"
-              variant="primary"
-              active={true}
+            <p
+              style={{
+                margin: '0 auto',
+                fontStyle: 'normal',
+                fontWeight: '400',
+                fontSize: '12px',
+                lineHeight: '16px',
+              }}
               onClick={() => {
                 if (validateForm(password)) {
                   changePassword(password);
                 }
               }}
-            />
+            >
+              변경하기
+            </p>
+            <BottomHr />
             <ButtonText
               label="저장하기"
               variant="primary"
@@ -170,13 +261,14 @@ export default function SettingModal({ onClose, data }) {
               onClick={onClose}
             />
           </InnerDiv>
-        ) : isEditMode === 'profile' ? (
+        ) : (
           <InnerDiv>
             <EttingDiv>
               <h3>계정 설정</h3>
             </EttingDiv>
-            <div style={{ display: 'flex' }}>
+            <ModeParentsDiv>
               <p
+                className="unModeP"
                 onClick={() => {
                   setIsEditMode('profile');
                 }}
@@ -184,72 +276,32 @@ export default function SettingModal({ onClose, data }) {
                 프로필 설정
               </p>
               <p
+                className="unModeP"
                 onClick={() => {
                   setIsEditMode('password');
                 }}
               >
                 비밀번호 설정
               </p>
-              <p
-                onClick={() => {
-                  setIsEditMode('env');
-                }}
-              >
-                환경설정
-              </p>
-            </div>
-            <div>닉네임</div>
-            <InputArea
-              size="md"
-              type="text"
-              name="nickName"
-              value={password.nickName}
-              onChange={changePWInputHandler}
-            />
-            <div>이메일</div>
-            <InputDiv>{data.email}</InputDiv>
+              <div className="modeDiv">
+                <p
+                  className="modeP"
+                  onClick={() => {
+                    setIsEditMode('env');
+                  }}
+                >
+                  환경설정
+                </p>
+                <Hr />
+              </div>
+            </ModeParentsDiv>
 
-            <ButtonText
-              label="저장하기"
-              variant="primary"
-              active={true}
-              disabled={isLoading}
-              onClick={() => {
-                nickName(password);
-                onClose();
-              }}
-            />
-          </InnerDiv>
-        ) : (
-          <InnerDiv>
-            <div style={{ display: 'flex' }}>
-              <p
-                onClick={() => {
-                  setIsEditMode('profile');
-                }}
-              >
-                프로필 설정
-              </p>
-              <p
-                onClick={() => {
-                  setIsEditMode('password');
-                }}
-              >
-                비밀번호 설정
-              </p>
-              <p
-                onClick={() => {
-                  setIsEditMode('env');
-                }}
-              >
-                환경설정
-              </p>
-            </div>
             <div>다크모드 넣어주기</div>
+            <BottomHr />
           </InnerDiv>
         )}
 
-        <button
+        {/* <button
           style={{
             display: 'flex',
             justifyContent: 'flex-end',
@@ -261,7 +313,7 @@ export default function SettingModal({ onClose, data }) {
           onClick={onClose}
         >
           Close
-        </button>
+        </button> */}
       </div>
     </ModalDiv>
   );
@@ -273,8 +325,8 @@ const ModalDiv = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: #c9cdd2;
-  mix-blend-mode: darken;
+  background-color: #6a758152;
+  /* mix-blend-mode: darken; */
   z-index: 999;
   .modal-overlay {
     padding: 20px 40px;
@@ -329,4 +381,34 @@ const FindButton = styled.button`
   background-color: transparent;
   width: fit-content;
   font-size: 11px;
+`;
+
+const ModeParentsDiv = styled.div`
+  display: flex;
+  gap: 20px;
+  font-size: 14px;
+  justify-content: center;
+  .unModeP {
+    color: #9ea4aa;
+  }
+  .modeDiv {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+`;
+const Hr = styled.hr`
+  border: 0.5px solid #ff4840;
+  width: 60px;
+  height: 0px;
+  border-bottom: 0px;
+  margin-top: -13px;
+`;
+
+const BottomHr = styled.hr`
+  border: 0.5px solid#E8EBED;
+  width: 368px;
+  height: 0px;
+  border-bottom: 0px;
+  margin-top: 170px;
 `;

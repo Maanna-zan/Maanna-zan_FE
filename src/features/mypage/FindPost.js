@@ -2,38 +2,106 @@ import { apis } from '@shared/axios';
 import { useQuery } from '@tanstack/react-query';
 import React from 'react';
 import { cookies } from '@shared/cookie';
+import styled from 'styled-components';
+import { useRouter } from 'next/router';
 
 const FindPost = () => {
   const token = cookies.get('access_token');
+  const push = useRouter();
 
-  const { data } = useQuery({
-    querryKey: ['GET_MYPOSTS'],
+  const { data, isLoading } = useQuery({
+    queryKey: ['GET_MYPOSTS'],
     queryFn: async () => {
-      const data = await apis.get('/my-page/likePost?all?page=1?size=5', {
+      const { data } = await apis.get('/my-page/likePost?all?page=1?size=5', {
         headers: {
           Access_Token: `${token}`,
         },
       });
-      console.log('data--------------', data.data.data.posts);
-      return data.data.data.posts;
+      console.log('data--------------', data.data.posts);
+      return data.data.posts;
     },
   });
-  return (
-    <div>
-      FindPost
-      {data &&
-        data.map((posts) => (
-          <div key={posts.id}>
-            <h4>{posts.id}</h4>
-            <img src={posts.s3Url} alt={posts.title} />
-            <p>{posts.nickname}</p>
-            <div>{posts.title}</div>
-            <p>{posts.description}</p>
-          </div>
+
+  if (data?.length === 0) {
+    return (
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignContent: 'center',
+        }}
+      >
+        <div
+          style={{
+            display: 'flex',
+            margin: '202px auto',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <img
+            style={{ width: '160px', height: '160px' }}
+            src="MypageQuestion.png"
+            alt="작성한 글이 없습니다."
+          />
+          <p>좋아요한 게시글이 없습니다.</p>
+          <p
+            onClick={() => {
+              push.push('/community');
+            }}
+            style={{ color: '#FF6A64' }}
+          >
+            {' '}
+            커뮤니티 게시글 보러가기
+          </p>
+        </div>
+      </div>
+    );
+  } else {
+    return (
+      <div
+        style={{
+          display: 'flex',
+          gap: '24px',
+          flexWrap: 'wrap',
+        }}
+      >
+        {data?.map((post) => (
+          <ContainerDiv key={post.id}>
+            <div>
+              <img
+                style={{
+                  width: '384px',
+                  height: '242px',
+                  objectFit: 'cover',
+                  borderRadius: '12px',
+                }}
+                src={post.s3Url}
+                alt={post.title}
+              />
+              <p>{post.title}</p>
+            </div>
+          </ContainerDiv>
         ))}
-      <img src="MypageQuestion.png" alt="작성한 글이 없습니다." />
-    </div>
-  );
+      </div>
+    );
+  }
 };
 
 export default FindPost;
+
+const ContainerDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 12px;
+  width: 384px;
+  height: 278px;
+
+  .p {
+    margin-top: 12px;
+    font-size: 16px;
+  }
+`;

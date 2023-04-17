@@ -4,7 +4,6 @@ import { InputArea } from '@components/Atoms/Input';
 import { ButtonText } from '@components/Atoms/Button';
 import { apis } from '@shared/axios';
 import { cookies } from '@shared/cookie';
-import { useParams } from 'react-router-dom';
 const Save = ({ data }) => {
   const queryClient = useQueryClient();
   const [userOut, setUserOut] = useState({
@@ -20,9 +19,9 @@ const Save = ({ data }) => {
   const { mutate: deleteId } = useMutation({
     mutationFn: async (payload) => {
       console.log('data', payload);
-      await apis.delete(
-        `/users/singout/${payload}`,
-        // { data: { password: payload.password } },
+      await apis.put(
+        `/users/signout/${payload.id}`,
+        { password: payload.password },
         {
           headers: {
             Access_Token: `${token}`,
@@ -32,6 +31,8 @@ const Save = ({ data }) => {
     },
     onSuccess: () => {
       window.confirm('정말 탈퇴 하시겠습니까?');
+      cookies.remove('access_token');
+      cookies.remove('refresh_token');
     },
     onError: () => {
       alert('다시 한 번 시도해주십시오');
@@ -47,6 +48,7 @@ const Save = ({ data }) => {
           margin: '0px auto',
           justifyContent: 'space-around',
           gap: '20px',
+          zIndex: '500',
         }}
       >
         <InputArea
@@ -58,7 +60,7 @@ const Save = ({ data }) => {
         <ButtonText
           label="회원 탈퇴"
           onClick={() => {
-            deleteId(data.id);
+            deleteId({ id: data.id, password: userOut.password });
           }}
         />
       </div>
