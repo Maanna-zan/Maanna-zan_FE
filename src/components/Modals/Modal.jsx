@@ -97,15 +97,6 @@ export default function Modal({ onClose }) {
               register(user);
             }}
           />
-          <ButtonText
-            label="카카오 로그인"
-            size="md"
-            variant="primary"
-            active={true}
-            onClick={() => {
-              kakao();
-            }}
-          />
 
           <button
             style={{
