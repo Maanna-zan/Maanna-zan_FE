@@ -31,7 +31,7 @@ const MapBeginning = () => {
                     }}
                 />
 
-                <contentWrapper>
+                <ContentWrapper>
                     <h1>중간 위치에 있는
                     술집을 찾아드립니다.
                     </h1>
@@ -45,7 +45,7 @@ const MapBeginning = () => {
                     >
                     중간 위치 검색하기
                     </ButtonText>
-                </contentWrapper>
+                </ContentWrapper>
             </FlexRow>
         </WebWrapperHeight>
     </WebWrapper>
@@ -53,6 +53,6 @@ const MapBeginning = () => {
 }
 
 export default MapBeginning
-const contentWrapper = styled.div`
+const ContentWrapper = styled.div`
 
 `
