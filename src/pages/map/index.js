@@ -8,6 +8,7 @@ import { FlexRow } from '@components/Atoms/Flex';
 import styled from 'styled-components';
 import { WebWrapper, WebWrapperHeight } from '@components/Atoms/Wrapper';
 import { ButtonText } from '@components/Atoms/Button';
+import AddingInputBoxButton from '@features/map/AddingInputBoxButton';
 
 export const MapMain = () => {
   //  지도 초기 위치 및 위도경도 state값
@@ -143,19 +144,10 @@ export const MapMain = () => {
         <p>
         중간 위치에 있는 맛집을 찾아드립니다.
         </p>
-        <InputArea
-        placeholder='이 버튼을 눌러 위치를 추가해주세요.'
-        variant='default'
-        size='leftIcon'
-        />
-
         <ButtonWrapper>
-          <ButtonText
-          size='lg'
-          variant='default'
-          >
+          <AddingInputBoxButton>
             추가하기
-          </ButtonText>
+          </AddingInputBoxButton>
           <ButtonText
             size='lg'
             variant='primary'
