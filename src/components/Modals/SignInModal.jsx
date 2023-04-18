@@ -10,7 +10,7 @@ import { ButtonText } from '@components/Atoms/Button';
 
 export default function SignInModal({ onClose }) {
   const router = useRouter();
-
+  //로그인
   const [isEditMode, setIsEditMode] = useState('login');
   const [user, setUser] = React.useState({
     email: '',
@@ -21,6 +21,20 @@ export default function SignInModal({ onClose }) {
     setUser((pre) => ({ ...pre, [name]: value }));
   };
 
+  //비밀번호 찾기
+  const [password, setPassword] = useState('');
+
+  // const changePWInputHandler = (e) => {
+  //   const { value, name } = e.target;
+  //   setPassword((pre) => ({ ...pre, [name]: value }));
+  // };
+
+  const [emailFormatError, setEmailFormatError] = useState(false); // state for email format validation error
+  const changeHandler = (event) => {
+    const { name, value } = event.target;
+    setPassword((prev) => ({ ...prev, [name]: value }));
+    setEmailFormatError(false); // clear the email format error when user types in the input field
+  };
   //access는 헤더로 refresh는 로컬스토리지로
   // passwordCheck 빼고 나머지 라는 뜻
   //3번째 옵션 config;'////////////////////
@@ -50,6 +64,37 @@ export default function SignInModal({ onClose }) {
       router.push('/');
     },
   });
+
+  //비밀번호찾기
+  const { mutate: findPw, isLoading } = useMutation({
+    mutationFn: async (user) => {
+      const data = await apis.post('users/check/findPw', user);
+      console.log('data', data);
+      return data;
+    },
+    onError: (error) => {
+      console.log('error', error.response.data.message);
+      alert(error.response.data.message);
+    },
+    onSuccess: (data) => {
+      console.log('data', data);
+      alert(`${data.data.message}🥹`);
+    },
+  });
+  // validate email format function
+  const validateEmailFormat = (email) => {
+    // regex pattern for email format validation
+    const emailFormat = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailFormat.test(email);
+  };
+
+  const handleFindpw = () => {
+    if (!validateEmailFormat(password.email)) {
+      setEmailFormatError(true); // set email format error if the email format is invalid
+      return;
+    }
+    findPw(password);
+  };
 
   return (
     <>
@@ -137,19 +182,23 @@ export default function SignInModal({ onClose }) {
                 size="lg"
                 variant="default"
                 name="email"
-                value={user.email}
-                onChange={changHandler}
+                value={password.email}
+                onChange={changeHandler}
                 placeholder="이메일 주소를 입력하세요"
               />
+              {emailFormatError && (
+                <p style={{ color: 'red', marginTop: '-10px' }}>
+                  이메일 형식에 맞게 입력해주세요.
+                </p>
+              )}
               <ButtonText
                 style={{ marginTop: '30px' }}
                 label="임시 비밀번호 전송"
                 size="md"
                 variant="primary"
                 active={true}
-                onClick={() => {
-                  register(user);
-                }}
+                disabled={isLoading}
+                onClick={handleFindpw}
               />
               <BottomDiv style={{ marginTop: '100px' }}>
                 <p className="question"> 비밀번호가 기억났어요!</p>
