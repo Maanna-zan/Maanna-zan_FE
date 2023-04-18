@@ -5,7 +5,7 @@ const Alcohols = () => {
   return (
     <div>
       <HeadInfo title="만나잔에 오신걸 환영합니다! " />
-      <AlcoholList apiId={'7885177'} />
+      <AlcoholList />
     </div>
   );
 };
