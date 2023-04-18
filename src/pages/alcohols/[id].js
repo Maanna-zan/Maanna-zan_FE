@@ -27,7 +27,7 @@ const StoreDetail = ({ apiId }) => {
   return (
     <div>
       <button onClick={() => router.push('/alcohols')}>뒤로가기</button>
-      <div>가게이름{data?.place_name}</div>
+      <div>가게이름 : {data?.place_name}</div>
       <div>주소 : {data?.address_name}</div>
     </div>
   );

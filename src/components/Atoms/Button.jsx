@@ -45,7 +45,7 @@ export const ButtonText = ({
   let padding = '0px';
   let fontSize = '14px';
   let width = undefined;
-  let backgroundColor = 'white';
+  let backgroundColor = 'inherit';
   let fontColor = '';
   let borderWidth = '1px';
   let borderColor = '';
@@ -88,7 +88,7 @@ export const ButtonText = ({
       borderColor = LightTheme.GRAY_400;
       hoverBackgroundColor = LightTheme.WHITE;
       hoverBorderColor = LightTheme.GRAY_200;
-      hoverFontColor = LightTheme.fontColorDark;
+      hoverFontColor = LightTheme.FONT_SECONDARY;
       break;
     case 'primary':
       backgroundColor = LightTheme.PRIMARY_NORMAL;
@@ -110,15 +110,16 @@ export const ButtonText = ({
       hoverBorderColor = LightTheme.PRIMARY_NORMAL;
       hoverFontColor = LightTheme.WHITE;
       break;
-    case 'grayButton':
-      backgroundColor = LightTheme.WHITE;
-      fontColor = LightTheme.PRIMARY_HEAVY;
+    case 'activeRed':
+      backgroundColor = LightTheme.PRIMARY_STRONG;
+      fontColor = LightTheme.WHITE;
       borderStyle = 'solid';
       borderWidth = '1px';
-      borderColor = LightTheme.PRIMARY_NORMAL;
-      hoverBackgroundColor = LightTheme.PRIMARY_NORMAL;
+      borderColor = LightTheme.PRIMARY_STRONG;
+      hoverBackgroundColor = LightTheme.PRIMARY_STRONG;
       hoverBorderColor = LightTheme.PRIMARY_NORMAL;
       hoverFontColor = LightTheme.WHITE;
+      break;
     case 'borderColorWhite':
       backgroundColor = LightTheme.WHITE;
       fontColor = LightTheme.BLACK;
@@ -143,6 +144,7 @@ export const ButtonText = ({
   return (
     <StyledButton
       backgroundColor={backgroundColor}
+      color={fontColor}
       fontSize={fontSize}
       width={width}
       padding={padding}

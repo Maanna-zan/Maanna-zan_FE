@@ -37,7 +37,7 @@ const Changenick = () => {
       router.push('/mypage');
     },
   });
-  return (ㄹ
+  return (
     <div>
       changenickName
       <InputArea
