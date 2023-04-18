@@ -23,12 +23,6 @@ export default function SignInModal({ onClose }) {
 
   //비밀번호 찾기
   const [password, setPassword] = useState('');
-
-  // const changePWInputHandler = (e) => {
-  //   const { value, name } = e.target;
-  //   setPassword((pre) => ({ ...pre, [name]: value }));
-  // };
-
   const [emailFormatError, setEmailFormatError] = useState(false); // state for email format validation error
   const changeHandler = (event) => {
     const { name, value } = event.target;
@@ -37,7 +31,7 @@ export default function SignInModal({ onClose }) {
   };
   //access는 헤더로 refresh는 로컬스토리지로
   // passwordCheck 빼고 나머지 라는 뜻
-  //3번째 옵션 config;'////////////////////
+  //3번째 옵션 config////////////////////
   const { mutate: register, status } = useMutation({
     mutationFn: async (user) => {
       const data = await apis.post('/users/login', user);
@@ -142,7 +136,6 @@ export default function SignInModal({ onClose }) {
               <input name="name" type="radio" />
               <label htmlFor="name">로그인 유지</label>
             </div> */}
-
                 <FindButton
                   onClick={() => {
                     setIsEditMode('findPassword');
@@ -151,7 +144,6 @@ export default function SignInModal({ onClose }) {
                   비밀번호 찾기
                 </FindButton>
               </EttingDiv>
-
               <ButtonText
                 style={{ marginTop: '30px' }}
                 label="로그인"
