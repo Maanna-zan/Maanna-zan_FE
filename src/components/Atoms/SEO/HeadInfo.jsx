@@ -1,6 +1,6 @@
 import React from 'react';
 import Head from 'next/head';
-import { ShareBlockStandard } from 'react-share';
+// import { ShareBlockStandard } from 'react-share';
 
 export const HeadInfo = ({ title, keyword, contents, shareUrl }) => {
   return (

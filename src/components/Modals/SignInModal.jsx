@@ -8,7 +8,7 @@ import styled from 'styled-components';
 import { InputArea } from '@components/Atoms/Input';
 import { ButtonText } from '@components/Atoms/Button';
 
-export default function Modal({ onClose }) {
+export default function SignInModal({ onClose }) {
   const router = useRouter();
 
   const [user, setUser] = React.useState({

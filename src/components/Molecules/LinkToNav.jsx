@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { cookies } from '../../shared/cookie';
 import { useRouter } from 'next/router';
-import PortalExample from '@components/Modals/PortalExample';
+import SignInPotalExample from '@components/Modals/SignInPortalExample';
 import SignUpPortalExample from '@components/Modals/SignUpPortalExample';
 import { useQuery } from '@tanstack/react-query';
 import { apis } from '@shared/axios';
@@ -81,7 +81,7 @@ export const LinkToNav = () => {
           ></ButtonText>
         </>
       ) : (
-        <PortalExample />
+        <SignInPotalExample />
       )}
 
       <SignUpPortalExample />
