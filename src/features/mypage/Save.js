@@ -4,7 +4,11 @@ import { InputArea } from '@components/Atoms/Input';
 import { ButtonText } from '@components/Atoms/Button';
 import { apis } from '@shared/axios';
 import { cookies } from '@shared/cookie';
+import { useRouter } from 'next/router';
+
 const Save = ({ data }) => {
+  const router = useRouter();
+  console.log('data save', data);
   const queryClient = useQueryClient();
   const [userOut, setUserOut] = useState({
     password: '',
@@ -16,6 +20,7 @@ const Save = ({ data }) => {
   };
 
   const token = cookies.get('access_token');
+
   const { mutate: deleteId } = useMutation({
     mutationFn: async (payload) => {
       console.log('data', payload);
@@ -33,6 +38,7 @@ const Save = ({ data }) => {
       window.confirm('정말 탈퇴 하시겠습니까?');
       cookies.remove('access_token');
       cookies.remove('refresh_token');
+      router.push('/');
     },
     onError: () => {
       alert('다시 한 번 시도해주십시오');
