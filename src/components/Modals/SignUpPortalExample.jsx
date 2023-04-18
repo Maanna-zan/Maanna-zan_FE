@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { createPortal } from 'react-dom';
 import SignUpModal from './SignUpModal';
 import { ButtonText } from '@components/Atoms/Button';
-import Modal from './Modal';
 
 export default function SignUpPortalExample() {
   const [showModal, setShowModal] = useState(false);

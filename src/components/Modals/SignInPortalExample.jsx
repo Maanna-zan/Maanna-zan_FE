@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
-import Modal from './Modal';
+import SignInModal from './SignInModal';
 import { ButtonText } from '@components/Atoms/Button';
 
-export default function PortalExample() {
+export default function SignInPotalExample() {
   const [showModal, setShowModal] = useState(false);
   return (
     <>
@@ -14,7 +14,7 @@ export default function PortalExample() {
       ></ButtonText>
       {showModal &&
         createPortal(
-          <Modal onClose={() => setShowModal(false)} />,
+          <SignInModal onClose={() => setShowModal(false)} />,
           document.body,
         )}
     </>

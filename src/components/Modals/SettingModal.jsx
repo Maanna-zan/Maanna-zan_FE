@@ -145,29 +145,36 @@ export default function SettingModal({ onClose, data }) {
                 환경설정
               </p>
             </ModeParentsDiv>
-            <div>닉네임</div>
-            <InputArea
-              size="lg"
-              variant="default"
-              type="text"
-              name="nickName"
-              value={password.nickName}
-              onChange={changePWInputHandler}
-            />
-            <div>이메일</div>
-            <InputDiv>{data.email}</InputDiv>
+            <div style={{ marginLeft: '25px' }}>닉네임</div>
+            <EttingDiv>
+              <InputArea
+                style={{ width: '320px' }}
+                size="lg"
+                variant="default"
+                type="text"
+                name="nickName"
+                value={password.nickName}
+                onChange={changePWInputHandler}
+              />
+            </EttingDiv>
+            <div style={{ marginLeft: '25px' }}>이메일</div>
+            <EttingDiv>
+              <InputDiv>{data.email}</InputDiv>
 
-            <BottomHr />
-            <ButtonText
-              label="저장하기"
-              variant="primary"
-              active={true}
-              disabled={isLoading}
-              onClick={() => {
-                nickName(password);
-                onClose();
-              }}
-            />
+              <BottomHr />
+
+              <ButtonText
+                style={{ width: '320px' }}
+                label="저장하기"
+                variant="primary"
+                active={true}
+                disabled={isLoading}
+                onClick={() => {
+                  nickName(password);
+                  onClose();
+                }}
+              />
+            </EttingDiv>
           </InnerDiv>
         ) : isEditMode === 'password' ? (
           <InnerDiv>
@@ -204,62 +211,73 @@ export default function SettingModal({ onClose, data }) {
                 환경설정
               </p>
             </ModeParentsDiv>
-            <p>새 비밀번호</p>
-            <InputArea
-              size="lg"
-              variant="default"
-              type="password"
-              name="password"
-              placeholder="비밀번호를 입력해주세요."
-              value={password.password}
-              onChange={handlePasswordChange}
-              maxLength="20"
-              required
-            />
-            <p>비밀번호 확인</p>
-            <InputArea
-              size="lg"
-              variant="default"
-              type="password"
-              name="checkPassword"
-              placeholder="비밀번호를 확인해주세요."
-              onChange={handlePasswordChange}
-              required
-            />
-            {passwordError && (
-              <p style={{ color: 'red', fontSize: '12px', marginTop: '-5px' }}>
-                비밀번호가 일치하지 않습니다.
+            <PasswordDiv>
+              <div className="innerpw">
+                <p>새 비밀번호</p>
+                <InputArea
+                  style={{ width: '320px' }}
+                  size="lg"
+                  variant="default"
+                  type="password"
+                  name="password"
+                  placeholder="비밀번호를 입력해주세요."
+                  value={password.password}
+                  onChange={handlePasswordChange}
+                  maxLength="20"
+                  required
+                />
+                <p>비밀번호 확인</p>
+                <InputArea
+                  style={{ width: '320px' }}
+                  size="lg"
+                  variant="default"
+                  type="password"
+                  name="checkPassword"
+                  placeholder="비밀번호를 확인해주세요."
+                  onChange={handlePasswordChange}
+                  required
+                />
+                {passwordError && (
+                  <p style={{ color: 'red', fontSize: '12px' }}>
+                    비밀번호가 일치하지 않습니다.
+                  </p>
+                )}
+                {!passwordError && (
+                  <p style={{ color: 'red', fontSize: '12px' }}>
+                    비밀번호가 일치합니다.
+                  </p>
+                )}
+              </div>
+
+              <p
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  fontStyle: 'normal',
+                  fontWeight: '400',
+                  fontSize: '12px',
+                  lineHeight: '16px',
+                }}
+                onClick={() => {
+                  if (validateForm(password)) {
+                    changePassword(password);
+                  }
+                }}
+              >
+                변경하기
               </p>
-            )}
-            {!passwordError && (
-              <p style={{ color: 'red', fontSize: '12px', marginTop: '-5px' }}>
-                비밀번호가 일치합니다.
-              </p>
-            )}
-            <p
-              style={{
-                margin: '0 auto',
-                fontStyle: 'normal',
-                fontWeight: '400',
-                fontSize: '12px',
-                lineHeight: '16px',
-              }}
-              onClick={() => {
-                if (validateForm(password)) {
-                  changePassword(password);
-                }
-              }}
-            >
-              변경하기
-            </p>
-            <BottomHr />
-            <ButtonText
-              label="저장하기"
-              variant="primary"
-              active={true}
-              disabled={isLoading}
-              onClick={onClose}
-            />
+            </PasswordDiv>
+            <EttingDiv>
+              <PwBottomHr />
+              <ButtonText
+                style={{ width: '320px' }}
+                label="저장하기"
+                variant="primary"
+                active={true}
+                disabled={isLoading}
+                onClick={onClose}
+              />
+            </EttingDiv>
           </InnerDiv>
         ) : (
           <InnerDiv>
@@ -295,9 +313,34 @@ export default function SettingModal({ onClose, data }) {
                 <Hr />
               </div>
             </ModeParentsDiv>
+            <div>
+              <p>테마</p>
+              <p>마케팅 정보 소식</p>
+            </div>
+            <p
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
 
-            <div>다크모드 넣어주기</div>
-            <BottomHr />
+                color: 'red',
+                fontWeight: '400',
+                fontSize: '12px',
+                lineHeight: '16px',
+              }}
+            >
+              계정 삭제
+            </p>
+            <EttingDiv>
+              <BottomHr />
+              <ButtonText
+                style={{ width: '320px' }}
+                label="저장하기"
+                variant="primary"
+                active={true}
+                disabled={isLoading}
+                onClick={onClose}
+              />
+            </EttingDiv>
           </InnerDiv>
         )}
 
@@ -329,7 +372,6 @@ const ModalDiv = styled.div`
   /* mix-blend-mode: darken; */
   z-index: 999;
   .modal-overlay {
-    padding: 20px 40px;
     border-radius: 20px;
     position: fixed;
     transform: translate(-50%, -50%);
@@ -340,9 +382,9 @@ const ModalDiv = styled.div`
     justify-content: center;
     background-color: #ffff;
     z-index: 1000;
-    max-width: 400px;
-    min-width: 280px;
-    width: 50%;
+    width: 416px;
+    height: 620px;
+    /* padding: 21px 48px; */
     border: 1px solid #939aa0;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
@@ -352,7 +394,7 @@ const InnerDiv = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-content: center;
+  /* align-content: center; */
   row-gap: 10px;
   .InputArea {
     border-color: #9fa4a9;
@@ -363,8 +405,9 @@ const InnerDiv = styled.div`
 `;
 const InputDiv = styled.div`
   border: 1px solid #9fa4a9;
-  padding: 10px;
+  padding: 12px;
   border-radius: 8px;
+  width: 320px;
   color: #9fa4a9;
   background-color: #f7f8f9;
 `;
@@ -374,6 +417,9 @@ const EttingDiv = styled.div`
   /* justify-content: center; */
   flex-direction: column;
   align-items: center;
+  .h3 {
+    block-size: fit-content;
+  }
 `;
 const FindButton = styled.button`
   border: none;
@@ -397,6 +443,14 @@ const ModeParentsDiv = styled.div`
     flex-direction: column;
   }
 `;
+
+const PasswordDiv = styled.div`
+  height: fit-content;
+  block-size: fit-content;
+  .innerpw {
+    margin-left: 23px;
+  }
+`;
 const Hr = styled.hr`
   border: 0.5px solid #ff4840;
   width: 60px;
@@ -410,5 +464,13 @@ const BottomHr = styled.hr`
   width: 368px;
   height: 0px;
   border-bottom: 0px;
-  margin-top: 170px;
+  margin-top: 220px;
+`;
+
+const PwBottomHr = styled.hr`
+  border: 0.5px solid#E8EBED;
+  width: 368px;
+  height: 0px;
+  border-bottom: 0px;
+  margin-top: 90px;
 `;
