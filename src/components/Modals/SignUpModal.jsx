@@ -71,50 +71,6 @@ export default function SignUpModal({ onClose }) {
       onClose();
     },
   });
-  // 각각 값들마다 인풋 창 포커스 시 조건들 표시해주는 코드 -> 조건은 @features/signUpAlert 에 각각 적어뒀습니다.
-  //훅에 아직 미숙해 빼내지를 못하는.. 공부해서 좀더 정리해보곘습니다.
-  const [isUserNameFocused, setIsUserNameFocused] = useState(false);
-  const handleUserNameFocus = () => {
-    setIsUserNameFocused(true);
-  };
-  const handleUserNameBlur = () => {
-    setIsUserNameFocused(false);
-  };
-  const [isNickNameFocused, setIsNickNameFocused] = useState(false);
-  const handleNicknameFocus = () => {
-    setIsNickNameFocused(true);
-  };
-  const handleNicknameBlur = () => {
-    setIsNickNameFocused(false);
-  };
-  const [isPhoneNumberFocused, setIsPhoneNumberFocused] = useState(false);
-  const handlePhoneNumberFocus = () => {
-    setIsPhoneNumberFocused(true);
-  };
-  const handlePhoneNumberBlur = () => {
-    setIsPhoneNumberFocused(false);
-  };
-  const [isPasswordFocused, setIsPasswordFocused] = useState(false);
-  const handlePassWordFocus = () => {
-    setIsPasswordFocused(true);
-  };
-  const handlePassWordBlur = () => {
-    setIsPasswordFocused(false);
-  };
-  const [isEmailFocused, setIsEmailFocused] = useState(false);
-  const handleEmailFocus = () => {
-    setIsEmailFocused(true);
-  };
-  const handleEmailBlur = () => {
-    setIsEmailFocused(false);
-  };
-  const [isBirthFocused, setIsBirthFocused] = useState(false);
-  const handleBirthFocus = () => {
-    setIsBirthFocused(true);
-  };
-  const handleBirthBlur = () => {
-    setIsBirthFocused(false);
-  };
 
   //비밀번호 조건
   const validatePassword = (password) => {
@@ -168,80 +124,91 @@ export default function SignUpModal({ onClose }) {
   return (
     <ModalDiv className="modal">
       <div className="modal-overlay">
+        <img
+          style={{
+            position: 'fixed',
+            right: '20px',
+            top: '20px',
+            // display: 'flex',
+            // justifyContent: 'flex-end',
+            width: '12px',
+            height: '12px',
+          }}
+          onClick={onClose}
+          src="Group 1972.png"
+          alt="취소 버튼"
+        />
         <InnerDiv>
           <HeadInfo title="로그인해주세요!" />
           <h2 className="signUp">회원가입</h2>
           <div className="detailSignUp">성명</div>
           <InputArea
             type="text"
+            size="lg"
+            variant="default"
             name="userName"
             value={user.userName}
-            placeholder="성명을 입력해주세요."
+            placeholder="이름을 입력해주세요."
             onChange={changHandler}
-            onFocus={handleUserNameFocus}
-            onBlur={handleUserNameBlur}
             required
           />
-          {isUserNameFocused && <UserNameAlert />}
-
-          <div className="detailSignUp">닉네임</div>
+          <Detaildiv>
+            <div className="detailSignUp">닉네임</div>
+            <div className="notice">닉네임 8글자 이내</div>
+          </Detaildiv>
           <div style={{ display: 'flex', gap: '20px' }}>
             <InputArea
               style={{ width: '100%' }}
               type="text"
               name="nickName"
               value={user.nickName}
-              placeholder="사용하실 닉네임을 입력해주세요."
+              placeholder="     닉네임을 입력해주세요."
               onChange={changHandler}
               maxLength="16"
-              onFocus={handleNicknameFocus}
-              onBlur={handleNicknameBlur}
               required
             />
 
             <ButtonText
               type="button"
               // size="md"
-              style={{ width: '140px' }}
+              style={{ width: '120px' }}
               variant="primary"
               active={true}
               onClick={confirmNickName}
               label="중복확인"
             />
           </div>
-          {isNickNameFocused && <NickNameAlert />}
-          <div className="detailSignUp">전화번호</div>
-          <InputArea
-            type="text"
-            name="phoneNumber"
-            value={user.phoneNumber}
-            placeholder="전화번호 숫자만 입력해주세요."
-            onChange={changHandler}
-            onFocus={handlePhoneNumberFocus}
-            onBlur={handlePhoneNumberBlur}
-            required
-          />
-          {isPhoneNumberFocused && <PhoneNumberAlert />}
 
-          <div className="detailSignUp">비밀번호</div>
+          <Detaildiv>
+            <div className="detailSignUp">비밀번호</div>
+            <div className="notice">
+              8~16 자리 / 영문 대소문자,숫자,특수문자 포함
+            </div>
+          </Detaildiv>
           <InputArea
             type="password"
             name="password"
+            size="lg"
+            variant="default"
             value={user.password}
             placeholder="비밀번호를 입력해주세요."
             onChange={handlePasswordChange}
-            onFocus={handlePassWordFocus}
-            onBlur={handlePassWordBlur}
             maxLength="20"
             required
           />
-          {isPasswordFocused && <PasswordAlert />}
-          <div className="detailSignUp">비밀번호 확인</div>
+          <Detaildiv>
+            <div className="detailSignUp">비밀번호 확인</div>
+            <div className="notice">
+              8~16 자리 / 영문 대소문자,숫자,특수문자 포함
+            </div>
+          </Detaildiv>
           <InputArea
             type="password"
             name="checkPassword"
+            size="lg"
+            variant="default"
             // value={user.checkPassword}
-            placeholder="비밀번호를 확인해주세요."
+            placeholder="비밀번호를 입력해주세요."
             onChange={handlePasswordChange}
             required
           />
@@ -257,6 +224,17 @@ export default function SignUpModal({ onClose }) {
           )}
           {next ? (
             <>
+              <div className="detailSignUp">전화번호</div>
+              <InputArea
+                type="text"
+                size="lg"
+                variant="default"
+                name="phoneNumber"
+                value={user.phoneNumber}
+                placeholder="전화번호를 입력해주세요."
+                onChange={changHandler}
+                required
+              />
               <div className="detailSignUp">이메일</div>
 
               <div
@@ -270,34 +248,30 @@ export default function SignUpModal({ onClose }) {
                   name="email"
                   style={{ width: '100%' }}
                   value={user.email}
-                  placeholder="이메일 주소를 입력해주세요."
+                  placeholder="      이메일을 입력해주세요."
                   onChange={changHandler}
-                  onFocus={handleEmailFocus}
-                  onBlur={handleEmailBlur}
                   required
                 />
                 <ButtonText
                   type="button"
                   size="md"
-                  style={{ width: '140px' }}
+                  style={{ width: '120px' }}
                   variant="primary"
                   active={true}
                   onClick={confirmEmail}
                   label="중복확인"
                 />
               </div>
-              {isEmailFocused && <EmailAlert />}
               <div className="detailSignUp">생년월일</div>
               <InputArea
                 type="text"
+                size="lg"
+                variant="default"
                 name="birth"
                 value={user.birth}
                 placeholder="생년월일 8글자를 입력해주세요."
                 onChange={changHandler}
-                onFocus={handleBirthFocus}
-                onBlur={handleBirthBlur}
               />
-              {isBirthFocused && <BirthAlert />}
               <ButtonText
                 size="md"
                 variant="primary"
@@ -323,16 +297,6 @@ export default function SignUpModal({ onClose }) {
               }}
             />
           )}
-          <button
-            style={{
-              cursor: 'pointer',
-              border: 'none',
-              backgroundColor: 'transparent',
-            }}
-            onClick={onClose}
-          >
-            Close
-          </button>
         </InnerDiv>
       </div>
     </ModalDiv>
@@ -360,7 +324,7 @@ const ModalDiv = styled.div`
     justify-content: center;
     background-color: white;
     z-index: 1000;
-    max-width: 600px;
+    max-width: 550px;
     min-width: 380px;
     width: 50%;
     border: 1px solid #939aa0;
@@ -373,14 +337,36 @@ const InnerDiv = styled.div`
   justify-content: center;
   flex-direction: column;
   align-content: center;
-  gap: 10px;
+  width: 100%;
+  row-gap: 15px;
   .signUp {
     display: flex;
     justify-content: center;
+    margin-top: 10px;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 26px;
   }
   .detailSignUp {
     font-size: 14px;
     margin-bottom: -7px;
     font-weight: 700;
+  }
+`;
+
+const Detaildiv = styled.div`
+  display: flex;
+  justify-content: space-between;
+  .detailSignUp {
+    font-size: 14px;
+    margin-bottom: -7px;
+    font-weight: 700;
+  }
+  .notice {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 16px;
+    color: #9ea4aa;
   }
 `;
