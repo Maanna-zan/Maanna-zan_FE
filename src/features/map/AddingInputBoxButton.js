@@ -1,6 +1,6 @@
 import { ButtonText } from '@components/Atoms/Button';
 import { InputArea } from '@components/Atoms/Input';
-import SearchKeywordModal from '@components/Modals/SearchKeywordModal';
+import KeywordSearchModal from '@components/Modals/SearchKeywordModal';
 import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 
@@ -50,7 +50,7 @@ function AddingInputBoxButton() {
         //  닫기 버튼 프롭스토 내려줌.
         return (
             showModal && createPortal(
-                <SearchKeywordModal onClose={onCloseModalHandler} />,
+                <KeywordSearchModal onClose={onCloseModalHandler} />,
                 document.body
             )
         );
