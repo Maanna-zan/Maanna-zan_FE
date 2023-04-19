@@ -1,5 +1,10 @@
 import axios from 'axios';
 
 export const apis = axios.create({
-  baseURL: 'http://54.180.119.237',
+  baseURL: process.env.NEXT_PUBLIC_SERVER_KEY,
 });
+
+console.log(
+  'process.env.NEXT_PUBLIC_SERVER_KEY',
+  process.env.NEXT_PUBLIC_SERVER_KEY,
+);

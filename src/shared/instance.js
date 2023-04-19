@@ -2,7 +2,7 @@ import axios from 'axios';
 import { cookies } from './cookie';
 
 const instance = axios.create({
-  baseURL: 'http://54.180.119.237',
+  baseURL: process.env.NEXT_PUBLIC_SERVER_KEY,
 });
 
 instance.interceptors.response.use(
