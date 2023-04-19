@@ -110,15 +110,15 @@ export const ButtonText = ({
       hoverBorderColor = LightTheme.PRIMARY_NORMAL;
       hoverFontColor = LightTheme.WHITE;
       break;
-    case 'activeRed':
-      backgroundColor = LightTheme.PRIMARY_STRONG;
-      fontColor = LightTheme.WHITE;
+    case 'hoverRed':
+      backgroundColor = LightTheme.WHITE;
+      fontColor = LightTheme.BLACK;
       borderStyle = 'solid';
       borderWidth = '1px';
-      borderColor = LightTheme.PRIMARY_STRONG;
-      hoverBackgroundColor = LightTheme.PRIMARY_STRONG;
-      hoverBorderColor = LightTheme.PRIMARY_NORMAL;
-      hoverFontColor = LightTheme.WHITE;
+      borderColor = LightTheme.WHITE;
+      hoverBackgroundColor = LightTheme.WHITE;
+      hoverBorderColor = LightTheme.WHITE;
+      hoverFontColor = LightTheme.PRIMARY_NORMAL;
       break;
     case 'borderColorWhite':
       backgroundColor = LightTheme.WHITE;
