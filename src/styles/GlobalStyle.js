@@ -92,4 +92,7 @@ export const GlobalStyles = createGlobalStyle`
         }
       }
     }
+    .active{
+      color: ${LightTheme.PRIMARY_NORMAL};
+    }
 `;

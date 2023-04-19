@@ -1,15 +1,16 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import { useQuery } from '@tanstack/react-query';
+import { WebWrapper } from '@components/Atoms/Wrapper';
+import { StoreListTabMenu } from '@components/Molecules/StoreListTabMenu';
+import { usePutLike } from '../hook/usePutLike';
 import {
   getAllStore,
   getBest,
   getView,
   getLike,
 } from '../hook/alcohol/useGetAllStore';
-import { StoreListTabMenu } from '@components/Molecules/StoreListTabMenu';
-import { WebWrapper } from '@components/Atoms/Wrapper';
-
+import { PageNation } from '@components/Modals/PageNation';
 const AlcoholList = () => {
   const router = useRouter();
   const [storeListPage, setStoreListPage] = useState('all');
@@ -118,25 +119,13 @@ const AlcoholList = () => {
           </div>
         ))}
 
-        <ul className="page_num">
-          {pages.map((pageNum) => (
-            <li
-              key={pageNum}
-              className={
-                (pageNum === parseInt(router.query.page) &&
-                  storeListPage === activeTab) ||
-                (pageNum === 1 &&
-                  !router.query.page &&
-                  storeListPage === activeTab)
-                  ? 'active'
-                  : ''
-              }
-              onClick={() => handlePageNumChange(pageNum)}
-            >
-              {pageNum}
-            </li>
-          ))}
-        </ul>
+        <PageNation
+          pages={pages}
+          handlePageNumChange={handlePageNumChange}
+          activeTab={activeTab}
+          router={router}
+          storeListPage={storeListPage}
+        />
         {isFetching && <div>Loading more...</div>}
       </WebWrapper>
     </>
