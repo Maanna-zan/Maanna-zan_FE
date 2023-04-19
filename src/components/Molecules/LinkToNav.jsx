@@ -9,10 +9,12 @@ import SignUpPortalExample from '@components/Modals/SignUpPortalExample';
 import { useQuery } from '@tanstack/react-query';
 import { apis } from '@shared/axios';
 import instance from '@shared/instance';
+import styled from 'styled-components';
 
 export const LinkToNav = () => {
   const router = useRouter();
   const [isLoginMode, setIsLoginMode] = useState(false);
+  const [showSubMenu, setShowSubMenu] = useState(false);
   // 토큰 삭제 함수
   const deleteTokens = () => {
     cookies.remove('access_token');
@@ -64,34 +66,158 @@ export const LinkToNav = () => {
   return (
     <nav>
       <Link href="/alcohols">
-        <ButtonText variant="borderColorWhite" label={'리스트'}></ButtonText>
+        <ButtonText variant="hoverRed" label={'리스트'}></ButtonText>
       </Link>
       <Link href="/map">
-        <ButtonText variant="borderColorWhite" label={'탐색'}></ButtonText>
+        <ButtonText variant="hoverRed" label={'탐색'}></ButtonText>
       </Link>
       <Link href="/community">
-        <ButtonText variant="borderColorWhite" label={'커뮤니티'}></ButtonText>
+        <ButtonText variant="hoverRed" label={'커뮤니티'}></ButtonText>
       </Link>
-      {isLoginMode ? (
+      {!token ? (
         <>
-          <ButtonText
-            variant="borderColorWhite"
-            label={'로그아웃'}
-            onClick={handleLogout}
-          ></ButtonText>
+          <SignInPotalExample />
+          <SignUpPortalExample />
         </>
       ) : (
-        <SignInPotalExample />
+        <DropDiv>
+          <ButtonText
+            variant="hoverRed"
+            onClick={() => setShowSubMenu(!showSubMenu)}
+            label={`${data?.userName}님`}
+          ></ButtonText>
+
+          {showSubMenu && (
+            <ul className="ullist">
+              <li className="listName">
+                <a
+                  onClick={() => setShowSubMenu(!showSubMenu)}
+                >{`${data?.userName}님`}</a>
+              </li>
+              <li className="list">
+                <a
+                  className="email"
+                  onClick={() => setShowSubMenu(!showSubMenu)}
+                >{`${data?.email}`}</a>
+              </li>
+              <Link href="/mypage">
+                <li className="list">
+                  <a onClick={() => setShowSubMenu(!showSubMenu)}>마이페이지</a>
+                </li>
+              </Link>
+              <li className="list">
+                <a onClick={handleLogout}>로그아웃</a>
+              </li>
+            </ul>
+          )}
+        </DropDiv>
       )}
-
-      <SignUpPortalExample />
-
-      <Link href="/mypage">
-        <ButtonText
-          variant="borderColorWhite"
-          label={`${data?.userName}님`}
-        ></ButtonText>
-      </Link>
     </nav>
   );
 };
+
+const DropDiv = styled.div`
+  position: relative;
+  width: 150px;
+  height: 40px;
+  text-align: center;
+  line-height: 40px;
+  float: right;
+  margin-left: -20px;
+
+  .mypageButton {
+    background: none;
+    border: none;
+  }
+  .mypageButton:hover {
+    color: red;
+  }
+  .ullist {
+    gap: 24px;
+    display: flex;
+    border-radius: 0px 0px 12px 12px;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 166px;
+    height: 170px;
+    margin-top: -1px;
+    background-color: white;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px,
+      rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
+  }
+  .listName {
+    margin-left: -30px;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 24px;
+    list-style: none;
+  }
+  .list {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 18px;
+    margin-left: -30px;
+    list-style: none;
+    :hover {
+      color: red;
+    }
+  }
+  .email {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 16px;
+    color: #9ea4aa;
+  }
+`;
+
+// const DropDiv = styled.div`
+//   position: relative;
+//   width: 100px;
+//   height: 40px;
+//   text-align: center;
+//   line-height: 40px;
+//   float: right;
+
+//   .sub {
+//     position: absolute;
+//     display: none;
+//     height: 120px;
+//     list-style: none;
+//     overflow: hidden;
+//   }
+//   .sub li {
+//     background-color: orange;
+//     border-top: 1px white solid;
+//   }
+//   .sub li > a {
+//     text-decoration: none;
+//     color: black;
+//   }
+//   .sub.up {
+//     height: 0px;
+//     animation-name: slide_up;
+//     animation-duration: 1s;
+//   }
+//   .sub.down {
+//     height: 120px;
+//     animation-name: slide_down;
+//     animation-duration: 1s;
+//   }
+//   @keyframes slide_up {
+//     0% {
+//       height: 120px;
+//     }
+//     100% {
+//       height: 0px;
+//     }
+//   }
+
+//   @keyframes slide_down {
+//     0% {
+//       height: 0px;
+//     }
+//     100% {
+//       height: 120px;
+//     }
+//   }
+// `;
