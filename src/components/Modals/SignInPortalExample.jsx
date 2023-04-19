@@ -8,7 +8,7 @@ export default function SignInPotalExample() {
   return (
     <>
       <ButtonText
-        variant="borderColorWhite"
+        variant="hoverRed"
         label={'로그인'}
         onClick={() => setShowModal(true)}
       ></ButtonText>

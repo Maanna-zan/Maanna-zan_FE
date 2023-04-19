@@ -8,7 +8,7 @@ export default function SignUpPortalExample() {
   return (
     <>
       <ButtonText
-        variant="borderColorWhite"
+        variant="hoverRed"
         label={'회원가입'}
         onClick={() => setShowModal(true)}
       ></ButtonText>
