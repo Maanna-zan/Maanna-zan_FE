@@ -46,21 +46,21 @@ export const LinkToNav = () => {
       return data.data;
     },
     // onError 콜백 함수 구현
-    // onError: (error) => {
-    //   console.log(error);
-    //   // // 에러 처리
-    //   if (error.response.data.statusCode === 401) {
-    //     const refreshToken = cookies.get('refresh_token');
-    //     if (refreshToken) {
-    //       const data = instance.get('/my-page', {
-    //         headers: {
-    //           refresh_token: `${refreshToken}`,
-    //         },
-    //       });
-    //       return data;
-    //     }
-    //   }
-    // },
+    onError: (error) => {
+      console.log(error);
+      // // 에러 처리
+      if (error.response.data.statusCode === 401) {
+        const refreshToken = cookies.get('refresh_token');
+        if (refreshToken) {
+          const data = instance.get('/my-page', {
+            headers: {
+              refresh_token: `${refreshToken}`,
+            },
+          });
+          return data;
+        }
+      }
+    },
   });
 
   return (
