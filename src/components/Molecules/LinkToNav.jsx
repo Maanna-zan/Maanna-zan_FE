@@ -80,15 +80,14 @@ export const LinkToNav = () => {
           <SignUpPortalExample />
         </>
       ) : (
-        <DropDiv>
+        <>
           <ButtonText
             variant="hoverRed"
             onClick={() => setShowSubMenu(!showSubMenu)}
             label={`${data?.userName}님`}
           ></ButtonText>
-
           {showSubMenu && (
-            <ul className="ullist">
+            <Ullist className="ullist">
               <li className="listName">
                 <a
                   onClick={() => setShowSubMenu(!showSubMenu)}
@@ -108,43 +107,27 @@ export const LinkToNav = () => {
               <li className="list">
                 <a onClick={handleLogout}>로그아웃</a>
               </li>
-            </ul>
+            </Ullist>
           )}
-        </DropDiv>
+        </>
       )}
     </nav>
   );
 };
 
-const DropDiv = styled.div`
-  position: relative;
-  width: 150px;
-  height: 40px;
-  text-align: center;
-  line-height: 40px;
-  float: right;
-  margin-left: -20px;
-
-  .mypageButton {
-    background: none;
-    border: none;
-  }
-  .mypageButton:hover {
-    color: red;
-  }
-  .ullist {
-    gap: 24px;
-    display: flex;
-    border-radius: 0px 0px 12px 12px;
-    flex-direction: column;
-    align-items: flex-start;
-    width: 166px;
-    height: 170px;
-    margin-top: -1px;
-    background-color: white;
-    box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px,
-      rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
-  }
+const Ullist = styled.ul`
+  gap: 24px;
+  display: flex;
+  border-radius: 0px 0px 12px 12px;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 166px;
+  height: 170px;
+  margin-left: 245px;
+  margin-top: -1px;
+  background-color: white;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px,
+    rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;
   .listName {
     margin-left: -30px;
     font-weight: 600;
@@ -169,55 +152,3 @@ const DropDiv = styled.div`
     color: #9ea4aa;
   }
 `;
-
-// const DropDiv = styled.div`
-//   position: relative;
-//   width: 100px;
-//   height: 40px;
-//   text-align: center;
-//   line-height: 40px;
-//   float: right;
-
-//   .sub {
-//     position: absolute;
-//     display: none;
-//     height: 120px;
-//     list-style: none;
-//     overflow: hidden;
-//   }
-//   .sub li {
-//     background-color: orange;
-//     border-top: 1px white solid;
-//   }
-//   .sub li > a {
-//     text-decoration: none;
-//     color: black;
-//   }
-//   .sub.up {
-//     height: 0px;
-//     animation-name: slide_up;
-//     animation-duration: 1s;
-//   }
-//   .sub.down {
-//     height: 120px;
-//     animation-name: slide_down;
-//     animation-duration: 1s;
-//   }
-//   @keyframes slide_up {
-//     0% {
-//       height: 120px;
-//     }
-//     100% {
-//       height: 0px;
-//     }
-//   }
-
-//   @keyframes slide_down {
-//     0% {
-//       height: 0px;
-//     }
-//     100% {
-//       height: 120px;
-//     }
-//   }
-// `;
