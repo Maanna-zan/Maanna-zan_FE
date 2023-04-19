@@ -46,5 +46,9 @@
     "@storybook/testing-library": "0.0.14-next.2",
     "eslint-plugin-storybook": "^0.6.11",
     "storybook": "7.0.2"
-  }
+  },
+  "main": "index.js",
+  "repository": "https://github.com/Maanna-zan/Maanna-zan_FE.git",
+  "author": "Pseheyon <100889975+Pseheyon@users.noreply.github.com>",
+  "license": "MIT"
 }

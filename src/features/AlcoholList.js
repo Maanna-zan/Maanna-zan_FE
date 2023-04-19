@@ -1,9 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/router';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { WebWrapper } from '@components/Atoms/Wrapper';
 import { StoreListTabMenu } from '@components/Molecules/StoreListTabMenu';
-import { usePutLike } from '../hook/usePutLike';
 import {
   getAllStore,
   getBest,
@@ -11,11 +10,12 @@ import {
   getLike,
 } from '../hook/alcohol/useGetAllStore';
 import { PageNation } from '@components/Modals/PageNation';
+import { Store } from './alcohol/store';
+
 const AlcoholList = () => {
   const router = useRouter();
   const [storeListPage, setStoreListPage] = useState('all');
   const [activeTab, setActiveTab] = useState('all');
-
   const pages = [1, 2, 3, 4, 5];
   const { page } = router.query;
   const [pageNum, setPageNum] = useState(1);
@@ -107,15 +107,21 @@ const AlcoholList = () => {
         {storeData?.map((store) => (
           <div
             key={store.id}
-            onClick={() => {
-              router.push(`/alcohols/${store.apiId}`);
-            }}
+            // onClick={() => {
+            //   router.push(`/alcohols/${store.apiId}`);
+            // }}
           >
             <h1>{store.address_name}</h1>
             <div>{store.id}</div>
             <div>{store.likecnt}</div>
             <img src={store.image} alt={store.place_name} />
             <div>{store.description}</div>
+            <div>{store.roomLikecnt}</div>
+            <div>{store.roomLike}</div>
+
+            {/* <div className="hearWrap" onClick={() => handleLike(store?.id)}> */}
+            <Store store={store} storeData={storeData}></Store>
+            {/* </div> */}
           </div>
         ))}
 

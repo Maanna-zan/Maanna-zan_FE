@@ -1,22 +1,17 @@
 import React from 'react';
 import { useState } from 'react';
-import {
-  QueryClient,
-  useQueryClient,
-  useMutation,
-} from '@tanstack/react-query';
-import { useDeletePost } from '../../hook/post/useDeletePost';
-import { useUpdatePost } from '../../hook/post/useUpdatePost';
-// import { usePutLike } from '../../hook/post/usePutLike';
-import { useRouter } from 'next/router';
+import { useQueryClient } from '@tanstack/react-query';
+
 import { LikeHeartIcon, DisLikeHeartIcon } from '@components/Atoms/HeartIcon';
 import { WebWrapper } from '@components/Atoms/Wrapper';
-import { apis } from '@shared/axios';
-import { cookies } from '@shared/cookie';
-import LikeButton from '../../hook/useLikeBtn';
+//hook
+import { useDeletePost } from '../../hook/post/useDeletePost';
+import { useUpdatePost } from '../../hook/post/useUpdatePost';
+import { useLikePost } from '../../hook/useLikes';
+
 export const Post = ({ post, onSubmit, apiId }) => {
   // console.log('newPost', post);
-
+  const queryClient = useQueryClient();
   const [newPost, setNewPost] = useState({
     storename: post.storename,
     title: post.title,
@@ -31,17 +26,14 @@ export const Post = ({ post, onSubmit, apiId }) => {
     x: post.x,
     y: post.y,
   });
-  const queryClient = useQueryClient();
-
-  const access_token = cookies.get('access_token');
-  const refresh_token = cookies.get('refresh_token');
+  const [isEditMode, setIsEditMode] = useState(false);
 
   const { deletePost } = useDeletePost();
   const { updatePost } = useUpdatePost();
+  const { likePost } = useLikePost();
 
   const deletePostHandler = (id) => {
     deletePost(id);
-    //router.reload(); 500에러
   };
   const changeInputHandler = (e) => {
     const { value, name } = e.target;
@@ -54,68 +46,31 @@ export const Post = ({ post, onSubmit, apiId }) => {
     setIsEditMode(false);
   };
 
-  //
-  //
-  // const { mutate: likePost } = useMutation(
-  //   (postId) =>
-  //     apis.put(`/posts/like/${postId}`, null, {
-  //       headers: {
-  //         // access_token: access_token,
-  //         access_token: `${access_token}`,
-  //         //refresh_token: `${refresh_token}`,
-  //       },
-  //     }),
-  //   {
-  //     onError: (error, postId, previousPost) => {
-  //       queryClient.setQueryData(['post', postId], previousPost);
-  //     },
-  //     onMutate: (postId) => {
-  //       const previousPost = queryClient.getQueryData(['post', postId]);
-  //       queryClient.setQueryData(['post', postId], (old) => ({
-  //         ...old,
-  //         like: !old?.like,
-  //         likecnt: old?.like ? old?.likecnt - 1 : old?.likecnt + 1,
-  //       }));
-  //       return previousPost;
-  //     },
-  //     onSettled: (data, error, postId, previousPost) => {
-  //       if (error) {
-  //         queryClient.setQueryData(['post', postId], previousPost);
-  //       } else {
-  //         queryClient.invalidateQueries(['post', postId]);
-  //       }
-  //     },
-  //   },
-  // );
+  const [like, setLike] = useState(post.like);
 
-  // const [like, setLike] = useState(post.like);
+  const handleLike = () => {
+    const postId = post.id;
+    const cachedPost = queryClient.getQueryData(['post', postId]);
 
-  // const handleLike = () => {
-  //   const postId = post.id;
-  //   const cachedPost = queryClient.getQueryData(['post', postId]);
+    // Optimistically update the cached post data
+    queryClient.setQueryData(['post', postId], (old) => ({
+      ...old,
+      like: !like,
+      likecnt: like ? old?.likecnt - 1 : old?.likecnt + 1,
+    }));
+    setLike(!like);
 
-  //   // Optimistically update the cached post data
-  //   queryClient.setQueryData(['post', postId], (old) => ({
-  //     ...old,
-  //     like: !like,
-  //     likecnt: like ? old?.likecnt - 1 : old?.likecnt + 1,
-  //   }));
-  //   setLike(!like);
-
-  //   likePost(postId, {
-  //     onSuccess: () => {
-  //       // If the request succeeds, the updated data will be refetched from the server
-  //       queryClient.invalidateQueries(['post', postId]);
-  //     },
-  //     onError: () => {
-  //       // If the request fails, roll back the optimistic update
-  //       queryClient.setQueryData(['post', postId], cachedPost);
-  //       setLike(like);
-  //     },
-  //   });
-  // };
-  // const [isEditMode, setIsEditMode] = useState(false);
-  // const [content, setContent] = useState(post.content); // content state 추가
+    likePost(postId, {
+      onSuccess: () => {
+        queryClient.invalidateQueries(['post', postId]);
+      },
+      onError: () => {
+        // If the request fails, roll back the optimistic update
+        queryClient.setQueryData(['post', postId], cachedPost);
+        setLike(like);
+      },
+    });
+  };
 
   return (
     <WebWrapper>
@@ -186,7 +141,11 @@ export const Post = ({ post, onSubmit, apiId }) => {
           {/* <div className="hearWrap" onClick={() => handleLike(post?.id)}>
             {like ? <LikeHeartIcon /> : <DisLikeHeartIcon />}
           </div> */}
-          <LikeButton post={post}></LikeButton>
+          <div className="hearWrap" onClick={() => handleLike(post?.id)}>
+            <div post={post}>
+              {like ? <LikeHeartIcon /> : <DisLikeHeartIcon />}
+            </div>
+          </div>
         </>
       )}
     </WebWrapper>
