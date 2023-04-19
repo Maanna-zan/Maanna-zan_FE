@@ -1,3 +1,14 @@
+import React from 'react'
+
+function usePutLike() {
+  return (
+    <div>usePutLike</div>
+  )
+}
+
+export default usePutLike
+
+
 // import React from 'react';
 // import { useState } from 'react';
 // import { cookies } from '@shared/cookie';
