@@ -2,7 +2,7 @@ import axios from 'axios';
 import { cookies } from './cookie';
 
 const instance = axios.create({
-  baseURL: 'http://3.34.179.86',
+  baseURL: 'http://54.180.119.237',
 });
 
 instance.interceptors.response.use(
@@ -34,4 +34,3 @@ instance.interceptors.response.use(
 );
 
 export default instance;
-

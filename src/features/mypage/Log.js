@@ -50,7 +50,7 @@ function Log() {
         </div>
 
         <ReviewDiv>
-          <p>나의 리뷰</p>
+          <p>나의 로그</p>
           <div
             style={{
               width: '688px',
