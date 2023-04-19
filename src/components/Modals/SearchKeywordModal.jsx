@@ -2,10 +2,13 @@ import { InputArea } from "@components/Atoms/Input";
 import { useState } from "react";
 import styled from "styled-components";
 import { Map } from "react-kakao-maps-sdk";
+import AddingInputBoxButton from "@features/map/AddingInputBoxButton";
 
-export default function KeywordSearchModal({ onClose }) {
+export default function KeywordSearchModal({ onClose, onSearch, onConfirm }) {
         const [inputText, setInputText] = useState('')
         const [searchPlace, setSearchPlace] = useState('');
+        //  클릭 선택된 장소를 저장할 state 변수
+        // const [selectedPlace, setSelectedPlace] = useState(null);
         
         const onChange = (e) => {
             setInputText(e.target.value)
@@ -15,10 +18,14 @@ export default function KeywordSearchModal({ onClose }) {
             e.preventDefault();
             // 검색어를 입력하고 검색 버튼을 클릭했을 때 실행되는 함수입니다.
             // 검색어를 상태 값으로 설정합니다.
-            setSearchPlace(inputText);
-            KeywordSearchFeat(searchPlace)
+            // setSearchPlace(inputText);
+            KeywordSearchFeat()
+            // onSearch();
         };
-
+        function handleSearchResult(place) {
+            setSearchPlace(place);
+            onClose();
+        }
 
     const KeywordSearchFeat=() => {
         const { kakao } = window;
@@ -86,6 +93,17 @@ export default function KeywordSearchModal({ onClose }) {
             const fragment = document.createDocumentFragment();
             const bounds = new kakao.maps.LatLngBounds();
             // listStr = '';
+            //  클릭된 항목에 대한 표시를 유지하기 위해 변수
+            let clickedItem = null;
+            //  클릭된 항목이 있다면 그 항목의 표시를 초기화하는 함수
+            function clearClickedItem() {
+                if (clickedItem !== null) {
+                    if (clickedItem.classList.contains('clicked')) { // 추가된 부분
+                        clickedItem.classList.remove('clicked');
+                    }
+                    clickedItem = null;
+                }
+            }
     
             // 검색 결과 목록에 추가된 항목들을 제거
             listEl && removeAllChildNods(listEl);
@@ -131,6 +149,16 @@ export default function KeywordSearchModal({ onClose }) {
                         infowindow.close();
                     };
                     itemEl.addEventListener("click", function (e) {
+                        //클릭된 항목을 표시
+                        clearClickedItem();
+                        clickedItem = e.currentTarget;
+                        clickedItem.classList.add('clicked');
+                        //Props로 선택된 장소 AddingInputBoxButton.js로 넘겨줌
+                        onSearch(places[i]);
+                        // 선택된 장소를 state에 저장
+                        // setSelectedPlace(places[i]);
+                        console.log("onSearch->", onSearch)
+                        console.log("places->", places)
                         displayInfowindow(marker, title);
                         // props.setAddress(places[i]);
                         map.panTo(placePosition);
@@ -360,10 +388,14 @@ export default function KeywordSearchModal({ onClose }) {
                     bottom: "20px",
                     right: "20px" 
                 }}
-                onClick={onClose}
+                onClick={handleSearchResult}
+                onConfirm={onConfirm}
+                // onClose={onClose}
+                onSearch={handleSearchResult}
             >
                 확인
             </button>
+            {/* <AddingInputBoxButton onSearch={onSearch}/> */}
         </div>
         </ModalDiv>
     )
@@ -449,7 +481,7 @@ const MapSection = styled.div`
     #menu_wrap {
         position: relative;
         width: 500px;
-        height: 310px;
+        height: 510px;
         border-radius: 20px;
         overflow-y: auto;
         background: rgba(255, 255, 255, 0.7);
@@ -510,6 +542,25 @@ const MapSection = styled.div`
     #placesList .info .tel {
         /* color: #009900; */
     }
+
+    #placesList .clicked{
+        /* background-color: rgba(100, 200, 100, 0.5);
+        border: 1px solid rgba(100, 200, 100, 0.8); */
+        border: 1px solid #35c280; /* 연하게 테두리(border) 스타일 */
+        position: relative; /* ::after 선택자를 위해 position 속성을 추가합니다. */
+        border-radius: 12px
+    }
+
+    #placesList .clicked ::after{
+        content: "V"; /* ::after 선택자를 이용하여 V표를 추가합니다. */
+        position: absolute;
+        right: 5px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #16a085;
+        font-weight: bold;
+    }
+
     #btnDiv {
         display: flex;
         flex-direction: column;
