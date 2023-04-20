@@ -11,7 +11,7 @@ import {
 } from '../hook/alcohol/useGetAllStore';
 import { PageNation } from '@components/Modals/PageNation';
 import { Store } from './alcohol/store';
-
+const PAGE_SIZE = 16;
 const AlcoholList = () => {
   const router = useRouter();
   const [storeListPage, setStoreListPage] = useState('all');

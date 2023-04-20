@@ -1,4 +1,5 @@
 import { HeadInfo } from '@components/Atoms/SEO/HeadInfo';
+import { MainFirstSection } from '@components/Templates/mainpage/MainFirstSection';
 import FirstPage from '@features/FirstPage';
 import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
@@ -7,6 +8,7 @@ const App = () => {
   return (
     <div>
       <HeadInfo title="만나잔에 오신걸 환영합니다!" />
+      <MainFirstSection></MainFirstSection>
     </div>
   );
 };

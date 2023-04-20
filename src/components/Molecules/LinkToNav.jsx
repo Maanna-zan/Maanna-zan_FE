@@ -45,6 +45,7 @@ export const LinkToNav = () => {
       console.log('data', data.data);
       return data.data;
     },
+
     // onError 콜백 함수 구현
     onError: (error) => {
       console.log(error);
