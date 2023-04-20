@@ -15,6 +15,10 @@ function AddingInputBoxButton() {
     const [inputValues, setInputValues] = useState(Array.from({ length: 4 }, () => ''));
     //  자식 컴포넌트의 props 값 state
     const [checkedPlace, setCheckedPlace] = useState();
+    //  자식 컴포넌트 props 꺼내서 쓸 수 있도록 한다.
+    function checkedPlaceHandler(place) {
+        setCheckedPlace(place);
+    }
     //  Input Box 추가 Button Handler
     const addingInputBoxButtonHandler = () => {
         if (inputCount < 4) {
@@ -39,7 +43,7 @@ function AddingInputBoxButton() {
                 // name={}
                 type="text" 
                 placeholder='이 버튼을 눌러 위치를 추가해주세요.'
-                value={inputValues[index]}
+                value={checkedPlace.place_name}
                 variant='default'
                 size='leftIcon'
                 cursor='pointer'
@@ -58,13 +62,13 @@ function AddingInputBoxButton() {
             showModal && createPortal(
                 <KeywordSearchModal 
                 onClose={onCloseModalHandler} 
-                onUpdate={(checkedPlace) => console.log(checkedPlace)}
+                onUpdate={checkedPlaceHandler}
                 />,
                 document.body
             )
         );
     };
-    // console.log("onUpdate", onUpdate)
+    console.log("checkedPlaceHandler", checkedPlace)
     //  Input Box 받아주는 배열
     const inputs = [];
     for (let i = 0; i < inputCount; i++) {
