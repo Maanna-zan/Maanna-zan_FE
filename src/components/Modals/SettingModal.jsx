@@ -146,7 +146,7 @@ export default function SettingModal({ onClose, data }) {
                 환경설정
               </p>
             </ModeParentsDiv>
-            <div>닉네임</div>
+            <p>닉네임</p>
             <InputArea
               size="lg"
               variant="default"
@@ -155,7 +155,7 @@ export default function SettingModal({ onClose, data }) {
               value={password.nickName}
               onChange={changePWInputHandler}
             />
-            <div>이메일</div>
+            <p>이메일</p>
             <InputDiv>{data.email}</InputDiv>
 
             <BottomHr />
@@ -311,10 +311,15 @@ export default function SettingModal({ onClose, data }) {
               </div>
             </ModeParentsDiv>
 
-            <div>다크모드 넣어주기</div>
+            <p>다크모드 넣어주기</p>
             <p
               onClick={() => {
                 setIsEditMode('delete');
+              }}
+              style={{
+                color: 'red',
+                display: 'flex',
+                justifyContent: 'center',
               }}
             >
               계정 삭제
