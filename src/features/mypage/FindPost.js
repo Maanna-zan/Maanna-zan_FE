@@ -37,7 +37,7 @@ const FindPost = () => {
         </div>
       ) : (
         <div>
-          <div style={{ display: 'flex', gap: '15px' }}>
+          <div style={{ display: 'flex', gap: '15px', padding: '20px 0px' }}>
             <ButtonText
               size="xxsm"
               variant="basic"
