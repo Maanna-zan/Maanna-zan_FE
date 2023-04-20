@@ -153,14 +153,16 @@ export const ButtonText = ({
       borderStyle = 'solid';
       borderWidth = '1px';
       borderColor = LightTheme.GRAY_200;
-
+      hoverBackgroundColor = LightTheme.PRIMARY_NORMAL;
+      hoverBorderColor = LightTheme.PRIMARY_NORMAL;
+      hoverFontColor = LightTheme.WHITE;
+      break;
     case 'activeRed':
       backgroundColor = LightTheme.PRIMARY_NORMAL;
       fontColor = LightTheme.WHITE;
       borderStyle = 'solid';
       borderWidth = '1px';
       borderColor = LightTheme.WHITE;
-
       hoverBackgroundColor = LightTheme.PRIMARY_NORMAL;
       hoverBorderColor = LightTheme.PRIMARY_NORMAL;
       hoverFontColor = LightTheme.WHITE;
