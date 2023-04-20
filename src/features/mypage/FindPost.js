@@ -17,7 +17,7 @@ const FindPost = () => {
           Access_Token: `${token}`,
         },
       });
-      console.log('data--------------', data.data.posts);
+      console.log('dataPost--------------', data.data.posts);
       return data.data.posts;
     },
   });
@@ -43,7 +43,7 @@ const FindPost = () => {
         >
           <img
             style={{ width: '160px', height: '160px' }}
-            src="MypageQuestion.png"
+            src="Group 2041.png"
             alt="작성한 글이 없습니다."
           />
           <p>좋아요한 게시글이 없습니다.</p>
@@ -99,7 +99,7 @@ const ContainerDiv = styled.div`
   border-radius: 12px;
   width: 384px;
   height: 278px;
-
+  margin-top: 20px;
   .p {
     margin-top: 12px;
     font-size: 16px;

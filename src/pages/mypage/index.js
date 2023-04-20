@@ -10,6 +10,7 @@ import FindPost from '@features/mypage/FindPost';
 import Log from '@features/mypage/Log';
 import Save from '@features/mypage/Save';
 import { WebWrapper } from '@components/Atoms/Wrapper';
+import MyWritePost from '@features/mypage/MyWritePost';
 
 const MyPage = () => {
   const router = useRouter();
@@ -121,7 +122,9 @@ const MyPage = () => {
           </WebWrapper>
 
           <BottomDiv>
-            <WebWrapper></WebWrapper>
+            <WebWrapper>
+              <MyWritePost data={data} />
+            </WebWrapper>
           </BottomDiv>
         </>
       ) : settingMyPage === 'like' ? (
