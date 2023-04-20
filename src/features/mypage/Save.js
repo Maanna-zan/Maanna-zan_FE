@@ -50,6 +50,7 @@ const Save = ({ data }) => {
       <div
         style={{
           display: 'flex',
+          flexDirection: 'column',
           width: '70%',
           margin: '0px auto',
           justifyContent: 'space-around',
@@ -58,12 +59,17 @@ const Save = ({ data }) => {
         }}
       >
         <InputArea
+          placeholder="비밀번호를 입력하세요"
+          variant="default"
+          size="lg"
           type="password"
           name="password"
           value={userOut.password}
           onChange={userOutHandler}
         />
         <ButtonText
+          variant="primary"
+          active={true}
           label="회원 탈퇴"
           onClick={() => {
             deleteId({ id: data.id, password: userOut.password });
