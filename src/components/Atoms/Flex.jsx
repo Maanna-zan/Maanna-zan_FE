@@ -10,6 +10,12 @@ export const FlexRow = styled.div`
   display: flex;
   flex-direction: row;
 `;
+export const FlexRowCenter = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-content: center;
+  justify-content: center;
+`;
 
 export const FlexGap = styled.div`
   display: flex;
