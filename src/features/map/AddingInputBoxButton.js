@@ -1,7 +1,7 @@
 import { ButtonText } from '@components/Atoms/Button';
 import { InputArea } from '@components/Atoms/Input';
 import KeywordSearchModal from '@components/Modals/SearchKeywordModal';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 
 function AddingInputBoxButton() {
@@ -18,6 +18,10 @@ function AddingInputBoxButton() {
     //  자식 컴포넌트 props 꺼내서 쓸 수 있도록 한다.
     function checkedPlaceHandler(place) {
         setCheckedPlace(place);
+        // 인풋박스 각각의 값에 각각의 props state값 주는 로직.
+        const newInputValues = [...inputValues];
+        newInputValues[currentInputIndex] = place.place_name;
+        setInputValues(newInputValues);
     }
     //  Input Box 추가 Button Handler
     const addingInputBoxButtonHandler = () => {
@@ -36,14 +40,12 @@ function AddingInputBoxButton() {
     }
      //Input 박스 추가
     const renderInputArea = (index) => {
-        console.log("inputValues->", inputValues)
         return (
             <InputArea 
                 key={index} 
-                // name={}
                 type="text" 
                 placeholder='이 버튼을 눌러 위치를 추가해주세요.'
-                value={checkedPlace.place_name}
+                value={inputValues[index]}
                 variant='default'
                 size='leftIcon'
                 cursor='pointer'
