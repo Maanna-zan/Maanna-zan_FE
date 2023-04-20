@@ -10,6 +10,7 @@ import { useQuery } from '@tanstack/react-query';
 import { apis } from '@shared/axios';
 import instance from '@shared/instance';
 import styled from 'styled-components';
+import { WebWrapper } from '@components/Atoms/Wrapper';
 
 export const LinkToNav = () => {
   const router = useRouter();
@@ -83,7 +84,7 @@ export const LinkToNav = () => {
       ) : (
         <>
           <ButtonText
-            style={{ position: 'absolute' }}
+            style={{ position: 'relative' }}
             variant="hoverRed"
             onClick={() => setShowSubMenu(!showSubMenu)}
             label={`${data?.userName}님`}
@@ -149,6 +150,9 @@ const Ullist = styled.ul`
     }
   }
   .email {
+    display: flex;
+    word-wrap: break-word;
+    flex-wrap: wrap;
     font-weight: 400;
     font-size: 12px;
     line-height: 16px;
