@@ -3,6 +3,9 @@ import { useRouter } from 'next/router';
 import { apis } from '../shared/axios';
 import { useMutation } from '@tanstack/react-query';
 import { cookies } from '../shared/cookie';
+import { InputArea } from '@components/Atoms/Input';
+import { ButtonText } from '@components/Atoms/Button';
+import styled from 'styled-components';
 
 const AddComment = () => {
   const router = useRouter();
@@ -31,26 +34,55 @@ const AddComment = () => {
       alert('댓글 추가를 완료하였습니다.');
       setCommentList({ content: '' });
     },
+    onError: (error) => {
+      console.log('error', error.response.data.message);
+      alert(error.response.data.message);
+    },
   });
   return (
-    <div>
-      AddContent
-      <input
-        type="text"
-        value={commentList.content}
-        name="content"
-        onChange={changeInputHandler}
-      />
-      <button
-        disabled={isLoading}
-        onClick={() => {
-          mutate(commentList);
-        }}
-      >
-        {isLoading ? '등록중' : ' ✅'}
-      </button>
-    </div>
+    <TotalDiv>
+      <BottomHr />
+      <AddDiv>
+        <InputArea
+          variant="default"
+          size="lg"
+          type="text"
+          value={commentList.content}
+          name="content"
+          onChange={changeInputHandler}
+        />
+        <ButtonText
+          variant="primary"
+          style={{ width: '84px' }}
+          disabled={isLoading}
+          onClick={() => {
+            mutate(commentList);
+          }}
+          label={isLoading ? '등록중' : '등록'}
+        />
+      </AddDiv>
+    </TotalDiv>
   );
 };
 
 export default AddComment;
+
+const TotalDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+`;
+const AddDiv = styled.div`
+  width: 792px;
+  margin-top: 50px;
+  margin: 0 auto;
+  display: flex;
+  gap: 24px;
+`;
+
+const BottomHr = styled.hr`
+  border: 0.5px solid#E8EBED;
+  width: 792px;
+  height: 0px;
+  border-bottom: 0px;
+`;

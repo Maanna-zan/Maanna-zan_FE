@@ -65,6 +65,10 @@ export const InputArea = ({
       padding = '14px 30px';
       fontSize = '20px';
       break;
+    case 'xxl':
+      padding = '10px 24px 24px 34px';
+      fontSize = '16px';
+      break;
   }
   if (block) {
     width = '100%';

@@ -5,6 +5,8 @@ import { useEffect } from 'react';
 import { apis } from '../../shared/axios';
 import { cookies } from '../../shared/cookie';
 import Alcohols from '.';
+import AddComment from '@features/AddComment';
+import CommentsList from '@features/CommentsList';
 
 const community = () => {
   const queryClient = useQueryClient();
@@ -69,6 +71,8 @@ const community = () => {
       <div>소주---{data?.soju}</div>
       <div>맥주---{data?.beer}</div>
       {/* <div>생성일{data?.createAt.substr(0, 10)}</div> */}
+      <AddComment />
+      <CommentsList />
     </div>
   );
 };
