@@ -54,10 +54,10 @@ export default function SettingModal({ onClose, data }) {
     onError: (error) => {
       console.error(error);
       // 에러 처리
+      alert('입력 된 비밀번호에 문제가 있습니다. 다시 한 번 살펴봐주세요.');
     },
     onSuccess: () => {
       alert('비밀번호 변경이 완료됐습니다.');
-      router.push('/mypage');
     },
   });
 
@@ -210,8 +210,20 @@ export default function SettingModal({ onClose, data }) {
               size="lg"
               variant="default"
               type="password"
+              name="oldPassword"
+              placeholder="현재 비밀번호를 입력해주세요."
+              value={password.oldPassword}
+              onChange={handlePasswordChange}
+              maxLength="20"
+              required
+            />
+            <p>새 비밀번호</p>
+            <InputArea
+              size="lg"
+              variant="default"
+              type="password"
               name="password"
-              placeholder="비밀번호를 입력해주세요."
+              placeholder="변경할 비밀번호를 입력해주세요."
               value={password.password}
               onChange={handlePasswordChange}
               maxLength="20"
@@ -223,6 +235,7 @@ export default function SettingModal({ onClose, data }) {
               variant="default"
               type="password"
               name="checkPassword"
+              value={password.checkPassword}
               placeholder="비밀번호를 확인해주세요."
               onChange={handlePasswordChange}
               required
@@ -248,6 +261,7 @@ export default function SettingModal({ onClose, data }) {
               onClick={() => {
                 if (validateForm(password)) {
                   changePassword(password);
+                  setPassword(' ');
                 }
               }}
             >
