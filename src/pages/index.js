@@ -1,5 +1,7 @@
 import { HeadInfo } from '@components/Atoms/SEO/HeadInfo';
 import { MainFirstSection } from '@components/Templates/mainpage/MainFirstSection';
+import { MainLastSectionMovie } from '@components/Templates/mainpage/MainLastSectionMovie';
+import { MainSecondSection } from '@components/Templates/mainpage/MainSecondSection';
 import FirstPage from '@features/FirstPage';
 import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
@@ -8,7 +10,9 @@ const App = () => {
   return (
     <div>
       <HeadInfo title="만나잔에 오신걸 환영합니다!" />
-      <MainFirstSection></MainFirstSection>
+      <MainFirstSection />
+      <MainSecondSection />
+      <MainLastSectionMovie />
     </div>
   );
 };

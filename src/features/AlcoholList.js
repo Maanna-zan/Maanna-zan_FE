@@ -10,7 +10,7 @@ import {
   getLike,
 } from '../hook/alcohol/useGetAllStore';
 import { PageNation } from '@components/Modals/PageNation';
-import { Store } from './alcohol/store';
+import { Store } from './alcohol/Store';
 const PAGE_SIZE = 16;
 const AlcoholList = () => {
   const router = useRouter();

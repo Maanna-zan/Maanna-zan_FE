@@ -45,9 +45,9 @@ export const MainFirstSection = () => {
 
   return (
     <>
-      <StWebBg></StWebBg>
-      <WebWrapper style={{ overflow: 'hidden' }}>
-        <WebWrapperHeight>
+      <WebWrapperHeight>
+        <StWebBg></StWebBg>
+        <WebWrapper style={{ overflow: 'hidden' }}>
           <GrideGapCol4 style={{ margin: '34px 0 12px 0' }}>
             <FlexRow style={{ justifyContent: 'space-between' }}>
               <StTitleGet>HOT, 여기서 만나잔</StTitleGet>
@@ -102,6 +102,7 @@ export const MainFirstSection = () => {
             <GrideGapRow4>
               {getView?.map((store, index) => (
                 <BoxTextReal
+                  key={store?.id}
                   size="sm"
                   variant="grayBolderBox"
                   style={{ height: '72px' }}
@@ -165,8 +166,8 @@ export const MainFirstSection = () => {
               }}
             />
           </FlexRowCenter>
-        </WebWrapperHeight>
-      </WebWrapper>
+        </WebWrapper>
+      </WebWrapperHeight>
     </>
   );
 };
