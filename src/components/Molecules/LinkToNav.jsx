@@ -83,6 +83,7 @@ export const LinkToNav = () => {
       ) : (
         <>
           <ButtonText
+            style={{ position: 'fixed' }}
             variant="hoverRed"
             onClick={() => setShowSubMenu(!showSubMenu)}
             label={`${data?.userName}님`}
@@ -117,6 +118,7 @@ export const LinkToNav = () => {
 };
 
 const Ullist = styled.ul`
+  position: fixed;
   gap: 24px;
   display: flex;
   border-radius: 0px 0px 12px 12px;
