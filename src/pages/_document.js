@@ -44,7 +44,7 @@ export default class MyDocument extends Document {
           <Main />
           <NextScript />
           <Script
-            src={`//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=${process.env.NEXT_PUBILC_KAKAOMAP_KEY}&libraries=services,clusterer,drawing`}
+            src={`//dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=${process.env.NEXT_PUBLIC_KAKAOMAP_KEY}&libraries=services,clusterer,drawing`}
             strategy="beforeInteractive"
           />
         </body>
