@@ -9,8 +9,6 @@ export const Store = ({ storeData, store }) => {
   const { likeStore } = useLikeStore();
   const [roomLike, setRoomLike] = useState(store.roomLike);
   // const [roomLike, setRoomLike] = useState(store.roomLike);
-  console.log('storeDataapiId-------------->', storeData.apiId);
-  console.log('storeapiId-------------->', store.apiId);
   const handleLike = () => {
     const apiId = store.apiId;
     const cachedStore = queryClient.getQueryData(['store', apiId]);

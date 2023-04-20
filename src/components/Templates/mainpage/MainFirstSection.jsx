@@ -12,16 +12,6 @@ import { apis } from '@shared/axios';
 import { BoxTextReal } from '@components/Atoms/BoxTextReal';
 const PAGE_SIZE = 3;
 export const MainFirstSection = () => {
-  //추후 useQuery에서 hook으로 사용.. 시간이...ㅠㅠ
-  // const { data: getViewData, isLoading } = useQuery([
-  //   'getView',
-  //   getView(1, PAGE_SIZE),
-  // ]);
-
-  // if (isLoading) {
-  //   return <p>Loading...</p>;
-  // }
-
   const [getView, seGetView] = useState([]);
 
   useEffect(() => {
@@ -35,7 +25,6 @@ export const MainFirstSection = () => {
   useEffect(() => {
     const fetchData = async () => {
       const response = await apis.get(`/alkol/view?page=${1}&size=4`);
-      console.log('response.data------->', response.data);
       seGetView(response.data);
     };
 

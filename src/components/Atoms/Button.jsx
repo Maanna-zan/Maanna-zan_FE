@@ -76,6 +76,9 @@ export const ButtonText = ({
       padding = '14px 30px';
       fontSize = '20px';
       break;
+    case 'tab':
+      padding = ' 8px 16px';
+      break;
   }
 
   // about full width
@@ -134,6 +137,7 @@ export const ButtonText = ({
       hoverBorderColor = LightTheme.PRIMARY_NORMAL;
       hoverFontColor = LightTheme.WHITE;
       break;
+
     // case 'grayButtonBolder':
     //   backgroundColor = LightTheme.SECONDARY;
     //   fontColor = LightTheme.PRIMARY;
@@ -149,6 +153,14 @@ export const ButtonText = ({
       borderStyle = 'solid';
       borderWidth = '1px';
       borderColor = LightTheme.GRAY_200;
+
+    case 'activeRed':
+      backgroundColor = LightTheme.PRIMARY_NORMAL;
+      fontColor = LightTheme.WHITE;
+      borderStyle = 'solid';
+      borderWidth = '1px';
+      borderColor = LightTheme.WHITE;
+
       hoverBackgroundColor = LightTheme.PRIMARY_NORMAL;
       hoverBorderColor = LightTheme.PRIMARY_NORMAL;
       hoverFontColor = LightTheme.WHITE;
