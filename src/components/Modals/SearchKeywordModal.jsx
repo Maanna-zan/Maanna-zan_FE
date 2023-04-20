@@ -2,31 +2,31 @@ import { InputArea } from "@components/Atoms/Input";
 import { useState } from "react";
 import styled from "styled-components";
 import { Map } from "react-kakao-maps-sdk";
-import AddingInputBoxButton from "@features/map/AddingInputBoxButton";
 
-export default function KeywordSearchModal({ onClose, onSearch, onConfirm }) {
+export default function KeywordSearchModal({ onClose, onUpdate}) {
+        //  키워드 검색 값 state
         const [inputText, setInputText] = useState('')
-        const [searchPlace, setSearchPlace] = useState('');
         //  클릭 선택된 장소를 저장할 state 변수
-        // const [selectedPlace, setSelectedPlace] = useState(null);
-        
-        const onChange = (e) => {
+        const [checkedPlace, setCheckedPlace] = useState('')
+        //  키워드 검색 값 Handler
+        const inputTextHandler = (e) => {
             setInputText(e.target.value)
         }
-
-        const handleSubmit = (e) => {
-            e.preventDefault();
-            // 검색어를 입력하고 검색 버튼을 클릭했을 때 실행되는 함수입니다.
-            // 검색어를 상태 값으로 설정합니다.
-            // setSearchPlace(inputText);
-            KeywordSearchFeat()
-            // onSearch();
-        };
-        function handleSearchResult(place) {
-            setSearchPlace(place);
+        //  선택된 장소 값 저장 및 부모 컴포넌트 배달 Handler & 모달창 닫기
+        const saveStateHandler = () => {
+            //  부모 컴포넌트로 선택된 장소 값 전달 props
+            onUpdate(checkedPlace);
+            //  모달 창 닫기 props
             onClose();
         }
-
+        console.log("checkedPlace-> ",checkedPlace)
+        //  키워드 검색 Submit Handler
+        const keywordSearchSubmitHandler = (e) => {
+            e.preventDefault();
+            // 검색어를 입력하고 검색 버튼을 클릭했을 때 실행되는 함수. 검색어를 상태 값으로 설정
+            KeywordSearchFeat()
+        };
+    //  키워드 검색 로직
     const KeywordSearchFeat=() => {
         const { kakao } = window;
         const map = new kakao.maps.Map(document.getElementById('myMap'), 
@@ -38,9 +38,6 @@ export default function KeywordSearchModal({ onClose, onSearch, onConfirm }) {
         const infowindow = new kakao.maps.InfoWindow({ zIndex: 1 });
         // 마커를 담을 배열입니다
         let markers = [];
-        // 장소검색 객체를 통해 키워드로 장소검색을 요청합니다
-        // ps.keywordSearch(searchPlace, placesSearchCB);
-        // console.log("ps->",searchPlace)
     
         const searchForm = document.getElementById('submit_btn');
         if (searchForm) {
@@ -50,7 +47,6 @@ export default function KeywordSearchModal({ onClose, onSearch, onConfirm }) {
             });
         }
         
-
         function searchPlaces() {
             const keyword = document.getElementById("keyword").value;
             if (!keyword?.replace(/^\s+|\s+$/g, "")) {
@@ -60,7 +56,7 @@ export default function KeywordSearchModal({ onClose, onSearch, onConfirm }) {
         // 장소검색 객체를 통해 키워드로 장소검색을 요청
         ps.keywordSearch(keyword, placesSearchCB);
         }
-        console.log("searchPlace -> ", keyword)
+        console.log("keyword -> ", keyword)
         // 장소검색이 완료됐을 때 호출되는 콜백함수 입니다
         function placesSearchCB(data, status, pagination) {
             if (status === kakao.maps.services.Status.OK) {
@@ -92,7 +88,6 @@ export default function KeywordSearchModal({ onClose, onSearch, onConfirm }) {
             const menuEl = document.getElementById('menu_wrap');
             const fragment = document.createDocumentFragment();
             const bounds = new kakao.maps.LatLngBounds();
-            // listStr = '';
             //  클릭된 항목에 대한 표시를 유지하기 위해 변수
             let clickedItem = null;
             //  클릭된 항목이 있다면 그 항목의 표시를 초기화하는 함수
@@ -104,26 +99,20 @@ export default function KeywordSearchModal({ onClose, onSearch, onConfirm }) {
                     clickedItem = null;
                 }
             }
-    
             // 검색 결과 목록에 추가된 항목들을 제거
             listEl && removeAllChildNods(listEl);
-    
             // 지도에 표시되고 있는 마커를 제거합니다
             removeMarker();
             for ( let i=0; i<places.length; i++ ) {
-    
                 // 마커를 생성하고 지도에 표시합니다
                 const placePosition = new kakao.maps.LatLng(places[i].y, places[i].x);
                 const marker = addMarker(placePosition, i);
-                const itemEl = getListItem(i, places[i]); // 검색 결과 항목 Element를 생성합니다
-    
-                // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기위해
-                // LatLngBounds 객체에 좌표를 추가합니다
+                const itemEl = getListItem(i, places[i]); // 검색 결과 항목 Element를 생성
+            // 검색된 장소 위치를 기준으로 지도 범위를 재설정하기 위해 LatLngBounds 객체에 좌표를 추가
                 bounds.extend(placePosition);
     
-                // 마커와 검색결과 항목에 mouseover 했을때
-                // 해당 장소에 인포윈도우에 장소명을 표시합니다
-                // mouseout 했을 때는 인포윈도우를 닫습니다
+                // 마커와 검색결과 항목에 mouseover 했을때 해당 장소에 인포윈도우 장소명 표시
+                // mouseout 했을 때는 인포윈도우를 닫기
                 (function(marker, title) {
                     kakao.maps.event.addListener(
                         marker, 
@@ -153,31 +142,29 @@ export default function KeywordSearchModal({ onClose, onSearch, onConfirm }) {
                         clearClickedItem();
                         clickedItem = e.currentTarget;
                         clickedItem.classList.add('clicked');
-                        //Props로 선택된 장소 AddingInputBoxButton.js로 넘겨줌
-                        onSearch(places[i]);
-                        // 선택된 장소를 state에 저장
-                        // setSelectedPlace(places[i]);
-                        console.log("onSearch->", onSearch)
-                        console.log("places->", places)
+                        //  검색 후 선택한 값 중 i 번째 값 선언
+                        const selected = places[i];
+                        //  검색 후 선택한 값 중 i 번째 값 state에 저장
+                        setCheckedPlace(selected)
+
                         displayInfowindow(marker, title);
-                        // props.setAddress(places[i]);
                         map.panTo(placePosition);
                     });
                 })(marker, places[i].place_name);
     
                 fragment.appendChild(itemEl);
             }
-            // 검색결과 항목들을 검색결과 목록 Element에 추가합니다
+            // 검색결과 항목들을 검색결과 목록 Element에 추가
             if (listEl) {
                 listEl.appendChild(fragment);
-                if (menuEl !== null) { // menuEl이 null이 아닐 때 scrollTop 속성을 설정합니다.
+                if (menuEl !== null) { // menuEl이 null이 아닐 때 scrollTop 속성을 설정
                     menuEl.scrollTop = 0;
                 }
             }
-            // 검색된 장소 위치를 기준으로 지도 범위를 재설정합니다
+            // 검색된 장소 위치를 기준으로 지도 범위를 재설정
             map.setBounds(bounds);
         }
-        // 검색결과 항목을 Element로 반환하는 함수입니다
+        // 검색결과 항목을 Element로 반환하는 함수
         function getListItem(index, places) {
             const el = document.createElement('li');
             let itemStr =
@@ -205,7 +192,7 @@ export default function KeywordSearchModal({ onClose, onSearch, onConfirm }) {
                         return el;
                     }
     
-        // 마커를 생성하고 지도 위에 마커를 표시하는 함수입니다
+        // 마커를 생성하고 지도 위에 마커를 표시하는 함수
         function addMarker(position, idx, title) {
             const imageSrc = 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/marker_number_blue.png', // 마커 이미지 url, 스프라이트 이미지를 씁니다
                 imageSize = new kakao.maps.Size(36, 37),  // 마커 이미지의 크기
@@ -220,13 +207,13 @@ export default function KeywordSearchModal({ onClose, onSearch, onConfirm }) {
                     image: markerImage 
                 });
     
-            marker.setMap(map); // 지도 위에 마커를 표출합니다
-            markers.push(marker);  // 배열에 생성된 마커를 추가합니다
+            marker.setMap(map); // 지도 위에 마커를 표출
+            markers.push(marker);  // 배열에 생성된 마커를 추가
     
             return marker;
         }
     
-        // 지도 위에 표시되고 있는 마커를 모두 제거합니다
+        // 지도 위에 표시되고 있는 마커를 모두 제거
         function removeMarker() {
             for ( let i = 0; i < markers.length; i++ ) {
                 markers[i].setMap(null);
@@ -234,8 +221,8 @@ export default function KeywordSearchModal({ onClose, onSearch, onConfirm }) {
             markers = [];
         }
     
-        // 검색결과 목록 또는 마커를 클릭했을 때 호출되는 함수입니다
-        // 인포윈도우에 장소명을 표시합니다
+        // 검색결과 목록 또는 마커를 클릭했을 때 호출되는 함수
+        // 인포윈도우에 장소명을 표시
         function displayInfowindow(marker, title) {
             const content = '<div style="padding:5px;z-index:1;">' + title + '</div>';
     
@@ -243,7 +230,7 @@ export default function KeywordSearchModal({ onClose, onSearch, onConfirm }) {
             infowindow.open(map, marker);
         }
     
-        // 검색결과 목록의 자식 Element를 제거하는 함수입니다
+        // 검색결과 목록의 자식 Element를 제거하는 함수
         function removeAllChildNods(el) {
             if (el && el.hasChildNodes()) {
                 while (el.childNodes.length > 0) { // changed condition to check if there are still child nodes
@@ -279,17 +266,18 @@ export default function KeywordSearchModal({ onClose, onSearch, onConfirm }) {
     
                 fragment.appendChild(el)
             }
-            if (paginationEl !== null) { // paginationEl이 null이 아닐 때 appendChild 메소드를 호출합니다.
+            // paginationEl이 null이 아닐 때 appendChild 메소드를 호출
+            if (paginationEl !== null) { 
                 paginationEl.appendChild(fragment);
             }
         }
+        // 마커를 생성하고 지도에 표시
         function displayMarker(place) {
-            // 마커를 생성하고 지도에 표시합니다
             let marker = new kakao.maps.Marker({
             map: map,
             position: new kakao.maps.LatLng(place.y, place.x)
             });
-            // 마커에 클릭이벤트를 등록합니다
+            // 마커에 클릭이벤트를 등록
             kakao.maps.event.addListener(marker, 'click', function(mouseEvent) {
                 props.setAddress(place);
                 infowindow.setContent(`<span>${place.place_name}</span>`);
@@ -300,30 +288,32 @@ export default function KeywordSearchModal({ onClose, onSearch, onConfirm }) {
             
         }
     }
-    
     return (
         <ModalDiv className="modal">
         <div className="modal-overlay">
+
         <MapSection>
             <h1 style={{textAlign: "center", width: "100%"}}>위치검색</h1>
-            <form id="form" className="inputForm" onSubmit={handleSubmit}>
-            <InputWrapper style={{ width: "100%" }}>
-                <InputArea 
-                    id="keyword"
-                    type="text" 
-                    placeholder="위치를 입력해주세요."
-                    onChange={onChange} 
-                    value={inputText}
-                />
-                <button
-                id="submit_btn" 
-                type="submit"
-                // onSubmit={handleSubmit}
-                >검색</button>
-            </InputWrapper>
+
+            <form id="form" className="inputForm" onSubmit={keywordSearchSubmitHandler}>
+                <InputWrapper style={{ width: "100%" }}>
+                    <InputArea 
+                        id="keyword"
+                        type="text" 
+                        placeholder="위치를 입력해주세요."
+                        onChange={inputTextHandler} 
+                        value={inputText}
+                    />
+                    <button
+                        id="submit_btn" 
+                        type="submit"
+                    >
+                        검색
+                    </button>
+                </InputWrapper>
             </form>
+
             <div style={{ width: '100%', height: 'calc(100% - 80px)', display: 'flex' }}>
-            
                 
                     <Map
                         id='myMap'
@@ -338,45 +328,25 @@ export default function KeywordSearchModal({ onClose, onSearch, onConfirm }) {
                             position: "relative"
                         }}
                     >
-                    {/* <MapContainer/> */}
-                    {/* <KeywordSearchFeat searchPlace={searchPlace} /> */}
                     </Map>
                     <div style={{width: '50%'}}>
                         
                         <div id="menuDiv">
-                        <div id="menu_wrap">
-                            <div>
-                                <div id="map_title">
-                                    {/* <div>만나잔</div> */}
+                            <div id="menu_wrap">
+                                <div>
+                                    <div id="map_title">
+                                        <div>검색목록</div>
+                                    </div>
                                 </div>
-                                {/* <form 
-                                className="inputForm" 
-                                id="form"
-                                onSubmit={handleSubmit}
-                                >
-                                    <input
-                                        placeholder="Search Place..."
-                                        onChange={onChange}
-                                        id="keyword"
-                                        value={inputText} 
-                                        
-                                    />
-                                    <button 
-                                        id="submit_btn" 
-                                        type="submit"
-                                    >검색
-                                    </button>                           
-                                </form> */}
+                                    <ul id="placesList"></ul>
+                                    <div id="pagination"></div>
                             </div>
-                            <ul id="placesList"></ul>
-                            <div id="pagination"></div>
                         </div>
-                    </div>
-
                     </div>
                 
             </div>
-            </MapSection>
+        </MapSection>
+
             <button
                 style={{
                     cursor: 'pointer',
@@ -388,14 +358,11 @@ export default function KeywordSearchModal({ onClose, onSearch, onConfirm }) {
                     bottom: "20px",
                     right: "20px" 
                 }}
-                onClick={handleSearchResult}
-                onConfirm={onConfirm}
-                // onClose={onClose}
-                onSearch={handleSearchResult}
+                onClick={saveStateHandler}
             >
                 확인
             </button>
-            {/* <AddingInputBoxButton onSearch={onSearch}/> */}
+
         </div>
         </ModalDiv>
     )
