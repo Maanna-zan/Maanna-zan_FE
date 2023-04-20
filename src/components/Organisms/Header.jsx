@@ -8,7 +8,13 @@ export const Header = () => {
   return (
     <>
       <WebWrapper>
-        <FlexRow style={{ justifyContent: 'space-between' }}>
+        <FlexRow
+          style={{
+            justifyContent: 'space-between',
+            height: '80px',
+            alignItems: 'center',
+          }}
+        >
           <Logo />
           <LinkToNav />
         </FlexRow>
