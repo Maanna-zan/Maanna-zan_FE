@@ -5,6 +5,8 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { apis } from '../shared/axios';
 import { cookies } from '../shared/cookie';
 import { useState } from 'react';
+import styled from 'styled-components';
+import { InputArea } from '@components/Atoms/Input';
 
 const CommentsList = () => {
   const queryClient = useQueryClient();
@@ -41,7 +43,7 @@ const CommentsList = () => {
           Access_Token: `${token}`,
         },
       });
-      //   console.log('data', data.data.commentList);
+      console.log('data', data.data.commentList);
       return data.data.commentList;
     },
     //enabled: -> 참일 때 실행시켜준다.
@@ -97,34 +99,73 @@ const CommentsList = () => {
         );
       })} */}
 
-      <div style={{ marginTop: '40px' }}>
+      <CommentDiv>
         {isEditMode ? (
           <>
-            <input
-              type="text"
-              name="content"
-              value={commentContent}
-              onChange={(e) => setCommentContent(e.target.value)}
-            />
-            <button onClick={handleUpdate}>완료</button>
+            <div style={{ display: 'flex' }}>
+              <InputArea
+                variant="default"
+                size="lg"
+                type="text"
+                name="content"
+                value={commentContent}
+                onChange={(e) => setCommentContent(e.target.value)}
+              />
+              <button className="Button" onClick={handleUpdate}>
+                완료
+              </button>
+            </div>
           </>
         ) : (
           <>
             {data?.map((comment) => (
               <div key={comment.id}>
-                <h2>{comment.content}</h2>
-                <div>{comment.id}</div>
-                <div>{comment.nickName}</div>
-                <div>{comment.createdAt}</div>
-                <button onClick={() => handleDelete(comment.id)}>삭제</button>
-                <button onClick={() => handleEdit(comment)}>수정</button>
+                <div className="nickName">{comment.nickName}</div>
+                <h2 className="content">{comment.content}</h2>
+                <button
+                  className="Button"
+                  onClick={() => handleDelete(comment.id)}
+                >
+                  삭제
+                </button>
+                <button className="Button" onClick={() => handleEdit(comment)}>
+                  수정
+                </button>
               </div>
             ))}
           </>
         )}
-      </div>
+      </CommentDiv>
     </div>
   );
 };
 
 export default CommentsList;
+
+const CommentDiv = styled.div`
+  width: 792px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+  .nickName {
+    font-weight: 700;
+    font-size: 12px;
+    line-height: 16px;
+  }
+  .content {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 16px;
+  }
+  .Button {
+    border: none;
+    background-color: transparent;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 16px;
+    color: #72787f;
+    width: 50px;
+  }
+`;

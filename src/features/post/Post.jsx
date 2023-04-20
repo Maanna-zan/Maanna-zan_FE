@@ -8,9 +8,11 @@ import { WebWrapper } from '@components/Atoms/Wrapper';
 import { useDeletePost } from '../../hook/post/useDeletePost';
 import { useUpdatePost } from '../../hook/post/useUpdatePost';
 import { useLikePost } from '../../hook/useLikes';
+import { useRouter } from 'next/router';
 
 export const Post = ({ post, onSubmit, apiId }) => {
   // console.log('newPost', post);
+  const go = useRouter();
   const queryClient = useQueryClient();
   const [newPost, setNewPost] = useState({
     storename: post.storename,
@@ -122,7 +124,11 @@ export const Post = ({ post, onSubmit, apiId }) => {
         </>
       ) : (
         <>
-          <div>
+          <div
+            onClick={() => {
+              go.push(`/community/${post.id}`);
+            }}
+          >
             가게이름
             <p>{post?.storename}</p>
           </div>
