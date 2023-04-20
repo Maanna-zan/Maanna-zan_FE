@@ -81,7 +81,7 @@ const PostDiv = styled.div`
   display: flex;
   flex-direction: column;
   gap: 12px;
-
+  margin-bottom: 20px;
   align-items: center;
   .image {
     margin-top: 20px;

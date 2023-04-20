@@ -56,6 +56,10 @@ export const ButtonText = ({
 
   // about size
   switch (size) {
+    case 'xxsm':
+      padding = '3px 15px';
+      fontSize = '11px';
+      break;
     case 'sm':
       padding = '10px 16px';
       fontSize = '14px';
@@ -139,6 +143,16 @@ export const ButtonText = ({
     //   hoverBackgroundColor = LightTheme.SECONDARY;
     //   hoverBorderColor = LightTheme.SECONDARY;
     //   break;
+    case 'basic':
+      backgroundColor = null;
+      fontColor = LightTheme.BLACK;
+      borderStyle = 'solid';
+      borderWidth = '1px';
+      borderColor = LightTheme.GRAY_200;
+      hoverBackgroundColor = LightTheme.PRIMARY_NORMAL;
+      hoverBorderColor = LightTheme.PRIMARY_NORMAL;
+      hoverFontColor = LightTheme.WHITE;
+      break;
   }
 
   return (
