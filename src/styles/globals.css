@@ -1,8 +1,9 @@
 body {
   width: 100vw;
+  overflow-x: hidden;
   margin: 0;
   font-size: 16px;
-  letter-spacing: -1px;
+  letter-spacing: -px;
   word-spacing: -2px;
 }
 a {
@@ -13,12 +14,13 @@ img {
   margin: 0;
   padding: 0;
 }
+
 @font-face {
   font-family: 'Pretendard';
-  font-weight: 400;
   font-style: normal;
-  src: url('/fonts/Pretendard-Regular.woff2') format('woff2'),
-    url('/fonts/Pretendard-Regular.woff') format('woff');
+  font-weight: 400;
+  src: url('https://fonts.gstatic.com/s/pretendard/v13/1hRflJn9CgMJPCUBYZfLrNXCyaRjV7GdRmM9VJmPgw.ttf')
+    format('truetype');
 }
 :root {
   --display1-bold: 700 3rem/3.5rem;
