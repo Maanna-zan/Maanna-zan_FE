@@ -3,12 +3,13 @@ import { LightTheme } from '@components/Themes/theme';
 import { GrideGapCol4, GrideGapRow4 } from '@components/Atoms/Grid';
 import { WebWrapper, WebWrapperHeight } from '@components/Atoms/Wrapper';
 import { FlexColumn, FlexRow, FlexRowCenter } from '@components/Atoms/Flex';
-import { BoxTextReal } from '@components/Atoms/BoxTextReal';
+
 import React from 'react';
 import styled from 'styled-components';
 import { getView, getBest } from '../../../hook/alcohol/useGetAllStore';
 import { useQueries, useQuery } from '@tanstack/react-query';
 import { apis } from '@shared/axios';
+import { BoxTextReal } from '@components/Atoms/BoxTextReal';
 const PAGE_SIZE = 3;
 export const MainFirstSection = () => {
   //추후 useQuery에서 hook으로 사용.. 시간이...ㅠㅠ
