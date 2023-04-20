@@ -64,7 +64,7 @@ function Log() {
           >
             <img
               style={{ width: '160px', height: '160px', zIndex: '320' }}
-              src="MypageQuestion.png"
+              src="Group 2041.png"
               alt="작성한 기록이 없습니다."
             />
             <p>작성한 기록이 없습니다.</p>
