@@ -3,6 +3,9 @@ import { InputArea } from '@components/Atoms/Input';
 import KeywordSearchModal from '@components/Modals/SearchKeywordModal';
 import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
+import { apis } from '@shared/axios';
+import { cookies } from '@shared/cookie';
+import { useMutation } from '@tanstack/react-query';
 
 function AddingInputBoxButton() {
     //  Input Box 갯수 state. 값으로 1을 넣은 이유는 처음에 1개가 기본 있어야 한다.
@@ -15,6 +18,10 @@ function AddingInputBoxButton() {
     const [inputValues, setInputValues] = useState(Array.from({ length: 4 }, () => ''));
     //  자식 컴포넌트의 props 값 state
     const [checkedPlace, setCheckedPlace] = useState();
+    //  중간 지점 state
+    const [midPoint, setMidPoint] = useState(null);
+    //  마커 찍어 줄 state
+    const [positions, setPositions] = useState([]);
     //  자식 컴포넌트 props 꺼내서 쓸 수 있도록 한다.
     function checkedPlaceHandler(place) {
         // checkedPlace 객체를 request 폼으로 가공
@@ -94,6 +101,42 @@ function AddingInputBoxButton() {
     for (let i = 0; i < inputCount; i++) {
         inputs.push(renderInputArea(i));
     }
+    // refresh token 얻기
+    const token = cookies.get('refresh_token');
+    //  검색 값 request폼으로 가공 후 서버통신
+    const { mutate, isLoading } = useMutation({
+        mutationFn: async (location) => {
+            console.log('location->', location[0]);
+            const data = await apis.post(
+                '/find',
+                {
+                    checkedPlace
+                },
+                {
+                    headers: {
+                        refresh_token: `${token}`,
+                        },
+                },
+                console.log("data====>",data)
+            );
+            return data;
+        },
+        // onError 콜백 함수, 에러 처리
+        onError: (error) => {
+            console.error(error);
+        },
+        //  완료 되었을 때 콜백 함수
+        onSuccess: (data) => {
+            const response = data.data.message;
+            console.log('response', response);
+            alert(response);
+            const lat = data.data.data.lat;
+            const lng = data.data.data.lng;
+            const newMidPoint = {lat, lng};
+            console.log("newMidPoint",newMidPoint);
+            setMidPoint(newMidPoint);
+        },
+    });
     return (
         <div>
             {inputs}
