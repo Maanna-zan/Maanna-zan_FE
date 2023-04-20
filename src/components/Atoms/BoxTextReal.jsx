@@ -35,7 +35,6 @@ export const BoxTextReal = ({
   size = 'md',
   variant = 'default',
   fontWeight,
-
   label,
   margin = '0px 0px',
   active = false,
