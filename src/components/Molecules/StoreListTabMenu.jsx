@@ -15,12 +15,15 @@ export const StoreListTabMenu = ({
       <div
         style={{
           display: 'flex',
-          gap: '40px',
+          gap: '12px',
+          margin: '20px 0px',
+          marginRight: '12px',
           alignContent: 'center',
         }}
       >
         <ButtonText
           label={'전체'}
+          size="tab"
           variant={activeTab === 'all' ? 'activeRed' : 'default'}
           onClick={() => {
             handleStoreListTabChange('all');
@@ -31,6 +34,7 @@ export const StoreListTabMenu = ({
         </ButtonText>
         <ButtonText
           label={'게시글 많은 순'}
+          size="tab"
           variant={activeTab === 'best' ? 'activeRed' : 'default'}
           onClick={() => {
             handleStoreListTabChange('best');
@@ -41,6 +45,7 @@ export const StoreListTabMenu = ({
         </ButtonText>
         <ButtonText
           label={'조회수'}
+          size="tab"
           variant={activeTab === 'view' ? 'activeRed' : 'default'}
           onClick={() => {
             handleStoreListTabChange('view');
@@ -51,6 +56,7 @@ export const StoreListTabMenu = ({
         </ButtonText>
         <ButtonText
           label={' 좋아요 순'}
+          size="tab"
           variant={activeTab === 'like' ? 'activeRed' : 'default'}
           onClick={() => {
             handleStoreListTabChange('like');

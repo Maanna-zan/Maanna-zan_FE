@@ -38,6 +38,7 @@ const StUl = styled.ul`
   justify-content: center;
   display: flex;
   align-items: center;
+  margin: 80px auto;
 `;
 
 const StLi = styled.li`
