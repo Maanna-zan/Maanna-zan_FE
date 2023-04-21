@@ -8,6 +8,7 @@ import { useMutation } from '@tanstack/react-query';
 import { Map, MapMarker } from 'react-kakao-maps-sdk';
 import { FlexRow } from '@components/Atoms/Flex';
 import { WebWrapper, WebWrapperHeight } from '@components/Atoms/Wrapper';
+import styled from 'styled-components';
 
 function AddingInputBoxButton() {
     //  Input Box 갯수 state. 값으로 1을 넣은 이유는 처음에 1개가 기본 있어야 한다.
@@ -74,10 +75,15 @@ function AddingInputBoxButton() {
                 placeholder='이 버튼을 눌러 위치를 추가해주세요.'
                 value={inputValues[index]}
                 variant='default'
-                size='leftIcon'
+                size='df'
                 cursor='pointer'
                 readOnly={true}
                 onClick={() => onInputClickHandler(index)}
+                style={{margin:"8px 0 5px 10px",
+                        border: 'none',
+                        backgroundColor: '#F7F8F9',
+                        fontSize: '12px'
+                        }}
             ></InputArea>
         );
     }
@@ -163,7 +169,7 @@ function AddingInputBoxButton() {
                 <div>
                     <Map 
                         center={center} 
-                        style={{ width: '690px', height: '803px', top:'179', left:'360' }}
+                        style={{ width: '690px', height: '803px', maxWidth:'100%', maxHeight:'100%' }}
                     >
                             {positions.map((position, index) => (
                                 <MapMarker
@@ -193,28 +199,24 @@ function AddingInputBoxButton() {
                     </Map>
                 </div>
             
-                <div>
-                    <h1>
-                    친구와 본인의 위치를 입력해주세요.
-                    </h1>
-                    <p>
-                    중간 위치에 있는 맛집을 찾아드립니다.
-                    </p>
+                <ContentWrapper>
+                    <H1Styled>친구와 본인의 </H1Styled>
+                    <Highlighting>위치를 입력해주세요</Highlighting>
                         <div>
                             {inputs}
                             {renderModal()}
-                                <button 
+                                <ButtonGrayStyle 
                                     onClick={addingInputBoxButtonHandler}
                                 >
                                 추가하기
-                                </button>
-                                <button
+                                </ButtonGrayStyle>
+                                <ButtonRedStyle
                                     onClick={() => {mutate(checkedPlace);}}
                                 >
-                                중간위치찾기
-                                </button>
+                                검색
+                                </ButtonRedStyle>
                         </div>
-                </div>
+                </ContentWrapper>
             </FlexRow>
         </WebWrapperHeight>
         </WebWrapper>
@@ -222,3 +224,39 @@ function AddingInputBoxButton() {
 }
 
 export default AddingInputBoxButton;
+const ContentWrapper = styled.div`
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    margin: 0 100px 250px 25px;
+`
+const H1Styled = styled.div`
+    font-size: 40px;
+    font-weight: 500;
+    line-height: 48px;
+`
+const Highlighting = styled.div`
+    font-size: 40px;
+    font-weight : 700;
+    line-height: 48px;
+`
+const ButtonGrayStyle = styled.button`
+    font-size: 14px;
+    font-weight: 400;
+    padding:13px 30px 13px 30px;
+    margin: 6px;
+    color : black;
+    background-color : #F4F5F6;
+    border : none;
+    border-radius : 10px;
+`
+const ButtonRedStyle = styled.button`
+    font-size: 14px;
+    font-weight: 600;
+    padding:13px 40px 13px 40px;
+    margin: 6px;
+    color : #FFFFFF;
+    background-color : #FF4740;
+    border : none;
+    border-radius : 10px;
+`
