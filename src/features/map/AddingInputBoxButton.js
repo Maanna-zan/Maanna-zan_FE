@@ -1,4 +1,3 @@
-import { ButtonText } from '@components/Atoms/Button';
 import { InputArea } from '@components/Atoms/Input';
 import KeywordSearchModal from '@components/Modals/SearchKeywordModal';
 import React, { useEffect, useState } from 'react';
@@ -9,6 +8,7 @@ import { useMutation } from '@tanstack/react-query';
 import { Map, MapMarker } from 'react-kakao-maps-sdk';
 import { FlexRow } from '@components/Atoms/Flex';
 import { WebWrapper, WebWrapperHeight } from '@components/Atoms/Wrapper';
+import styled from 'styled-components';
 
 function AddingInputBoxButton() {
     //  Input Box 갯수 state. 값으로 1을 넣은 이유는 처음에 1개가 기본 있어야 한다.
@@ -46,37 +46,10 @@ function AddingInputBoxButton() {
         const newInputValues = [...inputValues];
         newInputValues[currentInputIndex] = place.place_name;
         setInputValues(newInputValues);
-        // const lat = place.y;
-        // const lng = place.x;
-        // positions[currentInputIndex] = { lng, lat}
-
-        //  인풋박스 index이용하여 각자의 값에 x,y빼내어 case별로 구분.
-        // let newCheckedPlace = { x, y };
-        // switch (currentInputIndex) {
-        //     case 1:
-        //         newCheckedPlace = { ...newCheckedPlace, x2: x, y2: y };
-        //         break;
-        //     case 2:
-        //         newCheckedPlace = { ...newCheckedPlace, x2: x, y2: y, x3: x, y3: y };
-        //         break;
-        //     case 3:
-        //         newCheckedPlace = { ...newCheckedPlace, x2: x, y2: y, x3: x, y3: y, x4: x, y4: y };
-        //         break;
-        //     default:
-        //     break;
-        // }
         //  x,y값이 추가 되어도 같은 값이 x2,y2로 들어가는 버그 수정 코드
         let newCheckedPlace = { ...checkedPlace, [currentInputIndex === 0 ? 'x' : `x${currentInputIndex + 1}`]: x, [currentInputIndex === 0 ? 'y' : `y${currentInputIndex + 1}`]: y };
         //  setCheckedPlace함수 서버 통신위하여 가공
         setCheckedPlace(newCheckedPlace);
-        //checkedPlace 찍힐 때 마다 마커 찍기 위한 positions 상태값 업데이트 로직 추가.
-        //newCheckedPlace 객체는 positions 배열에 추가될 새로운 마커 위치 정보 담는다
-        // const newPositions = [...positions];
-        // newPositions[currentInputIndex] = { lat: y, lng: x };
-        // setPositions(newPositions);
-        // console.log('positions->', positions);
-        console.log("서버보내는 checkedPlace", checkedPlace)
-        console.log("서버보내는 newCheckedPlace", newCheckedPlace)
     }
     //  Input Box 추가 Button Handler
     const addingInputBoxButtonHandler = () => {
@@ -102,10 +75,15 @@ function AddingInputBoxButton() {
                 placeholder='이 버튼을 눌러 위치를 추가해주세요.'
                 value={inputValues[index]}
                 variant='default'
-                size='leftIcon'
+                size='df'
                 cursor='pointer'
                 readOnly={true}
                 onClick={() => onInputClickHandler(index)}
+                style={{margin:"8px 0 5px 10px",
+                        border: 'none',
+                        backgroundColor: '#F7F8F9',
+                        fontSize: '12px'
+                        }}
             ></InputArea>
         );
     }
@@ -146,7 +124,6 @@ function AddingInputBoxButton() {
                         refresh_token: `${token}`,
                         },
                 },
-                console.log("전송되는checkedPlace=>",checkedPlace)
             );
             return data;
         },
@@ -157,52 +134,34 @@ function AddingInputBoxButton() {
         //  완료 되었을 때 콜백 함수
         onSuccess: (data) => {
             const response = data.data.message;
-            console.log('response', response);
             alert(response);
+
             const lat = data.data.data.lat;
             const lng = data.data.data.lng;
             const newMidPoint = {lat, lng};
-            console.log("newMidPoint",newMidPoint);
             setMidPoint(newMidPoint);
         },
     });
-    // useEffect(() => {
-    //     if (checkedPlace) {
-    //         const newPositions = [...positions];
-    //         newPositions[currentInputIndex] = { lat: checkedPlace.y, lng: checkedPlace.x };
-    //         setPositions(newPositions);
-    //         gettingLocation(newPositions);
-    //     }
-    //   }, [checkedPlace, currentInputIndex, positions]);
-    // 지도가 움직이지만, gettingLocation함수 에러없이 작동 하지만 값이 없음.
+    //  checkedPlace로 props값 받아오면 useEffect 실행하여 지도에 마커 찍히도록 gettingLocation 함수 실행.
     useEffect(() => {
         if(checkedPlace) {
             gettingLocation(positions)}
     },[checkedPlace])
 
     // 키워드 입력후 검색 클릭 시 원하는 키워드의 주소로 이동
-    const gettingLocation = function (data) { 
+    const gettingLocation = function (positions) { 
         //  checkedPlace가 오는게 아니라 positions가 와야함. postions가 마커 state 값
         const newSearch = checkedPlace;
-        console.log("data-> ", data)
-        // positions 배열을 복제하여 prevPositions로 사용
         const prevPositions = [...positions];
-        // 검색 결과를 center에 추가.(검색결과위치로 좌표찍기)
-        setCenter({ lat: newSearch.y, lng: newSearch.x });
-        // 검색 결과를 positions에 추가.(마커를 찍어줌))
-        setPositions((prevPositions) => [
+        setPositions(prevPositions =>[
             ...prevPositions,
             {
             title: newSearch.place_name,
             latlng: { lat: newSearch.y, lng: newSearch.x },
             },
+            
         ]);
-        console.log('data->', data);
-        console.log('newSearch->', newSearch);
-        console.log('positions->', positions);
-        console.log('마지막 checkedPlace->', checkedPlace);
     }
-    
     return (
         <WebWrapper>
         <WebWrapperHeight>
@@ -210,7 +169,7 @@ function AddingInputBoxButton() {
                 <div>
                     <Map 
                         center={center} 
-                        style={{ width: '690px', height: '803px', top:'179', left:'360' }}
+                        style={{ width: '690px', height: '803px', maxWidth:'100%', maxHeight:'100%' }}
                     >
                             {positions.map((position, index) => (
                                 <MapMarker
@@ -240,28 +199,24 @@ function AddingInputBoxButton() {
                     </Map>
                 </div>
             
-                <div>
-                    <h1>
-                    친구와 본인의 위치를 입력해주세요.
-                    </h1>
-                    <p>
-                    중간 위치에 있는 맛집을 찾아드립니다.
-                    </p>
+                <ContentWrapper>
+                    <H1Styled>친구와 본인의 </H1Styled>
+                    <Highlighting>위치를 입력해주세요</Highlighting>
                         <div>
                             {inputs}
                             {renderModal()}
-                                <button 
+                                <ButtonGrayStyle 
                                     onClick={addingInputBoxButtonHandler}
                                 >
                                 추가하기
-                                </button>
-                                <button
+                                </ButtonGrayStyle>
+                                <ButtonRedStyle
                                     onClick={() => {mutate(checkedPlace);}}
                                 >
-                                중간위치찾기
-                                </button>
+                                검색
+                                </ButtonRedStyle>
                         </div>
-                </div>
+                </ContentWrapper>
             </FlexRow>
         </WebWrapperHeight>
         </WebWrapper>
@@ -269,3 +224,39 @@ function AddingInputBoxButton() {
 }
 
 export default AddingInputBoxButton;
+const ContentWrapper = styled.div`
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    margin: 0 100px 250px 25px;
+`
+const H1Styled = styled.div`
+    font-size: 40px;
+    font-weight: 500;
+    line-height: 48px;
+`
+const Highlighting = styled.div`
+    font-size: 40px;
+    font-weight : 700;
+    line-height: 48px;
+`
+const ButtonGrayStyle = styled.button`
+    font-size: 14px;
+    font-weight: 400;
+    padding:13px 30px 13px 30px;
+    margin: 6px;
+    color : black;
+    background-color : #F4F5F6;
+    border : none;
+    border-radius : 10px;
+`
+const ButtonRedStyle = styled.button`
+    font-size: 14px;
+    font-weight: 600;
+    padding:13px 40px 13px 40px;
+    margin: 6px;
+    color : #FFFFFF;
+    background-color : #FF4740;
+    border : none;
+    border-radius : 10px;
+`
