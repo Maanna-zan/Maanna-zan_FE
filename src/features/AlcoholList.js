@@ -44,10 +44,10 @@ const AlcoholList = () => {
   const { page } = router.query;
   const [pageNum, setPageNum] = useState(1);
   const [pageMap, setPageMap] = useState({
-    all: 0,
-    best: 0,
-    view: 0,
-    like: 0,
+    all: 1,
+    best: 1,
+    view: 1,
+    like: 1,
   });
 
   const handlePageNumChange = useCallback(
@@ -165,6 +165,7 @@ const AlcoholList = () => {
                   <ImgCenter
                     style={{
                       width: '100%',
+                      height: '100%',
                       overflow: 'hidden',
                       borderRadius: '8px',
                     }}
@@ -235,6 +236,7 @@ const AlcoholList = () => {
                     <ImgCenter
                       style={{
                         width: '100%',
+                        height: '100%',
                         overflow: 'hidden',
                         borderRadius: '8px',
                       }}
