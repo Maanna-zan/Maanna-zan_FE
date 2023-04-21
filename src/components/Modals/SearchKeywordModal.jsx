@@ -183,8 +183,8 @@ export default function KeywordSearchModal({ onClose, onUpdate}) {
                         itemStr += "<span>" + places.address_name + "</span>";
                     }
             
-                        itemStr +=
-                        '  <span class="tel">' + places.phone + "</span>" + "</div>";
+                        // itemStr +=
+                        // '  <span class="tel">' + places/*.phone*/ + "</span>" + "</div>";
                 
                         el.innerHTML = itemStr;
                         el.className = "item";
@@ -293,7 +293,7 @@ export default function KeywordSearchModal({ onClose, onUpdate}) {
         <div className="modal-overlay">
 
         <MapSection>
-            <h1 style={{textAlign: "center", width: "100%"}}>위치검색</h1>
+            <H1Styled style={{textAlign: "center", width: "100%"}}>위치검색</H1Styled>
 
             <form id="form" className="inputForm" onSubmit={keywordSearchSubmitHandler}>
                 <InputWrapper style={{ width: "100%" }}>
@@ -303,6 +303,8 @@ export default function KeywordSearchModal({ onClose, onUpdate}) {
                         placeholder="위치를 입력해주세요."
                         onChange={inputTextHandler} 
                         value={inputText}
+                        color='default'
+                        style={{border: '1px solid #9EA4AA', borderRadius: '12px'}}
                     />
                     <button
                         id="submit_btn" 
@@ -321,10 +323,10 @@ export default function KeywordSearchModal({ onClose, onUpdate}) {
                             lat: 37.56682420267543,
                             lng: 126.978652258823
                         }}
-                        level={4}
+                        level={3}
                         style={{
                             width: '50%',
-                            height: '100%',
+                            height: '105%',
                             position: "relative"
                         }}
                     >
@@ -335,7 +337,6 @@ export default function KeywordSearchModal({ onClose, onUpdate}) {
                             <div id="menu_wrap">
                                 <div>
                                     <div id="map_title">
-                                        <div>검색목록</div>
                                     </div>
                                 </div>
                                     <ul id="placesList"></ul>
@@ -356,7 +357,9 @@ export default function KeywordSearchModal({ onClose, onUpdate}) {
                     borderRadius: '8px',
                     position: "absolute",
                     bottom: "20px",
-                    right: "20px" 
+                    right: "20px", 
+                    fontSize: "13px",
+                    padding: "6px 20px 6px 20px"
                 }}
                 onClick={saveStateHandler}
             >
@@ -367,7 +370,10 @@ export default function KeywordSearchModal({ onClose, onUpdate}) {
         </ModalDiv>
     )
 }
-
+const H1Styled = styled.h1`
+    font-size: 15px;
+    font-weight: 700;
+`
 const ModalDiv = styled.div`
     position: fixed;
     top: 0;
@@ -407,7 +413,7 @@ const InputWrapper = styled.div`
         width: 90%;
         height: 40px;
         padding: 0 10px;
-        border: 1px solid #ddd;
+        border: 1px solid #9EA4AA;
         border-radius: 4px;
         font-size: 16px;
         color: #333;
@@ -432,7 +438,7 @@ const MapSection = styled.div`
         height: 600px;
         position: absolute; */
         overflow: hidden;
-        border-radius: 20px;
+        border-radius: 8px;
         /* z-index: "1"; */
         width: '50%',
         height: '100%',
@@ -442,30 +448,29 @@ const MapSection = styled.div`
         display: flex;
         position: relative;
         z-index: 2;
-        font-size: 12px;
+        font-size: 4px;
     }
 
     #menu_wrap {
         position: relative;
-        width: 500px;
-        height: 510px;
-        border-radius: 20px;
+        width: 570px;
+        height: 430px;
+        border-radius: 5px;
         overflow-y: auto;
         background: rgba(255, 255, 255, 0.7);
     }
 
-    #map_title {
+    /* #map_title {
         display: flex;
         justify-content: center;
         align-items: center;
         width: 100%;
-        /* padding: 10px; */
-    }
+    } */
 
     #form {
         display: flex;
         justify-content: space-between;
-        padding: 0px 15px 10px 15px;
+        padding: 0px 15px 10px 0;
     }
 
     #keyword {
@@ -475,18 +480,20 @@ const MapSection = styled.div`
     }
 
     #submit_btn {
-        background-color: #FF4740;
+        background-color: #F4F5F6;
+        color: #7e7979;
         border: none;
+        border-radius:10px;
         outline: none;
     }
 
-    #placesList h5 {
+    #placesList h6 {
         color: #FF4740;
         font-size: 15px;
     }
 
     #placesList li {
-        list-style: square;
+        /* list-style: square; */
     }
     #placesList .item {
         border-bottom: 1px solid #888;
@@ -495,15 +502,15 @@ const MapSection = styled.div`
     }
 
     #placesList .item .info {
-        padding: 10px 0 10px 5px;
+        padding: 3px 0 5px 3px;
     }
 
     #placesList .item span {
         display: block;
-        margin-top: 4px;
+        margin-top: 1px;
     }
     #placesList .info .gray {
-        color: #8a8a8a;
+        color: #9EA4AA;
     }
 
     #placesList .info .tel {
@@ -513,7 +520,7 @@ const MapSection = styled.div`
     #placesList .clicked{
         /* background-color: rgba(100, 200, 100, 0.5);
         border: 1px solid rgba(100, 200, 100, 0.8); */
-        border: 1px solid #35c280; /* 연하게 테두리(border) 스타일 */
+        border: 1px solid #3DC060; /* 연하게 테두리(border) 스타일 */
         position: relative; /* ::after 선택자를 위해 position 속성을 추가합니다. */
         border-radius: 12px
     }
@@ -524,7 +531,7 @@ const MapSection = styled.div`
         right: 5px;
         top: 50%;
         transform: translateY(-50%);
-        color: #16a085;
+        color: #3DC060;
         font-weight: bold;
     }
 
