@@ -17,3 +17,10 @@ export const WebWrapperFull = styled.div`
   justify-content: center;
   align-items: center;
 `;
+export const WebWrapper792px = styled.div`
+  width: 792px;
+`;
+
+export const WebWrapper384px = styled.div`
+  width: 384px;
+`;

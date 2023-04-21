@@ -110,6 +110,39 @@ export const ImgWrapper84x56 = styled.div`
   background-color: aliceblue;
   border-radius: 4px;
 `;
+export const ImgWrapper152 = styled.div`
+  width: 152px;
+  height: 152px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: aliceblue;
+  border-radius: 4px;
+`;
+export const ImgWrapper792 = styled.div`
+  width: 792px;
+  height: 360px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: aliceblue;
+  border-radius: 8px;
+`;
+export const ImgWrapper180X120 = styled.div`
+  width: 180px;
+  height: 120px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: aliceblue;
+  border-radius: 8px;
+`;
 
 export const ImgCenter = styled.img`
   max-width: 100%;

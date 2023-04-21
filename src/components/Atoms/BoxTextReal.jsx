@@ -14,6 +14,7 @@ const StyledBox = styled.div`
   border-color: ${(props) => props.borderColor};
   border-style: solid;
   box-sizing: border-box;
+  height: auto;
   &:hover {
     background-color: ${(props) => props.hoverBackgroundColor};
     border-color: ${(props) => props.hoverBorderColor};
@@ -39,6 +40,7 @@ export const BoxTextReal = ({
   margin = '0px 0px',
   active = false,
   disabled = false,
+  height = 'auto',
   onClick,
   ...props
 }) => {
@@ -72,6 +74,10 @@ export const BoxTextReal = ({
     case 'nonePadding':
       padding = '0';
       borderRadius = '8px';
+      break;
+    case '20px':
+      padding = '20px';
+      height = '316px';
       break;
   }
 
@@ -136,6 +142,7 @@ export const BoxTextReal = ({
       hoverFontColor={hoverFontColor}
       disabled={disabled}
       borderRadius={borderRadius}
+      height={height}
       {...props}
     ></StyledBox>
   );
