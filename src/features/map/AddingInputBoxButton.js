@@ -41,7 +41,7 @@ function AddingInputBoxButton() {
             return;
         }
         //  place 매개변수 받아 모달창 props의 좌표값 받아서 지도 옮겨줌.
-        setCenter({ lat: y, lng: x });
+        setCenter({ lat: x, lng: y });
         // 인풋박스 각각의 값에 각각의 props state값 주는 로직.
         const newInputValues = [...inputValues];
         newInputValues[currentInputIndex] = place.place_name;
