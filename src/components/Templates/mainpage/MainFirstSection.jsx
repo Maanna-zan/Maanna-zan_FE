@@ -10,6 +10,12 @@ import { getView, getBest } from '../../../hook/alcohol/useGetAllStore';
 import { useQueries, useQuery } from '@tanstack/react-query';
 import { apis } from '@shared/axios';
 import { BoxTextReal } from '@components/Atoms/BoxTextReal';
+import {
+  ImgCenter,
+  ImgWrapper248x248,
+  ImgWrapper282x322,
+  ImgWrapper84x56,
+} from '@components/Atoms/imgWrapper';
 const PAGE_SIZE = 3;
 export const MainFirstSection = () => {
   const [getView, seGetView] = useState([]);
@@ -55,7 +61,17 @@ export const MainFirstSection = () => {
             {getBest?.map((store, index) => (
               <BoxTextReal size="nonePadding" variant="realDefaultBox">
                 <div key={store?.id}>
-                  <img src={`/fakeImage/${index + 1}.png`} alt="베스트술집" />
+                  <ImgWrapper282x322>
+                    <ImgCenter
+                      style={{ width: '100%', height: '100%' }}
+                      src={
+                        store.postList.length
+                          ? store.postList[0].s3Url
+                          : '/noimage_282x248_.png'
+                      }
+                      alt="베스트술집"
+                    />
+                  </ImgWrapper282x322>
                   <div
                     style={{
                       marginTop: '12px',
@@ -88,7 +104,7 @@ export const MainFirstSection = () => {
                 </div>
               </BoxTextReal>
             ))}
-
+            {console.log('getView)}', getView)}
             <GrideGapRow4>
               {getView?.map((store, index) => (
                 <BoxTextReal
@@ -101,10 +117,17 @@ export const MainFirstSection = () => {
                     key={store?.apiId}
                     style={{ height: '100%', alignItems: 'center' }}
                   >
-                    <StImgMin
-                      src={`/fakeImage/${index + 1}.png`}
-                      alt="베스트술집"
-                    />
+                    <ImgWrapper84x56 style={{ margin: '4px' }}>
+                      <ImgCenter
+                        style={{ width: '100%', height: '100%' }}
+                        src={
+                          store.postList.length
+                            ? store.postList[0].s3Url
+                            : '/noimage_282x248_.png'
+                        }
+                        alt="베스트술집"
+                      />
+                    </ImgWrapper84x56>
                     <FlexColumn
                       style={{
                         height: '100%',

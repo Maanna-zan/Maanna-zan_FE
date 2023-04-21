@@ -88,6 +88,28 @@ export const ImgWrapper384x360 = styled.div`
   background-color: aliceblue;
   position: relative;
 `;
+export const ImgWrapper282x322 = styled.div`
+  width: 282px;
+  height: 322px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: aliceblue;
+  border-radius: 10px;
+`;
+export const ImgWrapper84x56 = styled.div`
+  width: 84px;
+  height: 56px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: aliceblue;
+  border-radius: 4px;
+`;
 
 export const ImgCenter = styled.img`
   max-width: 100%;
