@@ -9,10 +9,15 @@ body {
 a {
   text-decoration: none;
   color: inherit;
+  cursor: pointer;
 }
 img {
   margin: 0;
   padding: 0;
+  cursor: pointer;
+}
+li {
+  cursor: pointer;
 }
 
 @font-face {

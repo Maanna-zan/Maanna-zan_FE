@@ -1,7 +1,13 @@
 import { useState, useEffect, useCallback } from 'react';
 import { apis } from '@shared/axios';
 import { useRouter } from 'next/router';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { LikeHeartIcon, DisLikeHeartIcon } from '@components/Atoms/HeartIcon';
+import {
+  useQuery,
+  useQueryClient,
+  queryClient,
+  useQueries,
+} from '@tanstack/react-query';
 import { WebWrapper } from '@components/Atoms/Wrapper';
 import { StoreListTabMenu } from '@components/Molecules/StoreListTabMenu';
 import {
@@ -17,9 +23,21 @@ import styled from 'styled-components';
 import { BoxTextReal } from '@components/Atoms/BoxTextReal';
 import { LightTheme } from '@components/Themes/theme';
 import { FlexRow } from '@components/Atoms/Flex';
-const PAGE_SIZE = 16;
+import {
+  ImgCenter,
+  imgWrapper248x248,
+  ImgWrapper282x248,
+  ImgWrapper384x242,
+} from '@components/Atoms/imgWrapper';
+import { useLikeStore } from '../hook/useLikes';
+import Link from 'next/link';
+
 const AlcoholList = () => {
+  const { like, handleLike } = useLikeStore();
+
+  const { go } = useRouter();
   const router = useRouter();
+
   const [storeListPage, setStoreListPage] = useState('all');
   const [activeTab, setActiveTab] = useState('all');
   const pages = [1, 2, 3, 4, 5];
@@ -99,11 +117,11 @@ const AlcoholList = () => {
     },
   );
 
-  const [getView, seGetView] = useState([]);
+  const [getView2, seGetView2] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       const response = await apis.get(`/alkol/view`);
-      seGetView(response.data);
+      seGetView2(response.data);
     };
 
     fetchData();
@@ -112,6 +130,7 @@ const AlcoholList = () => {
   if (isLoading) {
     return <WebWrapper>Loading...</WebWrapper>;
   }
+
   return (
     <>
       <WebWrapper>
@@ -130,26 +149,33 @@ const AlcoholList = () => {
         </FlexRow>
         {console.log('storeListPage.view---------->', getView)}
         <GrideGapCol3>
-          {getView?.map((store) => (
-            <div key={store.id}>
+          {getView2?.map((store) => (
+            <div
+              key={store.id}
+              onClick={() => {
+                router.push(`/alcohols/${store.apiId}`);
+              }}
+            >
               <BoxTextReal
                 style={{ overflow: 'hidden' }}
                 variant="realDefaultBox"
                 size="nonePadding"
               >
-                <img
-                  style={{
-                    width: '100%',
-                    overflow: 'hidden',
-                    borderRadius: '8px',
-                  }}
-                  src={
-                    store.postList.length
-                      ? store.postList[0].s3Url
-                      : '/noimage_282x248_.png'
-                  }
-                  alt="store"
-                />
+                <ImgWrapper384x242>
+                  <ImgCenter
+                    style={{
+                      width: '100%',
+                      overflow: 'hidden',
+                      borderRadius: '8px',
+                    }}
+                    src={
+                      store.postList.length
+                        ? store.postList[0].s3Url
+                        : '/noimage_282x248_.png'
+                    }
+                    alt="store"
+                  />
+                </ImgWrapper384x242>
               </BoxTextReal>
               <StPlace_name>{store.place_name}</StPlace_name>
             </div>
@@ -165,43 +191,69 @@ const AlcoholList = () => {
         {console.log('storeData', storeData)}
         <GrideGapCol4 style={{ margin: '12px auto' }}>
           {storeData?.map((store) => (
-            <BoxTextReal
+            // console.log('store.apiId', store.apiId),
+            //<Link key={store.id} href={`/alcohols/${store.apiId}`}>
+
+            <div
               key={store.id}
+              // onClick={() => {
+              //   router.push(`/alcohols/${store.apiId}`);
+              // }}
               style={{
                 gridColumn: 'span 1',
                 gridRow: 'span 1',
                 height: '318px',
+                position: 'relative',
               }}
-              variant="realDefaultBox"
-              size="nonePadding"
-              // onClick={() => {
-              //   router.push(`/alcohols/${store.apiId}`);
-              // }}
             >
+              <div
+                style={{
+                  position: 'absolute',
+                  right: '16px',
+                  top: '6px',
+                  zIndex: '1',
+                }}
+                onClick={() => handleLike(store.apiId)}
+              >
+                <Store store={store}></Store>
+                {/* {like ? <LikeHeartIcon /> : <DisLikeHeartIcon />} */}
+              </div>
+              {/* <Link key={store.id} href={`/alcohols/${store.apiId}`}> */}
               <BoxTextReal
-                style={{ overflow: 'hidden' }}
                 variant="realDefaultBox"
                 size="nonePadding"
+                // onClick={() => {
+                //   router.push(`/alcohols/${store.apiId}`);
+                // }}
               >
-                <img
-                  style={{
-                    width: '100%',
-                    overflow: 'hidden',
-                    borderRadius: '8px',
-                  }}
-                  src={
-                    store.postList.length
-                      ? store.postList[0].s3Url
-                      : '/noimage_282x248_.png'
-                  }
-                  alt="store"
-                />
+                <BoxTextReal
+                  style={{ overflow: 'hidden' }}
+                  variant="realDefaultBox"
+                  size="nonePadding"
+                >
+                  <ImgWrapper282x248>
+                    <ImgCenter
+                      style={{
+                        width: '100%',
+                        overflow: 'hidden',
+                        borderRadius: '8px',
+                      }}
+                      src={
+                        store.postList.length
+                          ? store.postList[0].s3Url
+                          : '/noimage_282x248_.png'
+                      }
+                      alt="store"
+                    />
+                  </ImgWrapper282x248>
+                </BoxTextReal>
+                <StPlace_name>{store.place_name}</StPlace_name>
+                <StAddress_name>{store.address_name}</StAddress_name>
+                <div>{store.id}</div>
+                {/* <Store store={store} storeData={storeData}></Store> */}
               </BoxTextReal>
-              <StPlace_name>{store.place_name}</StPlace_name>
-              <StAddress_name>{store.address_name}</StAddress_name>
-              <div>{store.id}</div>
-              {/* <Store store={store} storeData={storeData}></Store> */}
-            </BoxTextReal>
+              {/* </Link> */}
+            </div>
           ))}
         </GrideGapCol4>
 

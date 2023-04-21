@@ -9,7 +9,18 @@ import { useDeletePost } from '../../hook/post/useDeletePost';
 import { useUpdatePost } from '../../hook/post/useUpdatePost';
 import { useLikePost } from '../../hook/useLikes';
 import { useRouter } from 'next/router';
-
+import { PageNation } from '@components/Modals/PageNation';
+import { BoxTextReal } from '@components/Atoms/BoxTextReal';
+import { LightTheme } from '@components/Themes/theme';
+import { FlexRow } from '@components/Atoms/Flex';
+import styled from 'styled-components';
+import { GrideGapCol4 } from '@components/Atoms/Grid';
+import {
+  ImgWrapper242x248,
+  ImgWrapper282x248,
+  ImgWrapper282x200,
+  ImgCenter,
+} from '@components/Atoms/imgWrapper';
 export const Post = ({ post, onSubmit, apiId }) => {
   // console.log('newPost', post);
   const go = useRouter();
@@ -37,6 +48,7 @@ export const Post = ({ post, onSubmit, apiId }) => {
   const deletePostHandler = (id) => {
     deletePost(id);
   };
+
   const changeInputHandler = (e) => {
     const { value, name } = e.target;
     setNewPost((pre) => ({ ...pre, [name]: value }));
@@ -75,7 +87,7 @@ export const Post = ({ post, onSubmit, apiId }) => {
   };
 
   return (
-    <WebWrapper>
+    <>
       {isEditMode ? (
         <>
           <form onSubmit={handleSubmit}>
@@ -125,35 +137,89 @@ export const Post = ({ post, onSubmit, apiId }) => {
       ) : (
         <>
           <div
-            onClick={() => {
-              go.push(`/community/${post.id}`);
-            }}
+            style={{ position: 'relative' }}
+            // onClick={() => {
+            //   go.push(`/community/${post.id}`);
+            // }}
           >
-            가게이름
-            <p>{post?.storename}</p>
-          </div>
-          <h5>제목</h5>
-          <div>{post?.title}</div>
-          <h5>내용</h5>
-          <div>{post?.description}</div>
-          <div>{post?.likecnt}</div>
-          <div>{post?.like}</div>
-          <div>{post.likecnt}</div>
-          <img src={post.image} alt={post.storename} />
-          <div>{post.description}</div>
-          <div>nickname---{post?.nickname}</div>
-          <button onClick={() => setIsEditMode(!isEditMode)}>수정</button>
-          <button onClick={() => deletePostHandler(post.id)}>삭제</button>
-          {/* <div className="hearWrap" onClick={() => handleLike(post?.id)}>
+            {/* <div className="hearWrap" onClick={() => handleLike(post?.id)}>
             {like ? <LikeHeartIcon /> : <DisLikeHeartIcon />}
           </div> */}
-          <div className="hearWrap" onClick={() => handleLike(post?.id)}>
-            <div post={post}>
+            <div
+              post={post}
+              style={{
+                position: 'absolute',
+                right: '16px',
+                top: '6px',
+                zIndex: '10',
+              }}
+              onClick={() => handleLike(post?.id)}
+            >
               {like ? <LikeHeartIcon /> : <DisLikeHeartIcon />}
+            </div>
+            <div
+              onClick={() => {
+                go.push(`/community/${post?.id}`);
+              }}
+            >
+              <BoxTextReal
+                style={{
+                  gridColumn: 'span 1',
+                  gridRow: 'span 1',
+                  height: '318px',
+                }}
+                variant="realDefaultBox"
+                size="nonePadding"
+              >
+                <BoxTextReal
+                  style={{ overflow: 'hidden' }}
+                  variant="realDefaultBox"
+                  size="nonePadding"
+                >
+                  <ImgWrapper282x200 style={{ position: 'relative' }}>
+                    <ImgCenter
+                      style={{
+                        width: '100%',
+                        overflow: 'hidden',
+                        borderRadius: '8px',
+                        objectFit: 'fill',
+                      }}
+                      src={post.s3Url || '/noimage_282x248_.png'}
+                      alt="store"
+                    />
+                  </ImgWrapper282x200>
+                </BoxTextReal>
+                <StPlace_name>{post.place_name}</StPlace_name>
+                <StAddress_name>{post.title}</StAddress_name>
+                <div>{post.id}</div>
+                {/* <Store store={store} storeData={storeData}></Store> */}
+                <div>{post?.nickname}</div>
+                {/* <button onClick={() => setIsEditMode(!isEditMode)}>수정</button>
+              <button onClick={() => deletePostHandler(post.id)}>삭제</button>
+              <div className="hearWrap" onClick={() => handleLike(post?.id)}>
+                <div post={post}>
+                  {like ? <LikeHeartIcon /> : <DisLikeHeartIcon />}
+                </div>
+              </div> */}
+              </BoxTextReal>
             </div>
           </div>
         </>
       )}
-    </WebWrapper>
+    </>
   );
 };
+const StHeade3_name = styled.div`
+  margin-top: 48px;
+  font: var(--head3-bold) normal sans-serif;
+`;
+const StPlace_name = styled.div`
+  margin-top: 20px;
+  font: var(--title1-semibold) normal sans-serif;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+const StAddress_name = styled.div`
+  font: var(--body1-medium) normal sans-serif;
+`;
