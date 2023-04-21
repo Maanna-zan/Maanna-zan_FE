@@ -8,14 +8,6 @@ import { ButtonText } from '@components/Atoms/Button';
 import { InputArea } from '@components/Atoms/Input';
 import { useConfirm } from '../../hook/useConfirm';
 
-//회원정보 기입시 각각 주의사항
-import UserNameAlert from '@features/signUpAlert/UserNameAlert';
-import NickNameAlert from '../../features/signUpAlert/NickNameAlert';
-import PhoneNumberAlert from '@features/signUpAlert/PhoneNumberAlert';
-import PasswordAlert from '@features/signUpAlert/PasswordAlert';
-import EmailAlert from '@features/signUpAlert/EmailAlert';
-import BirthAlert from '@features/signUpAlert/BirthAlert';
-
 export default function SignUpModal({ onClose }) {
   const router = useRouter();
   //회원가입 다음 버튼 눌렀을 때햣
@@ -158,11 +150,12 @@ export default function SignUpModal({ onClose }) {
           </Detaildiv>
           <div style={{ display: 'flex', gap: '20px' }}>
             <InputArea
+              size="lg"
               style={{ width: '100%' }}
               type="text"
               name="nickName"
               value={user.nickName}
-              placeholder="     닉네임을 입력해주세요."
+              placeholder="닉네임을 입력해주세요."
               onChange={changHandler}
               maxLength="16"
               required
@@ -244,11 +237,12 @@ export default function SignUpModal({ onClose }) {
                 }}
               >
                 <InputArea
+                  size="lg"
                   type="text"
                   name="email"
                   style={{ width: '100%' }}
                   value={user.email}
-                  placeholder="      이메일을 입력해주세요."
+                  placeholder="이메일을 입력해주세요."
                   onChange={changHandler}
                   required
                 />

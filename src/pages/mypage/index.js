@@ -161,7 +161,6 @@ const MyPage = () => {
               </p>
             </div>
           </WebWrapper>
-
           <BottomDiv>
             <WebWrapper>
               <FindPost />

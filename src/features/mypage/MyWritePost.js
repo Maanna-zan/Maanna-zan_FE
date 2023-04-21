@@ -1,7 +1,9 @@
+import { useRouter } from 'next/router';
 import React from 'react';
 import styled from 'styled-components';
 
 const MyWritePost = (data) => {
+  const push = useRouter();
   console.log('mywrutedata', data.data.posts);
   const myData = data.data.posts;
 
@@ -32,12 +34,12 @@ const MyWritePost = (data) => {
           <p>작성한 게시글이 없어요!</p>
           <p
             onClick={() => {
-              push.push('/community');
+              push.push('/alcohols');
             }}
             style={{ color: '#FF6A64' }}
           >
             {' '}
-            커뮤니티 게시글 보러가기
+            술집 리스트 보러가기
           </p>
         </div>
       </div>
