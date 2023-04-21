@@ -183,7 +183,7 @@ export const Post = ({ post, onSubmit, apiId }) => {
                         width: '100%',
                         overflow: 'hidden',
                         borderRadius: '8px',
-                        objectFit: 'fill',
+                        objectFit: 'cover',
                       }}
                       src={post.s3Url || '/noimage_282x248_.png'}
                       alt="store"
