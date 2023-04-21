@@ -4,7 +4,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { apis } from '../shared/axios';
 import { cookies } from '../shared/cookie';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { InputArea } from '@components/Atoms/Input';
 
@@ -15,6 +15,14 @@ const CommentsList = () => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [commentId, setCommentId] = useState(null);
   const [commentContent, setCommentContent] = useState('');
+  //닉네임 usestate 선언
+  const [userNickName, setUserNickName] = useState('');
+  // 로그인 ㄸ때 저장한 닉네임을 가져와 state에 저장
+  //로컬스토리지에 저장한 값이나 쿠키에 저장한 값이나 둘다 잘 작동 된다.!
+  useEffect(() => {
+    const nick_name = cookies.get('nick_name');
+    setUserNickName(nick_name);
+  }, []);
 
   const handleEdit = (comment) => {
     setIsEditMode(true);
@@ -85,20 +93,8 @@ const CommentsList = () => {
     },
   });
 
-  console.log('data---->', data);
   return (
     <div>
-      {/* {data?.map((comments) => {
-        //return 생략의 슬픔... ㅂ비애///
-        return (
-          <div key={comments.id}>
-            <h2>{comments.content}</h2>
-            <div>{comments.nickName}</div>
-            <div>{comments.createdAt}</div>
-          </div>
-        );
-      })} */}
-
       <CommentDiv>
         {isEditMode ? (
           <>
@@ -122,15 +118,22 @@ const CommentsList = () => {
               <div key={comment.id}>
                 <div className="nickName">{comment.nickName}</div>
                 <h2 className="content">{comment.content}</h2>
-                <button
-                  className="Button"
-                  onClick={() => handleDelete(comment.id)}
-                >
-                  삭제
-                </button>
-                <button className="Button" onClick={() => handleEdit(comment)}>
-                  수정
-                </button>
+                {userNickName === comment.nickName && (
+                  <>
+                    <button
+                      className="Button"
+                      onClick={() => handleDelete(comment.id)}
+                    >
+                      삭제
+                    </button>
+                    <button
+                      className="Button"
+                      onClick={() => handleEdit(comment)}
+                    >
+                      수정
+                    </button>
+                  </>
+                )}
               </div>
             ))}
           </>
