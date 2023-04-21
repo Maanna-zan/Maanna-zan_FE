@@ -179,6 +179,7 @@ export const Post = ({ post, onSubmit, apiId }) => {
                   <ImgWrapper282x200 style={{ position: 'relative' }}>
                     <ImgCenter
                       style={{
+                        height: '100%',
                         width: '100%',
                         overflow: 'hidden',
                         borderRadius: '8px',
