@@ -49,7 +49,7 @@ const GetMyAlcohols = () => {
           <p>좋아요한 게시글이 없습니다.</p>
           <p
             onClick={() => {
-              push.push('/alcohoLs');
+              push.push('/alcohols');
             }}
             style={{ color: '#FF6A64' }}
           >
