@@ -110,7 +110,17 @@ export const ImgWrapper84x56 = styled.div`
   background-color: aliceblue;
   border-radius: 4px;
 `;
-
+export const ImgWrapper690x803 = styled.div`
+  width: 690px;
+  height: 803px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  overflow: hidden;
+  background-color: aliceblue;
+  border-radius: 4px;
+`
 export const ImgCenter = styled.img`
   max-width: 100%;
   height: 100%;

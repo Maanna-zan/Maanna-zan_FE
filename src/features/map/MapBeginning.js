@@ -1,10 +1,10 @@
 import { ButtonText } from '@components/Atoms/Button';
 import { FlexRow } from '@components/Atoms/Flex';
+import { ImgCenter, ImgWrapper690x803 } from '@components/Atoms/imgWrapper';
 import { WebWrapper, WebWrapperHeight } from '@components/Atoms/Wrapper';
 import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { Map} from 'react-kakao-maps-sdk';
 import styled from 'styled-components';
 
 const MapBeginning = () => {
@@ -19,32 +19,41 @@ const MapBeginning = () => {
     <WebWrapper style={{paddingTop: "150px"}}>
         <WebWrapperHeight>
             <FlexRow style={{ justifyContent: 'space-between'}}>
-                <Map
-                    center={{
-                        lat: 37.56682420267543,
-                        lng: 126.978652258823
-                    }}
-                    level={5}
-                    style={{
-                        width: "690px",
-                        height: "803px",
-                    }}
-                />
+                <ImgWrapper690x803 style={{backgroundColor: 'white'}}>
+                    <ImgCenter
+                        style={{ 
+                            width: '100%', 
+                            height: '100%', 
+                            marginBottom: '200px',
+                        }}
+                        src='mainPageSecondScroll.png'
+                        />
+                </ImgWrapper690x803>
 
                 <ContentWrapper>
-                    <h1>중간 위치에 있는
-                    술집을 찾아드립니다.
-                    </h1>
-                    <span>
-                        중간 위치에 있는 맛집을 찾아드립니다.
-                    </span>
-                    <ButtonText
+                    <H1Styled>중간 위치에 있는
+                    <Highlighting>술집을 찾아드립니다.</Highlighting>
+                    </H1Styled>
+                    <ImgCenter
+                        style={{ 
+                            width: '350px', 
+                            height: '350px', 
+                            marginBottom: '200px',
+                            opacity: '50%',
+                            position: 'absolute',
+                            margin: '233px 0 0 440px',
+                            zIndex: `-1`
+                        }}
+                        src='mainPageSecondScrolldeIcon.png'
+                    />
+                    <ButtonStyle
                         size='xl'
                         variant='primary'
+                        fontColor= "white"
                         onClick={moveToMapSearchButtonClickHandler}
                     >
-                    중간 위치 검색하기
-                    </ButtonText>
+                    중간 위치 검색하기    
+                    </ButtonStyle>
                 </ContentWrapper>
             </FlexRow>
         </WebWrapperHeight>
@@ -54,5 +63,26 @@ const MapBeginning = () => {
 
 export default MapBeginning
 const ContentWrapper = styled.div`
-
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin: 0 140px 150px 0px;
+`
+const H1Styled = styled.h1`
+    font-size: 40px;
+    font-weight: 500;
+`
+const Highlighting = styled.div`
+    font-size: 40px;
+    font-weight : 700;
+`
+const ButtonStyle = styled.button`
+    font-size: 12px;
+    font-weight: 600;
+    padding:13px;
+    color : #FFFFFF;
+    background-color : #FF4740;
+    border : none;
+    border-radius : 20px;
 `
