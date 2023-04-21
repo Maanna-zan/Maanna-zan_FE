@@ -11,9 +11,9 @@ export const useGetPost = () => {
     queryKey: keys.GET_POSTS,
     queryFn: async () => {
       const data = await apis.get('/posts', {
-        headers: {
-          access_token: `${token}`,
-        },
+        // headers: {
+        //   access_token: `${token}`,
+        // },
       });
       //console.log('data--------------', data);
 
@@ -37,9 +37,9 @@ export const useGetLikePost = () => {
     queryKey: keys.GET_LIKE_POSTS,
     queryFn: async () => {
       const data = await apis.get('/posts/best', {
-        headers: {
-          access_token: `${token}`,
-        },
+        // headers: {
+        //   access_token: `${token}`,
+        // },
       });
       //console.log('useGetLikePost--------------', data);
       return data.data;
