@@ -38,10 +38,12 @@ export default function SignInModal({ onClose }) {
       //디코드 활용
       const decoded = jwtDecode(data.headers.access_token);
       console.log('decoded', decoded);
-      console.log('data', data);
+      console.log('로그인data', data.data.data);
       alert(`${decoded.sub}로그인 성공 했습니다❤️`);
       cookies.set('access_token', data.headers.access_token, { path: '/' });
       cookies.set('refresh_token', data.headers.refresh_token, { path: '/' });
+      cookies.set('nick_name', data.data.data, { path: '/' });
+      localStorage.setItem('nick_name', data.data.data, { path: '/' });
     },
     onSuccess: () => {
       router.push('/');
