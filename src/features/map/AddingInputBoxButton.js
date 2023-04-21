@@ -69,6 +69,7 @@ function AddingInputBoxButton() {
         let newCheckedPlace = { ...checkedPlace, [currentInputIndex === 0 ? 'x' : `x${currentInputIndex + 1}`]: x, [currentInputIndex === 0 ? 'y' : `y${currentInputIndex + 1}`]: y };
         //  setCheckedPlace함수 서버 통신위하여 가공
         setCheckedPlace(newCheckedPlace);
+        // setPositions([{ lat: y, lng: x }]);
         //checkedPlace 찍힐 때 마다 마커 찍기 위한 positions 상태값 업데이트 로직 추가.
         //newCheckedPlace 객체는 positions 배열에 추가될 새로운 마커 위치 정보 담는다
         // const newPositions = [...positions];
@@ -77,6 +78,16 @@ function AddingInputBoxButton() {
         // console.log('positions->', positions);
         console.log("서버보내는 checkedPlace", checkedPlace)
         console.log("서버보내는 newCheckedPlace", newCheckedPlace)
+        // const newPositions = [...positions]; // positions state 복제
+        // newPositions.push({ lat: y, lng: x }); // 새 마커 추가
+        // setPositions(newPositions); // positions state 업데이트
+        setCheckedPlace(prevCheckedPlace => ({
+            ...prevCheckedPlace,
+            [currentInputIndex === 0 ? 'x' : `x${currentInputIndex + 1}`]: x,
+            [currentInputIndex === 0 ? 'y' : `y${currentInputIndex + 1}`]: y
+        }));
+        setPositions(prevPositions => [...prevPositions, {lat: y, lng: x}]);
+        console.log("prevCheckedPlace=======>", prevCheckedPlace)
     }
     //  Input Box 추가 Button Handler
     const addingInputBoxButtonHandler = () => {
@@ -181,28 +192,28 @@ function AddingInputBoxButton() {
     },[checkedPlace])
 
     // 키워드 입력후 검색 클릭 시 원하는 키워드의 주소로 이동
-    const gettingLocation = function (data) { 
+    const gettingLocation = function (positions) { 
         //  checkedPlace가 오는게 아니라 positions가 와야함. postions가 마커 state 값
         const newSearch = checkedPlace;
-        console.log("data-> ", data)
+        // console.log("data-> ", data)
         // positions 배열을 복제하여 prevPositions로 사용
         const prevPositions = [...positions];
         // 검색 결과를 center에 추가.(검색결과위치로 좌표찍기)
-        setCenter({ lat: newSearch.y, lng: newSearch.x });
+        // 이 부분 checkedPlaceHandler() 함수에서 수행했기 때문에 중복된 코드
+        // setCenter({ lat: newSearch.y, lng: newSearch.x });
         // 검색 결과를 positions에 추가.(마커를 찍어줌))
-        setPositions((prevPositions) => [
+        setPositions(prevPositions =>[
             ...prevPositions,
             {
             title: newSearch.place_name,
             latlng: { lat: newSearch.y, lng: newSearch.x },
             },
+            
         ]);
-        console.log('data->', data);
         console.log('newSearch->', newSearch);
         console.log('positions->', positions);
         console.log('마지막 checkedPlace->', checkedPlace);
     }
-    
     return (
         <WebWrapper>
         <WebWrapperHeight>
