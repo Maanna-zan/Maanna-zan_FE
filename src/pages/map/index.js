@@ -104,64 +104,7 @@ export const MapMain = () => {
   };
 
   return (
-    <WebWrapper>
-      <WebWrapperHeight>
-      <FlexRow style={{ justifyContent: 'space-between' }}>
-      <div>
-        <Map center={center} style={{ width: '690px', height: '803px', top:'179', left:'360' }}>
-          {positions.map((position, index) => (
-            <MapMarker
-              key={index}
-              position={position.latlng} // 마커를 표시할 위치
-              image={{
-                src: 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png', // 마커이미지의 주소입니다
-                size: {
-                  width: 24,
-                  height: 35,
-                }, // 마커이미지의 크기입니다
-              }}
-              title={position.title} // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
-            />
-          ))}
-          {midPoint && (
-            <MapMarker
-              position={midPoint}
-              image={{
-                src:
-                  'MaannajanLogo.png',
-                size: { width: 30, height: 38 },
-              }}
-              title="중간지점"
-            />
-          )}
-        </Map>
-      </div>
-      
-      <contentWrapper>
-        <h1>
-          친구와 본인의 위치를 입력해주세요.
-        </h1>
-        <p>
-        중간 위치에 있는 맛집을 찾아드립니다.
-        </p>
-        <ButtonWrapper>
-          <AddingInputBoxButton>
-            추가하기
-          </AddingInputBoxButton>
-          <ButtonText
-            size='lg'
-            variant='primary'
-            onClick={() => {
-              mutate(positions);
-            }}
-          >
-            중간위치찾기
-          </ButtonText>
-        </ButtonWrapper>
-      </contentWrapper>
-      </FlexRow>
-      </WebWrapperHeight>
-    </WebWrapper>
+    <AddingInputBoxButton/>
   );
 };
 export default MapMain;
