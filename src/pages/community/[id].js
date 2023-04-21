@@ -8,6 +8,8 @@ import Alcohols from '.';
 import AddComment from '@features/AddComment';
 import CommentsList from '@features/CommentsList';
 import { WebWrapper } from '@components/Atoms/Wrapper';
+import { keys } from '@utils/createQueryKey';
+import { useGetPost } from '../../hook/post/useGetPost';
 
 const community = () => {
   const queryClient = useQueryClient();
@@ -26,7 +28,7 @@ const community = () => {
           // refresh_token: `${token}`,
         },
       });
-      console.log('data-------------', data.data);
+      console.log('커뮤니티data-------------', data);
       return data.data;
     },
     //enabled: -> 참일 때 실행시켜준다.
@@ -34,26 +36,41 @@ const community = () => {
     onSuccess: () => {},
   });
 
-  // const checkToken = async () => {
-  //   const token = cookies.get('refresh_token');
-  //   apis.get('/user', {
-  //     headers: {
-  //       refresh_token: `${token}`,
-  //     },
-  //   });
-  // };
+  const { posts, postIsLoading } = useGetPost();
 
-  // //가드 토큰 없으면 보내줘///
-  // useEffect(() => {
-  //   const refresh_token = cookies.get('refresh_token');
-  //   if (!refresh_token) {
-  //     router.push('/signin');
-  //   }
-  //   checkToken();
-  // }, []);
-  console.log('datacmo---->', data);
+  if (postIsLoading) return <div>로딩중...</div>;
+
+  console.log('datacmo---->', posts[query.id]);
+  //   id
+  // :
+  // 5
+  // like
+  // :
+  // false
+  // likecnt
+  // :
+  // 0
+  // modifiedAt
+  // :
+  // "2023-04-21"
+  // nickname
+  // :
+  // "장동희2"
+  // s3Url
+  // :
+  // "https://maanna-zan.s3.ap-northeast-2.amazonaws.com/55fc4476-5694-42ed-a1c9-59c9dc8b14e6_%EC%95%BC%ED%82%A4%ED%86%A0%EB%A6%AC%EA%B3%A0%EC%9A%B0.jpeg"
+  // soju
+  // :
+  // false
+  // title
+  // :
+  // "꼬치 맛집 야키토리고우"
+  // viewCount
+  // :
+  // 0
   return (
     <WebWrapper>
+      {posts[query.id]?.description}
       <div>
         <button
           onClick={() => {

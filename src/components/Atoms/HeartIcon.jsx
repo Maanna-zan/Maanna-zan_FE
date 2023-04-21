@@ -37,7 +37,7 @@ const StSvg = styled.svg`
   height: 24px;
 
   box-sizing: border-box;
-  margin: 6px;
+  /* margin: 6px; */
 `;
 
 const StLiked = styled.path`

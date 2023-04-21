@@ -150,8 +150,9 @@ export const Post = ({ post, onSubmit, apiId }) => {
               style={{
                 position: 'absolute',
                 right: '16px',
-                top: '6px',
+                top: '16px',
                 zIndex: '10',
+                padding: '10px',
               }}
               onClick={() => handleLike(post?.id)}
             >
@@ -183,7 +184,7 @@ export const Post = ({ post, onSubmit, apiId }) => {
                         width: '100%',
                         overflow: 'hidden',
                         borderRadius: '8px',
-                        objectFit: 'cover',
+                        objectFit: '',
                       }}
                       src={post.s3Url || '/noimage_282x248_.png'}
                       alt="store"
