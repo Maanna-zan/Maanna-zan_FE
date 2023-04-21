@@ -49,21 +49,24 @@ function AddingInputBoxButton() {
         // const lat = place.y;
         // const lng = place.x;
         // positions[currentInputIndex] = { lng, lat}
+
         //  인풋박스 index이용하여 각자의 값에 x,y빼내어 case별로 구분.
-        let newCheckedPlace = { x, y };
-        switch (currentInputIndex) {
-            case 1:
-                newCheckedPlace = { ...newCheckedPlace, x2: x, y2: y };
-                break;
-            case 2:
-                newCheckedPlace = { ...newCheckedPlace, x2: x, y2: y, x3: x, y3: y };
-                break;
-            case 3:
-                newCheckedPlace = { ...newCheckedPlace, x2: x, y2: y, x3: x, y3: y, x4: x, y4: y };
-                break;
-            default:
-            break;
-        }
+        // let newCheckedPlace = { x, y };
+        // switch (currentInputIndex) {
+        //     case 1:
+        //         newCheckedPlace = { ...newCheckedPlace, x2: x, y2: y };
+        //         break;
+        //     case 2:
+        //         newCheckedPlace = { ...newCheckedPlace, x2: x, y2: y, x3: x, y3: y };
+        //         break;
+        //     case 3:
+        //         newCheckedPlace = { ...newCheckedPlace, x2: x, y2: y, x3: x, y3: y, x4: x, y4: y };
+        //         break;
+        //     default:
+        //     break;
+        // }
+        //  x,y값이 추가 되어도 같은 값이 x2,y2로 들어가는 버그 수정 코드
+        let newCheckedPlace = { ...checkedPlace, [currentInputIndex === 0 ? 'x' : `x${currentInputIndex + 1}`]: x, [currentInputIndex === 0 ? 'y' : `y${currentInputIndex + 1}`]: y };
         //  setCheckedPlace함수 서버 통신위하여 가공
         setCheckedPlace(newCheckedPlace);
         //checkedPlace 찍힐 때 마다 마커 찍기 위한 positions 상태값 업데이트 로직 추가.
@@ -72,6 +75,8 @@ function AddingInputBoxButton() {
         // newPositions[currentInputIndex] = { lat: y, lng: x };
         // setPositions(newPositions);
         // console.log('positions->', positions);
+        console.log("서버보내는 checkedPlace", checkedPlace)
+        console.log("서버보내는 newCheckedPlace", newCheckedPlace)
     }
     //  Input Box 추가 Button Handler
     const addingInputBoxButtonHandler = () => {
@@ -120,7 +125,6 @@ function AddingInputBoxButton() {
             )
         );
     };
-    console.log("checkedPlace", checkedPlace)
     //  Input Box 받아주는 배열
     const inputs = [];
     for (let i = 0; i < inputCount; i++) {
@@ -142,7 +146,7 @@ function AddingInputBoxButton() {
                         refresh_token: `${token}`,
                         },
                 },
-                console.log("data=>",data)
+                console.log("전송되는checkedPlace=>",checkedPlace)
             );
             return data;
         },
@@ -178,6 +182,7 @@ function AddingInputBoxButton() {
 
     // 키워드 입력후 검색 클릭 시 원하는 키워드의 주소로 이동
     const gettingLocation = function (data) { 
+        //  checkedPlace가 오는게 아니라 positions가 와야함. postions가 마커 state 값
         const newSearch = checkedPlace;
         console.log("data-> ", data)
         // positions 배열을 복제하여 prevPositions로 사용
@@ -195,7 +200,7 @@ function AddingInputBoxButton() {
         console.log('data->', data);
         console.log('newSearch->', newSearch);
         console.log('positions->', positions);
-        console.log('checkedPlace->', checkedPlace);
+        console.log('마지막 checkedPlace->', checkedPlace);
     }
     
     return (
