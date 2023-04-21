@@ -44,10 +44,10 @@ const AlcoholList = () => {
   const { page } = router.query;
   const [pageNum, setPageNum] = useState(1);
   const [pageMap, setPageMap] = useState({
-    all: 1,
-    best: 1,
-    view: 1,
-    like: 1,
+    all: 0,
+    best: 0,
+    view: 0,
+    like: 0,
   });
 
   const handlePageNumChange = useCallback(

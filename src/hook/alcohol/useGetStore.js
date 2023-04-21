@@ -12,12 +12,10 @@ export const useGetStoredetail = ({ apiId }) => {
 
     queryFn: async () => {
       const data = await apis.get(`/alkol/${apiId}`, {
-        headers: {
-          access_token: `${access_token}`,
-        },
+        // headers: {
+        //   access_token: `${access_token}`,
+        // },
       });
-      console.log('useGetStore_data--------------', data);
-      console.log(' data.data.commentList', data);
       return data.data;
     },
   });

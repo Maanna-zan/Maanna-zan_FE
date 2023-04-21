@@ -23,7 +23,7 @@ const community = () => {
       const { data } = await apis.get(`/posts/${query.id}`, {
         headers: {
           //   // 'Content-Type': 'multipart/form-data',
-          refresh_token: `${token}`,
+          // refresh_token: `${token}`,
         },
       });
       console.log('data-------------', data.data);
