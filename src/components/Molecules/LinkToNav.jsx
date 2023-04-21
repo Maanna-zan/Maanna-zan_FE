@@ -121,6 +121,7 @@ export const LinkToNav = () => {
 };
 
 const Ullist = styled.ul`
+  z-index: 800;
   position: absolute;
   gap: 24px;
   display: flex;
