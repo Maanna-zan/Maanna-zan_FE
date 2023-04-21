@@ -133,10 +133,10 @@ function AddingInputBoxButton() {
         mutationFn: async (location) => {
             console.log('location->', location[0]);
             const data = await apis.post(
+                //  서버 URL
                 '/find',
-                {
-                    checkedPlace
-                },
+                //  Request값(x,y~x4,y4)
+                checkedPlace,
                 {
                     headers: {
                         refresh_token: `${token}`,
