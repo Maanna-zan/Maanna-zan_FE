@@ -7,6 +7,7 @@ import { cookies } from '../../shared/cookie';
 import Alcohols from '.';
 import AddComment from '@features/AddComment';
 import CommentsList from '@features/CommentsList';
+import { WebWrapper } from '@components/Atoms/Wrapper';
 
 const community = () => {
   const queryClient = useQueryClient();
@@ -50,30 +51,32 @@ const community = () => {
   //   }
   //   checkToken();
   // }, []);
-
+  console.log('datacmo---->', data);
   return (
-    <div>
-      <button
-        onClick={() => {
-          router.push('/community');
-        }}
-      >
-        뒤로가기
-      </button>
-      <div>id---{data?.id}</div>
-      <div>like---{data?.like}</div>
-      <div>storename---{data?.storename}</div>
-      <div>nickname---{data?.nickname}</div>
-      <img src={data?.s3Url} alt={data?.storename} />
-      <div>likecnt---{data?.likecnt}</div>
-      <div>title---{data?.title}</div>
-      <div>description---{data?.description}</div>
-      <div>소주---{data?.soju}</div>
-      <div>맥주---{data?.beer}</div>
-      {/* <div>생성일{data?.createAt.substr(0, 10)}</div> */}
-      <AddComment />
-      <CommentsList />
-    </div>
+    <WebWrapper>
+      <div>
+        <button
+          onClick={() => {
+            router.push('/community');
+          }}
+        >
+          뒤로가기
+        </button>
+        <div>id---{data?.id}</div>
+        <div>like---{data?.like}</div>
+        <div>storename---{data?.storename}</div>
+        <div>nickname---{data?.nickname}</div>
+        <img src={data?.s3Url} alt={data?.storename} />
+        <div>likecnt---{data?.likecnt}</div>
+        <div>title---{data?.title}</div>
+        <div>description---{data?.description}</div>
+        <div>소주---{data?.soju}</div>
+        <div>맥주---{data?.beer}</div>
+        {/* <div>생성일{data?.createAt.substr(0, 10)}</div> */}
+        <AddComment />
+        <CommentsList />
+      </div>
+    </WebWrapper>
   );
 };
 

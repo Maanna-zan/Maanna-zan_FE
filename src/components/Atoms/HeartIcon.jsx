@@ -26,7 +26,7 @@ const StSpan = styled.span`
   height: 24px;
   width: current;
   height: current;
-  overflow: hidden;
+
   box-sizing: border-box;
   stroke-linecap: round;
   stroke-linejoin: round;
@@ -35,8 +35,9 @@ const StSpan = styled.span`
 const StSvg = styled.svg`
   width: 24px;
   height: 24px;
-  overflow: hidden;
+
   box-sizing: border-box;
+  margin: 6px;
 `;
 
 const StLiked = styled.path`

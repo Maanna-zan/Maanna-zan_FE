@@ -19,9 +19,9 @@ export const MainFirstSection = () => {
       const response = await apis.get(`/alkol/best?page=${1}&size=3`);
       seGetBest(response.data);
     };
-
     fetchData();
   }, []);
+
   useEffect(() => {
     const fetchData = async () => {
       const response = await apis.get(`/alkol/view?page=${1}&size=4`);

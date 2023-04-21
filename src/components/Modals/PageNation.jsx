@@ -1,6 +1,5 @@
 import React, { Children } from 'react';
 import styled from 'styled-components';
-import { LightTheme } from '@components/Themes/theme';
 import { WebWrapper } from '@components/Atoms/Wrapper';
 
 export const PageNation = ({
