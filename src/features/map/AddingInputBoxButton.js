@@ -1,4 +1,3 @@
-import { ButtonText } from '@components/Atoms/Button';
 import { InputArea } from '@components/Atoms/Input';
 import KeywordSearchModal from '@components/Modals/SearchKeywordModal';
 import React, { useEffect, useState } from 'react';
@@ -46,48 +45,10 @@ function AddingInputBoxButton() {
         const newInputValues = [...inputValues];
         newInputValues[currentInputIndex] = place.place_name;
         setInputValues(newInputValues);
-        // const lat = place.y;
-        // const lng = place.x;
-        // positions[currentInputIndex] = { lng, lat}
-
-        //  인풋박스 index이용하여 각자의 값에 x,y빼내어 case별로 구분.
-        // let newCheckedPlace = { x, y };
-        // switch (currentInputIndex) {
-        //     case 1:
-        //         newCheckedPlace = { ...newCheckedPlace, x2: x, y2: y };
-        //         break;
-        //     case 2:
-        //         newCheckedPlace = { ...newCheckedPlace, x2: x, y2: y, x3: x, y3: y };
-        //         break;
-        //     case 3:
-        //         newCheckedPlace = { ...newCheckedPlace, x2: x, y2: y, x3: x, y3: y, x4: x, y4: y };
-        //         break;
-        //     default:
-        //     break;
-        // }
         //  x,y값이 추가 되어도 같은 값이 x2,y2로 들어가는 버그 수정 코드
         let newCheckedPlace = { ...checkedPlace, [currentInputIndex === 0 ? 'x' : `x${currentInputIndex + 1}`]: x, [currentInputIndex === 0 ? 'y' : `y${currentInputIndex + 1}`]: y };
         //  setCheckedPlace함수 서버 통신위하여 가공
         setCheckedPlace(newCheckedPlace);
-        // setPositions([{ lat: y, lng: x }]);
-        //checkedPlace 찍힐 때 마다 마커 찍기 위한 positions 상태값 업데이트 로직 추가.
-        //newCheckedPlace 객체는 positions 배열에 추가될 새로운 마커 위치 정보 담는다
-        // const newPositions = [...positions];
-        // newPositions[currentInputIndex] = { lat: y, lng: x };
-        // setPositions(newPositions);
-        // console.log('positions->', positions);
-        console.log("서버보내는 checkedPlace", checkedPlace)
-        console.log("서버보내는 newCheckedPlace", newCheckedPlace)
-        // const newPositions = [...positions]; // positions state 복제
-        // newPositions.push({ lat: y, lng: x }); // 새 마커 추가
-        // setPositions(newPositions); // positions state 업데이트
-        setCheckedPlace(prevCheckedPlace => ({
-            ...prevCheckedPlace,
-            [currentInputIndex === 0 ? 'x' : `x${currentInputIndex + 1}`]: x,
-            [currentInputIndex === 0 ? 'y' : `y${currentInputIndex + 1}`]: y
-        }));
-        setPositions(prevPositions => [...prevPositions, {lat: y, lng: x}]);
-        console.log("prevCheckedPlace=======>", prevCheckedPlace)
     }
     //  Input Box 추가 Button Handler
     const addingInputBoxButtonHandler = () => {
@@ -157,7 +118,6 @@ function AddingInputBoxButton() {
                         refresh_token: `${token}`,
                         },
                 },
-                console.log("전송되는checkedPlace=>",checkedPlace)
             );
             return data;
         },
@@ -168,24 +128,15 @@ function AddingInputBoxButton() {
         //  완료 되었을 때 콜백 함수
         onSuccess: (data) => {
             const response = data.data.message;
-            console.log('response', response);
             alert(response);
+
             const lat = data.data.data.lat;
             const lng = data.data.data.lng;
             const newMidPoint = {lat, lng};
-            console.log("newMidPoint",newMidPoint);
             setMidPoint(newMidPoint);
         },
     });
-    // useEffect(() => {
-    //     if (checkedPlace) {
-    //         const newPositions = [...positions];
-    //         newPositions[currentInputIndex] = { lat: checkedPlace.y, lng: checkedPlace.x };
-    //         setPositions(newPositions);
-    //         gettingLocation(newPositions);
-    //     }
-    //   }, [checkedPlace, currentInputIndex, positions]);
-    // 지도가 움직이지만, gettingLocation함수 에러없이 작동 하지만 값이 없음.
+    //  checkedPlace로 props값 받아오면 useEffect 실행하여 지도에 마커 찍히도록 gettingLocation 함수 실행.
     useEffect(() => {
         if(checkedPlace) {
             gettingLocation(positions)}
@@ -195,13 +146,7 @@ function AddingInputBoxButton() {
     const gettingLocation = function (positions) { 
         //  checkedPlace가 오는게 아니라 positions가 와야함. postions가 마커 state 값
         const newSearch = checkedPlace;
-        // console.log("data-> ", data)
-        // positions 배열을 복제하여 prevPositions로 사용
         const prevPositions = [...positions];
-        // 검색 결과를 center에 추가.(검색결과위치로 좌표찍기)
-        // 이 부분 checkedPlaceHandler() 함수에서 수행했기 때문에 중복된 코드
-        // setCenter({ lat: newSearch.y, lng: newSearch.x });
-        // 검색 결과를 positions에 추가.(마커를 찍어줌))
         setPositions(prevPositions =>[
             ...prevPositions,
             {
@@ -210,9 +155,6 @@ function AddingInputBoxButton() {
             },
             
         ]);
-        console.log('newSearch->', newSearch);
-        console.log('positions->', positions);
-        console.log('마지막 checkedPlace->', checkedPlace);
     }
     return (
         <WebWrapper>
