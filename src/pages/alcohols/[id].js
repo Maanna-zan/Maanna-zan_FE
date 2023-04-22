@@ -9,10 +9,10 @@ import {
 } from '@components/Atoms/Wrapper';
 // import { Map } from 'react-kakao-maps-sdk';
 import { LikeHeartIcon } from '@components/Atoms/HeartIcon';
-import { ShareBtn } from '@components/Atoms/ShareBtn';
 import { BoxTextReal } from '@components/Atoms/BoxTextReal';
 import { FlexColumn, FlexRow, FlexRowCenter } from '@components/Atoms/Flex';
 import { GrideGapCol4 } from '@components/Atoms/Grid';
+import { ShareBtn } from '@components/Atoms/ShareBtn';
 import {
   ImgCenter,
   ImgWrapper152,
@@ -20,6 +20,8 @@ import {
   ImgWrapper180X120,
 } from '@components/Atoms/imgWrapper';
 import styled from 'styled-components';
+import ShareApiBtn from '../../hook/shareBtn/shareApiBtn';
+import { apis } from '@shared/axios';
 const StoreDetail = ({ apiId }) => {
   const router = useRouter();
   const {
@@ -40,8 +42,6 @@ const StoreDetail = ({ apiId }) => {
 
   return (
     <WebWrapper style={{ marginBottom: '80px' }}>
-      {/* <WebWrapperHeight> */}
-      {console.log('data__디테일', data)}
       <div
         style={{
           marginBottom: '10px',
@@ -50,7 +50,6 @@ const StoreDetail = ({ apiId }) => {
       >
         {data?.category_group_name}
       </div>
-      {/* 카테고리{구분용} */}
 
       <FlexRow
         style={{ justifyContent: 'space-between', marginBottom: '24px' }}
@@ -60,7 +59,14 @@ const StoreDetail = ({ apiId }) => {
         </div>
         <FlexRow style={{ gap: '10px' }}>
           <LikeHeartIcon style={{ margin: '0px' }}></LikeHeartIcon>
-          <ShareBtn></ShareBtn>
+          <ShareApiBtn
+            style={{ cursor: ' pointer' }}
+            title={`만나잔에 오신걸 환영합니다!`}
+            url={`${apis}/${data.id}/`}
+            text={`여기서 만나잔!!${data?.place_name}친구가 공유한 가게 구경하기`}
+          >
+            {/* <ShareBtn /> */}
+          </ShareApiBtn>
         </FlexRow>
       </FlexRow>
       <WebWrapper792px>
@@ -242,7 +248,6 @@ const StoreDetail = ({ apiId }) => {
                   </div>
                 </FlexRow>
               </BoxTextReal>
-              {/* 여기까지 맵같은디 ------------------------*/}
             </div>
           ))}
         </div>
