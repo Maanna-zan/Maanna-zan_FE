@@ -39,7 +39,7 @@ const StoreDetail = ({ apiId }) => {
   if (!data) {
     return <div>Store not found.</div>;
   }
-
+  const storeId = data.apiId;
   return (
     <WebWrapper style={{ marginBottom: '80px' }}>
       <div
@@ -154,9 +154,13 @@ const StoreDetail = ({ apiId }) => {
             <div
               style={{ cursor: 'pointer' }}
               onClick={() => {
-                router.push(`/community/add`);
+                router.push({
+                  pathname: '/community/add',
+                  query: { storeId },
+                });
               }}
             >
+              {console.log(storeId)}
               작성하기
             </div>
           </FlexRow>

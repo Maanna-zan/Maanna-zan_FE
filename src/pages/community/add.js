@@ -3,9 +3,13 @@ import React, { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { cookies } from '../../shared/cookie';
 import { apis } from '../../shared/axios';
-const AddPostForm = () => {
+import { FlexRow } from '@components/Atoms/Flex';
+import { WebWrapper792px } from '@components/Atoms/Wrapper';
+const AddPostForm = ({ apiId }) => {
   const router = useRouter();
+  const apiIdReal = router.query.storeId;
 
+  console.log('apiIdReal-------------', apiIdReal);
   const [post, setPost] = useState({
     storename: '',
     title: '',
@@ -22,20 +26,18 @@ const AddPostForm = () => {
   };
   const { mutate, isSuccess, onMutate, onSuccess } = useMutation({
     mutationFn: async (payload) => {
-      const data = await apis.post('/posts', payload, {
+      const data = await apis.post(`/posts/${apiIdReal}`, payload, {
         headers: {
-
           'Content-Type': 'multipart/form-data',
           access_token: `${access_token}`,
           // refresh_token: `${refresh_token}`,
-
         },
       });
       console.log('dataAdd------------>', data);
       return data;
     },
     onSuccess: (data) => {
-      // router.push('/community');
+      router.push('/community');
     },
   });
   const changeFileHandler = (e) => {
@@ -54,43 +56,106 @@ const AddPostForm = () => {
 
     mutate(formData);
   };
+
   return (
-    <div>
-      <button
-        onClick={() => {
-          router.push('/community');
-        }}
-      >
-        뒤로가기
-      </button>
+    <WebWrapper792px style={{ margin: '0 auto' }}>
       <form onSubmit={handleSubmit}>
-        <h4>술집명</h4>
-        <input
-          type="text"
-          value={post.storename}
-          name="storename"
-          onChange={changeInputHandler}
-        />
-        <h4>제목</h4>
+        <FlexRow
+          style={{ justifyContent: 'space-between', marginBottom: '30px' }}
+        >
+          {/* 폰트 */}
+          <div>포스트 리뷰 작성</div>
+
+          <FlexRow style={{ gap: '10px' }}>
+            <img src=""></img>
+            {/* 장소 적는곳 */}
+            <input
+              type="text"
+              value={post.storename}
+              name="storename"
+              onChange={changeInputHandler}
+              placeholder="장소를 입력해주세요"
+              style={{ width: '130px' }}
+            />
+          </FlexRow>
+        </FlexRow>
         <input
           type="text"
           value={post.title}
           name="title"
           onChange={changeInputHandler}
+          placeholder="제목을 작성해주세요"
+          style={{
+            borderBottom: '1px solid #eee',
+            height: '50px',
+            border: '1px solid #eee',
+            padding: '16px',
+            borderRadius: '10px',
+            overflow: 'hidden',
+            boxSizing: 'border-box',
+          }}
         />
-        <h4>설명</h4>
-        <input
+        {/* 내용 입력란 */}
+        <textarea
           type="text"
+          style={{
+            marginTop: '24px',
+            border: '1px solid #eee',
+            padding: '16px',
+            borderRadius: '10px',
+            overflow: 'hidden',
+            boxSizing: 'border-box',
+            borderRadius: '8px',
+            height: '300px',
+            marginBottom: '40px',
+            width: '100%',
+          }}
           value={post.description}
           name="description"
           onChange={changeInputHandler}
+          placeholder="내용을 입력해주세요"
         />
-        <h4>이미지</h4>
-        <input type="file" name="image" onChange={changeFileHandler} />
 
-        <button type="submit">등록</button>
+        <FlexRow
+          style={{
+            gap: '24px',
+            marginBottom: '50px',
+            justifyContent: 'space-between',
+          }}
+        >
+          <input
+            type="file"
+            name="image"
+            onChange={changeFileHandler}
+            style={{ width: '40%', marginBottom: '30px' }}
+          />
+          {/* <button
+            type="submit"
+            style={{
+              padding: '10px 20px',
+              backgroundColor: 'white',
+              border: 'red 1px solid',
+              color: 'red',
+              borderRadius: '10px',
+            }}
+          >
+            임시저장
+          </button> */}
+          <button
+            type="submit"
+            style={{
+              padding: '10px 20px',
+              backgroundColor: 'red',
+              border: 'none',
+              color: 'white',
+              borderRadius: '10px',
+            }}
+          >
+            작성하기
+          </button>
+        </FlexRow>
       </form>
-    </div>
+    </WebWrapper792px>
   );
 };
 export default AddPostForm;
