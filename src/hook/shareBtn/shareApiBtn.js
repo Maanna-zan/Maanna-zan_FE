@@ -13,12 +13,17 @@ const ShareApiBtn = ({ url, title, text, icon }) => {
     } catch (error) {
       console.error('공유에 실패하였습니다.', error);
     }
+    console.log('url:', url);
+    console.log('title:', title);
+    console.log('text:', text);
   };
 
   return (
-    <ShareBtn>
-      <ButtonText onClick={handleShareClick}>{}</ButtonText>
-    </ShareBtn>
+    <div>
+      <ShareBtn style={{ cursor: ' pointer' }}>
+        <div onClick={handleShareClick}>{}</div>
+      </ShareBtn>
+    </div>
   );
 };
 
