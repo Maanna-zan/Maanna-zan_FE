@@ -144,7 +144,7 @@ function AddingInputBoxButton() {
             const newMidPoint = {lat, lng};
             setMidPoint(newMidPoint);
             //  중간지점 찾은 후 지도 이동
-            setPositions([
+            setCenter([
             {
             latlng: { lat: data.data.data.lat, lng: data.data.data.lng },
             },
@@ -153,7 +153,6 @@ function AddingInputBoxButton() {
         console.log("@@data.data.data.lat@@", data.data.data.lat)
         console.log("@@data.data.data.lng@@", data.data.data.lng)
         console.log("@@newMidPoint@@", newMidPoint)
-        
         },
     });
     //  checkedPlace로 props값 받아오면 useEffect 실행하여 지도에 마커 찍히도록 gettingLocation 함수 실행.
