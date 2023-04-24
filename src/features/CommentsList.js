@@ -7,6 +7,8 @@ import { cookies } from '../shared/cookie';
 import { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { InputArea } from '@components/Atoms/Input';
+import AddReComment from './AddReComment';
+import ReCommentList from './ReCommentList';
 
 const CommentsList = () => {
   const queryClient = useQueryClient();
@@ -49,7 +51,7 @@ const CommentsList = () => {
           Access_Token: `${token}`,
         },
       });
-      console.log('data', data.data.commentList);
+      console.log('data', data);
       return data.data.commentList;
     },
     //enabled: -> 참일 때 실행시켜준다.
@@ -116,6 +118,7 @@ const CommentsList = () => {
               <div key={comment.id}>
                 <div className="nickName">{comment.nickName}</div>
                 <h2 className="content">{comment.content}</h2>
+                <AddReComment comment={comment} />
                 {userNickName === comment.nickName && (
                   <>
                     <button
@@ -132,6 +135,9 @@ const CommentsList = () => {
                     </button>
                   </>
                 )}
+                <div>
+                  <ReCommentList comment={comment} />
+                </div>
               </div>
             ))}
           </>

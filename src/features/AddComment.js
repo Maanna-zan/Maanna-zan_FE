@@ -10,7 +10,6 @@ import styled from 'styled-components';
 const AddComment = () => {
   const router = useRouter();
   const { query } = useRouter();
-  console.log('query', query);
 
   const [commentList, setCommentList] = useState('');
 
@@ -39,6 +38,7 @@ const AddComment = () => {
       alert(error.response.data.message);
     },
   });
+
   return (
     <TotalDiv>
       <BottomHr />
