@@ -113,7 +113,7 @@ function AddingInputBoxButton() {
         inputs.push(renderInputArea(i));
     }
     // refresh token 얻기
-    const token = cookies.get('refresh_token');
+    // const token = cookies.get('refresh_token');
     //  검색 값 request폼으로 가공 후 서버통신
     const { mutate, isLoading } = useMutation({
         mutationFn: async (location) => {
@@ -123,11 +123,11 @@ function AddingInputBoxButton() {
                 '/find',
                 //  Request값(x,y~x4,y4)
                 checkedPlace,
-                {
-                    headers: {
-                        refresh_token: `${token}`,
-                        },
-                },
+                // {
+                //     headers: {
+                //         refresh_token: `${token}`,
+                //         },
+                // },
             );
             return data;
         },
@@ -144,17 +144,22 @@ function AddingInputBoxButton() {
             const newMidPoint = {lat, lng};
             setMidPoint(newMidPoint);
             //  중간지점 찾은 후 지도 이동
-            setCenter([
-            {
-            latlng: { lat: data.data.data.lat, lng: data.data.data.lng },
-            },
-        ]);
+        //     setCenter(
+        //     {
+        //     latlng: { lat: data.data.data.lat, lng: data.data.data.lng },
+        //     },
+        // );
         console.log("@@data@@", data)
         console.log("@@data.data.data.lat@@", data.data.data.lat)
         console.log("@@data.data.data.lng@@", data.data.data.lng)
         console.log("@@newMidPoint@@", newMidPoint)
         },
     });
+    useEffect(() => {
+        if(midPoint) {
+        //  checkedPlace값은 서버통신위하여 x,y~x4,y4 값으로 가공된 값으로 checkedMarkerPlace와야함
+        setCenter(midPoint)}
+    },[midPoint])
     //  checkedPlace로 props값 받아오면 useEffect 실행하여 지도에 마커 찍히도록 gettingLocation 함수 실행.
     useEffect(() => {
         if(checkedPlace) {
