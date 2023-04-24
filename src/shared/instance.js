@@ -16,10 +16,16 @@ instance.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
+    const refreshToken = cookies.get('refresh_token');
+
+    // 토큰이 없으면 인터셉터 실행 안함
+    if (!refreshToken) {
+      return Promise.reject(error);
+    }
+
     if (error.response.data.statusCode === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
 
-      const refreshToken = cookies.get('refresh_token');
       if (refreshToken) {
         headers.refresh_token = `${refreshToken}`;
         const accessToken = response.data.access_token;
