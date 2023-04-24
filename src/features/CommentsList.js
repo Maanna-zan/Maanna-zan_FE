@@ -15,12 +15,10 @@ const CommentsList = () => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [commentId, setCommentId] = useState(null);
   const [commentContent, setCommentContent] = useState('');
-  //닉네임 usestate 선언
   const [userNickName, setUserNickName] = useState('');
-  // 로그인 ㄸ때 저장한 닉네임을 가져와 state에 저장
-  //로컬스토리지에 저장한 값이나 쿠키에 저장한 값이나 둘다 잘 작동 된다.!
+
   useEffect(() => {
-    const nick_name = cookies.get('nick_name');
+    const nick_name = localStorage.getItem('nick_name');
     setUserNickName(nick_name);
   }, []);
 
