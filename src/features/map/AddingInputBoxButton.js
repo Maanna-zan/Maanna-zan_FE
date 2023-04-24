@@ -139,11 +139,16 @@ function AddingInputBoxButton() {
         onSuccess: (data) => {
             const response = data.data.message;
             alert(response);
-
             const lat = data.data.data.lat;
             const lng = data.data.data.lng;
             const newMidPoint = {lat, lng};
             setMidPoint(newMidPoint);
+            //  중간지점 찾은 후 지도 이동
+            setPositions([
+            {
+            latlng: { lat: data.y, lng: data.x },
+            },
+        ]);
         },
     });
     //  checkedPlace로 props값 받아오면 useEffect 실행하여 지도에 마커 찍히도록 gettingLocation 함수 실행.
@@ -164,6 +169,7 @@ function AddingInputBoxButton() {
             latlng: { lat: newSearch.y, lng: newSearch.x },
             },
         ]);
+        console.log("@@positions@@", positions)
     }
     return (
         <WebWrapper>
