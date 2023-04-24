@@ -21,6 +21,8 @@ function AddingInputBoxButton() {
     const [inputValues, setInputValues] = useState(Array.from({ length: 4 }, () => ''));
     //  자식 컴포넌트의 props 값 state
     const [checkedPlace, setCheckedPlace] = useState();
+    //  모달창 검색값 있는 그대로 배열로 만들어주는 state 값(다중마커위한)
+    const [checkedMarkerPlace, setCheckedMarkerPlace] = useState([]);
     //  중간 지점 state
     const [midPoint, setMidPoint] = useState(null);
     //  마커 찍어 줄 state
@@ -50,6 +52,8 @@ function AddingInputBoxButton() {
         let newCheckedPlace = { ...checkedPlace, [currentInputIndex === 0 ? 'x' : `x${currentInputIndex + 1}`]: x, [currentInputIndex === 0 ? 'y' : `y${currentInputIndex + 1}`]: y };
         //  setCheckedPlace함수 서버 통신위하여 가공
         setCheckedPlace(newCheckedPlace);
+        //	positions state에 검색된 state값 차곡차곡 담기위한 다중마커state값 (place는 모달창에서 검색 및 선택된 값)
+        setCheckedMarkerPlace(place)
     }
     //  Input Box 추가 Button Handler
     const addingInputBoxButtonHandler = () => {
@@ -145,21 +149,20 @@ function AddingInputBoxButton() {
     //  checkedPlace로 props값 받아오면 useEffect 실행하여 지도에 마커 찍히도록 gettingLocation 함수 실행.
     useEffect(() => {
         if(checkedPlace) {
-            gettingLocation(positions)}
+        //  checkedPlace값은 서버통신위하여 x,y~x4,y4 값으로 가공된 값으로 checkedMarkerPlace와야함
+            gettingLocation(checkedMarkerPlace)}
     },[checkedPlace])
 
     // 키워드 입력후 검색 클릭 시 원하는 키워드의 주소로 이동
-    const gettingLocation = function (positions) { 
-        //  checkedPlace가 오는게 아니라 positions가 와야함. postions가 마커 state 값
-        const newSearch = checkedPlace;
-        const prevPositions = [...positions];
+    const gettingLocation = function () { 
+        // checkedMarkerPlace state값(모달창 검색되어 받아온 배열로 날 것 그대로 가공해주는 값)
+        const newSearch = checkedMarkerPlace;
         setPositions(prevPositions =>[
             ...prevPositions,
             {
             title: newSearch.place_name,
             latlng: { lat: newSearch.y, lng: newSearch.x },
             },
-            
         ]);
     }
     return (
@@ -176,11 +179,11 @@ function AddingInputBoxButton() {
                                     key={index}
                                     position={position.latlng} // 마커를 표시할 위치
                                     image={{
-                                        src: 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png', // 마커이미지의 주소입니다
+                                        src: 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png', // 마커이미지의 주소
                                         size: {
                                         width: 24,
                                         height: 35,
-                                        }, // 마커이미지의 크기입니다
+                                        }, // 마커이미지의 크기
                                     }}
                                     title={position.title} // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
                                 />
