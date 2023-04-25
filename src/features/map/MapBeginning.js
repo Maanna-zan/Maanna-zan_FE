@@ -1,4 +1,3 @@
-import { ButtonText } from '@components/Atoms/Button';
 import { FlexRow } from '@components/Atoms/Flex';
 import { ImgCenter, ImgWrapper690x803 } from '@components/Atoms/imgWrapper';
 import { WebWrapper, WebWrapperHeight } from '@components/Atoms/Wrapper';

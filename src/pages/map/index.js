@@ -1,9 +1,9 @@
 import React from 'react';
-import AddingInputBoxButton from '@features/map/AddingInputBoxButton';
+import SearchedKeywordLandingPage from '@components/Modals/SearchKeywordModalPortal';
 
 export const MapMain = () => {
   return (
-    <AddingInputBoxButton/>
+    <SearchedKeywordLandingPage/>
   );
 };
 export default MapMain;

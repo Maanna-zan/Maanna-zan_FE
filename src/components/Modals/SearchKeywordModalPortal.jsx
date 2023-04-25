@@ -3,14 +3,13 @@ import KeywordSearchModal from '@components/Modals/SearchKeywordModal';
 import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { apis } from '@shared/axios';
-import { cookies } from '@shared/cookie';
 import { useMutation } from '@tanstack/react-query';
 import { Map, MapMarker } from 'react-kakao-maps-sdk';
 import { FlexRow } from '@components/Atoms/Flex';
 import { WebWrapper, WebWrapperHeight } from '@components/Atoms/Wrapper';
 import styled from 'styled-components';
 
-function AddingInputBoxButton() {
+function SearchedKeywordLandingPage() {
     //  Input Box 갯수 state. 값으로 1을 넣은 이유는 처음에 1개가 기본 있어야 한다.
     const [inputCount, setInputCount] = useState(1);
     //  Modal창 열고 닫는 state
@@ -138,23 +137,14 @@ function AddingInputBoxButton() {
             const lng = data.data.data.lng;
             const newMidPoint = {lat, lng};
             setMidPoint(newMidPoint);
-            //  중간지점 찾은 후 지도 이동
-        //     setCenter(
-        //     {
-        //     latlng: { lat: data.data.data.lat, lng: data.data.data.lng },
-        //     },
-        // );
-        console.log("@@data@@", data)
-        console.log("@@data.data.data.lat@@", data.data.data.lat)
-        console.log("@@data.data.data.lng@@", data.data.data.lng)
-        console.log("@@newMidPoint@@", newMidPoint)
         },
     });
+    //  중간위치 이동 후 해당 좌표로 지도 이동
     useEffect(() => {
         if(midPoint) {
-        //  checkedPlace값은 서버통신위하여 x,y~x4,y4 값으로 가공된 값으로 checkedMarkerPlace와야함
         setCenter(midPoint)}
     },[midPoint])
+    
     //  checkedPlace로 props값 받아오면 useEffect 실행하여 지도에 마커 찍히도록 gettingLocation 함수 실행.
     useEffect(() => {
         if(checkedPlace) {
@@ -173,7 +163,6 @@ function AddingInputBoxButton() {
             latlng: { lat: newSearch.y, lng: newSearch.x },
             },
         ]);
-        console.log("@@positions@@", positions)
     }
     return (
         <WebWrapper>
@@ -236,7 +225,7 @@ function AddingInputBoxButton() {
     );
 }
 
-export default AddingInputBoxButton;
+export default SearchedKeywordLandingPage;
 const ContentWrapper = styled.div`
     display: flex;
     justify-content: center;

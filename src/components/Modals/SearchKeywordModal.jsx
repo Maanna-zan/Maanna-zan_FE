@@ -19,7 +19,6 @@ export default function KeywordSearchModal({ onClose, onUpdate}) {
             //  모달 창 닫기 props
             onClose();
         }
-        console.log("checkedPlace-> ",checkedPlace)
         //  키워드 검색 Submit Handler
         const keywordSearchSubmitHandler = (e) => {
             e.preventDefault();
@@ -47,7 +46,8 @@ export default function KeywordSearchModal({ onClose, onUpdate}) {
             });
         }
         
-        function searchPlaces() {
+        function searchPlaces() 
+        {
             const keyword = document.getElementById("keyword").value;
             if (!keyword?.replace(/^\s+|\s+$/g, "")) {
                 alert("키워드를 입력해주세요!");
@@ -56,7 +56,7 @@ export default function KeywordSearchModal({ onClose, onUpdate}) {
         // 장소검색 객체를 통해 키워드로 장소검색을 요청
         ps.keywordSearch(keyword, placesSearchCB);
         }
-        console.log("keyword -> ", keyword)
+        
         // 장소검색이 완료됐을 때 호출되는 콜백함수 입니다
         function placesSearchCB(data, status, pagination) {
             if (status === kakao.maps.services.Status.OK) {
