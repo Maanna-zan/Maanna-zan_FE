@@ -6,19 +6,25 @@ import { useRouter } from 'next/router';
 import axios from 'axios';
 const oauth = () => {
   const router = useRouter();
+  const code = router.query.code;
+  console.log('codeee', code);
 
   const { mutate } = useMutation({
-    mutationFn: async () => {
-      const code = router.query.code;
-      const data = await apis.post('/OAuth/Kakao', code);
+    mutationFn: async (code) => {
+      console.log('codeee222', code);
+      await apis.post('/OAuth/Kakao', { code: code });
       //디코드 활용
-      console.log('data', data);
     },
     onSuccess: () => {
       router.push('/');
     },
   });
 
+  useEffect(() => {
+    if (code) {
+      mutate(code);
+    }
+  }, [code, mutate]);
   // useEffect(() => {
   //   if (code) {
   //     const kakao = async () => {
