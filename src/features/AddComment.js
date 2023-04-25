@@ -43,17 +43,15 @@ const AddComment = () => {
     <TotalDiv>
       <BottomHr />
       <AddDiv>
-        <InputArea
-          variant="default"
-          size="lg"
-          type="text"
+        <Textarea
           value={commentList.content}
           name="content"
           onChange={changeInputHandler}
+          rows={4}
         />
         <ButtonText
           variant="primary"
-          style={{ width: '84px' }}
+          style={{ width: '84px', height: '84px' }}
           disabled={isLoading}
           onClick={() => {
             mutate(commentList);
@@ -85,4 +83,11 @@ const BottomHr = styled.hr`
   width: 792px;
   height: 0px;
   border-bottom: 0px;
+`;
+
+const Textarea = styled.textarea`
+  width: 688px;
+  padding: 12px;
+  border-radius: 8px;
+  height: 87px;
 `;
