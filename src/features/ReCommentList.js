@@ -4,6 +4,8 @@ import { cookies } from '@shared/cookie';
 import { useMutation } from '@tanstack/react-query';
 import { InputArea } from '@components/Atoms/Input';
 import { apis } from '@shared/axios';
+import styled from 'styled-components';
+import AddReComment from './AddReComment';
 
 const ReCommentList = ({ comment }) => {
   console.log('comment', comment.commentList);
@@ -48,7 +50,7 @@ const ReCommentList = ({ comment }) => {
       });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(['GET_COMMENTS']);
+      window.alert('삭제 완료!');
     },
   });
 
@@ -61,11 +63,11 @@ const ReCommentList = ({ comment }) => {
         },
       });
     },
+
     onSuccess: () => {
       setIsEditMode(false);
       setCommentId(null);
       setCommentContent('');
-      queryClient.invalidateQueries(['GET_COMMENTS']);
       window.alert('수정 완료!');
     },
     onError: () => {
@@ -75,50 +77,80 @@ const ReCommentList = ({ comment }) => {
 
   return (
     <div>
-      {isEditMode ? (
-        <>
-          <div style={{ display: 'flex' }}>
-            <InputArea
-              variant="default"
-              size="lg"
-              type="text"
-              name="content"
-              value={commentContent}
-              onChange={(e) => setCommentContent(e.target.value)}
-            />
-            <button className="Button" onClick={handleUpdate}>
-              완료
-            </button>
-          </div>
-        </>
-      ) : (
-        <>
-          {comments?.map((comment) => (
-            <div key={comment.id}>
-              <div>{comment.content}</div>
-              <div>{comment.id}</div>
-              {userNickName === comment.nickName && (
-                <>
-                  <button
-                    className="Button"
-                    onClick={() => handleDelete(comment.id)}
-                  >
-                    삭제
-                  </button>
-                  <button
-                    className="Button"
-                    onClick={() => handleEdit(comment)}
-                  >
-                    수정
-                  </button>
-                </>
-              )}
+      <CommentDiv>
+        {isEditMode ? (
+          <>
+            <div style={{ display: 'flex' }}>
+              <InputArea
+                variant="default"
+                size="lg"
+                type="text"
+                name="content"
+                value={commentContent}
+                onChange={(e) => setCommentContent(e.target.value)}
+              />
+              <button className="Button" onClick={handleUpdate}>
+                완료
+              </button>
             </div>
-          ))}
-        </>
-      )}
+          </>
+        ) : (
+          <>
+            {comments?.map((comment) => (
+              <div key={comment.id}>
+                <div className="nickName">{comment.nickName}</div>
+                <h2 className="content">{comment.content}</h2>
+                {userNickName === comment.nickName && (
+                  <>
+                    <button
+                      className="Button"
+                      onClick={() => handleDelete(comment.id)}
+                    >
+                      삭제
+                    </button>
+                    <button
+                      className="Button"
+                      onClick={() => handleEdit(comment)}
+                    >
+                      수정
+                    </button>
+                  </>
+                )}
+              </div>
+            ))}
+          </>
+        )}
+      </CommentDiv>
     </div>
   );
 };
 
 export default ReCommentList;
+
+const CommentDiv = styled.div`
+  width: 792px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+  .nickName {
+    font-weight: 700;
+    font-size: 12px;
+    line-height: 16px;
+  }
+  .content {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 16px;
+  }
+  .Button {
+    border: none;
+    background-color: transparent;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 16px;
+    color: #72787f;
+    width: 50px;
+  }
+`;

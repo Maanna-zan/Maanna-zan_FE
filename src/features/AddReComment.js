@@ -3,15 +3,11 @@ import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import { apis } from '@shared/axios';
 import { cookies } from '@shared/cookie';
+import styled from 'styled-components';
 
 const AddReComment = (comment) => {
-  //   console.log('comment', comment.comment.id);
-
   const [reComments, setReComments] = useState(false);
-  const [reCommentList, setReCommentList] = useState({
-    content: '',
-    parentId: comment.comment.id,
-  });
+  const [reCommentList, setReCommentList] = useState('');
 
   const changeInputHandler = (e) => {
     const { value, name } = e.target;
@@ -55,7 +51,7 @@ const AddReComment = (comment) => {
             value={reCommentList.content}
             onChange={changeInputHandler}
           />
-          <button
+          <Button
             onClick={() => {
               mutate({
                 commentId: comment.comment.id,
@@ -65,19 +61,24 @@ const AddReComment = (comment) => {
             }}
           >
             완료
-          </button>
+          </Button>
         </div>
       ) : (
-        <button
+        <Button
           onClick={() => {
             setReComments(true);
           }}
         >
           답글달기
-        </button>
+        </Button>
       )}
     </div>
   );
 };
 
 export default AddReComment;
+
+const Button = styled.button`
+  border: none;
+  background-color: transparent;
+`;
