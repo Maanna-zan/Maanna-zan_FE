@@ -112,22 +112,17 @@ function AddingInputBoxButton() {
     for (let i = 0; i < inputCount; i++) {
         inputs.push(renderInputArea(i));
     }
-    // refresh token 얻기
-    // const token = cookies.get('refresh_token');
+
     //  검색 값 request폼으로 가공 후 서버통신
     const { mutate, isLoading } = useMutation({
         mutationFn: async (location) => {
             console.log('location->', location[0]);
-            const data = await apis.post(
+            const data = await apis.post
+            (
                 //  서버 URL
                 '/find',
                 //  Request값(x,y~x4,y4)
-                checkedPlace,
-                // {
-                //     headers: {
-                //         refresh_token: `${token}`,
-                //         },
-                // },
+                checkedPlace
             );
             return data;
         },
