@@ -7,6 +7,7 @@ import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import { InputArea } from '@components/Atoms/Input';
 import { ButtonText } from '@components/Atoms/Button';
+import KakaoButton from '@features/kakaoLogin/KakaoButton';
 
 export default function SignInModal({ onClose }) {
   const router = useRouter();
@@ -156,6 +157,7 @@ export default function SignInModal({ onClose }) {
                   register(user);
                 }}
               />
+              <KakaoButton />
               <BottomDiv>
                 <p className="question"> 아이디가 없으신가요?</p>
                 <p className="goToSignUp" onClick={onClose}>
