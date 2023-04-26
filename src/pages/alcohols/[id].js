@@ -1,6 +1,9 @@
-import React, { useState } from 'react'; 
+import React, { useState } from 'react';
 import { useRouter } from 'next/router';
-import { useGetLikeStore, useGetStoredetail } from '../../hook/alcohol/useGetStore';
+import {
+  useGetLikeStore,
+  useGetStoredetail,
+} from '../../hook/alcohol/useGetStore';
 import {
   WebWrapper,
   WebWrapper384px,
@@ -8,7 +11,7 @@ import {
   WebWrapperHeight,
 } from '@components/Atoms/Wrapper';
 // import { Map } from 'react-kakao-maps-sdk';
-import { LikeHeartIcon,DisLikeHeartIcon } from '@components/Atoms/HeartIcon';
+import { LikeHeartIcon, DisLikeHeartIcon } from '@components/Atoms/HeartIcon';
 import { BoxTextReal } from '@components/Atoms/BoxTextReal';
 import { FlexColumn, FlexRow, FlexRowCenter } from '@components/Atoms/Flex';
 import { GrideGapCol4 } from '@components/Atoms/Grid';
@@ -23,7 +26,7 @@ import styled from 'styled-components';
 import ShareApiBtn from '../../hook/shareBtn/shareApiBtn';
 import { apis } from '@shared/axios';
 import { useLikeStore } from '../../hook/useLikes';
-const StoreDetail = ({apiId}) => {
+const StoreDetail = () => {
   const router = useRouter();
   const { query } = useRouter();
   const {
@@ -35,23 +38,24 @@ const StoreDetail = ({apiId}) => {
   console.log(' 스토어 1개 조회', data);
   console.log(' 포스트리스트 배열', data?.postList);
 
-  const {likeStore} =useLikeStore();
-  
-  const {alkolsLike, alkolsIsLikeLoading } = useGetLikeStore();
-  
-  console.log('alkolsLike>>>>>>>>>>>',alkolsLike)
+  const { likeStore } = useLikeStore();
+
+  const { alkolsLike, alkolsIsLikeLoading } = useGetLikeStore();
+
+  console.log('alkolsLike>>>>>>>>>>>', alkolsLike);
   // console.log('alkolsLikeBOOLEN>>>>>>>>>>>',[alkolsLike].like)
   let alkolLikeMatch = [];
   if (alkolsLike && alkolsLike.apiId && alkolsLike.data.apiId) {
     alkolLikeMatch = alkolLikeMatch.apiId;
   }
   const storeLikeMine =
-  alkolLikeMatch.find((p) => p.id === Number(apiId)) || {};
+    alkolLikeMatch.find((p) => p.id === Number(apiId)) || {};
 
-  console.log('alkolLikeMatch>>>>>>>>>>>',alkolLikeMatch)
-  console.log('storeLikeMine>>>>>>>>>>>',storeLikeMine)
-  const [like, setLike] = useState( storeLikeMine.roomLike)
-  
+  console.log('alkolLikeMatch>>>>>>>>>>>', alkolLikeMatch);
+  console.log('storeLikeMine>>>>>>>>>>>', storeLikeMine);
+  const [like, setLike] = useState(storeLikeMine.roomLike);
+  // const [like, setLike] = useState(storeLikeMine.roomLike);
+
   const likeStoreHandler = async (apiId) => {
     // const apiId = data.apiId;
     try {
@@ -61,7 +65,7 @@ const StoreDetail = ({apiId}) => {
       console.error(error);
     }
   };
-  console.log('likeStoreHandler',likeStoreHandler)
+  console.log('likeStoreHandler', likeStoreHandler);
   if (storeIsLoading || alkolsIsLikeLoading) {
     return <div>Loading...</div>;
   }
@@ -69,7 +73,7 @@ const StoreDetail = ({apiId}) => {
     return <div>Store not found.</div>;
   }
   const storeId = data.apiId;
-  // const apiId = data.apiId;
+  const apiId = data.apiId;
   // const storeId = data.apiId;
   return (
     <WebWrapper style={{ marginBottom: '80px' }}>
@@ -89,12 +93,12 @@ const StoreDetail = ({apiId}) => {
           {data?.place_name}
         </div>
         <FlexRow style={{ gap: '10px' }}>
-        <span
-                    onClick={() => likeStoreHandler(apiId)}
-                    style={{ cursor: 'pointer' }}
-                  >
-                    {like ? <LikeHeartIcon /> :<DisLikeHeartIcon /> }
-                  </span>
+          <span
+            onClick={() => likeStoreHandler(apiId)}
+            style={{ cursor: 'pointer' }}
+          >
+            {like ? <LikeHeartIcon /> : <DisLikeHeartIcon />}
+          </span>
           <ShareApiBtn
             style={{ cursor: ' pointer' }}
             title={`만나잔에 오신걸 환영합니다!`}
@@ -235,7 +239,6 @@ const StoreDetail = ({apiId}) => {
                       </FlexColumn>
 
                       <FlexRow
-               
                         style={{
                           width: '20%',
                           gap: '10px',
@@ -243,13 +246,12 @@ const StoreDetail = ({apiId}) => {
                           justifyContent: 'center',
                         }}
                       >
-                     
-                      <span
-                    onClick={() => likeStoreHandler(apiId)}
-                    style={{ cursor: 'pointer' }}
-                  >
-                    {like ?  <DisLikeHeartIcon />:<LikeHeartIcon /> }
-                  </span>
+                        <span
+                          onClick={() => likeStoreHandler(apiId)}
+                          style={{ cursor: 'pointer' }}
+                        >
+                          {/* {likeComment ? <DisLikeHeartIcon /> : <LikeHeartIcon />} */}
+                        </span>
                         <div>좋아요</div>
                         <div> {post.likecnt}</div>
                         {/* ---좋아요 몇개인지올리기~--- */}

@@ -15,7 +15,7 @@ export const useGetPost = () => {
         //   access_token: `${access_token}`,
         // },
       });
-      console.log('useGetLikePostdata--------------', data);
+      console.log('useGetLikePostgidata--------------', data);
 
       return data.data;
     },
