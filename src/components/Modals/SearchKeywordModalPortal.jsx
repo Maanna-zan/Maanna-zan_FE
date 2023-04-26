@@ -1,6 +1,6 @@
 import { InputArea } from '@components/Atoms/Input';
 import KeywordSearchModal from '@components/Modals/SearchKeywordModal';
-import React, { useEffect, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { apis } from '@shared/axios';
 import { useMutation } from '@tanstack/react-query';
@@ -8,7 +8,12 @@ import { Map, MapMarker } from 'react-kakao-maps-sdk';
 import { FlexRow } from '@components/Atoms/Flex';
 import { WebWrapper, WebWrapperHeight } from '@components/Atoms/Wrapper';
 import styled from 'styled-components';
+import MapMidPoint from '@features/map/MapMidPoint';
+import { useRouter } from 'next/router';
 
+// createContext 함수를 사용하여 컨텍스트 생성(midPoint props MapMidPoint.js로 전달 위해)
+export const MidPointContext = createContext({});
+//  Modal Portal(Landing) Page
 function SearchedKeywordLandingPage() {
     //  Input Box 갯수 state. 값으로 1을 넣은 이유는 처음에 1개가 기본 있어야 한다.
     const [inputCount, setInputCount] = useState(1);
@@ -31,6 +36,8 @@ function SearchedKeywordLandingPage() {
         lat: 37.49676871972202,
         lng: 127.02474726969814,
     });
+    //  중간 위치 탐색 page 이동 위한 useRouter선언.
+    const router = useRouter();
     //  자식 컴포넌트 props 꺼내서 쓸 수 있도록 한다.
     function checkedPlaceHandler(place) {
         // checkedPlace 객체를 request 폼으로 가공
@@ -54,6 +61,7 @@ function SearchedKeywordLandingPage() {
         //	positions state에 검색된 state값 차곡차곡 담기위한 다중마커state값 (place는 모달창에서 검색 및 선택된 값)
         setCheckedMarkerPlace(place)
     }
+
     //  Input Box 추가 Button Handler
     const addingInputBoxButtonHandler = () => {
         if (inputCount < 4) {
@@ -137,6 +145,7 @@ function SearchedKeywordLandingPage() {
             const lng = data.data.data.lng;
             const newMidPoint = {lat, lng};
             setMidPoint(newMidPoint);
+            console.log("newMidPoint=>",newMidPoint)
         },
     });
     //  중간위치 이동 후 해당 좌표로 지도 이동
@@ -144,6 +153,7 @@ function SearchedKeywordLandingPage() {
         if(midPoint) {
         setCenter(midPoint)}
     },[midPoint])
+    console.log("midPoint=>",midPoint)
     
     //  checkedPlace로 props값 받아오면 useEffect 실행하여 지도에 마커 찍히도록 gettingLocation 함수 실행.
     useEffect(() => {
@@ -217,6 +227,20 @@ function SearchedKeywordLandingPage() {
                                 >
                                 검색
                                 </ButtonRedStyle>
+                                {/* <button onClick={moveToMapMidPointButtonClickHandler}>
+                                    중간지점탐색
+                                </button> */}
+                                {/* <MapMidPoint
+                                // onMidPoint={setMidPoint || null}
+                                onClick={moveToMapMidPointButtonClickHandler}
+                                onMidPoint={moveToMapMidPointButtonClickHandler}
+                                /> */}
+                                <MidPointContext.Provider value={midPoint}>
+                                <MapMidPoint />
+                                </MidPointContext.Provider>
+
+                                
+
                         </div>
                 </ContentWrapper>
             </FlexRow>
