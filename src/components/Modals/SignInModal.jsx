@@ -49,6 +49,11 @@ export default function SignInModal({ onClose }) {
     onSuccess: () => {
       router.push('/');
     },
+    onError: (e) => {
+      console.log('error login', e.response.data.message);
+      const error = e.response.data.message;
+      alert(error);
+    },
   });
 
   const { mutate: kakao } = useMutation({
