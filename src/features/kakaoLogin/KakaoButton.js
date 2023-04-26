@@ -11,16 +11,16 @@ const KakaoButton = () => {
     }
   };
 
-  const { mutate } = useMutation({
-    mutationFn: async (code) => {
-      const data = await apis.post('/OAuth/Kakao', code);
-      //디코드 활용
-      console.log('data', data);
-    },
-    onSuccess: () => {
-      router.push('/');
-    },
-  });
+  //   const { mutate } = useMutation({
+  //     mutationFn: async (code) => {
+  //       const data = await apis.post('/OAuth/Kakao', code);
+  //       //디코드 활용
+  //       console.log('data', data);
+  //     },
+  //     onSuccess: () => {
+  //       router.push('/');
+  //     },
+  //   });
   return (
     <>
       <button onClick={KakaoLoginHandler}>
