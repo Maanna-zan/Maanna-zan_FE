@@ -23,40 +23,34 @@ import {
   ImgCenter,
 } from '@components/Atoms/imgWrapper';
 import { apis } from '@shared/axios';
-export const Post = ({ post, onSubmit, apiId }) => {
+import { useGetLikePost } from '../../hook/post/useGetPost';
+export const Post = ({ post, onSubmit, apiId ,postId}) => {
   // console.log('newPost', post);
   const go = useRouter();
   const queryClient = useQueryClient();
   const router = useRouter();
+  const { query } = useRouter();
   const access_token = cookies.get('access_token');
   const { id } = router.query;
-
+  const { postsLike, postIsLikeLoading } = useGetLikePost();
+  let potLikeMatch = [];
+  if (postsLike && postsLike.data && postsLike.data.posts) {
+    potLikeMatch = postsLike.data.posts;
+  }
+  const postLikeMine =
+    potLikeMatch.find((p) => p.id === Number(postId)) || {};
   const { likePost } = useLikePost();
 
-  const [like, setLike] = useState(post.like);
+  const [like, setLike] = useState(postLikeMine.like);
 
-  const handleLike = () => {
-    const postId = post.id;
-    const cachedPost = queryClient.getQueryData(['post', postId]);
-
-    // Optimistically update the cached post data
-    queryClient.setQueryData(['post', postId], (old) => ({
-      ...old,
-      like: !like,
-      likecnt: like ? old?.likecnt - 1 : old?.likecnt + 1,
-    }));
-    setLike(!like);
-
-    likePost(postId, {
-      onSuccess: () => {
-        queryClient.invalidateQueries(['post', postId]);
-      },
-      onError: () => {
-        // If the request fails, roll back the optimistic update
-        queryClient.setQueryData(['post', postId], cachedPost);
-        setLike(like);
-      },
-    });
+  console.log('postId커뮤니티인덱스',postId)
+  const likePostHandler = async (postId) => {
+    try {
+      await likePost(postId);
+      setLike(!like);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useEffect(() => {
@@ -75,7 +69,10 @@ export const Post = ({ post, onSubmit, apiId }) => {
   }, [id]);
 
   return (
-    <>
+    <div style={{
+      position: 'relative',
+
+    }}>
       <div
         post={post}
         style={{
@@ -83,12 +80,11 @@ export const Post = ({ post, onSubmit, apiId }) => {
           right: '16px',
           top: '16px',
           zIndex: '10',
-          padding: '10px',
-        }}
-        onClick={() => handleLike(post?.id)}
+          padding: '10px',}}
+        onClick={() => likePostHandler(postId)}
       >
         {console.log('post 확인해~~~~~', post)}
-        {like ? <LikeHeartIcon /> : <DisLikeHeartIcon />}
+        {like ? <LikeHeartIcon /> : <DisLikeHeartIcon   />}
       </div>
       <div
         onClick={() => {
@@ -117,6 +113,7 @@ export const Post = ({ post, onSubmit, apiId }) => {
                   overflow: 'hidden',
                   borderRadius: '8px',
                   objectFit: '',
+                  zIndex:'1'
                 }}
                 src={post.s3Url || '/noimage_282x248_.png'}
                 alt="store"
@@ -135,7 +132,7 @@ export const Post = ({ post, onSubmit, apiId }) => {
           </div> */}
         </BoxTextReal>
       </div>
-    </>
+    </div>
   );
 };
 const StHeade3_name = styled.div`

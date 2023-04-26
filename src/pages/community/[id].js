@@ -29,9 +29,6 @@ const Community = () => {
   const router = useRouter();
 
   const { id } = router.query;
-
-  const { posts, postIsLoading } = useGetPost();
-  const { postsLike, postIsLikeLoading } = useGetLikePost();
   const { data, isLoading, isError, isSuccess } = useQuery({
     queryKey: ['GET_COMMUNITYDETAIL'],
     queryFn: async () => {
@@ -49,22 +46,26 @@ const Community = () => {
     onSuccess: () => {},
   });
   const [isUpdated, setIsUpdated] = useState(false);
+  
+
+  const { posts, postIsLoading } = useGetPost();
+  const { postsLike, postIsLikeLoading } = useGetLikePost();
   let potLikeMatch = [];
   if (postsLike && postsLike.data && postsLike.data.posts) {
     potLikeMatch = postsLike.data.posts;
   }
-
-  const post = posts.find((p) => p.id === Number(query.id)) || {};
+console.log('potLikeMatch--------->',potLikeMatch)
+const postId = query.id;
+  const post = posts.find((p) => p.id === Number(postId)) || {};
   const postLikeMine =
-    potLikeMatch.find((p) => p.id === Number(query.id)) || {};
+    potLikeMatch.find((p) => p.id === Number(postId)) || {};
 
   const [newPost, setNewPost] = useState({
     title: post?.title ?? '',
     description: post?.description ?? '',
     s3Url: post?.s3Url || '',
   });
-  // console.log('postLikeMine', postLikeMine);
-  const postId = query.id;
+   console.log('---postLikeMine', postLikeMine);
   const { updatePost } = useUpdatePost(postId);
   // const { mutate: updatePost } = useUpdatePost();
   const { deletePost } = useDeletePost();
@@ -77,7 +78,7 @@ const Community = () => {
   };
 
   const [like, setLike] = useState(postLikeMine.like);
-  console.log('(postLikeMine.like', postLikeMine.like);
+  console.log('(postLikeMine.like------->', postLikeMine.like);
   console.log('postId41', postId);
   console.log('post', post);
   console.log('post.like', post.like);
@@ -518,7 +519,7 @@ const Community = () => {
                 }}
               >
                 <BoxTextReal
-                  onClick={() => deletePostHandler(postId)}
+                  
                   size="nonePadding"
                   variant="realDefaultBox"
                   style={{ font: `var( --body1-medium) normal sans-serif` }}
@@ -526,6 +527,7 @@ const Community = () => {
                   <DeleteIcon />
                 </BoxTextReal>
                 <div
+                onClick={() => deletePostHandler(postId)}
                   style={{
                     color: `${LightTheme.FONT_SECONDARY}`,
                     cursor: 'pointer',

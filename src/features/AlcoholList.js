@@ -31,7 +31,7 @@ import {
 } from '@components/Atoms/imgWrapper';
 import { useLikeStore } from '../hook/useLikes';
 import Link from 'next/link';
-
+ 
 const AlcoholList = () => {
   // const { handleLike } = useLikeStore();
   // const [roomLike, setRoomLike] = useState(trou);
@@ -131,7 +131,7 @@ const AlcoholList = () => {
   if (isLoading) {
     return <WebWrapper>Loading...</WebWrapper>;
   }
-  console.log('handleLike', handleLike);
+  // console.log('handleLike', handleLike);
   return (
     <>
       <WebWrapper>

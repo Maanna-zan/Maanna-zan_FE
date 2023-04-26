@@ -36,10 +36,15 @@ const CommunityList = () => {
   const go = useRouter();
 
   const token = cookies.get('refresh_token');
-
+  const { query } = useRouter();
   const { postsLike, postIsLikeLoading } = useGetLikePost();
   const { posts, postIsLoading } = useGetPost();
-
+  let potLikeMatch = [];
+  if (postsLike && postsLike.data && postsLike.data.posts) {
+    potLikeMatch = postsLike.data.posts;
+  }
+  const postLikeMine =
+    potLikeMatch.find((p) => p.id === Number(query.id)) || {};
   if (postIsLikeLoading || postIsLoading) return <div>로딩중...</div>;
 
   return (
@@ -85,7 +90,9 @@ const CommunityList = () => {
             <Post
               post={post}
               key={post.id}
+              postId={post.id}
               apiId={post.id}
+              style={{position: 'relative'}}
               // onClick={() => {
               //   go.push(`/post/${post.id}`);
               // }}
