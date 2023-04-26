@@ -10,11 +10,13 @@ import { apis } from '../../shared/axios';
 import { useState } from 'react';
 // import 생략
 import { cookies } from '../../shared/cookie';
+import { LikeHeartIcon } from '@components/Atoms/HeartIcon';
 import { useGetPost, useGetLikePost } from '../../hook/post/useGetPost';
 import {
   ImgCenter,
   ImgWrapper282x248,
   ImgWrapper384x360,
+  ImgWrapper282x200,
 } from '@components/Atoms/imgWrapper';
 const StHeade3_name = styled.div`
   margin-top: 48px;
@@ -32,6 +34,7 @@ const StAddress_name = styled.div`
 `;
 const CommunityList = () => {
   const go = useRouter();
+
   const token = cookies.get('refresh_token');
 
   const { postsLike, postIsLikeLoading } = useGetLikePost();
@@ -46,7 +49,7 @@ const CommunityList = () => {
           이번주 인기글
         </StHeade3_name>
         <GrideGapCol3>
-          {postsLike?.data?.map((store) => (
+          {posts?.data?.map((store) => (
             <div
               key={store?.id}
               onClick={() => {
@@ -84,7 +87,7 @@ const CommunityList = () => {
               key={post.id}
               apiId={post.id}
               // onClick={() => {
-              //   go(`/community/${post.id}`);
+              //   go.push(`/post/${post.id}`);
               // }}
             ></Post>
           ))}

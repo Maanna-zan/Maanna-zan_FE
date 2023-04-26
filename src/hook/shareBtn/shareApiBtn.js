@@ -19,11 +19,9 @@ const ShareApiBtn = ({ url, title, text, icon }) => {
   };
 
   return (
-    <div>
-      <ShareBtn style={{ cursor: ' pointer' }}>
-        <div onClick={handleShareClick}>{}</div>
-      </ShareBtn>
-    </div>
+    <ShareBtn style={{ cursor: ' pointer', height: '24px' }}>
+      <div onClick={handleShareClick}>{}</div>
+    </ShareBtn>
   );
 };
 

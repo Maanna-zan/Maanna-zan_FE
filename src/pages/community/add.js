@@ -5,7 +5,7 @@ import { cookies } from '../../shared/cookie';
 import { apis } from '../../shared/axios';
 import { FlexRow } from '@components/Atoms/Flex';
 import { WebWrapper792px } from '@components/Atoms/Wrapper';
-const AddPostForm = ({ apiId }) => {
+const AddPostForm = () => {
   const router = useRouter();
   const apiIdReal = router.query.storeId;
 
@@ -14,36 +14,38 @@ const AddPostForm = ({ apiId }) => {
     storename: '',
     title: '',
     description: '',
-    image: null,
+    s3Url: '',
   });
 
   const access_token = cookies.get('access_token');
   const refresh_token = cookies.get('refresh_token');
 
-  const changeInputHandler = (e) => {
-    const { value, name } = e.target;
-    setPost((pre) => ({ ...pre, [name]: value }));
-  };
   const { mutate, isSuccess, onMutate, onSuccess } = useMutation({
     mutationFn: async (payload) => {
       const data = await apis.post(`/posts/${apiIdReal}`, payload, {
         headers: {
           'Content-Type': 'multipart/form-data',
           access_token: `${access_token}`,
-          // refresh_token: `${refresh_token}`,
         },
       });
       console.log('dataAdd------------>', data);
       return data;
     },
     onSuccess: (data) => {
+      alert('게시글 작성을 하셨습니다!');
       router.push('/community');
     },
   });
+
+  const changeInputHandler = (e) => {
+    const { value, name } = e.target;
+    setPost((pre) => ({ ...pre, [name]: value }));
+  };
   const changeFileHandler = (e) => {
     const file = e.target.files[0];
-    const image = new File([file], file.name, { type: file.type });
-    setPost((pre) => ({ ...pre, image }));
+    const formData = new FormData();
+    formData.append('file', file); // 이미지를 file 키로 추가
+    setPost((pre) => ({ ...pre, s3Url: formData }));
   };
 
   const handleSubmit = (e) => {
@@ -52,8 +54,9 @@ const AddPostForm = ({ apiId }) => {
     formData.append('storename', post.storename);
     formData.append('title', post.title);
     formData.append('description', post.description);
-    formData.append('image', post.image);
-
+    for (const [key, value] of post.s3Url.entries()) {
+      formData.append(key, value);
+    }
     mutate(formData);
   };
 
@@ -125,7 +128,7 @@ const AddPostForm = ({ apiId }) => {
         >
           <input
             type="file"
-            name="image"
+            name="s3Url"
             onChange={changeFileHandler}
             style={{ width: '40%', marginBottom: '30px' }}
           />

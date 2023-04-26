@@ -12,6 +12,7 @@ export const GlobalStyles = createGlobalStyle`
     input {
         all:unset;
         width: 100%;
+        border: 1px, solid, gray;
     }
     body {
       //global

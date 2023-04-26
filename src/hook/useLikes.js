@@ -42,51 +42,35 @@ export const useLikePost = () => {
   return { likePost };
 };
 
-export const useLikeStore = () => {
-  const queryClient = useQueryClient();
-  const access_token = cookies.get('access_token');
-  const [like, setLike] = useState(false); // 초기값을 false로 설정합니다.
-  const { mutate: likeStore } = useMutation(
-    (apiId) =>
-      apis.put(`/bar/like/${apiId}`, null, {
-        headers: {
-          access_token: `${access_token}`,
-        },
-      }),
-    {
-      onError: (error, apiId, previousStore) => {
-        queryClient.setQueryData(['store', apiId], previousStore);
-      },
-      onMutate: (apiId) => {
-        const previousStore = queryClient.getQueryData(['store', apiId]);
-        queryClient.setQueryData(['store', apiId], (old) => ({
-          ...old,
-          roomLike: !old?.roomLike,
-          roomLikecnt: old?.like ? old?.roomLikecnt - 1 : old?.roomLikecnt + 1,
-        }));
-        setLike((prevLike) => !prevLike); // 이전 `like` 값을 반전시킵니다.
-        return previousStore;
-      },
-      onSettled: (data, error, apiId, previousStore) => {
-        if (error) {
-          queryClient.setQueryData(['store', apiId], previousStore);
-          setLike(previousStore?.roomLike); // 이전 `roomLike` 값을 사용하여 `like` 값을 다시 설정합니다.
-        } else {
-          queryClient.invalidateQueries(['store', apiId]);
-        }
-      },
-    },
-  );
+// export const useGetLikePost = () => {
+//   const token = cookies.get('access_token');
 
-  const handleLike = (apiId) => {
-    likeStore(apiId);
-  };
+//   const { data, isLoading, isError } = useQuery({
+//     queryKey: keys.GET_LIKE_POSTS,
+//     queryFn: async () => {
+//       const data = await apis.get('/posts/best', {
+//         // headers: {
+//         //   access_token: `${token}`,
+//         // },
+//       });
+//       //console.log('useGetLikePost--------------', data);
+//       return data.data;
+//     },
+//   });
+//   if (isLoading) {
+//     return { postsLike: data, postIsLoading: true };
+//   }
 
-  return { like, handleLike }; // `like` 상태 값과 `handleLike` 함수를 함께 반환합니다.
-};
+//   if (isError) {
+//     return { postsLike: data, postIsLikeLoading: false };
+//   }
+//   return { postsLike: data, postIsLikeLoading: isLoading };
+// };
+
 // export const useLikeStore = () => {
 //   const queryClient = useQueryClient();
 //   const access_token = cookies.get('access_token');
+//   const [roomLike, setRoomLike] = useState(false); // 초기값을 false로 설정합니다.
 //   const { mutate: likeStore } = useMutation(
 //     (apiId) =>
 //       apis.put(`/bar/like/${apiId}`, null, {
@@ -105,11 +89,13 @@ export const useLikeStore = () => {
 //           roomLike: !old?.roomLike,
 //           roomLikecnt: old?.like ? old?.roomLikecnt - 1 : old?.roomLikecnt + 1,
 //         }));
+//         setLike((prevLike) => !prevLike); // 이전 `like` 값을 반전시킵니다.
 //         return previousStore;
 //       },
 //       onSettled: (data, error, apiId, previousStore) => {
 //         if (error) {
 //           queryClient.setQueryData(['store', apiId], previousStore);
+//           setLike(previousStore?.roomLike); // 이전 `roomLike` 값을 사용하여 `like` 값을 다시 설정합니다.
 //         } else {
 //           queryClient.invalidateQueries(['store', apiId]);
 //         }
@@ -117,5 +103,44 @@ export const useLikeStore = () => {
 //     },
 //   );
 
-//   return { likeStore };
+//   const handleLike = (apiId) => {
+//     likeStore(apiId);
+//   };
+
+//   return { roomLike, handleLike }; // `like` 상태 값과 `handleLike` 함수를 함께 반환합니다.
 // };
+export const useLikeStore = () => {
+  const queryClient = useQueryClient();
+  const access_token = cookies.get('access_token');
+  const { mutate: likeStore } = useMutation(
+    (apiId) =>
+      apis.put(`/bar/like/${apiId}`, null, {
+        headers: {
+          access_token: `${access_token}`,
+        },
+      }),
+    {
+      onError: (error, apiId, previousStore) => {
+        queryClient.setQueryData(['store', apiId], previousStore);
+      },
+      onMutate: (apiId) => {
+        const previousStore = queryClient.getQueryData(['store', apiId]);
+        queryClient.setQueryData(['store', apiId], (old) => ({
+          ...old,
+          roomLike: !old?.roomLike,
+          roomLikecnt: old?.like ? old?.roomLikecnt - 1 : old?.roomLikecnt + 1,
+        }));
+        return previousStore;
+      },
+      onSettled: (data, error, apiId, previousStore) => {
+        if (error) {
+          queryClient.setQueryData(['store', apiId], previousStore);
+        } else {
+          queryClient.invalidateQueries(['store', apiId]);
+        }
+      },
+    },
+  );
+
+  return { likeStore };
+};

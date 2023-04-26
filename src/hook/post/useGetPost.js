@@ -5,17 +5,17 @@ import { useQuery } from '@tanstack/react-query';
 import { cookies } from '@shared/cookie';
 
 export const useGetPost = () => {
-  const token = cookies.get('access_token');
+  const access_token = cookies.get('access_token');
 
   const { data, isLoading, isError } = useQuery({
     queryKey: keys.GET_POSTS,
     queryFn: async () => {
       const data = await apis.get('/posts', {
         // headers: {
-        //   access_token: `${token}`,
+        //   access_token: `${access_token}`,
         // },
       });
-      //console.log('data--------------', data);
+      console.log('useGetLikePostdata--------------', data);
 
       return data.data;
     },
@@ -31,17 +31,17 @@ export const useGetPost = () => {
 };
 
 export const useGetLikePost = () => {
-  const token = cookies.get('access_token');
+  const access_token = cookies.get('access_token');
 
   const { data, isLoading, isError } = useQuery({
     queryKey: keys.GET_LIKE_POSTS,
     queryFn: async () => {
-      const data = await apis.get('/posts/best', {
-        // headers: {
-        //   access_token: `${token}`,
-        // },
+      const data = await apis.get('/my-page/likePost', {
+        headers: {
+          access_token: `${access_token}`,
+        },
       });
-      //console.log('useGetLikePost--------------', data);
+      console.log('useGetLikePost--------------', data);
       return data.data;
     },
   });
