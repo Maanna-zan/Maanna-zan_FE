@@ -11,8 +11,8 @@ export const useDeletePost = () => {
 
   const queryClient = useQueryClient();
   const { mutate: deletePost } = useMutation(
-    (id) =>
-      apis.delete(`/posts/${id}`, {
+    (postId) =>
+      apis.delete(`/posts/${postId}`, {
         headers: {
           access_token: `${access_token}`,
           // refresh_token: `${refresh_token}`,
@@ -20,7 +20,7 @@ export const useDeletePost = () => {
       }),
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(keys.GET_POSTS);
+        queryClient.invalidateQueries(keys.GET_POSTS_DELETE);
       },
     },
   );

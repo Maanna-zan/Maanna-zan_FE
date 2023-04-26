@@ -12,6 +12,7 @@ export const ImgWrapper282x200 = styled.div`
   border-radius: 10px;
   background-color: aliceblue;
   position: relative;
+  z-index: 0;
 `;
 export const ImgWrapper248x248 = styled.div`
   width: 248px;

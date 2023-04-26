@@ -10,11 +10,13 @@ import { apis } from '../../shared/axios';
 import { useState } from 'react';
 // import 생략
 import { cookies } from '../../shared/cookie';
+import { LikeHeartIcon } from '@components/Atoms/HeartIcon';
 import { useGetPost, useGetLikePost } from '../../hook/post/useGetPost';
 import {
   ImgCenter,
   ImgWrapper282x248,
   ImgWrapper384x360,
+  ImgWrapper282x200,
 } from '@components/Atoms/imgWrapper';
 const StHeade3_name = styled.div`
   margin-top: 48px;
@@ -32,11 +34,17 @@ const StAddress_name = styled.div`
 `;
 const CommunityList = () => {
   const go = useRouter();
-  const token = cookies.get('refresh_token');
 
+  const token = cookies.get('refresh_token');
+  const { query } = useRouter();
   const { postsLike, postIsLikeLoading } = useGetLikePost();
   const { posts, postIsLoading } = useGetPost();
-
+  let potLikeMatch = [];
+  if (postsLike && postsLike.data && postsLike.data.posts) {
+    potLikeMatch = postsLike.data.posts;
+  }
+  const postLikeMine =
+    potLikeMatch.find((p) => p.id === Number(query.id)) || {};
   if (postIsLikeLoading || postIsLoading) return <div>로딩중...</div>;
 
   return (
@@ -46,7 +54,7 @@ const CommunityList = () => {
           이번주 인기글
         </StHeade3_name>
         <GrideGapCol3>
-          {postsLike?.data?.map((store) => (
+          {posts?.data?.map((store) => (
             <div
               key={store?.id}
               onClick={() => {
@@ -82,9 +90,11 @@ const CommunityList = () => {
             <Post
               post={post}
               key={post.id}
+              postId={post.id}
               apiId={post.id}
+              style={{position: 'relative'}}
               // onClick={() => {
-              //   go(`/community/${post.id}`);
+              //   go.push(`/post/${post.id}`);
               // }}
             ></Post>
           ))}

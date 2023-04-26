@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/router';
-import { useGetStoredetail } from '../../hook/alcohol/useGetStore';
+import {
+  useGetLikeStore,
+  useGetStoredetail,
+} from '../../hook/alcohol/useGetStore';
 import {
   WebWrapper,
   WebWrapper384px,
@@ -8,7 +11,7 @@ import {
   WebWrapperHeight,
 } from '@components/Atoms/Wrapper';
 // import { Map } from 'react-kakao-maps-sdk';
-import { LikeHeartIcon } from '@components/Atoms/HeartIcon';
+import { LikeHeartIcon, DisLikeHeartIcon } from '@components/Atoms/HeartIcon';
 import { BoxTextReal } from '@components/Atoms/BoxTextReal';
 import { FlexColumn, FlexRow, FlexRowCenter } from '@components/Atoms/Flex';
 import { GrideGapCol4 } from '@components/Atoms/Grid';
@@ -22,24 +25,56 @@ import {
 import styled from 'styled-components';
 import ShareApiBtn from '../../hook/shareBtn/shareApiBtn';
 import { apis } from '@shared/axios';
-const StoreDetail = ({ apiId }) => {
+import { useLikeStore } from '../../hook/useLikes';
+const StoreDetail = () => {
   const router = useRouter();
+  const { query } = useRouter();
   const {
     store: [data],
     storeIsLoading,
   } = useGetStoredetail({
     apiId: router.query.id,
   });
-  console.log(' 스토어 1개 조회', [data]);
+  console.log(' 스토어 1개 조회', data);
   console.log(' 포스트리스트 배열', data?.postList);
-  if (storeIsLoading) {
+
+  const { likeStore } = useLikeStore();
+
+  const { alkolsLike, alkolsIsLikeLoading } = useGetLikeStore();
+
+  console.log('alkolsLike>>>>>>>>>>>', alkolsLike);
+  // console.log('alkolsLikeBOOLEN>>>>>>>>>>>',[alkolsLike].like)
+  let alkolLikeMatch = [];
+  if (alkolsLike && alkolsLike.apiId && alkolsLike.data.apiId) {
+    alkolLikeMatch = alkolLikeMatch.apiId;
+  }
+  const storeLikeMine =
+    alkolLikeMatch.find((p) => p.id === Number(apiId)) || {};
+
+  console.log('alkolLikeMatch>>>>>>>>>>>', alkolLikeMatch);
+  console.log('storeLikeMine>>>>>>>>>>>', storeLikeMine);
+  const [like, setLike] = useState(storeLikeMine.roomLike);
+  // const [like, setLike] = useState(storeLikeMine.roomLike);
+
+  const likeStoreHandler = async (apiId) => {
+    // const apiId = data.apiId;
+    try {
+      await likeStore(apiId);
+      setLike(!like);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  console.log('likeStoreHandler', likeStoreHandler);
+  if (storeIsLoading || alkolsIsLikeLoading) {
     return <div>Loading...</div>;
   }
-
   if (!data) {
     return <div>Store not found.</div>;
   }
   const storeId = data.apiId;
+  const apiId = data.apiId;
+  // const storeId = data.apiId;
   return (
     <WebWrapper style={{ marginBottom: '80px' }}>
       <div
@@ -58,7 +93,12 @@ const StoreDetail = ({ apiId }) => {
           {data?.place_name}
         </div>
         <FlexRow style={{ gap: '10px' }}>
-          <LikeHeartIcon style={{ margin: '0px' }}></LikeHeartIcon>
+          <span
+            onClick={() => likeStoreHandler(apiId)}
+            style={{ cursor: 'pointer' }}
+          >
+            {like ? <LikeHeartIcon /> : <DisLikeHeartIcon />}
+          </span>
           <ShareApiBtn
             style={{ cursor: ' pointer' }}
             title={`만나잔에 오신걸 환영합니다!`}
@@ -160,7 +200,7 @@ const StoreDetail = ({ apiId }) => {
                 });
               }}
             >
-              {console.log(storeId)}
+              {/* {console.log(storeId)} */}
               작성하기
             </div>
           </FlexRow>
@@ -206,10 +246,12 @@ const StoreDetail = ({ apiId }) => {
                           justifyContent: 'center',
                         }}
                       >
-                        <LikeHeartIcon
-                          style={{ margin: '0px !import' }}
-                        ></LikeHeartIcon>
-                        {/* ---하트키고끄기--- */}
+                        <span
+                          onClick={() => likeStoreHandler(apiId)}
+                          style={{ cursor: 'pointer' }}
+                        >
+                          {/* {likeComment ? <DisLikeHeartIcon /> : <LikeHeartIcon />} */}
+                        </span>
                         <div>좋아요</div>
                         <div> {post.likecnt}</div>
                         {/* ---좋아요 몇개인지올리기~--- */}

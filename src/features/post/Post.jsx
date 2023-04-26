@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 
 import { LikeHeartIcon, DisLikeHeartIcon } from '@components/Atoms/HeartIcon';
@@ -13,6 +13,7 @@ import { PageNation } from '@components/Modals/PageNation';
 import { BoxTextReal } from '@components/Atoms/BoxTextReal';
 import { LightTheme } from '@components/Themes/theme';
 import { FlexRow } from '@components/Atoms/Flex';
+import { cookies } from '@shared/cookie';
 import styled from 'styled-components';
 import { GrideGapCol4 } from '@components/Atoms/Grid';
 import {
@@ -21,194 +22,117 @@ import {
   ImgWrapper282x200,
   ImgCenter,
 } from '@components/Atoms/imgWrapper';
-export const Post = ({ post, onSubmit, apiId }) => {
+import { apis } from '@shared/axios';
+import { useGetLikePost } from '../../hook/post/useGetPost';
+export const Post = ({ post, onSubmit, apiId ,postId}) => {
   // console.log('newPost', post);
   const go = useRouter();
   const queryClient = useQueryClient();
-  const [newPost, setNewPost] = useState({
-    storename: post.storename,
-    title: post.title,
-    description: post.description,
-    image: post.image,
-    apiId: apiId,
-    likecnt: post.likecnt,
-    like: post.like,
-    check: post.check,
-    soju: post.soju,
-    beer: post.beer,
-    x: post.x,
-    y: post.y,
-  });
-  const [isEditMode, setIsEditMode] = useState(false);
-
-  const { deletePost } = useDeletePost();
-  const { updatePost } = useUpdatePost();
+  const router = useRouter();
+  const { query } = useRouter();
+  const access_token = cookies.get('access_token');
+  const { id } = router.query;
+  const { postsLike, postIsLikeLoading } = useGetLikePost();
+  let potLikeMatch = [];
+  if (postsLike && postsLike.data && postsLike.data.posts) {
+    potLikeMatch = postsLike.data.posts;
+  }
+  const postLikeMine =
+    potLikeMatch.find((p) => p.id === Number(postId)) || {};
   const { likePost } = useLikePost();
 
-  const deletePostHandler = (id) => {
-    deletePost(id);
+  const [like, setLike] = useState(postLikeMine.like);
+
+  console.log('postId커뮤니티인덱스',postId)
+  const likePostHandler = async (postId) => {
+    try {
+      await likePost(postId);
+      setLike(!like);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  const changeInputHandler = (e) => {
-    const { value, name } = e.target;
-    setNewPost((pre) => ({ ...pre, [name]: value }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    updatePost({ newPost, id: post.id });
-    setIsEditMode(false);
-  };
-
-  const [like, setLike] = useState(post.like);
-
-  const handleLike = () => {
-    const postId = post.id;
-    const cachedPost = queryClient.getQueryData(['post', postId]);
-
-    // Optimistically update the cached post data
-    queryClient.setQueryData(['post', postId], (old) => ({
-      ...old,
-      like: !like,
-      likecnt: like ? old?.likecnt - 1 : old?.likecnt + 1,
-    }));
-    setLike(!like);
-
-    likePost(postId, {
-      onSuccess: () => {
-        queryClient.invalidateQueries(['post', postId]);
-      },
-      onError: () => {
-        // If the request fails, roll back the optimistic update
-        queryClient.setQueryData(['post', postId], cachedPost);
-        setLike(like);
-      },
-    });
-  };
+  useEffect(() => {
+    // 게시물 가져오기
+    async function fetchPost() {
+      const response = await apis.get(`/posts/${id}`, {
+        headers: {
+          access_token: `${access_token}`,
+          // refresh_token: `${refresh_token}`,
+        },
+      });
+      const post = response.data;
+      setPost(post);
+    }
+    fetchPost();
+  }, [id]);
 
   return (
-    <>
-      {isEditMode ? (
-        <>
-          <form onSubmit={handleSubmit}>
-            <div>
-              <label htmlFor="storename">상점명:</label>
-              <input
-                type="text"
-                id="storename"
-                name="storename"
-                value={newPost.storename}
-                onChange={changeInputHandler}
-              />
-            </div>
-            <div>
-              <label htmlFor="title">제목:</label>
-              <input
-                type="text"
-                id="title"
-                name="title"
-                value={newPost.title}
-                onChange={changeInputHandler}
-              />
-            </div>
-            <div>
-              <label htmlFor="description">설명:</label>
-              <input
-                type="text"
-                id="description"
-                name="description"
-                value={newPost.description}
-                onChange={changeInputHandler}
-              />
-            </div>
-            <div>
-              <label htmlFor="image">이미지:</label>
-              <input
-                type="text"
-                id="image"
-                name="image"
-                value={newPost.image}
-                onChange={changeInputHandler}
-              />
-            </div>
-            <button type="submit">수정완료</button>
-          </form>
-        </>
-      ) : (
-        <>
-          <div
-            style={{ position: 'relative' }}
-            // onClick={() => {
-            //   go.push(`/community/${post.id}`);
-            // }}
+    <div style={{
+      position: 'relative',
+
+    }}>
+      <div
+        post={post}
+        style={{
+          position: 'absolute',
+          right: '16px',
+          top: '16px',
+          zIndex: '10',
+          padding: '10px',}}
+        onClick={() => likePostHandler(postId)}
+      >
+        {console.log('post 확인해~~~~~', post)}
+        {like ? <LikeHeartIcon /> : <DisLikeHeartIcon   />}
+      </div>
+      <div
+        onClick={() => {
+          go.push(`/community/${post?.id}`);
+        }}
+      >
+        <BoxTextReal
+          style={{
+            gridColumn: 'span 1',
+            gridRow: 'span 1',
+            height: '318px',
+          }}
+          variant="realDefaultBox"
+          size="nonePadding"
+        >
+          <BoxTextReal
+            style={{ overflow: 'hidden' }}
+            variant="realDefaultBox"
+            size="nonePadding"
           >
-            {/* <div className="hearWrap" onClick={() => handleLike(post?.id)}>
-            {like ? <LikeHeartIcon /> : <DisLikeHeartIcon />}
-          </div> */}
-            <div
-              post={post}
-              style={{
-                position: 'absolute',
-                right: '16px',
-                top: '16px',
-                zIndex: '10',
-                padding: '10px',
-              }}
-              onClick={() => handleLike(post?.id)}
-            >
+            <ImgWrapper282x200 style={{ position: 'relative' }}>
+              <ImgCenter
+                style={{
+                  height: '100%',
+                  width: '100%',
+                  overflow: 'hidden',
+                  borderRadius: '8px',
+                  objectFit: '',
+                  zIndex:'1'
+                }}
+                src={post.s3Url || '/noimage_282x248_.png'}
+                alt="store"
+              />
+            </ImgWrapper282x200>
+          </BoxTextReal>
+          <StPlace_name>{post.place_name}</StPlace_name>
+          <StAddress_name>{post.title}</StAddress_name>
+          <div>{post.id}</div>
+          {/* <Store store={store} storeData={storeData}></Store> */}
+          <div>{post?.nickname}</div>
+          {/* <div className="hearWrap" onClick={() => handleLike(post?.id)}>
+            <div post={post}>
               {like ? <LikeHeartIcon /> : <DisLikeHeartIcon />}
             </div>
-            <div
-              onClick={() => {
-                go.push(`/community/${post?.id}`);
-              }}
-            >
-              <BoxTextReal
-                style={{
-                  gridColumn: 'span 1',
-                  gridRow: 'span 1',
-                  height: '318px',
-                }}
-                variant="realDefaultBox"
-                size="nonePadding"
-              >
-                <BoxTextReal
-                  style={{ overflow: 'hidden' }}
-                  variant="realDefaultBox"
-                  size="nonePadding"
-                >
-                  <ImgWrapper282x200 style={{ position: 'relative' }}>
-                    <ImgCenter
-                      style={{
-                        height: '100%',
-                        width: '100%',
-                        overflow: 'hidden',
-                        borderRadius: '8px',
-                        objectFit: '',
-                      }}
-                      src={post.s3Url || '/noimage_282x248_.png'}
-                      alt="store"
-                    />
-                  </ImgWrapper282x200>
-                </BoxTextReal>
-                <StPlace_name>{post.place_name}</StPlace_name>
-                <StAddress_name>{post.title}</StAddress_name>
-                <div>{post.id}</div>
-                {/* <Store store={store} storeData={storeData}></Store> */}
-                <div>{post?.nickname}</div>
-                {/* <button onClick={() => setIsEditMode(!isEditMode)}>수정</button>
-              <button onClick={() => deletePostHandler(post.id)}>삭제</button>
-              <div className="hearWrap" onClick={() => handleLike(post?.id)}>
-                <div post={post}>
-                  {like ? <LikeHeartIcon /> : <DisLikeHeartIcon />}
-                </div>
-              </div> */}
-              </BoxTextReal>
-            </div>
-          </div>
-        </>
-      )}
-    </>
+          </div> */}
+        </BoxTextReal>
+      </div>
+    </div>
   );
 };
 const StHeade3_name = styled.div`
