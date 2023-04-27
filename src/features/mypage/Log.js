@@ -5,21 +5,18 @@ import 'react-calendar/dist/Calendar.css';
 import styles from './react-calender.module.css';
 import { useQuery } from '@tanstack/react-query';
 import styled from 'styled-components';
-
+import Calender from './Calender';
 import { cookies } from '@shared/cookie';
 import { apis } from '@shared/axios';
+import instance from '@shared/instance';
 
 function Log() {
-  const [value, onChange] = useState(new Date());
-  console.log('onChange', Calendar);
-  const marks = ['15-04-2023', '20-04-2023'];
-
   const token = cookies.get('access_token');
 
   const { data } = useQuery({
     querryKey: ['GET_MYALCOHOLSLIST'],
     queryFn: async () => {
-      const data = await apis.get('/my-page/likeAlkol', {
+      const data = await instance.get('/my-page/likeAlkol', {
         headers: {
           Access_Token: `${token}`,
         },
@@ -40,15 +37,7 @@ function Log() {
           zIndex: '310',
         }}
       >
-        <div>
-          <Calendar
-            className={styles['react-calendar']}
-            onChange={onChange}
-            value={value}
-            locale="en-EN"
-          />
-        </div>
-
+        <Calender />
         <ReviewDiv>
           <p>나의 로그</p>
           <div
