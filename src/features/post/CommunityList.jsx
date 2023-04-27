@@ -10,14 +10,16 @@ import { apis } from '../../shared/axios';
 import { useState } from 'react';
 // import 생략
 import { cookies } from '../../shared/cookie';
-import { LikeHeartIcon } from '@components/Atoms/HeartIcon';
 import { useGetPost, useGetLikePost } from '../../hook/post/useGetPost';
+import { LikeHeartIcon, DisLikeHeartIcon } from '@components/Atoms/HeartIcon';
 import {
   ImgCenter,
   ImgWrapper282x248,
   ImgWrapper384x360,
   ImgWrapper282x200,
 } from '@components/Atoms/imgWrapper';
+import { useGetBestPost } from '../../hook/post/useGetBestPost';
+import { useLikePost } from '../../hook/useLikes';
 const StHeade3_name = styled.div`
   margin-top: 48px;
   font: var(--head3-bold) normal sans-serif;
@@ -34,10 +36,10 @@ const StAddress_name = styled.div`
 `;
 const CommunityList = () => {
   const go = useRouter();
-
-  const token = cookies.get('refresh_token');
   const { query } = useRouter();
   const { postsLike, postIsLikeLoading } = useGetLikePost();
+  const { postsBest, postIsBestLoading } = useGetBestPost();
+  const { likePost } = useLikePost();
   const { posts, postIsLoading } = useGetPost();
   let potLikeMatch = [];
   if (postsLike && postsLike.data && postsLike.data.posts) {
@@ -45,26 +47,48 @@ const CommunityList = () => {
   }
   const postLikeMine =
     potLikeMatch.find((p) => p.id === Number(query.id)) || {};
-  if (postIsLikeLoading || postIsLoading) return <div>로딩중...</div>;
+  const [like, setLike] = useState(postLikeMine.like);
+
+  const likePostHandler = async () => {
+    try {
+      await likePost();
+      setLike(!like);
+    } catch (error) {
+      console.error('error커뮤니티', error);
+    }
+  };
+  if (postIsLikeLoading || postIsLoading || postIsBestLoading)
+    return <div>로딩중...</div>;
 
   return (
     <>
-      <WebWrapper style={{ marginBottom: '80px' }}>
+      <WebWrapper style={{ marginBottom: '80px', position: 'relative' }}>
         <StHeade3_name style={{ marginBottom: '24px' }}>
           이번주 인기글
         </StHeade3_name>
+
         <GrideGapCol3>
-          {posts?.data?.map((store) => (
-            <div
-              key={store?.id}
-              onClick={() => {
-                go.push(`/community/${store.id}`);
-              }}
-            >
+          {postsBest?.data?.map((store) => (
+            <div key={store?.id} style={{ position: 'relative' }}>
+              <div
+                style={{
+                  position: 'absolute',
+                  right: '16px',
+                  top: '16px',
+                  zIndex: '10',
+                  padding: '10px',
+                }}
+                onClick={() => likePostHandler(store?.id)}
+              >
+                {like ? <LikeHeartIcon /> : <DisLikeHeartIcon />}
+              </div>
               <BoxTextReal
                 style={{ overflow: 'hidden' }}
                 variant="realDefaultBox"
                 size="nonePadding"
+                onClick={() => {
+                  go.push(`/community/${store?.id}`);
+                }}
               >
                 <ImgWrapper384x360>
                   <ImgCenter
@@ -92,10 +116,7 @@ const CommunityList = () => {
               key={post.id}
               postId={post.id}
               apiId={post.id}
-              style={{position: 'relative'}}
-              // onClick={() => {
-              //   go.push(`/post/${post.id}`);
-              // }}
+              style={{ position: 'relative' }}
             ></Post>
           ))}
         </GrideGapCol4>

@@ -42,6 +42,8 @@ export const MainFirstSection = () => {
   return (
     <>
       <WebWrapperHeight>
+        {console.log('getBest-->', getBest)}
+        {console.log('getView-->', getView)}
         <StWebBg></StWebBg>
         <WebWrapper style={{ overflow: 'hidden' }}>
           <GrideGapCol4 style={{ margin: '34px 0 12px 0' }}>
@@ -58,7 +60,7 @@ export const MainFirstSection = () => {
             </FlexRow>
           </GrideGapCol4>
           <GrideGapCol4>
-            {getBest?.map((store, index) => (
+            {getBest?.alkolResponseDtoList?.map((store, index) => (
               <BoxTextReal size="nonePadding" variant="realDefaultBox">
                 <div key={store?.id}>
                   <ImgWrapper282x322>
@@ -104,9 +106,8 @@ export const MainFirstSection = () => {
                 </div>
               </BoxTextReal>
             ))}
-            {console.log('getView)}', getView)}
             <GrideGapRow4>
-              {getView?.map((store, index) => (
+              {getView?.alkolResponseDtoList?.map((store, index) => (
                 <BoxTextReal
                   key={store?.id}
                   size="sm"

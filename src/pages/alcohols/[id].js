@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import {
   useGetLikeStore,
@@ -35,37 +35,42 @@ const StoreDetail = () => {
   } = useGetStoredetail({
     apiId: router.query.id,
   });
-  console.log(' 스토어 1개 조회', data);
-  console.log(' 포스트리스트 배열', data?.postList);
 
   const { likeStore } = useLikeStore();
-
   const { alkolsLike, alkolsIsLikeLoading } = useGetLikeStore();
 
-  console.log('alkolsLike>>>>>>>>>>>', alkolsLike);
-  // console.log('alkolsLikeBOOLEN>>>>>>>>>>>',[alkolsLike].like)
-  let alkolLikeMatch = [];
-  if (alkolsLike && alkolsLike.apiId && alkolsLike.data.apiId) {
-    alkolLikeMatch = alkolLikeMatch.apiId;
-  }
+  const apiIdFind = router.query.id;
+  const apiId = apiIdFind;
+  //게시글 좋아요한 가게와 현재가게 매칭
   const storeLikeMine =
-    alkolLikeMatch.find((p) => p.id === Number(apiId)) || {};
+    (alkolsLike && alkolsLike.flat().find((obj) => obj.apiId === apiIdFind)) ||
+    {};
 
-  console.log('alkolLikeMatch>>>>>>>>>>>', alkolLikeMatch);
-  console.log('storeLikeMine>>>>>>>>>>>', storeLikeMine);
-  const [like, setLike] = useState(storeLikeMine.roomLike);
-  // const [like, setLike] = useState(storeLikeMine.roomLike);
+  let alkolLikeMatch = [];
+  if (alkolsLike && alkolsLike.data) {
+    alkolLikeMatch = alkolsLike.data;
+  }
+
+  const [roomLike, setRoomLike] = useState(storeLikeMine?.roomLike);
+  console.log('스토어 좋아요한 값', storeLikeMine.roomLike);
 
   const likeStoreHandler = async (apiId) => {
-    // const apiId = data.apiId;
     try {
       await likeStore(apiId);
-      setLike(!like);
+      setRoomLike(!roomLike);
     } catch (error) {
       console.error(error);
     }
   };
-  console.log('likeStoreHandler', likeStoreHandler);
+
+  useEffect(() => {
+    if (alkolsLike && alkolsLike.flat) {
+      const postLikeMine =
+        alkolsLike.flat().find((obj) => obj.apiId === apiIdFind) || {};
+      setRoomLike(postLikeMine.roomLike);
+    }
+  }, [alkolsLike, apiIdFind]);
+
   if (storeIsLoading || alkolsIsLikeLoading) {
     return <div>Loading...</div>;
   }
@@ -73,8 +78,7 @@ const StoreDetail = () => {
     return <div>Store not found.</div>;
   }
   const storeId = data.apiId;
-  const apiId = data.apiId;
-  // const storeId = data.apiId;
+
   return (
     <WebWrapper style={{ marginBottom: '80px' }}>
       <div
@@ -97,7 +101,7 @@ const StoreDetail = () => {
             onClick={() => likeStoreHandler(apiId)}
             style={{ cursor: 'pointer' }}
           >
-            {like ? <LikeHeartIcon /> : <DisLikeHeartIcon />}
+            {roomLike ? <LikeHeartIcon /> : <DisLikeHeartIcon />}
           </span>
           <ShareApiBtn
             style={{ cursor: ' pointer' }}
