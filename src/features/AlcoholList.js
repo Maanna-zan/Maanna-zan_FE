@@ -31,10 +31,17 @@ import {
 } from '@components/Atoms/imgWrapper';
 import { useLikeStore } from '../hook/useLikes';
 import Link from 'next/link';
- 
+
 const AlcoholList = () => {
-  // const { handleLike } = useLikeStore();
-  // const [roomLike, setRoomLike] = useState(trou);
+  const { handleLike } = useLikeStore();
+  const likePostHandler = async () => {
+    try {
+      await likePost();
+      setLike(!like);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const { go } = useRouter();
   const router = useRouter();
@@ -150,7 +157,7 @@ const AlcoholList = () => {
         </FlexRow>
         {console.log('storeListPage.view---------->', getView)}
         <GrideGapCol3>
-          {getView2?.map((store) => (
+          {getView2?.alkolResponseDtoList?.map((store) => (
             <div
               style={{ zIndex: '500' }}
               key={store.id}
@@ -193,7 +200,7 @@ const AlcoholList = () => {
         />
         {console.log('storeData', storeData)}
         <GrideGapCol4 style={{ margin: '12px auto' }}>
-          {storeData?.map((store) => (
+          {storeData?.alkolResponseDtoList?.map((store) => (
             // console.log('store.apiId', store.apiId),
             //<Link key={store.id} href={`/alcohols/${store.apiId}`}>
 
@@ -255,7 +262,7 @@ const AlcoholList = () => {
                   <StPlace_name>{store.place_name}</StPlace_name>
                   <StAddress_name>{store.address_name}</StAddress_name>
                   <div>{store.id}</div>
-                  {/* <Store store={store} storeData={storeData}></Store> */}
+                  <Store store={store} storeData={storeData}></Store>
                 </BoxTextReal>
               </Link>
             </div>

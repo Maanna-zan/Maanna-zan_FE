@@ -46,29 +46,27 @@ const Community = () => {
     onSuccess: () => {},
   });
   const [isUpdated, setIsUpdated] = useState(false);
-  
 
   const { posts, postIsLoading } = useGetPost();
   const { postsLike, postIsLikeLoading } = useGetLikePost();
+  console.log('postsLike----......----->', postsLike);
   let potLikeMatch = [];
   if (postsLike && postsLike.data && postsLike.data.posts) {
     potLikeMatch = postsLike.data.posts;
   }
-console.log('potLikeMatch--------->',potLikeMatch)
-const postId = query.id;
+  console.log('potLikeMatch--------->', potLikeMatch);
+  const postId = query.id;
   const post = posts.find((p) => p.id === Number(postId)) || {};
-  const postLikeMine =
-    potLikeMatch.find((p) => p.id === Number(postId)) || {};
+  const postLikeMine = potLikeMatch.find((p) => p.id === Number(postId)) || {};
 
   const [newPost, setNewPost] = useState({
     title: post?.title ?? '',
     description: post?.description ?? '',
     s3Url: post?.s3Url || '',
   });
-   console.log('---postLikeMine', postLikeMine);
+  console.log('---postLikeMine', postLikeMine);
   const { updatePost } = useUpdatePost(postId);
-  // const { mutate: updatePost } = useUpdatePost();
-  const { deletePost } = useDeletePost();
+  const { deletePost, onSuccess } = useDeletePost();
   const { likePost } = useLikePost();
 
   const [isEditMode, setIsEditMode] = useState(false);
@@ -79,10 +77,6 @@ const postId = query.id;
 
   const [like, setLike] = useState(postLikeMine.like);
   console.log('(postLikeMine.like------->', postLikeMine.like);
-  console.log('postId41', postId);
-  console.log('post', post);
-  console.log('post.like', post.like);
-  console.log('postLike.like', postsLike);
 
   const likePostHandler = async (postId) => {
     try {
@@ -519,7 +513,6 @@ const postId = query.id;
                 }}
               >
                 <BoxTextReal
-                  
                   size="nonePadding"
                   variant="realDefaultBox"
                   style={{ font: `var( --body1-medium) normal sans-serif` }}
@@ -527,7 +520,7 @@ const postId = query.id;
                   <DeleteIcon />
                 </BoxTextReal>
                 <div
-                onClick={() => deletePostHandler(postId)}
+                  onClick={() => deletePostHandler(postId)}
                   style={{
                     color: `${LightTheme.FONT_SECONDARY}`,
                     cursor: 'pointer',

@@ -15,7 +15,6 @@ export const useGetPost = () => {
         //   access_token: `${access_token}`,
         // },
       });
-      console.log('useGetLikePostgidata--------------', data);
 
       return data.data;
     },
@@ -41,7 +40,6 @@ export const useGetLikePost = () => {
           access_token: `${access_token}`,
         },
       });
-      console.log('useGetLikePost--------------', data);
       return data.data;
     },
   });

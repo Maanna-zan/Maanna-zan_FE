@@ -24,12 +24,11 @@ import {
 } from '@components/Atoms/imgWrapper';
 import { apis } from '@shared/axios';
 import { useGetLikePost } from '../../hook/post/useGetPost';
-export const Post = ({ post, onSubmit, apiId ,postId}) => {
+export const Post = ({ post, onSubmit, apiId, postId }) => {
   // console.log('newPost', post);
   const go = useRouter();
   const queryClient = useQueryClient();
   const router = useRouter();
-  const { query } = useRouter();
   const access_token = cookies.get('access_token');
   const { id } = router.query;
   const { postsLike, postIsLikeLoading } = useGetLikePost();
@@ -37,13 +36,12 @@ export const Post = ({ post, onSubmit, apiId ,postId}) => {
   if (postsLike && postsLike.data && postsLike.data.posts) {
     potLikeMatch = postsLike.data.posts;
   }
-  const postLikeMine =
-    potLikeMatch.find((p) => p.id === Number(postId)) || {};
+  const postLikeMine = potLikeMatch.find((p) => p.id === Number(postId)) || {};
   const { likePost } = useLikePost();
 
   const [like, setLike] = useState(postLikeMine.like);
 
-  console.log('postId커뮤니티인덱스',postId)
+  console.log('postId커뮤니티인덱스', postId);
   const likePostHandler = async (postId) => {
     try {
       await likePost(postId);
@@ -69,10 +67,11 @@ export const Post = ({ post, onSubmit, apiId ,postId}) => {
   }, [id]);
 
   return (
-    <div style={{
-      position: 'relative',
-
-    }}>
+    <div
+      style={{
+        position: 'relative',
+      }}
+    >
       <div
         post={post}
         style={{
@@ -80,11 +79,11 @@ export const Post = ({ post, onSubmit, apiId ,postId}) => {
           right: '16px',
           top: '16px',
           zIndex: '10',
-          padding: '10px',}}
+          padding: '10px',
+        }}
         onClick={() => likePostHandler(postId)}
       >
-        {console.log('post 확인해~~~~~', post)}
-        {like ? <LikeHeartIcon /> : <DisLikeHeartIcon   />}
+        {like ? <LikeHeartIcon /> : <DisLikeHeartIcon />}
       </div>
       <div
         onClick={() => {
@@ -113,7 +112,7 @@ export const Post = ({ post, onSubmit, apiId ,postId}) => {
                   overflow: 'hidden',
                   borderRadius: '8px',
                   objectFit: '',
-                  zIndex:'1'
+                  zIndex: '1',
                 }}
                 src={post.s3Url || '/noimage_282x248_.png'}
                 alt="store"

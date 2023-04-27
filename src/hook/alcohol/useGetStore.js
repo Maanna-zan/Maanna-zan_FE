@@ -34,7 +34,7 @@ export const useGetLikeStore = () => {
   const access_token = cookies.get('access_token');
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: keys.GET_LIKE_POSTS,
+    queryKey: keys.GET_LIKE_STORE,
     queryFn: async () => {
       const data = await apis.get('/my-page/likeAlkol', {
         headers: {
