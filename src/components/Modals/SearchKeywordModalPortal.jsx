@@ -1,20 +1,15 @@
-import { InputArea } from '@components/Atoms/Input';
-import KeywordSearchModal from '@components/Modals/SearchKeywordModal';
-import React, { createContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { apis } from '@shared/axios';
-import { QueryClient, QueryClientProvider, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Map, MapMarker } from 'react-kakao-maps-sdk';
-import { FlexRow } from '@components/Atoms/Flex';
-import { WebWrapper, WebWrapperHeight } from '@components/Atoms/Wrapper';
-import styled from 'styled-components';
-import MapMidPoint from '@features/map/MapMidPoint';
 import { useRouter } from 'next/router';
-import Link from 'next/link';
+import KeywordSearchModal from '@components/Modals/SearchKeywordModal';
+import styled from 'styled-components';
+import { WebWrapper, WebWrapperHeight } from '@components/Atoms/Wrapper';
+import { FlexRow } from '@components/Atoms/Flex';
+import { InputArea } from '@components/Atoms/Input';
 
-// // createContext 함수를 사용하여 컨텍스트 생성(midPoint props MapMidPoint.js로 전달 위해)
-// export const MidPointContext = createContext({});
-//  Modal Portal(Landing) Page
 function SearchedKeywordLandingPage() {
     //  Input Box 갯수 state. 값으로 1을 넣은 이유는 처음에 1개가 기본 있어야 한다.
     const [inputCount, setInputCount] = useState(1);
@@ -41,7 +36,6 @@ function SearchedKeywordLandingPage() {
     function checkedPlaceHandler(place) {
         // checkedPlace 객체를 request 폼으로 가공
         const { x, y } = place;
-        console.log("place",place)
         //  x,y값 undefined일 시 조건문
         if (!x || !y) {
             console.error('Invalid place object:', place);
@@ -120,8 +114,7 @@ function SearchedKeywordLandingPage() {
     //  검색 값 request폼으로 가공 후 서버통신
     const { mutate } = useMutation({
         queryKey: ['POST_MIDPOINT'],
-        mutationFn: async (location) => {
-            console.log('location->', location[0]);
+        mutationFn: async () => {
             const data = await apis.post
             (
                 //  서버 URL
@@ -171,19 +164,19 @@ function SearchedKeywordLandingPage() {
             },
         ]);
     }
-        //  중간 위치 탐색 page 이동 위한 useRouter선언.
-        const router = useRouter();
+    //  mapmidpoint page로 이동 위한 useRouter선언.
+    const router = useRouter();
+    //  mapmidpoint 페이지로 이동 위한 핸들러.
     const moveToMapMidPointButtonClickHandler = () => {
-        router.push('/mapmidpoint',
-            // { midPoint }
-        );
+        router.push('/mapmidpoint',);
     }
+    //  midPoint값(중간지점좌표) useQueryClient로 저장 위해 선언
     const queryClient = useQueryClient();
-    const fuckingHell = midPoint
-    queryClient.setQueryData(['FUCK'], fuckingHell);
-    // const { data:midPointProp } = useQuery('midPointProp', () => fetchMidPointData(), {
-    //     initialData: midPoint, // 초기 데이터 설정 (optional)
-    // });
+    //  midPoint값 쿼리로 저장하기 위해 다른 이름으로 선언.
+    const midPointProp = midPoint
+    //  MIDPOINTPROP키값으로 midPoint값 저장. 해당 키 값으로 값 불러올 수 있음.
+    queryClient.setQueryData(['MIDPOINTPROP'], midPointProp);
+
     return (
         <WebWrapper>
         <WebWrapperHeight>
@@ -237,12 +230,7 @@ function SearchedKeywordLandingPage() {
                                 >
                                 검색
                                 </ButtonRedStyle>
-                                <button 
-                                onClick={moveToMapMidPointButtonClickHandler}
-                                >중간지점탐색</button>
-                                {/* <MidPointContext.Provider value={midPoint}>
-                                    <MapMidPoint showVue={false}/>
-                                </MidPointContext.Provider> */}
+                                <button onClick={moveToMapMidPointButtonClickHandler}>중간지점탐색</button>
                         </div>
                 </ContentWrapper>
             </FlexRow>
