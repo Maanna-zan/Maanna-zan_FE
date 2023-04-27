@@ -8,25 +8,25 @@ const Kakao = () => {
   const router = useRouter();
   const code = router.query.code;
 
-  //   const { mutate } = useMutation({
-  //     mutationFn: async (code) => {
-  //       console.log('codeee222', code);
-  //       const { res } = await apis.post('OAuth/Kakao', { code: code });
-  //       console.log('res', res);
-  //       return res;
-  //     },
+  // const { mutate } = useMutation({
+  //   mutationFn: async (code) => {
+  //     console.log('codeee222', code);
+  //     const { res } = await apis.post('OAuth/Kakao', { code: code });
+  //     console.log('res', res);
+  //     return res;
+  //   },
 
-  //     onSuccess: (res) => {
-  //       console.log(res); // 토큰이 넘어올 것임
-  //       router.push('/');
-  //     },
-  //   });
+  //   onSuccess: (res) => {
+  //     console.log(res); // 토큰이 넘어올 것임
+  //     router.push('/');
+  //   },
+  // });
 
-  //   useEffect(() => {
-  //     if (code) {
-  //       mutate(code);
-  //     }
-  //   }, [code, mutate]);
+  // useEffect(() => {
+  //   if (code) {
+  //     mutate(code);
+  //   }
+  // }, [code, mutate]);
 
   const fetchKakaoData = async (code) => {
     console.log('code', code);

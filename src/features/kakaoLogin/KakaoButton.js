@@ -11,34 +11,19 @@ const KakaoButton = () => {
     }
   };
 
-  //   const { mutate } = useMutation({
-  //     mutationFn: async (code) => {
-  //       const data = await apis.post('/OAuth/Kakao', code);
-  //       //디코드 활용
-  //       console.log('data', data);
-  //     },
-  //     onSuccess: () => {
-  //       router.push('/');
-  //     },
-  //   });
   return (
     <>
-      <button onClick={KakaoLoginHandler}>
+      <KakaoLogoButton onClick={KakaoLoginHandler}>
         <img src="Group 2383.png" alt="카카오 로그인" />
-      </button>
+      </KakaoLogoButton>
     </>
   );
 };
 
 export default KakaoButton;
 
-// const KakaoLogoButton = styled.button`
-//   background-image: url('/src/images/Group2383.png');
-//   background-repeat: no-repeat;
-//   background-size: cover;
-//   margin: 10px auto;
-//   /* padding: -10px; */
-//   color: transparent;
-//   width: 300px;
-//   height: 45px;
-// `;ß
+const KakaoLogoButton = styled.button`
+  background-color: transparent;
+  border: none;
+  color: transparent;
+`;

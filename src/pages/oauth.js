@@ -8,39 +8,21 @@ const oauth = () => {
   const router = useRouter();
   const code = router.query.code;
 
-  const { mutate } = useMutation({
-    mutationFn: async (code) => {
-      console.log('codeee222', code);
-      await apis.post('OAuth/Kakao', { code: code });
-    },
+  const fetchKakaoData = async (code) => {
+    console.log('code', code);
+    const res = await apis.get(`oauth?code=${code}`);
+    console.log('res', res);
+    return res;
+  };
 
-    onSuccess: (pop) => {
-      console.log(pop); // 토큰이 넘어올 것임
-      router.push('/');
-    },
+  const { res } = useQuery(['GET_KAKAO', code], () => fetchKakaoData(code), {
+    enabled: !!code,
   });
-
   useEffect(() => {
-    if (code) {
-      mutate(code);
+    if (res) {
+      // 이곳에서 토큰을 처리하고 페이지를 이동하거나 다른 작업을 수행합니다.
     }
-  }, [code, mutate]);
-
-  // const fetchKakaoData = async (code) => {
-  //   console.log('code', code);
-  //   const res = await apis.get(`OAuth/Kakao?code=${code}`);
-  //   console.log('res', res);
-  //   return res;
-  // };
-
-  // const { res } = useQuery(['GET_KAKAO', code], () => fetchKakaoData(code), {
-  //   enabled: !!code,
-  // });
-  // useEffect(() => {
-  //   if (res) {
-  //     // 이곳에서 토큰을 처리하고 페이지를 이동하거나 다른 작업을 수행합니다.
-  //   }
-  // }, [res]);
+  }, [res]);
 
   return <div>oauth</div>;
 };
