@@ -65,7 +65,8 @@ export default function KeywordSearchModal({ onClose, onUpdate}) {
                 // 페이지 목록 보여주는 displayPagination() 추가
                 displayPagination(pagination);
                 // setPlaces(data)
-    
+            console.log("~~~data~~~", data)
+            console.log("###pagination###", pagination)
             const bounds = new kakao.maps.LatLngBounds();
             for (let i = 0; i < data.length; i++) {
                 displayMarker(data[i]);
@@ -84,6 +85,7 @@ export default function KeywordSearchModal({ onClose, onUpdate}) {
         }
         // 검색 결과 목록과 마커를 표출하는 함수입니다
         function displayPlaces(places) {
+            console.log("~~~places~~~", places)
             const listEl = document.getElementById('placesList');
             const menuEl = document.getElementById('menu_wrap');
             const fragment = document.createDocumentFragment();
