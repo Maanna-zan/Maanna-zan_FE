@@ -10,11 +10,14 @@ import { cookies } from '@shared/cookie';
 import { apis } from '@shared/axios';
 import instance from '@shared/instance';
 import EventForm from './EventForm';
+
+//페이지네이션 임포트
 import Pagination from '@components/Modals/Pagenation2';
 import chunk from '@components/Modals/chunk';
 
 function Log() {
   const [value, onChange] = useState(new Date());
+  //페이지 네이션 처음 시작이 1번창부터 켜지도록
   const [activePage, setActivePage] = useState(1);
 
   // const mark = ['2023-04-20', '2023-04-28'];
@@ -40,6 +43,9 @@ function Log() {
       return data.data.data;
     },
     onSuccess: (data) => {
+      if (!data || data.length === 0) {
+        return <div>No data available.</div>;
+      }
       console.log('successdata', data);
       // setMark([data.data[0].selectedDate]);
       // // // ["2022-02-02", "2022-02-02", "2022-02-10"] 형태로 가져옴
@@ -72,10 +78,12 @@ function Log() {
     mutate(event);
   };
 
-  const chunkedData = chunk(data, 4);
+  //페이지네이션을 위한 구역 data 는 쿼리에서 먼저 undefined되기에 ? 로 있을 때
+  //map을 돌릴 데이터를 4개씩 끊어서 라는 뜯 입니다 (9개ㅈ씩 끊고 싶으면 9 적으면 됩니다. )
+  const chunkedData = data ? chunk(data, 4) : [];
   const currentPageData = chunkedData[activePage - 1] ?? [];
 
-  if (data?.length === 0) {
+  if (!data || data?.length === 0) {
     return (
       <div style={{ display: 'flex', alignItems: 'center', zIndex: '300' }}>
         <div
@@ -240,7 +248,7 @@ const Div = styled.div`
     background: rgb(255, 255, 255);
     /* border: 1px solid #a0a096; */
     border-radius: 8px;
-    border: 1px solid #e8ebed; */
+    border: 1px solid #e8ebed;
     font-family: Arial, Helvetica, sans-serif;
     line-height: 1.125em;
     padding: 10px;
@@ -284,7 +292,6 @@ const Div = styled.div`
     display: flex;
     margin-left: 16px;
   }
-
 `;
 
 const CalLogDiv = styled.div`
