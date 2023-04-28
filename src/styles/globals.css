@@ -1,4 +1,7 @@
 body {
+  font-family: 'Pretendard', sans-serif;
+}
+body {
   width: 100vw;
   overflow-x: hidden;
   margin: 0;
@@ -20,13 +23,15 @@ li {
   cursor: pointer;
 }
 
-@font-face {
+/* @font-face {
   font-family: 'Pretendard';
-  font-style: normal;
+  font-style: Pretendard;
   font-weight: 400;
-  src: url('https://fonts.gstatic.com/s/pretendard/v13/1hRflJn9CgMJPCUBYZfLrNXCyaRjV7GdRmM9VJmPgw.ttf')
-    format('truetype');
-}
+  src: url('https://cdn.jsdelivr.net/npm/pretendard@2.001/fonts/Subset/Pretendard-Regular.woff2')
+      format('woff2'),
+    url('https://cdn.jsdelivr.net/npm/pretendard@2.001/fonts/Subset/Pretendard-Regular.woff')
+      format('woff');
+} */
 :root {
   --display1-bold: 700 3rem/3.5rem;
   --display2-bold: 700 2.5rem/3rem;
@@ -60,14 +65,14 @@ li {
   const StTitleGet = styled.span`
   color: ${LightTheme.FONT_PRIMARY};
    // 필요없음font-weight: $ // 필요없음{LightTheme.FONT_BOLD};
-  font: var(--display1-bold) normal sans-serif; ---> 이렇게 사용하면 됨 
+  font: var(--display1-bold) Pretendard sans-serif; ---> 이렇게 사용하면 됨 
 ` */
 /* 인라인 사용예시 
 <span
 style={{
 margin: '0px 0px 0 8px',
-font: `var(--display1-bold) normal sans-serif`,
+font: `var(--display1-bold) Pretendard sans-serif`,
 }}
 >
 */
-/* 주의할점!!!!  normal sans-serif 안붙이면 절대 속성안됨!!!!!! */
+/* 주의할점!!!!  Pretendard sans-serif 안붙이면 절대 속성안됨!!!!!! */

@@ -14,7 +14,11 @@ export const useDeletePost = () => {
   const { mutate: deletePost, onSuccess } = useMutation(
     (postId) =>
       apis.delete(`/posts/${postId}`, {
-        access_token: `${access_token}`,
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          access_token: `${access_token}`,
+          // refresh_token: `${refresh_token}`,
+        },
       }),
     {
       onSuccess: () => {

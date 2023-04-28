@@ -33,11 +33,18 @@ export default class MyDocument extends Document {
     return (
       <Html>
         <Head>
+          {/* 폰트 CSS CDN */}
+
           <link
             rel="stylesheet"
-            as="style"
-            href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/static/pretendard.css"
+            type="text/css"
+            href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css"
           />
+          <style jsx global>{`
+            body {
+              font-family: 'Pretendard', sans-serif;
+            }
+          `}</style>
           <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
         </Head>
         <body>

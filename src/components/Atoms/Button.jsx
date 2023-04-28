@@ -8,7 +8,10 @@ const StyledButton = styled.button`
   margin: ${(props) => props.margin};
   padding: ${(props) => props.padding};
   font-size: ${(props) => props.fontSize};
+
+  position: relative;
   border-radius: 10px;
+
   color: ${(props) => props.fontColor};
   border-width: ${(props) => props.borderWidth};
   border-color: ${(props) => props.borderColor};
@@ -47,6 +50,7 @@ export const ButtonText = ({
   let width = undefined;
   let backgroundColor = 'inherit';
   let fontColor = '';
+
   let borderWidth = '1px';
   let borderColor = '';
   let borderStyle = 'solid';

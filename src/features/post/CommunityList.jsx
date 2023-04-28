@@ -22,17 +22,17 @@ import { useGetBestPost } from '../../hook/post/useGetBestPost';
 import { useLikePost } from '../../hook/useLikes';
 const StHeade3_name = styled.div`
   margin-top: 48px;
-  font: var(--head3-bold) normal sans-serif;
+  font: var(--head3-bold) 'Pretendard' sans-serif;
 `;
 const StPlace_name = styled.div`
   margin-top: 20px;
-  font: var(--title1-semibold) normal sans-serif;
+  font: var(--title1-semibold) 'Pretendard' sans-serif;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 `;
 const StAddress_name = styled.div`
-  font: var(--body1-medium) normal sans-serif;
+  font: var(--body1-medium) 'Pretendard' sans-serif;
 `;
 const CommunityList = () => {
   const go = useRouter();
@@ -109,7 +109,6 @@ const CommunityList = () => {
         </GrideGapCol3>
         <StHeade3_name> 포스트 리뷰글</StHeade3_name>
         <GrideGapCol4 style={{ margin: '12px auto' }}>
-          {console.log('posts', posts)}
           {posts.map((post) => (
             <Post
               post={post}
