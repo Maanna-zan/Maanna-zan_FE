@@ -34,6 +34,14 @@ instance.interceptors.response.use(
         return axios(originalRequest);
       }
     }
+    if (error.response.data.statusCode === 400 && !originalRequest._retry) {
+      originalRequest._retry = true;
+      cookies.remove('access_token');
+      cookies.remove('refresh_token');
+      cookies.remove('nick_name');
+      localStorage.removeItem('nick_name');
+      alert('로그인 유효 시간이 지났습니다. 다시 로그인 해주십시오');
+    }
 
     return Promise.reject(error);
   },
