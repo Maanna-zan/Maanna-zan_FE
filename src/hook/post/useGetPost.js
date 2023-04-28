@@ -52,3 +52,28 @@ export const useGetLikePost = () => {
   }
   return { postsLike: data, postIsLikeLoading: isLoading };
 };
+
+// export const useGetLikeStore = () => {
+//   const access_token = cookies.get('access_token');
+
+//   const { data, isLoading, isError } = useQuery({
+//     queryKey: keys.GET_LIKE_STORE,
+//     queryFn: async () => {
+//       const data = await apis.get('/my-page/likeAlkol', {
+//         headers: {
+//           access_token: `${access_token}`,
+//         },
+//       });
+//       console.log('likeAlkol--------------', data);
+//       return data.data;
+//     },
+//   });
+//   if (isLoading) {
+//     return { alkolsLike: data, alkolsIsLoading: true };
+//   }
+
+//   if (isError) {
+//     return { alkolsLike: data, alkolsIsLikeLoading: false };
+//   }
+//   return { alkolsLike: data, alkolsIsLikeLoading: isLoading };
+// };
