@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { apis } from '@shared/axios';
 import { WebWrapper, WebWrapperHeight } from '@components/Atoms/Wrapper'
 import { FlexRow } from '@components/Atoms/Flex'
 import { Map, MapMarker } from 'react-kakao-maps-sdk';
+import styled from 'styled-components';
 
 function MapMidPoint() {
     // queryKey에 캐싱하여 값 불러오기위해 queryClient선언
@@ -17,9 +18,9 @@ function MapMidPoint() {
         queryFn: async () => {
         const response = await apis.get(
             // 서버 URL
-            // `/kakaoApi?y=${midPointProp?.lat}&x=%20${midPointProp?.lng}&query=술집&radius=1500&page=1&size=15&sort=distance`,
+            `/kakaoApi?y=${midPointProp?.lat}&x=%20${midPointProp?.lng}&query=술집&radius=1500&page=1&size=15&sort=distance`,
             //테스트용 서버 URL
-            '/kakaoApi?y=37.534485&x=%20126.994369&query=술집&radius=1500&page=1&size=15&sort=distance',
+            // '/kakaoApi?y=37.534485&x=%20126.994369&query=술집&radius=1500&page=1&size=15&sort=distance',
             // 중간지점 lat,lng값
             midPointProp
         );
@@ -39,50 +40,72 @@ function MapMidPoint() {
         }
     });
     console.log("@@data",data?.data?.documents)
-    
-    const [center, setCenter] = useState()
-        //  키워드 검색 Submit Handler
+    console.log("@@날것의data",data?.data)
+    const kakaoApi = data?.data?.documents
+    console.log("@@kakaoApi",kakaoApi)
+    //  클릭 선택된 장소를 저장할 state 변수
+    const [checkedPlace, setCheckedPlace] = useState('')
+        //  임시적인 Submit Handler (GetSpotsNearbyMidPoint함수 실행)
         const keywordSearchSubmitHandler = (e) => {
             e.preventDefault();
-            // 검색어를 입력하고 검색 버튼을 클릭했을 때 실행되는 함수. 검색어를 상태 값으로 설정
-            KeywordSearchFeat(data?.data)
+            // 지도 불러오기 및 마커 및 인포윈도우, pagination생성 함수 실행
+            GetSpotsNearbyMidPoint(kakaoApi)
         };
+    // 페이지 렌더링 되자마자 지도 불러오기.@@(한 번 더 실행이 되어야 마커들찍히는 문제 해결 필요)@@
+    useEffect(() => {
+        GetSpotsNearbyMidPoint(kakaoApi)
+    },[kakaoApi])
+
     //  키워드 검색 로직
-    const KeywordSearchFeat=() => {
+    const GetSpotsNearbyMidPoint =() => {
         const { kakao } = window;
-        //  맵 선언(카카오map api에서 부르기)
-        const map = document.getElementById("map");
+        //지도를 담을 영역의 DOM 레퍼런스
+        const container = document.getElementById('map'); 
+        const options = { //지도를 생성할 때 필요한 기본 옵션
+            center: new kakao.maps.LatLng(midPointProp?.lat, midPointProp?.lng), //지도의 중심좌표(중간지점props받은 값으로 해당지점 찍어줌)
+            level: 3 //지도의 레벨(확대, 축소 정도)
+        };
+        //지도 생성 및 객체 리턴
+        const map = new kakao.maps.Map(container, options); 
+        const ps = new kakao.maps.services.Places();
+        // const map = document.getElementById("map");
+        // const map = new kakao.maps.Map(document.getElementById('map'), 
+        // {
+        //     center: new kakao.maps.LatLng(37.5546788388674, 126.970606917394),
+        //     level: 3
+        // });
         //  인포윈도우 선언(카카오map api에서 부르기)
         const infowindow = new kakao.maps.InfoWindow({ zIndex: 1 });
         // // 마커를 담을 배열입니다
         let markers = [];
     
         const searchForm = document.getElementById('submit_btn');
-        if (data) {
+        if (kakaoApi) {
             searchForm?.addEventListener('click', function (e) {
             e.preventDefault();
-            showingOnMap()
+            //kakaoApi넣어줘야 작동
+            showingOnMap(kakaoApi)
             });
         }
         
-        // 마커 및 인포윈도우, 
-        function showingOnMap(data, status, pagination) {
-            if (status === kakao.maps.services.Status.OK) {
+        // 마커 및 인포윈도우, pagination
+        function showingOnMap(data, pagination) {
                 // 검색 목록과 마커를 표출합니다
                 displayPlaces(data);
                 // 페이지 목록 보여주는 displayPagination() 추가
                 displayPagination(pagination);
-                // setPlaces(data)
-    
+                console.log("###data###", data)
+                console.log("###pagination###", pagination)
             const bounds = new kakao.maps.LatLngBounds();
             for (let i = 0; i < data.length; i++) {
                 displayMarker(data[i]);
                 bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
             }
             map.setBounds(bounds)
-        }
+        
         // 검색 결과 목록과 마커를 표출하는 함수입니다
         function displayPlaces(places) {
+            console.log("###places###",places)
             const listEl = document.getElementById('placesList');
             const menuEl = document.getElementById('menu_wrap');
             const fragment = document.createDocumentFragment();
@@ -293,36 +316,213 @@ function MapMidPoint() {
     return (
         <WebWrapper>
             <WebWrapperHeight>
-                <FlexRow style={{ justifyContent: 'space-between' }}>
-                    <div>
-                        <Map 
-                        id='map'
-                        center={{
-                            lat: midPointProp?.lat,
-                            lng: midPointProp?.lng
-                        }}
-                        level={3}
-                        style={{
-                            width: '690px',
-                            height: '803px',
-                        }}
-                        >
-                            <MapMarker
-                            position={{ lat: midPointProp?.lat, lng: midPointProp?.lng }}
-                            >
-                                <div style={{ color: "#000" }}>InfoWindow</div>
-                            </MapMarker>
-                        </Map>
-                    </div>
-                    {/* <button
-                    onClick={keywordSearchSubmitHandler}
-                    >
-                        adasdasds
-                    </button> */}
+            <FlexRow style={{ justifyContent: 'space-between' }}>
+        <MapSection>
+            {/* <H1Styled style={{textAlign: "center", width: "100%"}}>위치검색</H1Styled> */}
+    
+            <form 
+            id="form" 
+            className="inputForm" 
+            onSubmit={keywordSearchSubmitHandler}
+            >
+                <div style={{ width: "100%" }}>
+                    <button
+                    id="submit_btn" 
+                    type="submit"
+                    >체크</button>
+                </div>
+            </form>
+    
+                        <div style={{ width: '100%', height: 'calc(100% - 80px)', display: 'flex' }}>
+                            {/* <Map 
+                                id='map'
+                                center={{
+                                    lat: midPointProp?.lat,
+                                    lng: midPointProp?.lng
+                                }}
+                                level={3}
+                                style={{
+                                    width: '690px',
+                                    height: '803px',
+                                }}
+                                >
+                                <MapMarker
+                                    position={{ lat: midPointProp?.lat, lng: midPointProp?.lng }}
+                                    >
+                                        <div style={{ color: "#000" }}>InfoWindow</div>
+                                    </MapMarker>
+                            </Map> */}
+                            <div id='map'
+                                center={{
+                                    lat: midPointProp?.lat,
+                                    lng: midPointProp?.lng
+                                }}
+                                level={3}
+                                style={{
+                                    width: '690px',
+                                    height: '803px',
+                                }}
+                            />
+                            
+                            <div style={{width: '50%'}}>
+                                <div id="menuDiv">
+                                    <div id="menu_wrap">
+                                        <div>
+                                            <div id="map_title">
+                                            </div>
+                                        </div>
+                                            <ul id="placesList"></ul>
+                                            <div id="pagination"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </MapSection>
                 </FlexRow>
             </WebWrapperHeight>
         </WebWrapper>
     )
-}
-
-export default MapMidPoint
+    }
+    
+    export default MapMidPoint
+    const MapSection = styled.div`
+    /* display: flex; */
+    #map {
+        /* width: 920px;
+        height: 600px;
+        position: absolute; */
+        overflow: hidden;
+        border-radius: 8px;
+        /* z-index: "1"; */
+        width: '50%',
+        height: '100%',
+        position: "relative"
+    }
+    #menuDiv {
+        display: flex;
+        position: relative;
+        z-index: 2;
+        font-size: 4px;
+    }
+    
+    #menu_wrap {
+        position: relative;
+        width: 570px;
+        height: 430px;
+        border-radius: 5px;
+        overflow-y: auto;
+        background: rgba(255, 255, 255, 0.7);
+    }
+    
+    /* #map_title {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+    } */
+    
+    #form {
+        display: flex;
+        justify-content: space-between;
+        padding: 0px 15px 10px 0;
+    }
+    
+    #keyword {
+        width: 100%;
+        border: none;
+        outline: none;
+    }
+    
+    #submit_btn {
+        background-color: #F4F5F6;
+        color: #7e7979;
+        border: none;
+        border-radius:10px;
+        outline: none;
+    }
+    
+    #placesList h6 {
+        color: #FF4740;
+        font-size: 15px;
+    }
+    
+    #placesList li {
+        /* list-style: square; */
+    }
+    #placesList .item {
+        border-bottom: 1px solid #888;
+        overflow: hidden;
+        cursor: pointer;
+    }
+    
+    #placesList .item .info {
+        padding: 3px 0 5px 3px;
+    }
+    
+    #placesList .item span {
+        display: block;
+        margin-top: 1px;
+    }
+    #placesList .info .gray {
+        color: #9EA4AA;
+    }
+    
+    #placesList .info .tel {
+        /* color: #009900; */
+    }
+    
+    #placesList .clicked{
+        /* background-color: rgba(100, 200, 100, 0.5);
+        border: 1px solid rgba(100, 200, 100, 0.8); */
+        border: 1px solid #3DC060; /* 연하게 테두리(border) 스타일 */
+        position: relative; /* ::after 선택자를 위해 position 속성을 추가합니다. */
+        border-radius: 12px
+    }
+    
+    #placesList .clicked ::after{
+        content: "V"; /* ::after 선택자를 이용하여 V표를 추가합니다. */
+        position: absolute;
+        right: 5px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #3DC060;
+        font-weight: bold;
+    }
+    
+    #btnDiv {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    
+    #pagination {
+        margin: 10px auto;
+        text-align: center;
+    }
+    #pagination a {
+        display: inline-block;
+        margin-right: 10px;
+        color: #7b7b7b;
+    }
+    #pagination .on {
+        font-weight: bold;
+        cursor: default;
+        color: #ff6e30;
+    }
+    #btnOn {
+        height: 600px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    
+    #searchBtn {
+        width: 20px;
+        padding: 0px;
+        height: 70px;
+        background-color: #ffa230;
+        border: none;
+        outline: none;
+    }
+    `;
