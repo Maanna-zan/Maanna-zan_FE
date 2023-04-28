@@ -25,13 +25,12 @@ import {
 import { apis } from '@shared/axios';
 import { useGetLikePost } from '../../hook/post/useGetPost';
 export const Post = ({ post, onSubmit, apiId, postId }) => {
-  // console.log('newPost', post);
   const go = useRouter();
-  const queryClient = useQueryClient();
   const router = useRouter();
-  const access_token = cookies.get('access_token');
   const { id } = router.query;
+
   const { postsLike, postIsLikeLoading } = useGetLikePost();
+
   let potLikeMatch = [];
   if (postsLike && postsLike.data && postsLike.data.posts) {
     potLikeMatch = postsLike.data.posts;
@@ -41,7 +40,6 @@ export const Post = ({ post, onSubmit, apiId, postId }) => {
 
   const [like, setLike] = useState(postLikeMine.like);
 
-  console.log('postId커뮤니티인덱스', postId);
   const likePostHandler = async (postId) => {
     try {
       await likePost(postId);
@@ -51,20 +49,20 @@ export const Post = ({ post, onSubmit, apiId, postId }) => {
     }
   };
 
-  useEffect(() => {
-    // 게시물 가져오기
-    async function fetchPost() {
-      const response = await apis.get(`/posts/${id}`, {
-        headers: {
-          access_token: `${access_token}`,
-          // refresh_token: `${refresh_token}`,
-        },
-      });
-      const post = response.data;
-      setPost(post);
-    }
-    fetchPost();
-  }, [id]);
+  // useEffect(() => {
+  //   // 게시물 가져오기
+  //   async function fetchPost() {
+  //     const response = await apis.get(`/posts/${id}`, {
+  //       headers: {
+  //         access_token: `${access_token}`,
+  //         // refresh_token: `${refresh_token}`,
+  //       },
+  //     });
+  //     const post = response.data;
+  //     setPost(post);
+  //   }
+  //   fetchPost();
+  // }, [id]);
 
   return (
     <div
@@ -136,15 +134,15 @@ export const Post = ({ post, onSubmit, apiId, postId }) => {
 };
 const StHeade3_name = styled.div`
   margin-top: 48px;
-  font: var(--head3-bold) normal sans-serif;
+  font: var(--head3-bold) 'Pretendard' sans-serif;
 `;
 const StPlace_name = styled.div`
   margin-top: 20px;
-  font: var(--title1-semibold) normal sans-serif;
+  font: var(--title1-semibold) 'Pretendard' sans-serif;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 `;
 const StAddress_name = styled.div`
-  font: var(--body1-medium) normal sans-serif;
+  font: var(--body1-medium) 'Pretendard' sans-serif;
 `;

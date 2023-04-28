@@ -19,7 +19,7 @@ import { ImgCenter, ImgWrapper792 } from '@components/Atoms/imgWrapper';
 import ShareApiBtn from '../../hook/shareBtn/shareApiBtn';
 import { AderessIcon } from '@components/Atoms/AderessIcon';
 import { AderessMarker } from '@components/Atoms/AderessMarker';
-import { DeleteIcon } from '@components/Atoms/deleteIcon';
+import { DeleteIcon } from '@components/Atoms/DeleteIcon';
 import { useDeletePost } from '../../hook/post/useDeletePost';
 import { useUpdatePost } from '../../hook/post/useUpdatePost';
 import { useLikePost } from '../../hook/useLikes';
@@ -32,12 +32,7 @@ const Community = () => {
   const { data, isLoading, isError, isSuccess } = useQuery({
     queryKey: ['GET_COMMUNITYDETAIL'],
     queryFn: async () => {
-      const { data } = await apis.get(`/posts/${query.id}`, {
-        headers: {
-          //   'Content-Type': 'multipart/form-data',
-          // refresh_token: `${token}`,
-        },
-      });
+      const { data } = await apis.get(`/posts/${query.id}`, {});
       console.log('커뮤니티data-------------', data);
       return data.data;
     },
@@ -159,7 +154,7 @@ const Community = () => {
             >
               <div
                 style={{
-                  font: `var(--head2-bold) normal sans-serif`,
+                  font: `var(--head2-bold) Pretendard sans-serif`,
                   marginBottom: '28px',
                 }}
               >
@@ -197,7 +192,7 @@ const Community = () => {
                 <FlexRow
                   style={{
                     gap: '10px',
-                    font: `var( --body1-medium) normal sans-serif`,
+                    font: `var( --body1-medium) Pretendard sans-serif`,
                   }}
                 >
                   <div></div>
@@ -352,7 +347,7 @@ const Community = () => {
             <div style={{ marginBottom: '24px' }}>
               <div
                 style={{
-                  font: `var(--head2-bold) normal sans-serif`,
+                  font: `var(--head2-bold) Pretendard sans-serif`,
 
                   marginBottom: '28px',
                 }}
@@ -368,7 +363,7 @@ const Community = () => {
                 <FlexRow
                   style={{
                     gap: '10px',
-                    font: `var( --body1-medium) normal sans-serif`,
+                    font: `var( --body1-medium) Pretendard sans-serif`,
                   }}
                 >
                   <div></div>
@@ -480,7 +475,7 @@ const Community = () => {
                     alignItems: 'center',
                     display: 'flex',
                     textAlign: 'center',
-                    font: `var( --body1-medium) normal sans-serif`,
+                    font: `var( --body1-medium) Pretendard sans-serif`,
                     cursor: 'pointer',
                   }}
                 >
@@ -515,7 +510,7 @@ const Community = () => {
                 <BoxTextReal
                   size="nonePadding"
                   variant="realDefaultBox"
-                  style={{ font: `var( --body1-medium) normal sans-serif` }}
+                  style={{ font: `var( --body1-medium) Pretendard sans-serif` }}
                 >
                   <DeleteIcon />
                 </BoxTextReal>

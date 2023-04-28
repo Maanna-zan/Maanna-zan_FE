@@ -11,7 +11,6 @@ const AddPostForm = () => {
 
   console.log('apiIdReal-------------', apiIdReal);
   const [post, setPost] = useState({
-    storename: '',
     title: '',
     description: '',
     s3Url: '',
@@ -54,8 +53,10 @@ const AddPostForm = () => {
     formData.append('storename', post.storename);
     formData.append('title', post.title);
     formData.append('description', post.description);
-    for (const [key, value] of post.s3Url.entries()) {
-      formData.append(key, value);
+    if (post.s3Url) {
+      for (const [key, value] of post.s3Url.entries()) {
+        formData.append(key, value);
+      }
     }
     mutate(formData);
   };

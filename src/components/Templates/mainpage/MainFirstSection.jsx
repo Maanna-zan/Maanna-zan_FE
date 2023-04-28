@@ -61,64 +61,10 @@ export const MainFirstSection = () => {
           </GrideGapCol4>
           <GrideGapCol4>
             {getBest?.alkolResponseDtoList?.map((store, index) => (
-              <BoxTextReal size="nonePadding" variant="realDefaultBox">
-                <div key={store?.id}>
-                  <ImgWrapper282x322>
-                    <ImgCenter
-                      style={{ width: '100%', height: '100%' }}
-                      src={
-                        store.postList.length
-                          ? store.postList[0].s3Url
-                          : '/noimage_282x248_.png'
-                      }
-                      alt="베스트술집"
-                    />
-                  </ImgWrapper282x322>
-                  <div
-                    style={{
-                      marginTop: '12px',
-                      font: `var(--title1-semibold) normal sans-serif`,
-                      whiteSpace: 'nowrap',
-                      overflow: 'hidden',
-                      textOverflow: 'ellipsis',
-                    }}
-                  >
-                    {store.place_name}
-                  </div>
-                  <div style={{ margin: '12px auto' }}>
-                    <img
-                      style={{ margin: '0px 8px 0px 0' }}
-                      src="adress.png"
-                      alt="주소아이콘"
-                    />
-                    <span
-                      style={{
-                        color: `${LightTheme.FONT_PRIMARY}`,
-                        font: `var(--title2-regular) normal sans-serif`,
-                        whiteSpace: 'nowrap',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                      }}
-                    >
-                      {store?.address_name}
-                    </span>
-                  </div>
-                </div>
-              </BoxTextReal>
-            ))}
-            <GrideGapRow4>
-              {getView?.alkolResponseDtoList?.map((store, index) => (
-                <BoxTextReal
-                  key={store?.id}
-                  size="sm"
-                  variant="grayBolderBox"
-                  style={{ height: '72px' }}
-                >
-                  <FlexRow
-                    key={store?.apiId}
-                    style={{ height: '100%', alignItems: 'center' }}
-                  >
-                    <ImgWrapper84x56 style={{ margin: '4px' }}>
+              <div key={store?.id || index}>
+                <BoxTextReal size="nonePadding" variant="realDefaultBox">
+                  <div>
+                    <ImgWrapper282x322>
                       <ImgCenter
                         style={{ width: '100%', height: '100%' }}
                         src={
@@ -128,42 +74,99 @@ export const MainFirstSection = () => {
                         }
                         alt="베스트술집"
                       />
-                    </ImgWrapper84x56>
-                    <FlexColumn
+                    </ImgWrapper282x322>
+                    <div
                       style={{
-                        height: '100%',
-                        justifyContent: `space-between`,
+                        marginTop: '12px',
+                        font: `var(--title1-semibold) Pretendard sans-serif`,
+                        whiteSpace: 'nowrap',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
                       }}
                     >
+                      {store.place_name}
+                    </div>
+                    <div style={{ margin: '12px auto' }}>
+                      <img
+                        style={{ margin: '0px 8px 0px 0' }}
+                        src="adress.png"
+                        alt="주소아이콘"
+                      />
                       <span
                         style={{
-                          font: `var(--label2-bold) normal sans-serif`,
+                          color: `${LightTheme.FONT_PRIMARY}`,
+                          font: `var(--title2-regular) Pretendard sans-serif`,
+                          whiteSpace: 'nowrap',
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
                         }}
                       >
-                        {store?.place_name}
+                        {store?.address_name}
                       </span>
-                      <div>
-                        <span
-                          style={{
-                            marginRight: '8px',
-                            color: `${LightTheme.FONT_PRIMARY}`,
-                            font: `var(--caption2-bold) normal sans-serif`,
-                          }}
-                        >
-                          리뷰
-                        </span>
-                        <span
-                          style={{
-                            color: `${LightTheme.FONT_PRIMARY}`,
-                            font: `var(caption1-bold) normal sans-serif`,
-                          }}
-                        >
-                          {store?.roomViewCount}
-                        </span>
-                      </div>
-                    </FlexColumn>
-                  </FlexRow>
+                    </div>
+                  </div>
                 </BoxTextReal>
+              </div>
+            ))}
+            <GrideGapRow4>
+              {getView?.alkolResponseDtoList?.map((store, index) => (
+                <div key={store?.id || index}>
+                  <BoxTextReal
+                    size="sm"
+                    variant="grayBolderBox"
+                    style={{ height: '72px' }}
+                  >
+                    <FlexRow
+                      key={store?.apiId}
+                      style={{ height: '100%', alignItems: 'center' }}
+                    >
+                      <ImgWrapper84x56 style={{ margin: '4px' }}>
+                        <ImgCenter
+                          style={{ width: '100%', height: '100%' }}
+                          src={
+                            store.postList.length
+                              ? store.postList[0].s3Url
+                              : '/noimage_282x248_.png'
+                          }
+                          alt="베스트술집"
+                        />
+                      </ImgWrapper84x56>
+                      <FlexColumn
+                        style={{
+                          height: '100%',
+                          justifyContent: `space-between`,
+                        }}
+                      >
+                        <span
+                          style={{
+                            font: `var(--label2-bold) Pretendard sans-serif`,
+                          }}
+                        >
+                          {store?.place_name}
+                        </span>
+                        <div>
+                          <span
+                            style={{
+                              marginRight: '8px',
+                              color: `${LightTheme.FONT_PRIMARY}`,
+                              font: `var(--caption2-bold) Pretendard sans-serif`,
+                            }}
+                          >
+                            리뷰
+                          </span>
+                          <span
+                            style={{
+                              color: `${LightTheme.FONT_PRIMARY}`,
+                              font: `var(caption1-bold) Pretendard sans-serif`,
+                            }}
+                          >
+                            {store?.roomViewCount}
+                          </span>
+                        </div>
+                      </FlexColumn>
+                    </FlexRow>
+                  </BoxTextReal>
+                </div>
               ))}
             </GrideGapRow4>
           </GrideGapCol4>
@@ -195,11 +198,11 @@ const StWebBg = styled.div`
 `;
 const StTitleGet = styled.span`
   color: ${LightTheme.FONT_PRIMARY};
-  font: var(--head3-bold) normal sans-serif;
+  font: var(--head3-bold) Pretendard sans-serif;
 `;
 const StSpan = styled.span`
   color: ${LightTheme.FONT_SECONDARY};
-  font: var(--body1-regular) normal sans-serif;
+  font: var(--body1-regular) Pretendard sans-serif;
   display: flex;
   height: 100%;
   align-items: center;

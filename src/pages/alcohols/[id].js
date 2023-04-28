@@ -84,7 +84,7 @@ const StoreDetail = () => {
       <div
         style={{
           marginBottom: '10px',
-          font: `var(--caption1-regular) normal sans-serif`,
+          font: `var(--caption1-regular) Pretendard sans-serif`,
         }}
       >
         {data?.category_group_name}
@@ -93,7 +93,7 @@ const StoreDetail = () => {
       <FlexRow
         style={{ justifyContent: 'space-between', marginBottom: '24px' }}
       >
-        <div style={{ font: `var(--head1-bold) normal sans-serif` }}>
+        <div style={{ font: `var(--head1-bold) Pretendard sans-serif` }}>
           {data?.place_name}
         </div>
         <FlexRow style={{ gap: '10px' }}>
@@ -189,7 +189,7 @@ const StoreDetail = () => {
             <div
               style={{
                 margin: '0px 0px 0 8px',
-                font: `var( --head1-bold) normal sans-serif`,
+                font: `var( --head1-bold) Pretendard sans-serif`,
               }}
             >
               포스트 리뷰
@@ -265,7 +265,7 @@ const StoreDetail = () => {
                     <div
                       style={{
                         margin: '0px 0px',
-                        font: `var( --label2-regular) normal sans-serif`,
+                        font: `var( --label2-regular) Pretendard sans-serif`,
                       }}
                     >
                       {post.title}
@@ -273,7 +273,7 @@ const StoreDetail = () => {
                     <div
                       style={{
                         margin: '0px 0px 8px 0 ',
-                        font: `var( --label2-regular) normal sans-serif`,
+                        font: `var( --label2-regular) Pretendard sans-serif`,
                       }}
                     >
                       {post.description}

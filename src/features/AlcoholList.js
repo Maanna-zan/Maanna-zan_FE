@@ -10,12 +10,6 @@ import {
 } from '@tanstack/react-query';
 import { WebWrapper } from '@components/Atoms/Wrapper';
 import { StoreListTabMenu } from '@components/Molecules/StoreListTabMenu';
-import {
-  getAllStore,
-  getBest,
-  getView,
-  getLike,
-} from '../hook/alcohol/useGetAllStore';
 import { PageNation } from '@components/Modals/PageNation';
 import { Store } from './alcohol/Store';
 import { GrideGapCol4, GrideGapCol3 } from '@components/Atoms/Grid';
@@ -31,6 +25,12 @@ import {
 } from '@components/Atoms/imgWrapper';
 import { useLikeStore } from '../hook/useLikes';
 import Link from 'next/link';
+import {
+  getAllStore,
+  getBest,
+  getView,
+  getLike,
+} from '../hook/alcohol/useGetAllStore';
 
 const AlcoholList = () => {
   const { handleLike } = useLikeStore();
@@ -57,7 +57,25 @@ const AlcoholList = () => {
     view: 1,
     like: 1,
   });
+  const [keyword, setKeyword] = useState('');
+  const [query, setQuery] = useState('');
+  // 검색어가 변경될 때마다, 검색 결과를 새로 불러옵니다.
+  useEffect(() => {
+    if (keyword === '') {
+      setPageNum(1);
+    } else {
+      setPageNum(1);
+    }
+  }, [keyword]);
+  // 검색어 입력을 처리하는 핸들러
+  const handleQueryChange = (event) => {
+    setQuery(event.target.value);
+  };
 
+  // 검색 버튼 클릭을 처리하는 핸들러
+  const handleSearch = () => {
+    setKeyword(query);
+  };
   const handlePageNumChange = useCallback(
     (newPageNum) => {
       setPageMap((prev) => ({
@@ -103,19 +121,19 @@ const AlcoholList = () => {
     isError,
     isFetching,
   } = useQuery(
-    ['storeData', storeListPage, activeTab, pageNum],
+    ['storeData', storeListPage, activeTab, pageNum, keyword],
     () => {
       switch (storeListPage) {
         case 'all':
-          return getAllStore(pageNum, activeTab);
+          return getAllStore(pageNum, activeTab, keyword);
         case 'best':
-          return getBest(pageNum, activeTab);
+          return getBest(pageNum, activeTab, keyword);
         case 'view':
-          return getView(pageNum, activeTab);
+          return getView(pageNum, activeTab, keyword);
         case 'like':
-          return getLike(pageNum, activeTab);
+          return getLike(pageNum, activeTab, keyword);
         default:
-          return getAllStore(pageNum, activeTab);
+          return getAllStore(pageNum, activeTab, keyword);
       }
     },
     {
@@ -148,8 +166,8 @@ const AlcoholList = () => {
           </StHeade3_name>
           <span
             style={{
-              color: `${LightTheme.PRIMARY_NORMAL}`,
-              font: `var(--title1-semibold) normal sans-serif`,
+              color: `${LightTheme.PRIMARY_Pretendard}`,
+              font: `var(--title1-semibold) Pretendard sans-serif`,
             }}
           >
             HOT
@@ -159,8 +177,8 @@ const AlcoholList = () => {
         <GrideGapCol3>
           {getView2?.alkolResponseDtoList?.map((store) => (
             <div
-              style={{ zIndex: '500' }}
               key={store.id}
+              style={{ zIndex: '500' }}
               onClick={() => {
                 router.push(`/alcohols/${store.apiId}`);
               }}
@@ -198,7 +216,8 @@ const AlcoholList = () => {
           activeTab={activeTab}
           handleStoreListTabChange={handleStoreListTabChange}
         />
-        {console.log('storeData', storeData)}
+        <input type="text" value={query} onChange={handleQueryChange} />
+        <button onClick={handleSearch}>검색</button>
         <GrideGapCol4 style={{ margin: '12px auto' }}>
           {storeData?.alkolResponseDtoList?.map((store) => (
             // console.log('store.apiId', store.apiId),
@@ -216,6 +235,7 @@ const AlcoholList = () => {
                 position: 'relative',
               }}
             >
+              <div></div>
               <div
                 style={{
                   position: 'absolute',
@@ -285,15 +305,15 @@ const AlcoholList = () => {
 export default AlcoholList;
 const StHeade3_name = styled.div`
   margin-top: 48px;
-  font: var(--head3-bold) normal sans-serif;
+  font: var(--head3-bold) Pretendard sans-serif;
 `;
 const StPlace_name = styled.div`
   margin-top: 20px;
-  font: var(--title1-semibold) normal sans-serif;
+  font: var(--title1-semibold) Pretendard sans-serif;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 `;
 const StAddress_name = styled.div`
-  font: var(--body1-medium) normal sans-serif;
+  font: var(--body1-medium) Pretendard sans-serif;
 `;
