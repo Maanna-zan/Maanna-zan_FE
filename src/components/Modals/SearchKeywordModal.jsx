@@ -1,5 +1,5 @@
 import { InputArea } from "@components/Atoms/Input";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Map } from "react-kakao-maps-sdk";
 
@@ -25,6 +25,11 @@ export default function KeywordSearchModal({ onClose, onUpdate}) {
             // 검색어를 입력하고 검색 버튼을 클릭했을 때 실행되는 함수. 검색어를 상태 값으로 설정
             KeywordSearchFeat()
         };
+        // 모달창 열면 바로 지도 불러오기(검색버튼 2번 누르는 거 버그 해결.)(<Map>태그 없애고 <div>태그로 지도 겹치는 버그 해결)
+        useEffect(() => {
+            KeywordSearchFeat()
+        },[])
+
     //  키워드 검색 로직
     const KeywordSearchFeat=() => {
         const { kakao } = window;
@@ -319,7 +324,7 @@ export default function KeywordSearchModal({ onClose, onUpdate}) {
 
             <div style={{ width: '100%', height: 'calc(100% - 80px)', display: 'flex' }}>
                 
-                    <Map
+                    <div
                         id='myMap'
                         center={{
                             lat: 37.56682420267543,
@@ -332,7 +337,7 @@ export default function KeywordSearchModal({ onClose, onUpdate}) {
                             position: "relative"
                         }}
                     >
-                    </Map>
+                    </div>
                     <div style={{width: '50%'}}>
                         
                         <div id="menuDiv">
