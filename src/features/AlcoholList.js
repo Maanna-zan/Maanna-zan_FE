@@ -24,6 +24,7 @@ import {
   ImgWrapper384x242,
 } from '@components/Atoms/imgWrapper';
 import { useLikeStore } from '../hook/useLikes';
+import { useGetLikeStore } from '../hook/alcohol/useGetStore';
 import Link from 'next/link';
 import {
   getAllStore,
@@ -31,20 +32,45 @@ import {
   getView,
   getLike,
 } from '../hook/alcohol/useGetAllStore';
+import { ButtonText } from '@components/Atoms/Button';
+import { InputArea } from '@components/Atoms/Input';
 
+// const [like, setLike] = useState(like);
 const AlcoholList = () => {
-  const { handleLike } = useLikeStore();
-  const likePostHandler = async () => {
-    try {
-      await likePost();
-      setLike(!like);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
+  //   const { handleLike } = useLikeStore();
+  //   const likePostHandler = async () => {
+  //     try {
+  //       await likePost();
+  //       setLike(!like);
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   };
   const { go } = useRouter();
   const router = useRouter();
+
+  const { alkolsLike, alkolsIsLikeLoading } = useGetLikeStore();
+
+  // //게시글 좋아요한 가게와 현재가게 매칭
+  // const storeLikeMine =
+  //   (alkolsLike && alkolsLike.flat().find((obj) => obj.apiId === apiId)) || {};
+
+  // let alkolLikeMatch = [];
+  // if (alkolsLike && alkolsLike.data) {
+  //   alkolLikeMatch = alkolsLike.data;
+  // }
+  // const [roomLike, setRoomLike] = useState(storeLikeMine?.roomLike);
+  // const { handleLike } = useLikeStore();
+  // console.log('리스트스토어 좋아요한 값', storeLikeMine.roomLike);
+
+  // const likeStoreHandler = async (apiId) => {
+  //   try {
+  //     await likeStore(apiId);
+  //     setRoomLike(!roomLike);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
   const [storeListPage, setStoreListPage] = useState('all');
   const [activeTab, setActiveTab] = useState('all');
@@ -57,6 +83,12 @@ const AlcoholList = () => {
     view: 1,
     like: 1,
   });
+  const keywordKey = [
+    'placeName',
+    'categoryName',
+    'addressName',
+    'roadAddressName',
+  ];
   const [keyword, setKeyword] = useState('');
   const [query, setQuery] = useState('');
   // 검색어가 변경될 때마다, 검색 결과를 새로 불러옵니다.
@@ -74,8 +106,10 @@ const AlcoholList = () => {
 
   // 검색 버튼 클릭을 처리하는 핸들러
   const handleSearch = () => {
+    setPageNum(1);
     setKeyword(query);
   };
+
   const handlePageNumChange = useCallback(
     (newPageNum) => {
       setPageMap((prev) => ({
@@ -84,8 +118,9 @@ const AlcoholList = () => {
       }));
       setPageNum(newPageNum);
     },
-    [storeListPage, setPageNum],
+    [storeListPage, setPageNum, keyword],
   );
+  console.log('keyword', keyword);
 
   const handleStoreListTabChange = useCallback(
     (newTab) => {
@@ -94,16 +129,30 @@ const AlcoholList = () => {
 
       router.push({
         pathname: router.pathname,
-        query: { page: pageMap[newTab], storeListPage: newTab },
+        query: {
+          page: pageMap[newTab],
+          placeName: keyword,
+          categoryName: keyword,
+          addressName: keyword,
+          roadAddressName: keyword,
+          storeListPage: newTab,
+        },
       });
     },
-    [router, setActiveTab, setStoreListPage, setPageMap],
+    [router, setActiveTab, setStoreListPage, setPageMap, keyword],
   );
 
   useEffect(() => {
     router.push({
       pathname: router.pathname,
-      query: { page: pageMap[storeListPage], storeListPage: storeListPage },
+      query: {
+        page: pageMap[storeListPage],
+        placeName: keyword,
+        categoryName: keyword,
+        addressName: keyword,
+        roadAddressName: keyword,
+        storeListPage: storeListPage,
+      },
     });
   }, [pageNum]);
 
@@ -125,15 +174,15 @@ const AlcoholList = () => {
     () => {
       switch (storeListPage) {
         case 'all':
-          return getAllStore(pageNum, activeTab, keyword);
+          return getAllStore(pageNum, keyword);
         case 'best':
-          return getBest(pageNum, activeTab, keyword);
+          return getBest(pageNum, keyword);
         case 'view':
-          return getView(pageNum, activeTab, keyword);
+          return getView(pageNum, keyword);
         case 'like':
-          return getLike(pageNum, activeTab, keyword);
+          return getLike(pageNum, keyword);
         default:
-          return getAllStore(pageNum, activeTab, keyword);
+          return getAllStore(pageNum, keyword);
       }
     },
     {
@@ -156,7 +205,6 @@ const AlcoholList = () => {
   if (isLoading) {
     return <WebWrapper>Loading...</WebWrapper>;
   }
-  // console.log('handleLike', handleLike);
   return (
     <>
       <WebWrapper>
@@ -173,7 +221,6 @@ const AlcoholList = () => {
             HOT
           </span>
         </FlexRow>
-        {console.log('storeListPage.view---------->', getView)}
         <GrideGapCol3>
           {getView2?.alkolResponseDtoList?.map((store) => (
             <div
@@ -211,23 +258,48 @@ const AlcoholList = () => {
         </GrideGapCol3>
 
         <StHeade3_name>술집리스트</StHeade3_name>
-        <StoreListTabMenu
-          setActiveTab={setActiveTab}
-          activeTab={activeTab}
-          handleStoreListTabChange={handleStoreListTabChange}
-        />
-        <input type="text" value={query} onChange={handleQueryChange} />
-        <button onClick={handleSearch}>검색</button>
+        <FlexRow style={{ alignItems: 'center' }}>
+          <StoreListTabMenu
+            setActiveTab={setActiveTab}
+            activeTab={activeTab}
+            handleStoreListTabChange={handleStoreListTabChange}
+          />
+          <FlexRow
+            style={{
+              height: '34px',
+              fontSize: '14px',
+              display: 'flex',
+              gap: '4px',
+              margin: '20px 0px',
+              marginRight: '12px',
+              alignContent: 'center',
+            }}
+          >
+            <InputArea
+              style={{ padding: '8px 16px' }}
+              type="text"
+              variant="default"
+              value={query}
+              onChange={handleQueryChange}
+              placeholder="술집을 검색해보세요"
+            />
+            <div
+              style={{
+                width: '120px',
+                padding: '8px 16px',
+                overflow: 'hidden',
+                boxSizing: 'border-box',
+              }}
+              onClick={handleSearch}
+            >
+              술집 검색
+            </div>
+          </FlexRow>
+        </FlexRow>
         <GrideGapCol4 style={{ margin: '12px auto' }}>
           {storeData?.alkolResponseDtoList?.map((store) => (
-            // console.log('store.apiId', store.apiId),
-            //<Link key={store.id} href={`/alcohols/${store.apiId}`}>
-
             <div
               key={store.id}
-              // onClick={() => {
-              //   router.push(`/alcohols/${store.apiId}`);
-              // }}
               style={{
                 gridColumn: 'span 1',
                 gridRow: 'span 1',
@@ -244,19 +316,11 @@ const AlcoholList = () => {
                   zIndex: '1',
                   padding: '10px',
                 }}
-                onClick={() => handleLike(store.apiId)}
               >
                 <Store store={store}></Store>
-                {/* {like ? <LikeHeartIcon /> : <DisLikeHeartIcon />} */}
               </div>
               <Link key={store.id} href={`/alcohols/${store.apiId}`}>
-                <BoxTextReal
-                  variant="realDefaultBox"
-                  size="nonePadding"
-                  // onClick={() => {
-                  //   router.push(`/alcohols/${store.apiId}`);
-                  // }}
-                >
+                <BoxTextReal variant="realDefaultBox" size="nonePadding">
                   <BoxTextReal
                     style={{ overflow: 'hidden' }}
                     variant="realDefaultBox"
@@ -281,8 +345,6 @@ const AlcoholList = () => {
                   </BoxTextReal>
                   <StPlace_name>{store.place_name}</StPlace_name>
                   <StAddress_name>{store.address_name}</StAddress_name>
-                  <div>{store.id}</div>
-                  <Store store={store} storeData={storeData}></Store>
                 </BoxTextReal>
               </Link>
             </div>
