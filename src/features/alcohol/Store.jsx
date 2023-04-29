@@ -39,7 +39,6 @@ export const Store = ({ storeData, store }) => {
         className="hearWrap"
         onClick={() => likeStoreHandler(apiId)}
       >
-        {console.log('likeStoreHandler', likeStoreHandler)}
         {roomLike ? <LikeHeartIcon /> : <DisLikeHeartIcon />}
       </div>
     </>

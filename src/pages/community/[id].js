@@ -441,8 +441,8 @@ const Community = () => {
                 </BoxTextReal>
               </FlexRow>
             </div>
-            {/* <AddComment />
-          <CommentsList /> */}
+            <AddComment />
+            <CommentsList />
 
             <FlexColumn
               style={{

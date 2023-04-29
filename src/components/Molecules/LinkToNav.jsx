@@ -70,13 +70,27 @@ export const LinkToNav = () => {
   return (
     <nav>
       <Link href="/alcohols">
-        <ButtonText variant="hoverRed" label={'리스트'}></ButtonText>
+        <span>
+          <ButtonText
+            style={{ font: `var(--title2-semibold) Pretendard sans-serif` }}
+            variant={router.pathname === '/alcohols' ? 'activeRed' : 'hoverRed'}
+            label={'리스트'}
+          ></ButtonText>
+        </span>
       </Link>
       <Link href="/map">
-        <ButtonText variant="hoverRed" label={'탐색'}></ButtonText>
+        <ButtonText
+          style={{ font: `var(--title2-semibold) Pretendard sans-serif` }}
+          variant={router.pathname === '/map' ? 'activeRed' : 'hoverRed'}
+          label={'탐색'}
+        ></ButtonText>
       </Link>
       <Link href="/community">
-        <ButtonText variant="hoverRed" label={'커뮤니티'}></ButtonText>
+        <ButtonText
+          style={{ font: `var( --title2-semibold) Pretendard sans-serif` }}
+          variant={router.pathname === '/community' ? 'activeRed' : 'hoverRed'}
+          label={'커뮤니티'}
+        ></ButtonText>
       </Link>
       {!token ? (
         <>
@@ -86,7 +100,10 @@ export const LinkToNav = () => {
       ) : (
         <>
           <ButtonText
-            style={{ position: 'relative' }}
+            style={{
+              font: `var(--title2-semibold) Pretendard sans-serif`,
+              position: 'relative',
+            }}
             variant="hoverRed"
             onClick={() => setShowSubMenu(!showSubMenu)}
             label={`${data?.userName}님`}
