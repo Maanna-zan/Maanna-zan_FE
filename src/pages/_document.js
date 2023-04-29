@@ -40,15 +40,12 @@ export default class MyDocument extends Document {
             type="text/css"
             href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css"
           />
-<<<<<<< HEAD
           <style jsx global>{`
             body {
               font-family: 'Pretendard', sans-serif;
             }
           `}</style>
           <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
-=======
->>>>>>> e0703d8 (캘린더 조회 입력 기능)
         </Head>
         <body>
           <Main />
