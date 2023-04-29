@@ -20,6 +20,7 @@ const AddPostForm = () => {
     service: null,
     atmosphere: null,
     satisfaction: null,
+    postStarAvg: null,
   });
 
   const access_token = cookies.get('access_token');
@@ -41,7 +42,19 @@ const AddPostForm = () => {
       router.push('/community');
     },
   });
+  const [hoveredStar, setHoveredStar] = useState(0);
 
+  const handleStarClick = (clickedStar) => {
+    const newPost = {
+      ...post,
+      postStarAvg: clickedStar,
+    };
+    setPost(newPost);
+  };
+
+  const handleStarHover = (hoveredStar) => {
+    setHoveredStar(hoveredStar);
+  };
   const changeInputHandler = (e) => {
     const { value, name } = e.target;
     setPost((pre) => ({ ...pre, [name]: value }));
@@ -103,6 +116,8 @@ const AddPostForm = () => {
         <ReviewForm
           post={post}
           handleRatingChange={handleRatingChange}
+          handleStarClick={handleStarClick}
+          handleStarHover={handleStarHover}
         ></ReviewForm>
         <input
           type="text"
