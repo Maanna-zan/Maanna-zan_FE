@@ -1,30 +1,75 @@
 import React, { useState } from 'react';
-import { FlexRow } from '@components/Atoms/Flex';
+import { FlexColumn, FlexRow } from '@components/Atoms/Flex';
 import { Rating } from './Rating';
-export const ReviewForm = ({ post, handleRatingChange }) => {
+import { PostStar } from '@components/Atoms/PostStar';
+import { PostStarChecked } from '@components/Atoms/PostStarChecked';
+export const ReviewForm = ({ post, handleRatingChange, handleStarClick }) => {
+  const [hoveredStar, setHoveredStar] = useState(0);
+  const starStyle = { cursor: 'pointer', transition: 'color 0.3s easeInOut' };
   return (
-    <>
-      <Rating
-        name="taste"
-        value={post.taste}
-        onChange={(value) => handleRatingChange('taste', value)}
-      />
-      <Rating
-        name="service"
-        value={post.service}
-        onChange={(value) => handleRatingChange('service', value)}
-      />
-      <Rating
-        name="atmosphere"
-        value={post.atmosphere}
-        onChange={(value) => handleRatingChange('atmosphere', value)}
-      />
-      <Rating
-        name="satisfaction"
-        value={post.satisfaction}
-        onChange={(value) => handleRatingChange('satisfaction', value)}
-      />
-    </>
+    <FlexColumn>
+      <div>
+        <span>가게 평점:</span>
+        {[1, 2, 3, 4, 5].map((starValue) => (
+          <span
+            key={starValue}
+            onClick={() => handleStarClick(starValue)}
+            onMouseEnter={() => setHoveredStar(starValue)}
+            onMouseLeave={() => setHoveredStar(0)}
+          >
+            {starValue <= (hoveredStar || post.postStarAvg) ? (
+              <PostStarChecked
+                style={{
+                  cursor: 'pointer',
+                  transition: 'all 0.3s easeInOut',
+                }}
+              />
+            ) : (
+              <PostStar
+                style={{
+                  cursor: 'pointer',
+                  transition: 'all 0.3s easeInOut',
+                }}
+              />
+            )}
+          </span>
+        ))}
+      </div>
+      <FlexRow>
+        <FlexColumn>
+          맛
+          <Rating
+            name="taste"
+            value={post.taste}
+            onChange={(value) => handleRatingChange('taste', value)}
+          />
+        </FlexColumn>
+        <FlexColumn>
+          서비스
+          <Rating
+            name="service"
+            value={post.service}
+            onChange={(value) => handleRatingChange('service', value)}
+          />
+        </FlexColumn>
+        <FlexColumn>
+          분위기
+          <Rating
+            name="atmosphere"
+            value={post.atmosphere}
+            onChange={(value) => handleRatingChange('atmosphere', value)}
+          />
+        </FlexColumn>
+        <FlexColumn>
+          만족도
+          <Rating
+            name="satisfaction"
+            value={post.satisfaction}
+            onChange={(value) => handleRatingChange('satisfaction', value)}
+          />
+        </FlexColumn>
+      </FlexRow>
+    </FlexColumn>
   );
 };
 //   const handleRatingChange = (name, newValue) => {

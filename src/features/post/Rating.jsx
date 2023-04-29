@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { PsostRadioChecked } from '@components/Atoms/PsostRadioChecked';
 import { PsostRadio } from '@components/Atoms/PsostRadio';
+import { FlexColumn } from '@components/Atoms/Flex';
 
 const ratings = [
   { value: 5, label: '아주 좋아요' },
@@ -17,10 +18,9 @@ export const Rating = ({ name, value, onChange }) => {
     onChange({ [name]: newValue });
     setCheckedState(newValue);
   };
-
+  const starStyle = { cursor: 'pointer', transition: 'color 0.3s easeInOut' };
   return (
-    <div>
-      <span>{name}: </span>
+    <FlexColumn>
       {ratings.map((rating) => (
         <label key={rating.value}>
           <input
@@ -32,14 +32,24 @@ export const Rating = ({ name, value, onChange }) => {
           />
           <span className="radio-icon">
             {rating.value === checkedState ? (
-              <PsostRadioChecked />
+              <PsostRadioChecked
+                style={{
+                  cursor: 'pointer',
+                  transition: 'color 0.3s easeInOut',
+                }}
+              />
             ) : (
-              <PsostRadio />
+              <PsostRadio
+                style={{
+                  cursor: 'pointer',
+                  transition: 'color 0.3s easeInOut',
+                }}
+              />
             )}
           </span>
           <span className="radio-label">{rating.label}</span>
         </label>
       ))}
-    </div>
+    </FlexColumn>
   );
 };
