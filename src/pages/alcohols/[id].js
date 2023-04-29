@@ -213,7 +213,7 @@ const StoreDetail = () => {
               <BoxTextReal
                 size="20px"
                 variant="grayBolderBox"
-                style={{ height: '316px' }}
+                style={{ height: '316px', marginBottom: '12px' }}
               >
                 <FlexRow style={{ gap: '10px' }}>
                   <StProfile>{/* 왼쪽이미지 */}</StProfile>

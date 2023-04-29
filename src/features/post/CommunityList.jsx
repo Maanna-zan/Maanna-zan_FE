@@ -31,8 +31,13 @@ const StPlace_name = styled.div`
   overflow: hidden;
   text-overflow: ellipsis;
 `;
-const StAddress_name = styled.div`
-  font: var(--body1-medium) 'Pretendard' sans-serif;
+const StWebBg = styled.div`
+  width: 100vw;
+  height: 300px;
+  background-image: url('/banner-CommunityList.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
 `;
 const CommunityList = () => {
   const go = useRouter();
@@ -62,6 +67,7 @@ const CommunityList = () => {
 
   return (
     <>
+      <StWebBg />
       <WebWrapper style={{ marginBottom: '80px', position: 'relative' }}>
         <StHeade3_name style={{ marginBottom: '24px' }}>
           이번주 인기글
