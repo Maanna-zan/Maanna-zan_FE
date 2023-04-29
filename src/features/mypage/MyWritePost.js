@@ -1,11 +1,22 @@
 import { useRouter } from 'next/router';
 import React from 'react';
 import styled from 'styled-components';
+import { useState } from 'react';
+import Pagination from '@components/Modals/Pagenation2';
+import chunk from '@components/Modals/chunk';
 
 const MyWritePost = (data) => {
   const push = useRouter();
   console.log('mywrutedata', data.data.posts);
   const myData = data.data.posts;
+
+  //페이지 네이션 처음 시작이 1번창부터 켜지도록
+  const [activePage, setActivePage] = useState(1);
+
+  //페이지네이션을 위한 구역 data 는 쿼리에서 먼저 undefined되기에 ? 로 있을 때
+  //map을 돌릴 데이터를 4개씩 끊어서 라는 뜯 입니다 (9개ㅈ씩 끊고 싶으면 9 적으면 됩니다. )
+  const chunkedData = myData ? chunk(myData, 9) : [];
+  const currentPageData = chunkedData[activePage - 1] ?? [];
 
   if (myData?.length === 0) {
     return (
@@ -46,22 +57,29 @@ const MyWritePost = (data) => {
     );
   } else {
     return (
-      <ContainerDiv>
-        {myData.map((post) => (
-          <PostDiv key={post.id}>
-            <img
-              className="image"
-              src="{post.s3URl}"
-              alt="내가 쓴 게시물"
-              onerror="this.onerror=null; this.src='Group 2017.png';"
-            />
-            <div className="innerDiv">
-              <p className="title">{post.title}</p>
-              <p className="description">{post.description}</p>
-            </div>
-          </PostDiv>
-        ))}
-      </ContainerDiv>
+      <div>
+        <ContainerDiv>
+          {currentPageData.map((post) => (
+            <PostDiv key={post.id}>
+              <img
+                className="image"
+                src="{post.s3URl}"
+                alt="내가 쓴 게시물"
+                onerror="this.onerror=null; this.src='Group 2017.png';"
+              />
+              <div className="innerDiv">
+                <p className="title">{post.title}</p>
+                <p className="description">{post.description}</p>
+              </div>
+            </PostDiv>
+          ))}
+        </ContainerDiv>
+        <Pagination
+          pages={chunkedData.map((_, i) => i + 1)}
+          activePage={activePage}
+          setPage={setActivePage}
+        />
+      </div>
     );
   }
 };

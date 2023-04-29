@@ -4,14 +4,22 @@ import { cookies } from '@shared/cookie';
 import styled from 'styled-components';
 import { useRouter } from 'next/router';
 import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
+
+//페이지네이션 임포트
+import Pagination from '@components/Modals/Pagenation2';
+import chunk from '@components/Modals/chunk';
 
 const GetmyPost = () => {
   const token = cookies.get('access_token');
 
+  //페이지 네이션 처음 시작이 1번창부터 켜지도록
+  const [activePage, setActivePage] = useState(1);
+
   const { data, isLoading } = useQuery({
     queryKey: ['GET_MYPOSTS'],
     queryFn: async () => {
-      const { data } = await apis.get('/my-page/likePost?all?page=1?size=5', {
+      const { data } = await apis.get('/my-page/likePost', {
         headers: {
           Access_Token: `${token}`,
         },
@@ -21,7 +29,13 @@ const GetmyPost = () => {
     },
   });
 
-  if (data?.length === 0) {
+  //페이지네이션을 위한 구역 data 는 쿼리에서 먼저 undefined되기에 ? 로 있을 때
+  //map을 돌릴 데이터를 4개씩 끊어서 라는 뜯 입니다 (9개ㅈ씩 끊고 싶으면 9 적으면 됩니다. )
+  const chunkedData = data ? chunk(data, 9) : [];
+  const currentPageData = chunkedData[activePage - 1] ?? [];
+  console.log('currentPageData', currentPageData);
+
+  if (!data || data?.length === 0) {
     return (
       <div
         style={{
@@ -60,30 +74,37 @@ const GetmyPost = () => {
     );
   } else {
     return (
-      <div
-        style={{
-          display: 'flex',
-          gap: '24px',
-          flexWrap: 'wrap',
-        }}
-      >
-        {data?.map((post) => (
-          <ContainerDiv key={post.id}>
-            <div>
-              <img
-                style={{
-                  width: '384px',
-                  height: '242px',
-                  objectFit: 'cover',
-                  borderRadius: '12px',
-                }}
-                src={post.s3Url}
-                alt={post.title}
-              />
-              <p>{post.title}</p>
-            </div>
-          </ContainerDiv>
-        ))}
+      <div>
+        <div
+          style={{
+            display: 'flex',
+            gap: '24px',
+            flexWrap: 'wrap',
+          }}
+        >
+          {currentPageData.map((post) => (
+            <ContainerDiv key={post.id}>
+              <div>
+                <img
+                  style={{
+                    width: '384px',
+                    height: '242px',
+                    objectFit: 'cover',
+                    borderRadius: '12px',
+                  }}
+                  src={post.s3Url}
+                  alt={post.title}
+                />
+                <p>{post.title}</p>
+              </div>
+            </ContainerDiv>
+          ))}
+        </div>
+        <Pagination
+          pages={chunkedData.map((_, i) => i + 1)}
+          activePage={activePage}
+          setPage={setActivePage}
+        />
       </div>
     );
   }
