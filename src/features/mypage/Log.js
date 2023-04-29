@@ -275,35 +275,46 @@ function Log() {
                 <CalLogDiv key={calLog.id}>
                   {isEditMode[calLog.id] ? (
                     <>
-                      <InputArea
-                        variant="default"
-                        size="lg"
-                        type="text"
-                        name="title"
-                        value={callederTitle}
-                        onChange={(e) => setCallenderTitle(e.target.value)}
-                      />
-                      <InputArea
-                        variant="default"
-                        size="lg"
-                        type="text"
-                        name="content"
-                        value={callederContent}
-                        onChange={(e) => setCallenderContent(e.target.value)}
-                      />
-                      <InputArea
-                        variant="default"
-                        size="lg"
-                        type="date"
-                        name="content"
-                        value={callederSetDated}
-                        onChange={(e) => setCallenderSetDated(e.target.value)}
-                      />
-                      <div>
-                        <button onClick={() => handleDelete(calLog.id)}>
+                      <div className="editmode">
+                        <div className="twoEdit">
+                          <InputArea
+                            className="editInput"
+                            variant="default"
+                            size="md"
+                            type="text"
+                            name="title"
+                            value={callederTitle}
+                            onChange={(e) => setCallenderTitle(e.target.value)}
+                          />
+                          <InputArea
+                            className="editInput"
+                            variant="default"
+                            size="md"
+                            type="date"
+                            name="content"
+                            value={callederSetDated}
+                            onChange={(e) =>
+                              setCallenderSetDated(e.target.value)
+                            }
+                          />
+                        </div>
+                        <textarea
+                          className="textarea"
+                          name="content"
+                          value={callederContent}
+                          onChange={(e) => setCallenderContent(e.target.value)}
+                        />
+                      </div>
+                      <div className="twoButton">
+                        <button className="done" onClick={handleUpdate}>
+                          수정
+                        </button>
+                        <button
+                          className="del"
+                          onClick={() => handleDelete(calLog.id)}
+                        >
                           삭제
                         </button>
-                        <button onClick={handleUpdate}>완료</button>
                       </div>
                     </>
                   ) : (
@@ -378,6 +389,7 @@ const Div = styled.div`
     /* margin-top: -20px; */
   }
   .react-calendar__tile {
+    padding: 8px 10px;
   }
   .react-calendar__tile--now:enabled:hover,
   .react-calendar__tile--now:enabled:focus {
@@ -387,6 +399,8 @@ const Div = styled.div`
   .react-calendar__tile--now {
     background: #ff4840;
     border-radius: 12px;
+    width: fit-content;
+    block-size: fit-content;
   }
   .react-calendar__navigation__label > span {
     font-weight: 600;
@@ -396,14 +410,25 @@ const Div = styled.div`
   .react-calendar__tile:enabled:hover,
   .react-calendar__tile:enabled:focus {
     border-radius: 12px;
-    color: white;
+    /* Primary Color/active */
+
+    background: #ffe0df;
   }
+  .react-calendar__month-view__days__day--weekend {
+    color: black;
+  }
+  /* react-calendar__tile react-calendar__month-view__days__day react-calendar__month-view__days__day--weekend default_pointer_cs */
   .react-calendar__tile--active {
-    background-color: #ff4840;
+    background: #ff6a64;
     border-radius: 12px;
   }
   .react-calendar__month-view__days__day—weekend {
     color: #000000;
+  }
+  /* react-calendar__navigation__arrow react-calendar__navigation__next2-button default_pointer_cs */
+  .react-calendar__navigation :hover {
+    border-radius: 50%;
+    color: red;
   }
   .react-calendar__month-view__weekdays {
     font-weight: 600;
@@ -433,5 +458,48 @@ const CalLogDiv = styled.div`
   .editImg {
     height: 38px;
     width: 38px;
+  }
+  .editmode {
+    display: flex;
+    flex-direction: column;
+    width: 570px;
+    /* border: 1px solid #c8150d; */
+  }
+  .twoEdit {
+    display: flex;
+  }
+  .twoButton {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+  }
+  .editInput {
+    border: none;
+    width: 180px;
+  }
+  .textarea {
+    margin-top: 5px;
+    border: none;
+  }
+  .del {
+    padding: 3px 12px;
+    color: white;
+    border-radius: 8px;
+    border: 1px solid #ff4840;
+    background-color: #ff4840;
+    :hover {
+      color: #c8150d;
+    }
+  }
+
+  .done {
+    padding: 3px 12px;
+    color: white;
+    border-radius: 8px;
+    border: 1px solid #ff4840;
+    background-color: #ff4840;
+    :hover {
+      color: #c8150d;
+    }
   }
 `;
