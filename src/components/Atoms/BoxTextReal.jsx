@@ -79,6 +79,9 @@ export const BoxTextReal = ({
       padding = '20px';
       height = '316px';
       break;
+    case '1624':
+      padding = '16px 24px';
+      break;
   }
 
   // about full width
