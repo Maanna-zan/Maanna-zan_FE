@@ -20,34 +20,37 @@ export const Rating = ({ name, value, onChange }) => {
   };
   const starStyle = { cursor: 'pointer', transition: 'color 0.3s easeInOut' };
   return (
-    <FlexColumn>
+    <FlexColumn
+      style={{ justifyContent: ' center', gap: '10px', marginBottom: '20px' }}
+    >
       {ratings.map((rating) => (
-        <label key={rating.value}>
+        <label
+          key={rating.value}
+          style={{
+            font: `var(--label2-regular) Pretendard sans-serif`,
+          }}
+        >
           <input
+            style={{ width: '0px', height: '0px' }}
             type="radio"
             name={name}
             value={rating.value}
             checked={rating.value === checkedState}
             onChange={() => handleRatingChange(rating.value)}
           />
-          <span className="radio-icon">
+          <span className="radio-icon" style={{ marginRight: '4px' }}>
             {rating.value === checkedState ? (
-              <PsostRadioChecked
-                style={{
-                  cursor: 'pointer',
-                  transition: 'color 0.3s easeInOut',
-                }}
-              />
+              <PsostRadioChecked />
             ) : (
-              <PsostRadio
-                style={{
-                  cursor: 'pointer',
-                  transition: 'color 0.3s easeInOut',
-                }}
-              />
+              <PsostRadio />
             )}
           </span>
-          <span className="radio-label">{rating.label}</span>
+          <span
+            className="radio-label"
+            style={{ width: '0px', height: '18px' }}
+          >
+            {rating.label}
+          </span>
         </label>
       ))}
     </FlexColumn>
