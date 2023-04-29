@@ -5,6 +5,7 @@ import { WebWrapper, WebWrapperHeight } from '@components/Atoms/Wrapper'
 import { FlexRow } from '@components/Atoms/Flex'
 import { Map, MapMarker } from 'react-kakao-maps-sdk';
 import styled from 'styled-components';
+import Pagination from '@components/Modals/Pagenation2';
 
 function MapMidPoint() {
     // queryKey에 캐싱하여 값 불러오기위해 queryClient선언
@@ -39,18 +40,20 @@ function MapMidPoint() {
             alert(data);
         }
     });
-    console.log("@@data",data?.data?.documents)
     console.log("@@날것의data",data?.data)
     const kakaoApi = data?.data?.documents
     console.log("@@kakaoApi",kakaoApi)
+
     //  클릭 선택된 장소를 저장할 state 변수
     const [checkedPlace, setCheckedPlace] = useState('')
-        //  임시적인 Submit Handler (GetSpotsNearbyMidPoint함수 실행)
-        const keywordSearchSubmitHandler = (e) => {
-            e.preventDefault();
-            // 지도 불러오기 및 마커 및 인포윈도우, pagination생성 함수 실행
-            GetSpotsNearbyMidPoint(kakaoApi)
-        };
+
+    //  임시적인 Submit Handler (GetSpotsNearbyMidPoint함수 실행)
+    const keywordSearchSubmitHandler = (e) => {
+        e.preventDefault();
+        // 지도 불러오기 및 마커 및 인포윈도우, pagination생성 함수 실행
+        GetSpotsNearbyMidPoint(kakaoApi)
+    };
+
     // 페이지 렌더링 되자마자 지도 불러오기.@@(한 번 더 실행이 되어야 마커들찍히는 문제 해결 필요)@@
     useEffect(() => {
         GetSpotsNearbyMidPoint(kakaoApi)
@@ -68,12 +71,6 @@ function MapMidPoint() {
         //지도 생성 및 객체 리턴
         const map = new kakao.maps.Map(container, options); 
         const ps = new kakao.maps.services.Places();
-        // const map = document.getElementById("map");
-        // const map = new kakao.maps.Map(document.getElementById('map'), 
-        // {
-        //     center: new kakao.maps.LatLng(37.5546788388674, 126.970606917394),
-        //     level: 3
-        // });
         //  인포윈도우 선언(카카오map api에서 부르기)
         const infowindow = new kakao.maps.InfoWindow({ zIndex: 1 });
         // // 마커를 담을 배열입니다
@@ -85,15 +82,53 @@ function MapMidPoint() {
             e.preventDefault();
             //kakaoApi넣어줘야 작동
             showingOnMap(kakaoApi)
+            // MidPointMarkerSet(midPointProp)
             });
         }
+        //  중간지점 마커 시도.
+        // function MidPointMarkerSet() {  
+        //     MidPointMarker()
+        //     displayMidPointMarker()
+        //     function MidPointMarker(midPointProp) {
+        //         const imageMidPointSrc = 'MaannajanLogo.png', // 마커 이미지 url, 스프라이트 이미지를 씁니다
+        //         imageSize = new kakao.maps.Size(36, 37),  // 마커 이미지의 크기
+        //         imgOptions =  {
+        //             spriteSize : new kakao.maps.Size(36, 691), // 스프라이트 이미지의 크기
+        //             spriteOrigin : new kakao.maps.Point(0, (idx*46)+10), // 스프라이트 이미지 중 사용할 영역의 좌상단 좌표
+        //             offset: new kakao.maps.Point(13, 37) // 마커 좌표에 일치시킬 이미지 내에서의 좌표
+        //         },
+        //         markerImage = new kakao.maps.MarkerImage(imageMidPointSrc, imageSize, imgOptions),
+        //         MidPointMarker = new kakao.maps.Marker({
+        //             position: midPointProp, // 마커의 위치
+        //             image: markerImage 
+        //         });
+        //         MidPointMarker.setMap(map); // 지도 위에 마커를 표출
+        //     // markers.push(marker);  // 배열에 생성된 마커를 추가
+        //     return MidPointMarker;
+        //     }
+        //     function displayMidPointMarker(midPointProp) {
+        //         let marker = new kakao.maps.Marker({
+        //         map: map,
+        //         position: new kakao.maps.LatLng(midPointProp.lat, place.lng)
+        //         });
+        // }}
+        // kakao Pagination API중 gotoPage 함수(시도 실패) 
+        // function gotoPage(page) {
+        //     const pageSize = 15; // 페이지당 표시할 장소 수
+        //     const pageCenter = (page - 1) * pageSize + pageSize / 2; // 페이지 중심 장소 인덱스
+        //     const center = new kakao.maps.LatLng(kakaoApi[pageCenter]?.y, kakaoApi[pageCenter]?.x); // 페이지 중심 좌표
+        //     map.setCenter(center); // 지도의 중심 좌표를 페이지 중심 좌표로 설정
+        //     refetch({
+        //         url: `/kakaoApi?y=${midPointProp?.lat}&x=%20${midPointProp?.lng}&query=술집&radius=1500&page=${page}&size=15&sort=distance`
+        //     });
+        // }
         
         // 마커 및 인포윈도우, pagination
         function showingOnMap(data, pagination) {
                 // 검색 목록과 마커를 표출합니다
                 displayPlaces(data);
                 // 페이지 목록 보여주는 displayPagination() 추가
-                displayPagination(pagination);
+                displayPagination(data);
                 console.log("###data###", data)
                 console.log("###pagination###", pagination)
             const bounds = new kakao.maps.LatLngBounds();
@@ -271,17 +306,23 @@ function MapMidPoint() {
                 paginationEl.removeChild(paginationEl.lastChild)
             }
     
-            for (let i = 1; i <= pagination.last; i++) {
+            const totalPage = Math.ceil(data?.data?.meta?.pageable_count / 3); // 전체 페이지 수
+            const currentPage = pagination.currentPage; // 현재 페이지
+
+            for (let i = 1; i <= totalPage; i++) {
                 const el = document.createElement('a')
                 el.href = '#'
                 el.innerHTML = i
-    
-                if (i === pagination.current) {
+                if (i === currentPage) {
                 el.className = 'on';
                 } else {
                 el.onclick = (function (i) {
                     return function () {
-                    pagination.gotoPage(i)
+                        refetch({
+                            url: `/kakaoApi?y=${midPointProp?.lat}&x=%20${midPointProp?.lng}&query=술집&radius=1500&page=${i}&size=15&sort=distance`
+                        });
+                        pagination.currentPage = i;
+                        displayPagination(pagination);
                     }
                 })(i)
                 }
