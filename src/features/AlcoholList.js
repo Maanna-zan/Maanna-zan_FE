@@ -37,40 +37,10 @@ import { InputArea } from '@components/Atoms/Input';
 
 // const [like, setLike] = useState(like);
 const AlcoholList = () => {
-  //   const { handleLike } = useLikeStore();
-  //   const likePostHandler = async () => {
-  //     try {
-  //       await likePost();
-  //       setLike(!like);
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   };
   const { go } = useRouter();
   const router = useRouter();
 
   const { alkolsLike, alkolsIsLikeLoading } = useGetLikeStore();
-
-  // //게시글 좋아요한 가게와 현재가게 매칭
-  // const storeLikeMine =
-  //   (alkolsLike && alkolsLike.flat().find((obj) => obj.apiId === apiId)) || {};
-
-  // let alkolLikeMatch = [];
-  // if (alkolsLike && alkolsLike.data) {
-  //   alkolLikeMatch = alkolsLike.data;
-  // }
-  // const [roomLike, setRoomLike] = useState(storeLikeMine?.roomLike);
-  // const { handleLike } = useLikeStore();
-  // console.log('리스트스토어 좋아요한 값', storeLikeMine.roomLike);
-
-  // const likeStoreHandler = async (apiId) => {
-  //   try {
-  //     await likeStore(apiId);
-  //     setRoomLike(!roomLike);
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
 
   const [storeListPage, setStoreListPage] = useState('all');
   const [activeTab, setActiveTab] = useState('all');

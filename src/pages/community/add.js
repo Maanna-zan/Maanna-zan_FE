@@ -5,15 +5,21 @@ import { cookies } from '../../shared/cookie';
 import { apis } from '../../shared/axios';
 import { FlexRow } from '@components/Atoms/Flex';
 import { WebWrapper792px } from '@components/Atoms/Wrapper';
+import { ReviewForm } from '@features/post/ReviewForm';
 const AddPostForm = () => {
   const router = useRouter();
   const apiIdReal = router.query.storeId;
 
   console.log('apiIdReal-------------', apiIdReal);
   const [post, setPost] = useState({
+    storename: '',
     title: '',
     description: '',
     s3Url: '',
+    taste: null,
+    service: null,
+    atmosphere: null,
+    satisfaction: null,
   });
 
   const access_token = cookies.get('access_token');
@@ -46,13 +52,24 @@ const AddPostForm = () => {
     formData.append('file', file); // 이미지를 file 키로 추가
     setPost((pre) => ({ ...pre, s3Url: formData }));
   };
-
+  const handleRatingChange = (name, value) => {
+    setPost((prevPost) => ({
+      ...prevPost,
+      [name]: value[name],
+    }));
+    console.log('setPosthandleRatingChange', post);
+  };
   const handleSubmit = (e) => {
     e.preventDefault();
     const formData = new FormData();
     formData.append('storename', post.storename);
     formData.append('title', post.title);
     formData.append('description', post.description);
+    formData.append('taste', post.taste);
+    formData.append('service', post.service);
+    formData.append('atmosphere', post.atmosphere);
+    formData.append('satisfaction', post.satisfaction);
+
     if (post.s3Url) {
       for (const [key, value] of post.s3Url.entries()) {
         formData.append(key, value);
@@ -83,6 +100,10 @@ const AddPostForm = () => {
             />
           </FlexRow>
         </FlexRow>
+        <ReviewForm
+          post={post}
+          handleRatingChange={handleRatingChange}
+        ></ReviewForm>
         <input
           type="text"
           value={post.title}
