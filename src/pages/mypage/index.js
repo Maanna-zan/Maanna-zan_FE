@@ -255,6 +255,6 @@ const Span = styled.span`
 `;
 const BottomDiv = styled.div`
   width: 100%;
-  height: 727px;
+  height: 100%;
   background-color: #f7f8f9;
 `;
