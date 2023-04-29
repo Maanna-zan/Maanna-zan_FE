@@ -45,25 +45,22 @@ export default function SignInModal({ onClose }) {
       cookies.set('refresh_token', data.headers.refresh_token, { path: '/' });
       cookies.set('nick_name', data.data.data, { path: '/' });
       localStorage.setItem('nick_name', data.data.data, { path: '/' });
+
+      console.log('login', data);
+      return data;
     },
-    onSuccess: () => {
-      router.push('/');
+    onSuccess: (data) => {
+      console.log('login', data);
+      if (data.data.message == '비밀번호 변경이 필요합니다') {
+        router.push('/OAuth');
+      } else {
+        router.push('/');
+      }
     },
     onError: (e) => {
       console.log('error login', e.response.data.message);
       const error = e.response.data.message;
       alert(error);
-    },
-  });
-
-  const { mutate: kakao } = useMutation({
-    mutationFn: async (user) => {
-      const data = await apis.post('/OAuth/Kakao', user);
-      //디코드 활용
-      console.log('data', data);
-    },
-    onSuccess: () => {
-      router.push('/');
     },
   });
 
