@@ -6,27 +6,29 @@ export const Footer = () => {
   return (
     <>
       <FooterDiv>
-        <WebWrapper style={{ justifyContent: 'center' }}>
+        <WebWrapper>
           <InnerDiv>
-            <img className="logoimg" src="Group 1893.png" alt="만나잔 로고" />
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              <img className="logoimg" src="Group 1893.png" alt="만나잔 로고" />
+              <div className="informationB">
+                <p className="Bp">(주)만나잔</p>
+                <div>
+                  <p className="Bp">대표이사 이산하</p>
+                  <p className="Bp">경기 성남시 분당구 정자일로 95</p>
+                  <p className="Bp">manajan@gmail.com</p>
+                </div>
+                <div>
+                  <p className="Bp">사업자등록번호 123-45-67890</p>
+                  <p className="Bp">통신판매업신고번호 제1234-서울서초-1234</p>
+                </div>
+              </div>
+            </div>
             <div className="informationA">
               <a className="aTag">리스트</a>
               <a className="aTag">탐색</a>
               <a className="aTag">커뮤니티</a>
               <a className="aTag">공지사항</a>
               <a className="aTag">개인정보처리방침</a>
-            </div>
-            <div className="informationB">
-              <p className="Bp">(주)만나잔</p>
-              <div>
-                <p className="Bp">대표이사 이산하</p>
-                <p className="Bp">경기 성남시 분당구 정자일로 95</p>
-                <p className="Bp">manajan@gmail.com</p>
-              </div>
-              <div>
-                <p className="Bp">사업자등록번호 123-45-67890</p>
-                <p className="Bp">통신판매업신고번호 제1234-서울서초-1234</p>
-              </div>
             </div>
           </InnerDiv>
         </WebWrapper>
@@ -43,18 +45,17 @@ const FooterDiv = styled.div`
 `;
 const InnerDiv = styled.div`
   display: flex;
-  justify-content: center;
-  flex-direction: column;
-  align-items: center;
+  width: 100%;
+  justify-content: space-between;
   row-gap: 28px;
+  padding-top: 75px;
   .logoimg {
-    margin-top: 68px;
     width: 81px;
     height: 22px;
   }
   .informationA {
     display: flex;
-    width: 50%;
+    width: 30%;
     justify-content: center;
     gap: 28px;
     font-weight: 400;
@@ -63,8 +64,9 @@ const InnerDiv = styled.div`
     color: #e8ebed;
   }
   .informationB {
+    padding-top: 30px;
     display: flex;
-    width: 50%;
+    width: 100%;
     gap: 24px;
     justify-content: center;
     font-weight: 400;
@@ -80,5 +82,5 @@ const InnerDiv = styled.div`
 const Hr = styled.hr`
   margin-top: 53px;
   background: #72787f;
-  width: 95%;
+  width: 85%;
 `;
