@@ -177,7 +177,6 @@ function Log() {
               tileContent={({ date, view }) => {
                 // 날짜 타일에 컨텐츠 추가하기 (html 태그)
                 // 추가할 html 태그를 변수 초기화
-
                 let html = [];
                 // 현재 날짜가 post 작성한 날짜 배열(mark)에 있다면, dot div 추가
                 if (mark.find((x) => x === moment(date).format('YYYY-MM-DD'))) {
@@ -193,15 +192,14 @@ function Log() {
                 );
               }}
             />
-            <div className="text-gray-500 mt-4">
-              {moment(value).format('YYYY년 MM월 DD일')}
-            </div>
             <EventForm
+              selectedDateLog={moment(value).format('MM월DD일')}
               selectedDate={moment(value).format('YYYY-MM-DD')}
               onSubmit={handleEventSubmit}
             />
           </Div>
           <ReviewDiv>
+            <h1 className="title">기록</h1>
             {currentPageData.map((calLog) => (
               <CalLogDiv key={calLog.id}>
                 <img
@@ -238,6 +236,11 @@ const ReviewDiv = styled.div`
   .p {
     font-size: 24px;
     font-weight: 600;
+  }
+  .title {
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 24px;
   }
 `;
 
