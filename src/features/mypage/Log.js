@@ -3,22 +3,55 @@ import Calendar from 'react-calendar';
 import moment from 'moment/moment';
 import 'react-calendar/dist/Calendar.css';
 import styles from './react-calender.module.css';
-import { useQuery, useMutation } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import styled from 'styled-components';
-import Calender from './Calender';
 import { cookies } from '@shared/cookie';
 import { apis } from '@shared/axios';
-import instance from '@shared/instance';
 import EventForm from './EventForm';
+import { InputArea } from '@components/Atoms/Input';
 
 //페이지네이션 임포트
 import Pagination from '@components/Modals/Pagenation2';
 import chunk from '@components/Modals/chunk';
 
 function Log() {
+  const queryClient = useQueryClient();
+
   const [value, onChange] = useState(new Date());
   //페이지 네이션 처음 시작이 1번창부터 켜지도록
   const [activePage, setActivePage] = useState(1);
+  //캘린더 로그 수정모드
+  const [isEditMode, setIsEditMode] = useState({});
+
+  const [callenderId, setCallenderId] = useState(null);
+  const [callederTitle, setCallenderTitle] = useState('');
+  const [callederContent, setCallenderContent] = useState('');
+  const [callederSetDated, setCallenderSetDated] = useState('');
+
+  const handleEdit = (calLog) => {
+    setIsEditMode((prev) => ({ ...prev, [calLog.id]: true }));
+    setCallenderId(calLog.id);
+    setCallenderTitle(calLog.title);
+    setCallenderSetDated(calLog.selectedDate);
+    setCallenderContent(calLog.content);
+  };
+
+  const handleUpdate = () => {
+    const payload = {
+      title: callederTitle,
+      content: callederContent,
+      selectedDate: callederSetDated,
+    };
+    const calLog = data.find((calLog) => calLog.id === callenderId);
+    if (calLog) {
+      calLogUpdate({ id: calLog.id, payload });
+    }
+    setIsEditMode((prev) => ({ ...prev, [calLog.id]: false }));
+  };
+
+  const handleDelete = (id) => {
+    calLogDelete(id);
+  };
 
   // const mark = ['2023-04-20', '2023-04-28'];
 
@@ -34,7 +67,7 @@ function Log() {
   const { data } = useQuery({
     queryKey: ['LOG_DATE'],
     queryFn: async () => {
-      const data = await apis.get('my-page/calendarList', {
+      const data = await apis.get('/my-page/calendarList', {
         headers: {
           Access_Token: `${token}`,
         },
@@ -55,6 +88,7 @@ function Log() {
   });
   console.log('res', data);
 
+  // 츄가
   const { mutate } = useMutation({
     mutationFn: async (event) => {
       const data = await apis.post('my-page/calendar', event, {
@@ -73,8 +107,9 @@ function Log() {
       alert(data.data.message);
     },
   });
+
+  //추가 payload
   const handleEventSubmit = (event) => {
-    console.log('Submitted event:', event);
     mutate(event);
   };
 
@@ -82,6 +117,44 @@ function Log() {
   //map을 돌릴 데이터를 4개씩 끊어서 라는 뜯 입니다 (9개ㅈ씩 끊고 싶으면 9 적으면 됩니다. )
   const chunkedData = data ? chunk(data, 4) : [];
   const currentPageData = chunkedData[activePage - 1] ?? [];
+
+  //캘린더 로그 수정
+  //수정
+  const { mutate: calLogUpdate } = useMutation({
+    mutationFn: async ({ id, payload }) => {
+      console.log('patloadEdit', payload);
+      const { data } = await apis.patch(`/my-page/calendar/${id}`, payload, {
+        headers: {
+          Access_Token: `${token}`,
+        },
+      });
+      console.log('editdata', data);
+      return data;
+    },
+    onSuccess: () => {
+      setIsEditMode(false);
+
+      queryClient.invalidateQueries(['LOG_DATE']);
+      window.alert('수정 완료!');
+    },
+    onError: () => {
+      window.alert('수정 오류!');
+    },
+  });
+  //삭제
+  const { mutate: calLogDelete } = useMutation({
+    mutationFn: async (id) => {
+      await apis.delete(`/my-page/calendar/${id}`, {
+        headers: {
+          Access_Token: `${token}`,
+        },
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(['LOG_DATE']);
+      alert.confirm('일정을 삭제하시겠습니까?');
+    },
+  });
 
   if (!data || data?.length === 0) {
     return (
@@ -106,7 +179,6 @@ function Log() {
               tileContent={({ date, view }) => {
                 // 날짜 타일에 컨텐츠 추가하기 (html 태그)
                 // 추가할 html 태그를 변수 초기화
-
                 let html = [];
                 // 현재 날짜가 post 작성한 날짜 배열(mark)에 있다면, dot div 추가
                 if (mark.find((x) => x === moment(date).format('YYYY-MM-DD'))) {
@@ -122,16 +194,14 @@ function Log() {
                 );
               }}
             />
-            <div className="text-gray-500 mt-4">
-              {moment(value).format('YYYY년 MM월 DD일')}
-            </div>
             <EventForm
+              selectedDateLog={moment(value).format('MM월DD일')}
               selectedDate={moment(value).format('YYYY-MM-DD')}
               onSubmit={handleEventSubmit}
             />
           </Div>
           <ReviewDiv>
-            <p>나의 로그</p>
+            <h1 className="title">기록</h1>
             <div
               style={{
                 width: '688px',
@@ -200,20 +270,68 @@ function Log() {
           </Div>
           <ReviewDiv>
             <h1 className="title">기록</h1>
-            {currentPageData.map((calLog) => (
-              <CalLogDiv key={calLog.id}>
-                <img
-                  src="Group 2248.png"
-                  alt="글쓰기 수정 버튼"
-                  className="editImg"
-                />
-                <div>
-                  <p>{calLog.title}</p>
-                  <p>{calLog.content}</p>
-                  <p>{calLog.selectedDate.substr(2).replace(/-/gi, '.')}</p>
-                </div>
-              </CalLogDiv>
-            ))}
+            <div>
+              {currentPageData.map((calLog) => (
+                <CalLogDiv key={calLog.id}>
+                  {isEditMode[calLog.id] ? (
+                    <>
+                      <InputArea
+                        variant="default"
+                        size="lg"
+                        type="text"
+                        name="title"
+                        value={callederTitle}
+                        onChange={(e) => setCallenderTitle(e.target.value)}
+                      />
+                      <InputArea
+                        variant="default"
+                        size="lg"
+                        type="text"
+                        name="content"
+                        value={callederContent}
+                        onChange={(e) => setCallenderContent(e.target.value)}
+                      />
+                      <InputArea
+                        variant="default"
+                        size="lg"
+                        type="date"
+                        name="content"
+                        value={callederSetDated}
+                        onChange={(e) => setCallenderSetDated(e.target.value)}
+                      />
+                      <div>
+                        <button onClick={() => handleDelete(calLog.id)}>
+                          삭제
+                        </button>
+                        <button onClick={handleUpdate}>완료</button>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <img
+                        src="Group 2248.png"
+                        alt="글쓰기 수정 버튼"
+                        className="editImg"
+                        onClick={() => handleEdit(calLog)}
+                        // onClick={() => {
+                        //   setIsEditMode((prev) => ({
+                        //     ...prev,
+                        //     [calLog.id]: !prev[calLog.id],
+                        //   }));
+                        // }}
+                      />
+                      <div>
+                        <p>{calLog.title}</p>
+                        <p>{calLog.content}</p>
+                        <p>
+                          {calLog.selectedDate.substr(2).replace(/-/gi, '.')}
+                        </p>
+                      </div>
+                    </>
+                  )}
+                </CalLogDiv>
+              ))}
+            </div>
             <Pagination
               pages={chunkedData.map((_, i) => i + 1)}
               activePage={activePage}
@@ -246,8 +364,8 @@ const ReviewDiv = styled.div`
 
 const Div = styled.div`
   .react-calendar {
-    width: 400px;
-    max-width: 100%;
+    width: 487px;
+    height: 318px;
     background: rgb(255, 255, 255);
     /* border: 1px solid #a0a096; */
     border-radius: 8px;
@@ -255,6 +373,11 @@ const Div = styled.div`
     font-family: Arial, Helvetica, sans-serif;
     line-height: 1.125em;
     padding: 10px;
+  }
+  .react-calendar__viewContainer {
+    /* margin-top: -20px; */
+  }
+  .react-calendar__tile {
   }
   .react-calendar__tile--now:enabled:hover,
   .react-calendar__tile--now:enabled:focus {
@@ -279,7 +402,7 @@ const Div = styled.div`
     background-color: #ff4840;
     border-radius: 12px;
   }
-  .react-calendar__month-view__days__day--weekend {
+  .react-calendar__month-view__days__day—weekend {
     color: #000000;
   }
   .react-calendar__month-view__weekdays {
@@ -292,8 +415,8 @@ const Div = styled.div`
     width: 8px;
     background-color: #f87171;
     border-radius: 50%;
-    display: flex;
-    margin-left: 16px;
+    margin-left: 22px;
+    position: fixed;
   }
 `;
 
