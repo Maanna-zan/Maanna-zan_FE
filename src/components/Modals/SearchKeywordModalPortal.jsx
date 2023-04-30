@@ -9,6 +9,7 @@ import styled from 'styled-components';
 import { WebWrapper, WebWrapperHeight } from '@components/Atoms/Wrapper';
 import { FlexRow } from '@components/Atoms/Flex';
 import { InputArea } from '@components/Atoms/Input';
+import { ArrangeCenterWrapper } from '@components/Atoms/Wrapper';
 import Calendar from 'react-calendar';
 import moment from 'moment';
 import 'react-calendar/dist/Calendar.css';
@@ -46,11 +47,15 @@ function SearchedKeywordLandingPage() {
       console.error('Invalid place object:', place);
       return;
     }
+    console.log("@@@@@@@@@@@@place", place)
     //  place 매개변수 받아 모달창 props의 좌표값 받아서 지도 옮겨줌.
     setCenter({ lat: y, lng: x });
     // 인풋박스 각각의 값에 각각의 props state값 주는 로직.
     const newInputValues = [...inputValues];
-    newInputValues[currentInputIndex] = place.place_name;
+    // 인풋 박스 안에 넣을 값중 키워드이름 + (주소). 그중 도로명 주소가 없다면 지번 주소로 입력되도록 placeAddress선언
+    const placeAddress = place.road_address_name || place.address_name;
+    //  인풋 박스에 키워드이름(주소이름) 적히도록 수정.
+    newInputValues[currentInputIndex] = `${place.place_name} (${placeAddress})`;
     setInputValues(newInputValues);
     //  x,y값이 추가 되어도 같은 값이 x2,y2로 들어가는 버그 수정 코드
     let newCheckedPlace = {
@@ -78,26 +83,59 @@ function SearchedKeywordLandingPage() {
   const onCloseModalHandler = () => {
     setShowModal(false);
   };
+
   //Input 박스 추가
   const renderInputArea = (index) => {
     return (
-      <InputArea
-        key={index}
-        type="text"
-        placeholder="이 버튼을 눌러 위치를 추가해주세요."
-        value={inputValues[index]}
-        variant="default"
-        size="df"
-        cursor="pointer"
-        readOnly={true}
-        onClick={() => onInputClickHandler(index)}
-        style={{
-          margin: '8px 0 5px 10px',
-          border: 'none',
-          backgroundColor: '#F7F8F9',
-          fontSize: '12px',
-        }}
-      ></InputArea>
+      <div style={{ display: 'flex', alignItems: 'center' }} >
+        <InputArea
+          key={index}
+          type="text"
+          placeholder="이  버튼을  눌러  본인  혹은  친구의 위치를  추가해주세요."
+          value={inputValues[index]}
+          variant="default"
+          size="leftIcon"
+          readOnly={true}
+          onClick={() => onInputClickHandler(index)}
+          style={{
+            width: 'calc(100%)', //X 버튼 너비를 제외한 인풋박스의 너비를 설정위해 calc활용(필요시 연산자를 사용하여 값 계산하기) 
+            margin: '8px 0 5px 10px',
+            border: 'none',
+            backgroundColor: '#F7F8F9',
+            fontSize: '14px',
+            lineHeight: '18px',
+            cursor:"pointer",
+            //Icon style
+            // inputValues에 값 들어가면 돋보기 아이콘 사라지게하기. 반대로 X 버튼 나타나기.
+            //  (...spread연산자 쓴 이유는 inputValues 배열의 모든 요소를 새로운 배열에 펼쳐서 복사하기위해)
+            ...(inputValues[index] 
+              ? {
+                paddingLeft: "12px",
+                border: "1px solid black"
+              } : {
+                backgroundImage: `url(ModalPortalSearchBarIcon.png)`, //Icon 불러오기
+                backgroundRepeat: "no-repeat", //이미지 한번만
+                backgroundPosition: "12px center", // 위치
+                backgroundSize: "18px", // 이미지 크기
+                paddingLeft: "36px", //  placeholder와의 거리
+              }),
+              boxSizing: "border-box", //   input의 넓이가 부모 넓이보다 넘는 현상방지
+          }}
+        ></InputArea>
+        {inputValues[index] && (
+      <div 
+      style={{ 
+        position: 'absolute', 
+        marginLeft: '500px',
+        paddingTop: '6px',
+      }}>
+      <img 
+      // style={{display: 'inlineBlock', verticalAlign: 'middle'}}
+      src="ModalPortalInputXButton.png" alt="X button" />
+    </div>
+  )}
+
+      </div>
     );
   };
   //  Modal창 렌더링
@@ -244,23 +282,6 @@ function SearchedKeywordLandingPage() {
           <ContentWrapper>
             <H1Styled>친구와 본인의 </H1Styled>
             <Highlighting>위치를 입력해주세요</Highlighting>
-            <div>
-              {inputs}
-              {renderModal()}
-              <ButtonGrayStyle onClick={addingInputBoxButtonHandler}>
-                추가하기
-              </ButtonGrayStyle>
-              <ButtonRedStyle
-                onClick={() => {
-                  mutate(checkedPlace);
-                }}
-              >
-                검색
-              </ButtonRedStyle>
-              <button onClick={moveToMapMidPointButtonClickHandler}>
-                중간지점탐색
-              </button>
-            </div>
             <Div className="calendar-container">
               <Calendar
                 //196 줄의 핸들러 함수 -> 날짜 얼럿이 뜹니다.
@@ -298,6 +319,32 @@ function SearchedKeywordLandingPage() {
                 {moment(value).format('YYYY- MM- DD')}
               </div>
             </Div>
+            <div>
+              {inputs}
+              {renderModal()}
+                <ArrangeCenterWrapper>
+                  <ButtonGrayStyle inputCount={inputCount} onClick={addingInputBoxButtonHandler}
+                  /* styled-components로 해당 버튼 꾸며주기에 아래와 같은 조건을 걸기 위해서는 props를 내려준다. */> 
+                  {inputCount < 4 ? '친구 위치 추가하기' : '최대 4명까지 추가할 수 있습니다.'}
+                  </ButtonGrayStyle>
+                </ArrangeCenterWrapper>
+            </div>
+            <div>
+              {!midPoint && inputValues.filter(Boolean).length >= 2 && ( //filter(Boolean)은 inputValues 배열에서 falsy 값 
+                <ButtonRedStyle         //(즉, undefined, null, false, "", 0, NaN)를 필터링한다. 
+                  onClick={() => {      //그러므로 inputValues 배열에서 값이 있는 요소만을 가지고 있는 새로운 배열을 반환한다.
+                    mutate(checkedPlace);
+                  }}
+                >
+                  중간 위치 찾기
+                </ButtonRedStyle>
+              )}
+              {midPoint && (
+              <button onClick={moveToMapMidPointButtonClickHandler}>
+                중간지점탐색
+              </button>
+              )}
+            </div>
           </ContentWrapper>
         </FlexRow>
       </WebWrapperHeight>
@@ -327,10 +374,19 @@ const ButtonGrayStyle = styled.button`
   font-weight: 400;
   padding: 13px 30px 13px 30px;
   margin: 6px;
-  color: black;
-  background-color: #f4f5f6;
+  color: #9EA4AA;
+  background-color: transparent;
   border: none;
   border-radius: 10px;
+  // inputCount를 props로 내려 inputCount가 4개가 되면 pointer 속성을 없앤다.
+  cursor: ${props => props.inputCount < 4 ? 'pointer' : 'default'};
+  //Icon style
+  // inputCount를 props로 내려 inputCount가 4개가 되면 plus img를 없앤다.
+  background-image: ${props => props.inputCount < 4 ? 'url(ModalPortalAddInputPlus.png)' : 'none'};
+  background-repeat: no-repeat;  //이미지 한번만
+  background-position: 140px center; //  위치
+  background-size: 22px; // 이미지 크기
+  box-sizing: border-box; //   input의 넓이가 부모 넓이보다 넘는 현상방지 */
 `;
 const ButtonRedStyle = styled.button`
   font-size: 14px;
