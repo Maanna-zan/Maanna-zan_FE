@@ -83,7 +83,14 @@ function SearchedKeywordLandingPage() {
   const onCloseModalHandler = () => {
     setShowModal(false);
   };
-
+  // X 버튼 Handler(해당 인풋박스 값 초기화(index줘서 각각의 인풋 박스 값 취소 가능)
+  const onInputClearHandler = (index) => {
+    setInputValues(prevInputValues => {
+      const newInputValues = [...prevInputValues];
+      newInputValues[index] = '';
+      return newInputValues;
+    });
+  }
   //Input 박스 추가
   const renderInputArea = (index) => {
     return (
@@ -123,7 +130,7 @@ function SearchedKeywordLandingPage() {
           }}
         ></InputArea>
         {inputValues[index] && (
-      <div 
+      <div onClick={() => onInputClearHandler(index)}
       style={{ 
         position: 'absolute', 
         marginLeft: '500px',
