@@ -16,7 +16,12 @@ export const FlexRowCenter = styled.div`
   align-content: center;
   justify-content: center;
 `;
-
+export const FlexColumnCenter = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  justify-content: center;
+`;
 export const FlexGap = styled.div`
   display: flex;
   flex-wrap: wrap;
