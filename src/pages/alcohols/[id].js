@@ -28,6 +28,7 @@ import {
 import { apis } from '@shared/axios';
 import { useLikeStore } from '../../hook/useLikes';
 import { PenIcon } from '@components/Atoms/PenIcon';
+import { Map, MapMarker } from 'react-kakao-maps-sdk';
 const StoreDetail = () => {
   const router = useRouter();
   const { query } = useRouter();
@@ -40,7 +41,7 @@ const StoreDetail = () => {
 
   const { likeStore } = useLikeStore();
   const { alkolsLike, alkolsIsLikeLoading } = useGetLikeStore();
-
+  const [center, setCenter] = useState({lat: data?.y,lng: data?.x,});
   const apiIdFind = router.query.id;
   const apiId = apiIdFind;
   //게시글 좋아요한 가게와 현재가게 매칭
@@ -382,16 +383,29 @@ const StoreDetail = () => {
                 display: 'flex',
               }}
             >
-              <StMap
+              <Map
+                center={center}
+                level= '5'
                 style={{
+                  width: '100%',
+                  height: '18vh',
                   marign: '8px 16px 22px 16px',
                   overflow: 'hidden',
                   boxSizing: 'border-box',
                 }}
               >
-                {data?.x}
-                {data?.y}
-              </StMap>
+                <MapMarker
+                position={center} // 마커를 표시할 위치
+                  image={{
+                    src: 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png',
+                    size: {
+                      width: 24,
+                      height: 35,
+                    },
+                  }}>
+                  <div style={{ color: "#000" }}>{data?.place_name}</div>
+                </MapMarker>
+              </Map>
             </div>
             <FlexRow
               style={{
