@@ -224,16 +224,27 @@ const AddPostForm = () => {
             임시저장
           </button> */}
               <button
-                type="submit"
                 style={{
-                  padding: '10px 20px',
-                  backgroundColor: 'red',
                   border: 'none',
-                  color: 'white',
-                  borderRadius: '10px',
+                  outline: 'none',
+                  backgroundColor: 'transparent',
+                  boxShadow: 'none',
+                  float: 'right',
                 }}
+                type="submit"
               >
-                작성하기
+                <BoxTextReal
+                  variant="redBox"
+                  style={{
+                    padding: '10px 20px',
+                    marginBottom: '28px',
+                    border: 'none',
+                    color: 'white',
+                    borderRadius: '10px',
+                  }}
+                >
+                  작성하기
+                </BoxTextReal>
               </button>
             </FlexRow>
           </FlexColumn>

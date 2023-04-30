@@ -24,6 +24,7 @@ import { useDeletePost } from '../../hook/post/useDeletePost';
 import { useUpdatePost } from '../../hook/post/useUpdatePost';
 import { useLikePost } from '../../hook/useLikes';
 import { LightTheme } from '@components/Themes/theme';
+import { ButtonText } from '@components/Atoms/Button';
 const Community = () => {
   const { query } = useRouter();
   const router = useRouter();
@@ -318,18 +319,27 @@ const Community = () => {
                 }}
               ></div>
               <button
-                type="submit"
                 style={{
-                  float: 'right',
-                  padding: '10px 20px',
-                  marginBottom: '28px',
-                  backgroundColor: 'red',
                   border: 'none',
-                  color: 'white',
-                  borderRadius: '10px',
+                  outline: 'none',
+                  backgroundColor: 'transparent',
+                  boxShadow: 'none',
+                  float: 'right',
                 }}
+                type="submit"
               >
-                수정 완료
+                <BoxTextReal
+                  variant="redBox"
+                  style={{
+                    padding: '10px 20px',
+                    marginBottom: '28px',
+                    border: 'none',
+                    color: 'white',
+                    borderRadius: '10px',
+                  }}
+                >
+                  수정 완료
+                </BoxTextReal>
               </button>
             </WebWrapper792px>
           </form>

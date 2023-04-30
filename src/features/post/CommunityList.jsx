@@ -22,11 +22,11 @@ import { useGetBestPost } from '../../hook/post/useGetBestPost';
 import { useLikePost } from '../../hook/useLikes';
 const StHeade3_name = styled.div`
   margin-top: 48px;
-  font: var(--head3-bold) 'Pretendard' sans-serif;
+  font: var(--head3-bold) Pretendard sans-serif;
 `;
 const StPlace_name = styled.div`
   margin-top: 20px;
-  font: var(--title1-semibold) 'Pretendard' sans-serif;
+  font: var(--title1-semibold) sans-serif;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -40,7 +40,7 @@ const StWebBg = styled.div`
   background-position: center;
 `;
 const CommunityList = () => {
-  const go = useRouter();
+  const router = useRouter();
   const { query } = useRouter();
   const { postsLike, postIsLikeLoading } = useGetLikePost();
   const { postsBest, postIsBestLoading } = useGetBestPost();
@@ -88,27 +88,30 @@ const CommunityList = () => {
               >
                 {like ? <LikeHeartIcon /> : <DisLikeHeartIcon />}
               </div>
-              <BoxTextReal
-                style={{ overflow: 'hidden' }}
-                variant="realDefaultBox"
-                size="nonePadding"
+              <div
                 onClick={() => {
-                  go.push(`/community/${store?.id}`);
+                  router.push(`/community/${store?.id}`);
                 }}
               >
-                <ImgWrapper384x360>
-                  <ImgCenter
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      overflow: 'hidden',
-                      borderRadius: '8px',
-                    }}
-                    src={store.s3Url ? store.s3Url : '/noimage_282x248_.png'}
-                    alt="store"
-                  />
-                </ImgWrapper384x360>
-              </BoxTextReal>
+                <BoxTextReal
+                  style={{ overflow: 'hidden' }}
+                  variant="realDefaultBox"
+                  size="nonePadding"
+                >
+                  <ImgWrapper384x360>
+                    <ImgCenter
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        overflow: 'hidden',
+                        borderRadius: '8px',
+                      }}
+                      src={store.s3Url ? store.s3Url : '/noimage_282x248_.png'}
+                      alt="store"
+                    />
+                  </ImgWrapper384x360>
+                </BoxTextReal>
+              </div>
               <StPlace_name>{store?.place_name}</StPlace_name>
             </div>
           ))}

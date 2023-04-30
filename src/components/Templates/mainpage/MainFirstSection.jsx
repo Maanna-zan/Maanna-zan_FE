@@ -42,8 +42,6 @@ export const MainFirstSection = () => {
   return (
     <>
       <WebWrapperHeight>
-        {console.log('getBest-->', getBest)}
-        {console.log('getView-->', getView)}
         <StWebBg></StWebBg>
         <WebWrapper style={{ overflow: 'hidden' }}>
           <GrideGapCol4 style={{ margin: '34px 0 12px 0' }}>
@@ -68,11 +66,15 @@ export const MainFirstSection = () => {
                       <ImgCenter
                         style={{ width: '100%', height: '100%' }}
                         src={
-                          store.postList.length
+                          store.postList.length &&
+                          store.postList[0].s3Url !== null
                             ? store.postList[0].s3Url
-                            : '/noimage_282x248_.png'
+                            : store.postList
+                                .slice(1)
+                                .find((post) => post?.s3Url)?.s3Url ||
+                              '/noimage_282x248_.png'
                         }
-                        alt="베스트술집"
+                        alt={`베스트 술집${store?.place_name}`}
                       />
                     </ImgWrapper282x322>
                     <div
@@ -122,13 +124,16 @@ export const MainFirstSection = () => {
                     >
                       <ImgWrapper84x56 style={{ margin: '4px' }}>
                         <ImgCenter
-                          style={{ width: '100%', height: '100%' }}
                           src={
-                            store.postList.length
+                            store.postList.length &&
+                            store.postList[0].s3Url !== null
                               ? store.postList[0].s3Url
-                              : '/noimage_282x248_.png'
+                              : store.postList
+                                  .slice(1)
+                                  .find((post) => post?.s3Url)?.s3Url ||
+                                '/noimage_282x248_.png'
                           }
-                          alt="베스트술집"
+                          alt={`베스트 술집${store?.place_name}`}
                         />
                       </ImgWrapper84x56>
                       <FlexColumn

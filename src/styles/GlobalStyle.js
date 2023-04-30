@@ -6,7 +6,7 @@ export const GlobalStyles = createGlobalStyle`
 
     * {
         box-sizing:border-box;
-        font-family: 'Pretendard', sans-serif ;
+        font-family: Pretendard, sans-serif ;
         
     }
     input {
