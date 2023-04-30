@@ -41,6 +41,10 @@ export const LightTheme = {
   FONT_TERTIARY: '#E8EBED',
   FONT_CAUTION: '#BDBDBD',
 
+  //hover, active
+  HOVER_BASIC: '#FFF2F1',
+  ACTIVE_BASIC: '#FFE0DF',
+
   //font weight(bold 600 --> medium)
   FONT_BOLD: '700',
   FONT_REGULAR: '400',

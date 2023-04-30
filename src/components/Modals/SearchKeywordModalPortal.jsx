@@ -7,12 +7,14 @@ import { useRouter } from 'next/router';
 import KeywordSearchModal from '@components/Modals/SearchKeywordModal';
 import styled from 'styled-components';
 import { WebWrapper, WebWrapperHeight } from '@components/Atoms/Wrapper';
-import { FlexRow } from '@components/Atoms/Flex';
+import { FlexColumnCenter, FlexRow } from '@components/Atoms/Flex';
 import { InputArea } from '@components/Atoms/Input';
+import { ButtonText } from '@components/Atoms/Button';
 import { ArrangeCenterWrapper } from '@components/Atoms/Wrapper';
 import Calendar from 'react-calendar';
 import moment from 'moment';
 import 'react-calendar/dist/Calendar.css';
+import { LightTheme } from '@components/Themes/theme';
 
 function SearchedKeywordLandingPage() {
   //  Input Box 갯수 state. 값으로 1을 넣은 이유는 처음에 1개가 기본 있어야 한다.
@@ -108,7 +110,8 @@ function SearchedKeywordLandingPage() {
             width: 'calc(100%)', //X 버튼 너비를 제외한 인풋박스의 너비를 설정위해 calc활용(필요시 연산자를 사용하여 값 계산하기) 
             margin: '8px 0 5px 10px',
             border: 'none',
-            backgroundColor: '#F7F8F9',
+            backgroundColor: `${LightTheme.GRAY_50}`,
+            fontFamily: `${'var(--label1-regular)'} Pretendard sans-serif`,
             fontSize: '14px',
             lineHeight: '18px',
             cursor:"pointer",
@@ -137,7 +140,6 @@ function SearchedKeywordLandingPage() {
         paddingTop: '6px',
       }}>
       <img 
-      // style={{display: 'inlineBlock', verticalAlign: 'middle'}}
       src="ModalPortalInputXButton.png" alt="X button" />
     </div>
   )}
@@ -286,8 +288,8 @@ function SearchedKeywordLandingPage() {
             </Map>
           </div>
 
-          <ContentWrapper>
-            <H1Styled>친구와 본인의 </H1Styled>
+          <FlexColumnCenter style={{margin: '0 100px 250px 25px'}}>
+            <TitleStyled>친구와 본인의 </TitleStyled>
             <Highlighting>위치를 입력해주세요</Highlighting>
             <Div className="calendar-container">
               <Calendar
@@ -330,29 +332,55 @@ function SearchedKeywordLandingPage() {
               {inputs}
               {renderModal()}
                 <ArrangeCenterWrapper>
-                  <ButtonGrayStyle inputCount={inputCount} onClick={addingInputBoxButtonHandler}
+                  <AddInputButtonStyle inputCount={inputCount} onClick={addingInputBoxButtonHandler}
                   /* styled-components로 해당 버튼 꾸며주기에 아래와 같은 조건을 걸기 위해서는 props를 내려준다. */> 
                   {inputCount < 4 ? '친구 위치 추가하기' : '최대 4명까지 추가할 수 있습니다.'}
-                  </ButtonGrayStyle>
+                  </AddInputButtonStyle>
                 </ArrangeCenterWrapper>
             </div>
-            <div>
+            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+              {!midPoint && inputValues.filter(Boolean).length < 2 && (
+                  <ButtonText
+                  size='lg'
+                  variant='basic'
+                  label= '중간 위치 찾기'
+                  fontSize= '14px'
+                  fontColor= {LightTheme.GRAY_400}
+                  borderStyle = 'none'
+                  borderWidth = '0px'
+                  backgroundColor = {LightTheme.GRAY_100}
+                  hoverBackgroundColor = 'null'
+                  hoverBorderColor = 'null'
+                  hoverFontColor = 'null'
+                  style={{ cursor: 'default'}}
+                  disabled={true}
+                />
+              )}
               {!midPoint && inputValues.filter(Boolean).length >= 2 && ( //filter(Boolean)은 inputValues 배열에서 falsy 값 
-                <ButtonRedStyle         //(즉, undefined, null, false, "", 0, NaN)를 필터링한다. 
+                <ButtonText         //(즉, undefined, null, false, "", 0, NaN)를 필터링한다. 
+                size = 'lg'
+                variant = 'primaryBolder'
+                label= '중간 위치 찾기'
+                fontSize= '14px'
+                fontColor = {`${LightTheme.PRIMARY_NORMAL}`}
+                hoverBackgroundColor = {`${LightTheme.HOVER_BASIC}`}
+                hoverFontColor = {`${LightTheme.PRIMARY_NORMAL}`}
+                active = {`${LightTheme.ACTIVE_BASIC}`}
                   onClick={() => {      //그러므로 inputValues 배열에서 값이 있는 요소만을 가지고 있는 새로운 배열을 반환한다.
                     mutate(checkedPlace);
-                  }}
-                >
-                  중간 위치 찾기
-                </ButtonRedStyle>
+                  }}/>
               )}
               {midPoint && (
-              <button onClick={moveToMapMidPointButtonClickHandler}>
-                중간지점탐색
-              </button>
+              <ButtonText 
+              size = 'lg'
+              variant = 'primary'
+              label= '중간 술집 검색'
+              fontSize= '14px'
+              hoverBackgroundColor = {LightTheme.PRIMARY_LIGHT}
+              onClick={moveToMapMidPointButtonClickHandler}/>
               )}
             </div>
-          </ContentWrapper>
+          </FlexColumnCenter>
         </FlexRow>
       </WebWrapperHeight>
     </WebWrapper>
@@ -360,28 +388,24 @@ function SearchedKeywordLandingPage() {
 }
 
 export default SearchedKeywordLandingPage;
-const ContentWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  margin: 0 100px 250px 25px;
-`;
-const H1Styled = styled.div`
+const TitleStyled = styled.div`
   font-size: 40px;
   font-weight: 500;
   line-height: 48px;
+  font-family: var(--display2-medium) Pretendard sans-serif,
 `;
 const Highlighting = styled.div`
   font-size: 40px;
   font-weight: 700;
   line-height: 48px;
+  font-family: var(--display2-bold) Pretendard sans-serif,
 `;
-const ButtonGrayStyle = styled.button`
+const AddInputButtonStyle = styled.button`
   font-size: 14px;
   font-weight: 400;
   padding: 13px 30px 13px 30px;
   margin: 6px;
-  color: #9EA4AA;
+  color: ${LightTheme.FONT_SECONDARY};
   background-color: transparent;
   border: none;
   border-radius: 10px;
@@ -395,16 +419,6 @@ const ButtonGrayStyle = styled.button`
   background-size: 22px; // 이미지 크기
   box-sizing: border-box; //   input의 넓이가 부모 넓이보다 넘는 현상방지 */
 `;
-const ButtonRedStyle = styled.button`
-  font-size: 14px;
-  font-weight: 600;
-  padding: 13px 40px 13px 40px;
-  margin: 6px;
-  color: #ffffff;
-  background-color: #ff4740;
-  border: none;
-  border-radius: 10px;
-`;
 
 const Div = styled.div`
   .react-calendar {
@@ -417,6 +431,7 @@ const Div = styled.div`
     font-family: Arial, Helvetica, sans-serif;
     line-height: 1.125em;
     padding: 10px;
+    margin: 15px 0 5px 0;
   }
   .react-calendar__viewContainer {
     /* margin-top: -20px; */
