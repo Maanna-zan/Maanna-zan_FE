@@ -90,7 +90,7 @@ const AlcoholList = () => {
     },
     [storeListPage, setPageNum, keyword],
   );
-  console.log('keyword', keyword);
+  console.log('storedata', keyword);
 
   const handleStoreListTabChange = useCallback(
     (newTab) => {
@@ -161,7 +161,7 @@ const AlcoholList = () => {
       },
     },
   );
-
+  console.log('storedata', storeData);
   const [getView2, seGetView2] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
@@ -177,6 +177,7 @@ const AlcoholList = () => {
   }
   return (
     <>
+      <StWebBg />
       <WebWrapper>
         <FlexRow style={{ alignItems: 'flex-end', marginBottom: '40px' }}>
           <StHeade3_name style={{ marginRight: '12px' }}>
@@ -214,9 +215,10 @@ const AlcoholList = () => {
                       borderRadius: '8px',
                     }}
                     src={
-                      store.postList.length
+                      store.postList.length && store.postList[0].s3Url !== null
                         ? store.postList[0].s3Url
-                        : '/noimage_282x248_.png'
+                        : store.postList.slice(1).find((post) => post?.s3Url)
+                            ?.s3Url || '/noimage_282x248_.png'
                     }
                     alt="store"
                   />
@@ -305,9 +307,13 @@ const AlcoholList = () => {
                           borderRadius: '8px',
                         }}
                         src={
-                          store.postList.length
+                          store.postList.length &&
+                          store.postList[0].s3Url !== null
                             ? store.postList[0].s3Url
-                            : '/noimage_282x248_.png'
+                            : store.postList
+                                .slice(1)
+                                .find((post) => post?.s3Url)?.s3Url ||
+                              '/noimage_282x248_.png'
                         }
                         alt="store"
                       />
@@ -348,4 +354,12 @@ const StPlace_name = styled.div`
 `;
 const StAddress_name = styled.div`
   font: var(--body1-medium) Pretendard sans-serif;
+`;
+const StWebBg = styled.div`
+  width: 100vw;
+  height: 300px;
+  background-image: url('/banner-CommunityList.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
 `;

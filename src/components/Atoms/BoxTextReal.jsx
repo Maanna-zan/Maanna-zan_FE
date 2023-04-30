@@ -12,6 +12,7 @@ const StyledBox = styled.div`
   color: ${(props) => props.fontColor};
   border-width: ${(props) => props.borderWidth};
   border-color: ${(props) => props.borderColor};
+
   border-style: solid;
   box-sizing: border-box;
   height: auto;
@@ -42,6 +43,7 @@ export const BoxTextReal = ({
   disabled = false,
   height = 'auto',
   onClick,
+  type,
   ...props
 }) => {
   let padding = '0px';
@@ -121,12 +123,30 @@ export const BoxTextReal = ({
       hoverBorderColor = LightTheme.GRAY_100;
       hoverFontColor = LightTheme.FONT_PRIMARY;
       break;
+    case 'gray400BolderBox':
+      backgroundColor = LightTheme.WHITE;
+      fontColor = LightTheme.FONT_PRIMARY;
+      borderStyle = 'solid';
+      borderWidth = '1px';
+      borderColor = LightTheme.GRAY_400;
+      hoverBackgroundColor = LightTheme.WHITE;
+      hoverBorderColor = LightTheme.GRAY_400;
+      hoverFontColor = LightTheme.FONT_PRIMARY;
+      break;
     case 'realDefaultBox':
       backgroundColor = LightTheme.WHITE;
       fontColor = LightTheme.FONT_PRIMARY;
       borderStyle = 'none';
       borderWidth = '0px';
       borderColor = LightTheme.WHITE;
+      break;
+    case 'redBox':
+      backgroundColor = LightTheme.PRIMARY_NORMAL;
+      fontColor = LightTheme.WHITE;
+      borderStyle = 'none';
+      borderWidth = '0px';
+      borderColor = 'none';
+      hoverBackgroundColor = LightTheme.PRIMARY_NORMAL;
   }
 
   return (

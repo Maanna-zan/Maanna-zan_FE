@@ -157,4 +157,8 @@ export const ImgCenter = styled.img`
   object-fit: cover;
   background-color: aliceblue;
   position: relative;
+  transition: transform 0.5s;
+  :hover {
+    transform: scale(1.1);
+  }
 `;

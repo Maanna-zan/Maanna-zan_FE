@@ -1,6 +1,8 @@
-import { WebWrapper } from '@components/Atoms/Wrapper';
 import React from 'react';
+import Link from 'next/link';
 import styled from 'styled-components';
+import { WebWrapper } from '@components/Atoms/Wrapper';
+import { LogoFoot } from '@components/Atoms/LogoFoot';
 
 export const Footer = () => {
   return (
@@ -9,7 +11,8 @@ export const Footer = () => {
         <WebWrapper>
           <InnerDiv>
             <div style={{ display: 'flex', flexDirection: 'column' }}>
-              <img className="logoimg" src="Group 1893.png" alt="만나잔 로고" />
+              <LogoFoot alt="만나잔 로고" />
+              {/* <img className="logoimg" src="Group 1893.png" alt="만나잔 로고" /> */}
               <div className="informationB">
                 <p className="Bp">(주)만나잔</p>
                 <div>
@@ -24,9 +27,18 @@ export const Footer = () => {
               </div>
             </div>
             <div className="informationA">
-              <a className="aTag">리스트</a>
+              <Link href="/alcohols" className="aTag">
+                리스트
+              </Link>
+              <Link href="/map" className="aTag">
+                탐색
+              </Link>
+              <Link href="/community" className="aTag">
+                커뮤니티
+              </Link>
+              {/* <a className="aTag">리스트</a>
               <a className="aTag">탐색</a>
-              <a className="aTag">커뮤니티</a>
+              <a className="aTag">커뮤니티</a> */}
               <a className="aTag">공지사항</a>
               <a className="aTag">개인정보처리방침</a>
             </div>

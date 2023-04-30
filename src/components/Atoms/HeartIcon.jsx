@@ -26,7 +26,6 @@ const StSpan = styled.span`
   height: 24px;
   width: current;
   height: current;
-
   box-sizing: border-box;
   stroke-linecap: round;
   stroke-linejoin: round;
@@ -35,7 +34,11 @@ const StSpan = styled.span`
 const StSvg = styled.svg`
   width: 24px;
   height: 24px;
-
+  transition: all 0.3s;
+  cursor: pointer;
+  &:hover {
+    fill: #ff385c;
+  }
   box-sizing: border-box;
   /* margin: 6px; */
 `;

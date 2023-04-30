@@ -42,7 +42,7 @@ export default class MyDocument extends Document {
           />
           <style jsx global>{`
             body {
-              font-family: 'Pretendard', sans-serif;
+              font-family: Pretendard, sans-serif;
             }
           `}</style>
           <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
