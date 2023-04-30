@@ -24,3 +24,7 @@ export const WebWrapper792px = styled.div`
 export const WebWrapper384px = styled.div`
   width: 384px;
 `;
+export const ArrangeCenterWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+`
