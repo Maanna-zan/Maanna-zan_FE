@@ -37,6 +37,7 @@ export const LinkToNav = () => {
     setShowSubMenu(false); // 추가된 코드
   }, [token, setShowSubMenu]);
   //Token Error
+
   const { data, isLoading, isError, isSuccess } = useQuery({
     queryKey: ['GET_MYPAGE'],
     queryFn: async () => {
@@ -49,7 +50,7 @@ export const LinkToNav = () => {
       // console.log('data', data.data);
       return data.data;
     },
-
+    enabled: !!token,
     // onError 콜백 함수 구현
     onError: (error) => {
       // console.log('error', error);

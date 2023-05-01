@@ -67,7 +67,7 @@ const GetMyAlcohols = () => {
             style={{ color: '#FF6A64' }}
           >
             {' '}
-            커뮤니티 게시글 보러가기
+            술집 리스트 보러가기
           </p>
         </div>
       </div>
@@ -84,7 +84,11 @@ const GetMyAlcohols = () => {
         >
           {currentPageData.map((post) => (
             <ContainerDiv key={post.id}>
-              <div>
+              <div
+                onClick={() => {
+                  push.push(`/alcohols/${post.id}`);
+                }}
+              >
                 <img
                   style={{
                     width: '384px',
