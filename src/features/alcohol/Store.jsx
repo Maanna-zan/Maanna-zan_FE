@@ -28,6 +28,8 @@ export const Store = ({ storeData, store }) => {
       await likeStore(apiId);
       setRoomLike(!roomLike);
     } catch (error) {
+      alert(error);
+      alert('data', data);
       console.error(error);
     }
   };

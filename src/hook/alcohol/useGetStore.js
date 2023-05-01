@@ -44,7 +44,12 @@ export const useGetLikeStore = () => {
       console.log('likeAlkol--------------', data);
       return data.data;
     },
+    onSuccess: (data) => {
+      console.log('likeAlkol success:', data);
+      alert(data);
+    },
   });
+
   if (isLoading) {
     return { alkolsLike: data, alkolsIsLoading: true };
   }
@@ -52,5 +57,6 @@ export const useGetLikeStore = () => {
   if (isError) {
     return { alkolsLike: data, alkolsIsLikeLoading: false };
   }
+
   return { alkolsLike: data, alkolsIsLikeLoading: isLoading };
 };

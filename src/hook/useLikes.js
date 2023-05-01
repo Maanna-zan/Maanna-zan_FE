@@ -55,23 +55,38 @@ export const useLikeStore = () => {
       }),
     {
       onError: (error, apiId, previousPost) => {
-        queryClient.setQueryData(['store', apiId], previousPost);
+        const response = error?.response;
+        if (
+          response &&
+          response.data &&
+          response.data.message === 'Token Error'
+        ) {
+          alert('로그인 후 시도해 주세요');
+        } else {
+          queryClient.setQueryData(['store', apiId], previousPost);
+        }
       },
       onMutate: (apiId) => {
         const previousPost = queryClient.getQueryData(['store', apiId]);
         queryClient.setQueryData(['store', apiId], (old) => ({
           ...old,
           roomLike: !old?.roomLike,
-          roomLikecnt: old?.roomLike ? old?.roomLikecnt - 1 : old?.roomLikecnt + 1,
+          roomLikecnt: old?.roomLike
+            ? old?.roomLikecnt - 1
+            : old?.roomLikecnt + 1,
         }));
         return previousPost;
       },
+
       onSettled: (data, error, apiId, previousPost) => {
         if (error) {
           queryClient.setQueryData(['store', apiId], previousPost);
         } else {
           queryClient.invalidateQueries(['store', apiId]);
         }
+      },
+      onSuccess: (response) => {
+        alert(JSON.stringify(response.data.data));
       },
     },
   );

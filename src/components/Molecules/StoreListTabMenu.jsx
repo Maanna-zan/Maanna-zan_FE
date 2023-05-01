@@ -24,7 +24,7 @@ export const StoreListTabMenu = ({
         <ButtonText
           label={'전체'}
           size="tab"
-          variant={activeTab === 'all' ? 'activeRed' : 'default'}
+          variant={activeTab === 'all' ? 'activeRedTab' : 'default'}
           onClick={() => {
             handleStoreListTabChange('all');
             setActiveTab('all');
@@ -35,7 +35,7 @@ export const StoreListTabMenu = ({
         <ButtonText
           label={'게시글 많은 순'}
           size="tab"
-          variant={activeTab === 'best' ? 'activeRed' : 'default'}
+          variant={activeTab === 'best' ? 'activeRedTab' : 'default'}
           onClick={() => {
             handleStoreListTabChange('best');
             setActiveTab('best');
@@ -46,7 +46,7 @@ export const StoreListTabMenu = ({
         <ButtonText
           label={'조회수'}
           size="tab"
-          variant={activeTab === 'view' ? 'activeRed' : 'default'}
+          variant={activeTab === 'view' ? 'activeRedTab' : 'default'}
           onClick={() => {
             handleStoreListTabChange('view');
             setActiveTab('view');
@@ -57,7 +57,7 @@ export const StoreListTabMenu = ({
         <ButtonText
           label={' 좋아요 순'}
           size="tab"
-          variant={activeTab === 'like' ? 'activeRed' : 'default'}
+          variant={activeTab === 'like' ? 'activeRedTab' : 'default'}
           onClick={() => {
             handleStoreListTabChange('like');
             setActiveTab('like');

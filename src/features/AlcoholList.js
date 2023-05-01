@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { apis } from '@shared/axios';
 import { useRouter } from 'next/router';
-import { LikeHeartIcon, DisLikeHeartIcon } from '@components/Atoms/HeartIcon';
 import {
   useQuery,
   useQueryClient,
@@ -209,10 +208,17 @@ const AlcoholList = () => {
         }}
       >
         <div style={{ position: 'relative' }}>
+          <div
+            style={{ position: 'absolute', top: '13px', left: '20px' }}
+            onClick={handleSearch}
+          >
+            <SearchIcon />
+          </div>
+
           <InputArea
             style={{
               width: '762px',
-              padding: '16px 20px',
+              padding: '16px 32px 16px 64px',
               border: 'none',
             }}
             type="text"
@@ -222,10 +228,22 @@ const AlcoholList = () => {
             placeholder="술집을 검색해보세요"
           />
           <div
-            style={{ position: 'absolute', top: '13px', right: '20px' }}
+            style={{ position: 'absolute', top: '11px', right: '20px' }}
             onClick={handleSearch}
           >
-            <SearchIcon />
+            <BoxTextReal
+              variant="redBox"
+              style={{
+                padding: '4px 16px',
+                marginBottom: '28px',
+                border: 'none',
+                color: 'white',
+                borderRadius: '10px',
+                font: `var(--body2-medium) Pretendard sans-serif`,
+              }}
+            >
+              검색
+            </BoxTextReal>
           </div>
         </div>
       </div>

@@ -18,7 +18,7 @@ const AddReComment = (comment) => {
 
   const { mutate, isLoading, isSuccess, isIdle } = useMutation({
     mutationFn: async (payload) => {
-      console.log('payload', payload.commentId);
+      // console.log('payload', payload.commentId);
       const data = await apis.post(
         `/posts/comments/${payload.commentId}`,
         {

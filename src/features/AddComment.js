@@ -27,7 +27,7 @@ const AddComment = () => {
           Access_Token: `${token}`,
         },
       });
-      console.log('payload', payload);
+      // console.log('payload', payload);
     },
     onSuccess: () => {
       alert('댓글 추가를 완료하였습니다.');
