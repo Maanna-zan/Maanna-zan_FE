@@ -29,8 +29,8 @@ export const LinkToNav = () => {
   };
   const token = cookies.get('access_token');
   const refresh_token = cookies.get('refresh_token');
-  console.log('access_token', token);
-  console.log('refresh_token', refresh_token);
+  // console.log('access_token', token);
+  // console.log('refresh_token', refresh_token);
 
   useEffect(() => {
     setIsLoginMode(!!token);
@@ -46,13 +46,13 @@ export const LinkToNav = () => {
         },
       });
 
-      console.log('data', data.data);
+      // console.log('data', data.data);
       return data.data;
     },
 
     // onError 콜백 함수 구현
     onError: (error) => {
-      console.log('error', error);
+      // console.log('error', error);
       // // 에러 처리
       if (error.response.data.statusCode === 401) {
         const refreshToken = cookies.get('refresh_token');
@@ -92,7 +92,7 @@ export const LinkToNav = () => {
         <ButtonText
           style={{ font: `var(--title2-semibold) Pretendard sans-serif` }}
           variant={router.pathname === '/map' ? 'activeRed' : 'hoverRed'}
-          label={'탐색'}
+          label={'지도 검색'}
         ></ButtonText>
       </Link>
       <Link href="/community">

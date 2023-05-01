@@ -51,7 +51,7 @@ const CommentsList = () => {
           Access_Token: `${token}`,
         },
       });
-      console.log('data', data);
+      // console.log('data', data);
       return data.data.commentList;
     },
     //enabled: -> 참일 때 실행시켜준다.

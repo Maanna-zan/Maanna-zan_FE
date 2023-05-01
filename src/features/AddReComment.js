@@ -18,7 +18,7 @@ const AddReComment = (comment) => {
 
   const { mutate, isLoading, isSuccess, isIdle } = useMutation({
     mutationFn: async (payload) => {
-      console.log('payload', payload.commentId);
+      // console.log('payload', payload.commentId);
       const data = await apis.post(
         `/posts/comments/${payload.commentId}`,
         {
@@ -35,7 +35,7 @@ const AddReComment = (comment) => {
       alert('댓글 추가를 완료하였습니다.');
     },
     onError: (error) => {
-      console.log('error', error.response.data.message);
+      // console.log('error', error.response.data.message);
       alert(error.response.data.message);
     },
   });

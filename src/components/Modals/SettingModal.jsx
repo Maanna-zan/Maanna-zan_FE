@@ -10,7 +10,7 @@ import Save from '@features/mypage/Save';
 
 export default function SettingModal({ onClose, data }) {
   const router = useRouter();
-  console.log('data', data);
+  // console.log('data', data);
   const [isEditMode, setIsEditMode] = useState('profile');
   const [password, setPassword] = useState('');
   const changePWInputHandler = (e) => {
@@ -31,7 +31,7 @@ export default function SettingModal({ onClose, data }) {
     },
     // onError 콜백 함수 구현
     onError: (error) => {
-      console.log(error.response);
+      // console.log(error.response);
       // // 에러 처리
       alert('중복된 닉네임이 있습니다.');
     },
@@ -52,7 +52,7 @@ export default function SettingModal({ onClose, data }) {
     },
     // onError 콜백 함수 구현
     onError: (error) => {
-      console.error(error);
+      // console.error(error);
       // 에러 처리
       alert('입력 된 비밀번호에 문제가 있습니다. 다시 한 번 살펴봐주세요.');
     },

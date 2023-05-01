@@ -8,7 +8,7 @@ import { useRouter } from 'next/router';
 
 const Save = ({ data }) => {
   const router = useRouter();
-  console.log('data save', data);
+  // console.log('data save', data);
   const queryClient = useQueryClient();
   const [userOut, setUserOut] = useState({
     password: '',
@@ -23,7 +23,7 @@ const Save = ({ data }) => {
 
   const { mutate: deleteId } = useMutation({
     mutationFn: async (payload) => {
-      console.log('data', payload);
+      // console.log('data', payload);
       await apis.put(
         `/users/signout/${payload.id}`,
         { password: payload.password },

@@ -7,7 +7,7 @@ import chunk from '@components/Modals/chunk';
 
 const MyWritePost = (data) => {
   const push = useRouter();
-  console.log('mywrutedata', data.data.posts);
+  // console.log('mywrutedata', data.data.posts);
   const myData = data.data.posts;
 
   //페이지 네이션 처음 시작이 1번창부터 켜지도록

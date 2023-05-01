@@ -8,7 +8,7 @@ import styled from 'styled-components';
 import AddReComment from './AddReComment';
 
 const ReCommentList = ({ comment }) => {
-  console.log('comment', comment.commentList);
+  // console.log('comment', comment.commentList);
   const comments = comment.commentList;
 
   const [isEditMode, setIsEditMode] = useState(false);

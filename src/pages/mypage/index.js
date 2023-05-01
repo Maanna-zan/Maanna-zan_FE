@@ -26,12 +26,12 @@ const MyPage = () => {
         },
       });
 
-      console.log('data', data.data);
+      // console.log('data', data.data);
       return data.data;
     },
     // onError 콜백 함수 구현
     onError: (error) => {
-      console.log('error', error);
+      // console.log('error', error);
     },
   });
 
