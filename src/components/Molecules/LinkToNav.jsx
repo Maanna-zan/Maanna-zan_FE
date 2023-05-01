@@ -34,6 +34,7 @@ export const LinkToNav = () => {
 
   useEffect(() => {
     setIsLoginMode(!!token);
+    setShowSubMenu(false); // 추가된 코드
   }, [token]);
 
   const { data, isLoading, isError, isSuccess } = useQuery({
@@ -156,7 +157,7 @@ const Ullist = styled.ul`
   align-items: flex-start;
   width: 166px;
   height: 170px;
-  margin-left: 245px;
+  margin-left: 330px;
   margin-top: -1px;
   background-color: white;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px,

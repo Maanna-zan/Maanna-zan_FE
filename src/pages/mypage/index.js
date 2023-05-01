@@ -257,4 +257,5 @@ const BottomDiv = styled.div`
   width: 100%;
   height: 100%;
   background-color: #f7f8f9;
+  padding-bottom: 150px;
 `;

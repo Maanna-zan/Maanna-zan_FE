@@ -15,8 +15,8 @@ function Pagination({ pages, activePage, setPage }) {
             borderRadius: '50%',
             marginRight: '12px',
             cursor: 'pointer',
-            backgroundColor: activePage === page ? '#FF4840' : '#F4F4F4',
-            color: activePage === page ? 'white' : '#BDBDBD',
+
+            color: activePage === page ? '#FF4840' : 'black',
           }}
           onClick={() => setPage(page)}
         >
