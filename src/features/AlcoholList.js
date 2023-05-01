@@ -22,6 +22,7 @@ import {
   imgWrapper248x248,
   ImgWrapper282x248,
   ImgWrapper384x242,
+  ImgWrapper384x360,
 } from '@components/Atoms/imgWrapper';
 import { useLikeStore } from '../hook/useLikes';
 import { useGetLikeStore } from '../hook/alcohol/useGetStore';
@@ -35,6 +36,7 @@ import {
 import { ButtonText } from '@components/Atoms/Button';
 import { InputArea } from '@components/Atoms/Input';
 import { Ranking1, Ranking2, Ranking3 } from '@components/Atoms/Ranking';
+import { SearchIcon } from '@components/Atoms/SearchIcon';
 
 // const [like, setLike] = useState(like);
 const AlcoholList = () => {
@@ -173,7 +175,20 @@ const AlcoholList = () => {
     fetchData();
   }, []);
 
-  let ranking = 0;
+  let ranking = 1;
+  let rankingFn = () => {
+    switch (ranking) {
+      case 1:
+        ranking += 1;
+        return <Ranking1></Ranking1>;
+      case 2:
+        ranking += 1;
+        return <Ranking2></Ranking2>;
+      case 3:
+        ranking += 1;
+        return <Ranking3></Ranking3>;
+    }
+  };
 
   if (isLoading) {
     return <WebWrapper>Loading...</WebWrapper>;
@@ -181,6 +196,39 @@ const AlcoholList = () => {
   return (
     <>
       <StWebBg />
+      <div
+        style={{
+          position: 'absolute',
+          width: '806px',
+          height: '50px',
+          top: '355px',
+          left: 'calc(50% - 404px)',
+          boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
+          borderRadius: '10px',
+          backgroundColor: 'white',
+        }}
+      >
+        <div style={{ position: 'relative' }}>
+          <InputArea
+            style={{
+              width: '762px',
+              padding: '16px 20px',
+              border: 'none',
+            }}
+            type="text"
+            variant="default"
+            value={query}
+            onChange={handleQueryChange}
+            placeholder="술집을 검색해보세요"
+          />
+          <div
+            style={{ position: 'absolute', top: '13px', right: '20px' }}
+            onClick={handleSearch}
+          >
+            <SearchIcon />
+          </div>
+        </div>
+      </div>
       <WebWrapper>
         <FlexRow style={{ alignItems: 'flex-end', marginBottom: '40px' }}>
           <StHeade3_name style={{ marginRight: '12px' }}>
@@ -209,7 +257,7 @@ const AlcoholList = () => {
                 variant="realDefaultBox"
                 size="nonePadding"
               >
-                <ImgWrapper384x242>
+                <ImgWrapper384x360 style={{ position: 'relative' }}>
                   <ImgCenter
                     style={{
                       width: '100%',
@@ -225,7 +273,16 @@ const AlcoholList = () => {
                     }
                     alt="store"
                   />
-                </ImgWrapper384x242>
+                  <div
+                    style={{
+                      position: 'absolute',
+                      bottom: '308px',
+                      left: '20px',
+                    }}
+                  >
+                    {rankingFn()}
+                  </div>
+                </ImgWrapper384x360>
               </BoxTextReal>
               <StPlace_name>{store.place_name}</StPlace_name>
             </div>
@@ -233,44 +290,12 @@ const AlcoholList = () => {
         </GrideGapCol3>
 
         <StHeade3_name>술집리스트</StHeade3_name>
-        <FlexRow style={{ alignItems: 'center' }}>
-          <StoreListTabMenu
-            setActiveTab={setActiveTab}
-            activeTab={activeTab}
-            handleStoreListTabChange={handleStoreListTabChange}
-          />
-          <FlexRow
-            style={{
-              height: '34px',
-              fontSize: '14px',
-              display: 'flex',
-              gap: '4px',
-              margin: '20px 0px',
-              marginRight: '12px',
-              alignContent: 'center',
-            }}
-          >
-            <InputArea
-              style={{ padding: '8px 16px' }}
-              type="text"
-              variant="default"
-              value={query}
-              onChange={handleQueryChange}
-              placeholder="술집을 검색해보세요"
-            />
-            <div
-              style={{
-                width: '120px',
-                padding: '8px 16px',
-                overflow: 'hidden',
-                boxSizing: 'border-box',
-              }}
-              onClick={handleSearch}
-            >
-              술집 검색
-            </div>
-          </FlexRow>
-        </FlexRow>
+        <StoreListTabMenu
+          setActiveTab={setActiveTab}
+          activeTab={activeTab}
+          handleStoreListTabChange={handleStoreListTabChange}
+        />
+
         <GrideGapCol4 style={{ margin: '12px auto' }}>
           {storeData?.alkolResponseDtoList?.map((store) => (
             <div

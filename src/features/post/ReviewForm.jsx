@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { FlexColumn, FlexRow } from '@components/Atoms/Flex';
 import { Rating } from './Rating';
-import { PostStar } from '@components/Atoms/PostStar';
-import { PostStarChecked } from '@components/Atoms/PostStarChecked';
+import { PostStar, PostStarChecked } from '@components/Atoms/PostStar';
+
 import styled from 'styled-components';
 export const ReviewForm = ({ post, handleRatingChange, handleStarClick }) => {
   const [hoveredStar, setHoveredStar] = useState(0);

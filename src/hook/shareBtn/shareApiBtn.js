@@ -1,26 +1,10 @@
 import { ShareBtn } from '@components/Atoms/ShareBtn';
 import React from 'react';
 import { ButtonText } from '@components/Atoms/Button';
-const ShareApiBtn = ({ url, title, text, icon }) => {
-  const handleShareClick = async () => {
-    try {
-      await navigator.share({
-        title,
-        text,
-        url,
-      });
-      console.alert('성공적으로 공유가 되었습니다.');
-    } catch (error) {
-      console.error('공유에 실패하였습니다.', error);
-    }
-    console.log('url:', url);
-    console.log('title:', title);
-    console.log('text:', text);
-  };
-
+const ShareApiBtn = ({ url, title, text, icon, handleShareClick }) => {
   return (
     <ShareBtn style={{ cursor: ' pointer', height: '24px' }}>
-      <div onClick={handleShareClick}>{}</div>
+      <div onClick={handleShareClick}></div>
     </ShareBtn>
   );
 };

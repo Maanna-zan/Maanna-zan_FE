@@ -86,7 +86,7 @@ export const ImgWrapper384x360 = styled.div`
   align-items: center;
   border-radius: 8px;
   overflow: hidden;
-  background-color: aliceblue;
+  /* background: linear-gradient(180deg, #ffffff 65.83%, #26282b 119.72%); */
   position: relative;
 `;
 export const ImgWrapper282x322 = styled.div`
@@ -155,7 +155,7 @@ export const ImgCenter = styled.img`
   height: auto;
   position: center;
   object-fit: cover;
-  background-color: aliceblue;
+  /* background-color: aliceblue; */
   position: relative;
   transition: transform 0.5s;
   :hover {

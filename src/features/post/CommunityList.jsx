@@ -20,6 +20,8 @@ import {
 } from '@components/Atoms/imgWrapper';
 import { useGetBestPost } from '../../hook/post/useGetBestPost';
 import { useLikePost } from '../../hook/useLikes';
+import { Ranking1, Ranking2, Ranking3 } from '@components/Atoms/Ranking';
+
 const StHeade3_name = styled.div`
   margin-top: 48px;
   font: var(--head3-bold) Pretendard sans-serif;
@@ -62,9 +64,23 @@ const CommunityList = () => {
       console.error('error커뮤니티', error);
     }
   };
+  let ranking = 1;
+  let rankingFn = () => {
+    switch (ranking) {
+      case 1:
+        ranking += 1;
+        return <Ranking1></Ranking1>;
+      case 2:
+        ranking += 1;
+        return <Ranking2></Ranking2>;
+      case 3:
+        ranking += 1;
+        return <Ranking3></Ranking3>;
+    }
+  };
   if (postIsLikeLoading || postIsLoading || postIsBestLoading)
     return <div>로딩중...</div>;
-
+  console.log('zzzzz', posts);
   return (
     <>
       <StWebBg />
@@ -97,24 +113,86 @@ const CommunityList = () => {
                   router.push(`/community/${store?.id}`);
                 }}
               >
-                <BoxTextReal
-                  style={{ overflow: 'hidden' }}
-                  variant="realDefaultBox"
-                  size="nonePadding"
+                <span
+                  style={{
+                    width: '384px',
+                    height: '360px',
+                    position: 'relative',
+                    zIndex: '100',
+                    background:
+                      'linear-gradient(180deg, #FFFFFF 65.83%, #26282B 119.72%)',
+                  }}
                 >
-                  <ImgWrapper384x360>
-                    <ImgCenter
+                  <BoxTextReal
+                    style={{
+                      overflow: 'hidden',
+                      // background:
+                      //   'linear-gradient(180deg, #FFFFFF 65.83%, #26282B 119.72%)',
+                    }}
+                    variant="realDefaultBox"
+                    size="nonePadding"
+                  >
+                    <ImgWrapper384x360
                       style={{
-                        width: '100%',
-                        height: '100%',
-                        overflow: 'hidden',
-                        borderRadius: '8px',
+                        background:
+                          'linear-gradient(180deg, #FFFFFF 65.83%, #26282B 119.72%)',
                       }}
-                      src={store.s3Url ? store.s3Url : '/noimage_282x248_.png'}
-                      alt="store"
-                    />
-                  </ImgWrapper384x360>
-                </BoxTextReal>
+                    >
+                      <ImgCenter
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          overflow: 'hidden',
+                          borderRadius: '10px',
+                          // background:
+                          //   'linear-gradient(180deg, #FFFFFF 65.83%, #26282B 119.72%)',
+                        }}
+                        src={
+                          store.s3Url ? store.s3Url : '/noimage_282x248_.png'
+                        }
+                        alt="store"
+                      />
+                      <div
+                        style={{
+                          position: 'absolute',
+                          bottom: '308px',
+                          left: '20px',
+                        }}
+                      >
+                        {rankingFn()}
+                      </div>
+                      <div
+                        style={{
+                          position: 'absolute',
+                          bottom: '20px',
+                          left: '20px',
+                          width: '344px',
+                          color: 'white',
+                        }}
+                      >
+                        <div
+                          style={{
+                            font: `var(--title1-semibold) Pretendard sans-serif`,
+                            width: '344px',
+                            height: '26px',
+                            marginBottom: '8px',
+                          }}
+                        >
+                          {store.title}
+                        </div>
+                        <div
+                          style={{
+                            font: `var(--body2-medium) Pretendard sans-serif`,
+                            width: '152px',
+                            height: '20px',
+                          }}
+                        >
+                          {store.nickname}
+                        </div>
+                      </div>
+                    </ImgWrapper384x360>
+                  </BoxTextReal>
+                </span>
               </div>
               <StPlace_name>{store?.place_name}</StPlace_name>
             </div>
