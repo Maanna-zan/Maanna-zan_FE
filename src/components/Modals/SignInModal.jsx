@@ -19,6 +19,10 @@ export default function SignInModal({ onClose }) {
     email: '',
     password: '',
   });
+  const changHandler = (event) => {
+    const { name, value } = event.target;
+    setUser((pre) => ({ ...pre, [name]: value }));
+  };
 
   // 이메일찾기 관련 useState및 핸들러
   const [email, setEmail] = React.useState({
@@ -42,10 +46,6 @@ export default function SignInModal({ onClose }) {
     const { name, value } = event.target;
     setPassword((prev) => ({ ...prev, [name]: value }));
     setEmailFormatError(false); // clear the email format error when user types in the input field
-  };
-  //토스트 메시지
-  const handleClick = () => {
-    toast.success('임시 비밀번호로 로그인하셨습니다.');
   };
 
   //access는 헤더로 refresh는 로컬스토리지로

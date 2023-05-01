@@ -34,7 +34,7 @@ const Community = () => {
     queryKey: ['GET_COMMUNITYDETAIL'],
     queryFn: async () => {
       const { data } = await apis.get(`/posts/${query.id}`, {});
-      console.log('커뮤니티data-------------', data);
+
       return data.data;
     },
     //enabled: -> 참일 때 실행시켜준다.
@@ -45,12 +45,12 @@ const Community = () => {
 
   const { posts, postIsLoading } = useGetPost();
   const { postsLike, postIsLikeLoading } = useGetLikePost();
-  console.log('postsLike----......----->', postsLike);
+
   let potLikeMatch = [];
   if (postsLike && postsLike.data && postsLike.data.posts) {
     potLikeMatch = postsLike.data.posts;
   }
-  console.log('potLikeMatch--------->', potLikeMatch);
+
   const postId = query.id;
   const post = posts.find((p) => p.id === Number(postId)) || {};
   const postLikeMine = potLikeMatch.find((p) => p.id === Number(postId)) || {};
@@ -59,6 +59,11 @@ const Community = () => {
     title: post?.title ?? '',
     description: post?.description ?? '',
     s3Url: post?.s3Url || '',
+    taste: post?.null,
+    service: post?.null,
+    atmosphere: post?.null,
+    satisfaction: post?.null,
+    postStarAvg: post?.null,
   });
   console.log('---postLikeMine', postLikeMine);
   const { updatePost } = useUpdatePost(postId);
@@ -72,7 +77,6 @@ const Community = () => {
   };
 
   const [like, setLike] = useState(postLikeMine.like);
-  console.log('(postLikeMine.like------->', postLikeMine.like);
 
   const likePostHandler = async (postId) => {
     try {
@@ -95,12 +99,36 @@ const Community = () => {
     const imageUrl = URL.createObjectURL(file);
     document.getElementById('image-preview').src = imageUrl;
   };
+  const handleRatingChange = (name, value) => {
+    setPost((prevPost) => ({
+      ...prevPost,
+      [name]: value[name],
+    }));
+    console.log('setPosthandleRatingChange', post);
+  };
+  const [hoveredStar, setHoveredStar] = useState(0);
 
+  const handleStarClick = (clickedStar) => {
+    const newPost = {
+      ...post,
+      postStarAvg: clickedStar,
+    };
+    setPost(newPost);
+  };
+
+  const handleStarHover = (hoveredStar) => {
+    setHoveredStar(hoveredStar);
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData();
     formData.append('title', newPost.title);
     formData.append('description', newPost.description);
+    formData.append('taste', post.taste);
+    formData.append('service', post.service);
+    formData.append('atmosphere', post.atmosphere);
+    formData.append('satisfaction', post.satisfaction);
+
     if (newPost?.s3Url) {
       for (const [key, value] of newPost.s3Url.entries()) {
         formData.append(key, value);
@@ -131,7 +159,7 @@ const Community = () => {
     }
   }, [isUpdated]);
   if (postIsLoading || postIsLikeLoading) return <div>로딩중...</div>;
-
+  const [showReviewForm, setShowReviewForm] = useState(false);
   return (
     <div>
       {isEditMode ? (
@@ -153,6 +181,14 @@ const Community = () => {
                 borderRadius: '10px',
               }}
             >
+              {showReviewForm && (
+                <ReviewForm
+                  post={post}
+                  handleRatingChange={handleRatingChange}
+                  handleStarClick={handleStarClick}
+                  handleStarHover={handleStarHover}
+                />
+              )}
               <div
                 style={{
                   font: `var(--head2-bold) Pretendard sans-serif`,

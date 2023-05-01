@@ -30,7 +30,7 @@ export const MainFirstSection = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await apis.get(`/alkol/view?page=${1}&size=4`);
+      const response = await apis.get(`/alkol/best?page=${1}&size=4`);
       seGetView(response.data);
     };
 

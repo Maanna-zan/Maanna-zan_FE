@@ -67,6 +67,7 @@ const StoreDetail = () => {
     }
   };
   const [likeComment, setlikeComment] = useState(false);
+  const [tab, setTab] = useState('storeInfor');
 
   useEffect(() => {
     if (alkolsLike && alkolsLike.flat) {
@@ -98,6 +99,7 @@ const StoreDetail = () => {
     console.log('text:', text);
   };
   const storeId = data.apiId;
+
   return (
     <>
       <WebWrapper>
@@ -155,50 +157,17 @@ const StoreDetail = () => {
               </ImgWrapper792>
             </BoxTextReal>
             <GrideGapCol4>
-              <BoxTextReal size="nonePadding" variant="realDefaultBox">
-                <ImgWrapper180X120>
-                  <ImgCenter
-                    src={
-                      data?.postList[0]
-                        ? data?.postList[0].s3Url
-                        : '/noimage_282x248_.png'
-                    }
-                  ></ImgCenter>
-                </ImgWrapper180X120>
-              </BoxTextReal>
-              <BoxTextReal size="nonePadding" variant="realDefaultBox">
-                <ImgWrapper180X120>
-                  <ImgCenter
-                    src={
-                      data?.postList[1]
-                        ? data?.postList[1].s3Url
-                        : '/noimage_282x248_.png'
-                    }
-                  ></ImgCenter>
-                </ImgWrapper180X120>{' '}
-              </BoxTextReal>
-              <BoxTextReal size="nonePadding" variant="realDefaultBox">
-                <ImgWrapper180X120>
-                  <ImgCenter
-                    src={
-                      data?.postList[2]
-                        ? data?.postList[2].s3Url
-                        : '/noimage_282x248_.png'
-                    }
-                  ></ImgCenter>
-                </ImgWrapper180X120>{' '}
-              </BoxTextReal>
-              <BoxTextReal size="nonePadding" variant="realDefaultBox">
-                <ImgWrapper180X120>
-                  <ImgCenter
-                    src={
-                      data?.postList[3]
-                        ? data?.postList[3].s3Url
-                        : '/noimage_282x248_.png'
-                    }
-                  ></ImgCenter>
-                </ImgWrapper180X120>{' '}
-              </BoxTextReal>
+              {data?.postList.slice(0, 4).map((post, index) => (
+                <BoxTextReal
+                  key={index}
+                  size="nonePadding"
+                  variant="realDefaultBox"
+                >
+                  <ImgWrapper180X120>
+                    <ImgCenter src={post?.s3Url || '/noimage_282x248_.png'} />
+                  </ImgWrapper180X120>
+                </BoxTextReal>
+              ))}
             </GrideGapCol4>
           </div>
           <div>
@@ -378,72 +347,169 @@ const StoreDetail = () => {
               height: '360px',
             }}
           >
-            <FlexRowCenter
-              style={{
-                font: `var(--body1-medium) Pretendard sans-serif`,
-                paddingTop: '10px',
-                paddingBottom: '10px',
-                borderBottom: '1px solid gray',
-                boxSizing: 'border-box',
-              }}
-            >
-              가게 정보
-            </FlexRowCenter>
-            <div
-              style={{
-                width: '100%',
-                justifyContent: ' space-between',
-                display: 'flex',
-              }}
-            >
-              <Map
-                center={center}
-                level="5"
+            {/* {setTab === 'storeInfor' ? ( */}
+            <div>
+              <FlexRow
                 style={{
-                  width: '100%',
-                  height: '18vh',
-                  marign: '8px 16px 22px 16px',
-                  overflow: 'hidden',
+                  font: `var(--body1-medium) Pretendard sans-serif`,
+                  justifyContent: 'space-around',
+                  paddingTop: '10px',
+                  paddingBottom: '10px',
+                  borderBottom: '1px solid gray',
                   boxSizing: 'border-box',
                 }}
               >
-                <MapMarker
-                  position={center} // 마커를 표시할 위치
-                  image={{
-                    src: 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png',
-                    size: {
-                      width: 24,
-                      height: 35,
-                    },
+                <span
+                  style={{
+                    color: `${LightTheme.Fon}`,
+                    font: `var(--body1-medium) Pretendard sans-serif`,
+                    marign: '0',
+                  }}
+                  onClick={() => {
+                    setTab('storeInfor');
                   }}
                 >
-                  <div style={{ color: '#000' }}>{data?.place_name}</div>
-                </MapMarker>
-              </Map>
-            </div>
-            <FlexRow
-              style={{
-                justifyContent: 'space-between',
-                padding: '8px 16px 22px 16px',
-              }}
-            >
-              <FlexColumn style={{ gap: '10px', marginTop: '8px' }}>
-                <StTab>위치</StTab>
-                <StTab>시간</StTab>
-                <StTab>링크</StTab>
-                <StTab>전화번호</StTab>
-              </FlexColumn>
-              <FlexColumn style={{ gap: '10px' }}>
-                <div>{data?.address_name}</div>
-                <FlexRow style={{ gap: '10px' }}>
-                  {/* <div style={{ color: 'green' }}>영업중인지 뭔지</div>
-                <div>영업시간</div> */}
+                  가게정보
+                </span>
+                {/* <span
+                  style={{
+                    color: 'red',
+                    color: `${LightTheme.FONT_SECONDARY}`,
+                    font: `var(--body1-medium) Pretendard sans-serif`,
+                    marign: '0',
+                  }}
+                  onClick={() => {
+                    setTab('evaluation');
+                  }}
+                >
+                  평가
+                </span> */}
+              </FlexRow>
+              <div>
+                {/* 가게 정보 */}
+                <div
+                  style={{
+                    width: '100%',
+                    justifyContent: ' space-between',
+                    display: 'flex',
+                  }}
+                >
+                  <Map
+                    center={center}
+                    level="5"
+                    style={{
+                      width: '344px',
+                      height: '169px',
+                      marign: '8px 16px 22px 16px',
+                      overflow: 'hidden',
+                      boxSizing: 'border-box',
+                    }}
+                  >
+                    <MapMarker
+                      position={center} // 마커를 표시할 위치
+                      image={{
+                        src: 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png',
+                        size: {
+                          width: 24,
+                          height: 35,
+                        },
+                      }}
+                    >
+                      <div style={{ color: '#000' }}>{data?.place_name}</div>
+                    </MapMarker>
+                  </Map>
+                </div>
+                <FlexRow
+                  style={{
+                    justifyContent: 'space-between',
+                    padding: '8px 16px 22px 16px',
+                  }}
+                >
+                  <FlexColumn style={{ gap: '10px', marginTop: '8px' }}>
+                    <StTab>위치</StTab>
+
+                    <StTab>링크</StTab>
+                    <StTab>전화번호</StTab>
+                  </FlexColumn>
+                  <FlexColumn style={{ gap: '10px', justifyContent: 'center' }}>
+                    <div>{data?.address_name}</div>
+                    <FlexRow style={{ gap: '10px' }}></FlexRow>
+
+                    <div>{data?.place_url}</div>
+                    <div>{data?.phone}</div>
+                  </FlexColumn>
                 </FlexRow>
-                <div>...</div>
-                <div>{data?.place_url}</div>
-                <div>{data?.phone}</div>
-              </FlexColumn>
-            </FlexRow>
+              </div>
+            </div>
+            {/* ) : ( */}
+            {/* // <div>
+              /<FlexRow
+              //     style={{
+              //       font: `var(--body1-medium) Pretendard sans-serif`,
+              //       justifyContent: 'space-around',
+              //       paddingTop: '10px',
+              //       paddingBottom: '10px',
+              //       borderBottom: '1px solid gray',
+              //       boxSizing: 'border-box',
+              //     }}
+              //   >
+              //     <span
+              //       style={{
+              //         color: `${LightTheme.FONT_SECONDARY}`,
+              //         font: `var(--body1-medium) Pretendard sans-serif`,
+              //         marign: '0',
+              //       }}
+              //       onClick={() => {
+              //         setTab('storeInfor');
+              //       }}
+              //     >
+              //       가게정보
+              //     </span>
+              //     <span
+              //       style={{
+              //         color: 'red',
+              //         color: `${LightTheme.FONT_PRIMARY}`,
+              //         font: `var(--body1-medium) Pretendard sans-serif`,
+              //         marign: '0',
+              //       }}
+              //       onClick={() => {
+              //         setTab('evaluation');
+              //       }}
+              //     >
+              //       평가
+              //     </span>
+              //   </FlexRow>
+              //   <div style={{ padding: '20px' }}>
+              //     <div style={{ marginBottom: '4px' }}>평균 별점</div>
+              //     <FlexRow style={{ gap: '8px', marginBottom: '28 px' }}>
+              //       <div>별</div>
+              //       <div>별점의 숫자</div>
+              //     </FlexRow>
+              //     <FlexColumn style={{ gap: '20px ' }}>
+              //       <FlexRow style={{ gap: '10px' }}>
+              //         <div style={{ width: '40px' }}>맛</div>
+              //         <div style={{ width: '200px' }}>평가의 그래프길이</div>
+              //         <div style={{ width: '21px' }}>평가의 숫자</div>
+              //       </FlexRow>
+              //       <FlexRow style={{ gap: '10px' }}>
+              //         <div style={{ width: '40px' }}>서비스</div>
+              //         <div style={{ width: '200px' }}>평가의 그래프길이</div>
+              //         <div style={{ width: '21px' }}>평가의 숫자</div>
+              //       </FlexRow>
+              //       <FlexRow style={{ gap: '10px' }}>
+              //         <div style={{ width: '40px' }}>만족도</div>
+              //         <div style={{ width: '200px' }}>평가의 그래프길이</div>
+              //         <div style={{ width: '21px' }}>평가의 숫자</div>
+              //       </FlexRow>
+              //       <FlexRow style={{ gap: '10px' }}>
+              //         <div style={{ width: '40px' }}>분위기</div>
+              //         <div style={{ width: '200px' }}>평가의 그래프길이</div>
+              //         <div style={{ width: '21px' }}>평가의 숫자</div>
+              //       </FlexRow>
+              //     </FlexColumn>
+              //   </div>
+              // </div>
+            // )} */}
           </BoxTextReal>
         </WebWrapper384px>
       </WebWrapper>
