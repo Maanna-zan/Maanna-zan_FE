@@ -69,6 +69,10 @@ function SearchedKeywordLandingPage() {
     setCheckedPlace(newCheckedPlace);
     //	positions state에 검색된 state값 차곡차곡 담기위한 다중마커state값 (place는 모달창에서 검색 및 선택된 값)
     setCheckedMarkerPlace(place);
+    //  newInputValues값 쿼리로 저장 위해 선언
+    const InputValuesProp = newInputValues
+    //  INPUTVALUESPROP키값으로 newInputValues값 저장. 해당 키 값으로 값 불러올 수 있음.
+    queryClient.setQueryData(['INPUTVALUESPROP'], InputValuesProp);
   }
   //  Input Box 추가 Button Handler
   const addingInputBoxButtonHandler = () => {
@@ -254,14 +258,14 @@ function SearchedKeywordLandingPage() {
   queryClient.setQueryData(['MIDPOINTPROP'], midPointProp);
 
   // 266 으로 가서 글을 확인해주세요 ~
-  const [value, onChange] = useState(new Date());
-  console.log('onChange', Calendar);
-  const mark = ['2023-04-20', '2023-04-28'];
+  // const [value, onChange] = useState(new Date());
+  // console.log('onChange', Calendar);
+  // const mark = ['2023-04-20', '2023-04-28'];
 
-  const clickDayHandler = (value, event) => {
-    console.log('value', value);
-    alert(`Clicked day:  ${moment(value).format('MM - DD')}`);
-  };
+  // const clickDayHandler = (value, event) => {
+  //   console.log('value', value);
+  //   alert(`Clicked day:  ${moment(value).format('MM - DD')}`);
+  // };
   //value -> 원래 형태 'YYYY년 MM월 DD일' , 'YYYY-MM-DD', 'MM-DD' 이런식으로 변경이 가능합니다
 
   return (
