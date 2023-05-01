@@ -49,7 +49,6 @@ function SearchedKeywordLandingPage() {
       console.error('Invalid place object:', place);
       return;
     }
-    console.log("@@@@@@@@@@@@place", place)
     //  place 매개변수 받아 모달창 props의 좌표값 받아서 지도 옮겨줌.
     setCenter({ lat: y, lng: x });
     // 인풋박스 각각의 값에 각각의 props state값 주는 로직.
@@ -65,6 +64,7 @@ function SearchedKeywordLandingPage() {
       [currentInputIndex === 0 ? 'x' : `x${currentInputIndex + 1}`]: x,
       [currentInputIndex === 0 ? 'y' : `y${currentInputIndex + 1}`]: y,
     };
+    console.log("@@111111newInputValues@@",newInputValues)
     //  setCheckedPlace함수 서버 통신위하여 가공
     setCheckedPlace(newCheckedPlace);
     //	positions state에 검색된 state값 차곡차곡 담기위한 다중마커state값 (place는 모달창에서 검색 및 선택된 값)
@@ -85,13 +85,27 @@ function SearchedKeywordLandingPage() {
   const onCloseModalHandler = () => {
     setShowModal(false);
   };
-  // X 버튼 Handler(해당 인풋박스 값 초기화(index줘서 각각의 인풋 박스 값 취소 가능)
+  // X 버튼 Handler(해당 인풋박스 값 초기화(index줘서 각각의 인풋 박스 값 취소 가능) -> 수정(인풋박스값 삭제하더라도 checkedPlace값은 반영 안 되어 서버 페이로드가 잘못 감)
+  // const onInputClearHandler = (index) => {
+  //   setInputValues(prevInputValues => {
+  //     console.log("@@22222newInputValues@@",newInputValues)
+  //     const newInputValues = [...prevInputValues];
+  //     newInputValues[index] = '';
+  //     return newInputValues;
+  //   });
+    
+  // }
   const onInputClearHandler = (index) => {
-    setInputValues(prevInputValues => {
-      const newInputValues = [...prevInputValues];
-      newInputValues[index] = '';
-      return newInputValues;
-    });
+    const newInputValues = [...inputValues];
+    newInputValues[index] = '';
+    setInputValues(newInputValues);
+
+    let newCheckedPlace = {
+      ...checkedPlace,
+      [index === 0 ? 'x' : `x${index + 1}`]: undefined,
+      [index === 0 ? 'y' : `y${index + 1}`]: undefined,
+    };
+    setCheckedPlace(newCheckedPlace);
   }
   //Input 박스 추가
   const renderInputArea = (index) => {
