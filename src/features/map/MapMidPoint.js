@@ -18,7 +18,6 @@ function MapMidPoint() {
     const midPointProp = queryClient.getQueryData({queryKey: ['MIDPOINTPROP']});
     // getQueryData로 캐싱한 값 INPUTVALUESPROP키로 불러오기.
     const InputValuesProp = queryClient.getQueryData({queryKey: ['INPUTVALUESPROP']});
-    console.log("@InputValuesProp@",InputValuesProp)
     //  map page로 뒤로가기 위한 useRouter선언.
     const router = useRouter();
     //  뒤로가기 버튼 핸들러
@@ -258,7 +257,16 @@ function MapMidPoint() {
     
                     itemEl.onmouseout =  function () {
                         infowindow.close();
+                        
                     };
+
+                    itemEl.ondblclick = function () {
+                        // 라우터로 페이지 이동 시 해당 중간지점 찾아놓은 부분 뒤로 하고 해당 술집 게시판으로 이동
+                        // router.push(`/alcohols/${places[i]?.id}`)
+                        // 새 창으로 띄워줌
+                        window.open(`/alcohols/${places[i]?.id}`, '_blank');
+                    };
+                    console.log("@places@",places)
                     itemEl.addEventListener("click", function (e) {
                         //클릭된 항목을 표시
                         clearClickedItem();
@@ -346,7 +354,7 @@ function MapMidPoint() {
         // 검색결과 목록 또는 마커를 클릭했을 때 호출되는 함수
         // 인포윈도우에 장소명을 표시
         function displayInfowindow(marker, title) {
-            const content = '<div style="padding:5px;z-index:1;">' + title + '</div>';
+            const content = '<div style="padding:0 3px 0 4px;z-index:1;">' + title + '</div>';
     
             infowindow.setContent(content);
             infowindow.open(map, marker);
@@ -462,6 +470,7 @@ function MapMidPoint() {
                                 <TitleWrapper>
                                     <TitleStyled>중간 위치에 있는 </TitleStyled>
                                     <Highlighting>술집입니다.</Highlighting>
+                                    <div style={{margin : '4px 0 5px 0'}}> 술집 카테고리를 클릭하고 리스트를 더블 클릭해보세요!</div>
                                         <CategoryWrapper>
                                             <form 
                                             id="form" 
@@ -569,7 +578,7 @@ function MapMidPoint() {
         display: flex;
         justify-content: flex-end;
         align-items: flex-end;
-        margin: 1.5% 0 0 0;
+        margin: 1% 0 -24px 0;
     `;
     const MoveBackButtonWrapper = styled.div`
     position: absolute;
