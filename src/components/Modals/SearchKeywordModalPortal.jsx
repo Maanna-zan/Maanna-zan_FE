@@ -272,7 +272,7 @@ function SearchedKeywordLandingPage() {
                       height: 45,
                     }, // 마커이미지의 크기
                   }}
-                  title={position.title} // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+                  title={position.title} // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시된다
                 />
               ))}
               {midPoint && (
@@ -288,10 +288,10 @@ function SearchedKeywordLandingPage() {
             </Map>
           </div>
 
-          <FlexColumnCenter style={{margin: '0 100px 250px 25px'}}>
+          <FlexColumnCenter style={{margin: '0 200px 250px 25px'}}>
             <TitleStyled>친구와 본인의 </TitleStyled>
             <Highlighting>위치를 입력해주세요</Highlighting>
-            <Div className="calendar-container">
+            {/* <Div className="calendar-container">
               <Calendar
                 //196 줄의 핸들러 함수 -> 날짜 얼럿이 뜹니다.
                 onChange={clickDayHandler}
@@ -327,8 +327,8 @@ function SearchedKeywordLandingPage() {
               <div className="text-gray-500 mt-4">
                 {moment(value).format('YYYY- MM- DD')}
               </div>
-            </Div>
-            <div>
+            </Div> */}
+            <div style={{width: '100%'}}>
               {inputs}
               {renderModal()}
                 <ArrangeCenterWrapper>
@@ -395,6 +395,8 @@ const TitleStyled = styled.div`
   font-family: var(--display2-medium) Pretendard sans-serif,
 `;
 const Highlighting = styled.div`
+  //width값있어야 전체 width늘어남..
+  width: 487px;
   font-size: 40px;
   font-weight: 700;
   line-height: 48px;
