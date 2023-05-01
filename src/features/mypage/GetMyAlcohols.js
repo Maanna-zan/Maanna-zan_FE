@@ -83,10 +83,10 @@ const GetMyAlcohols = () => {
           }}
         >
           {currentPageData.map((post) => (
-            <ContainerDiv key={post.id}>
+            <ContainerDiv key={post.apiId}>
               <div
                 onClick={() => {
-                  push.push(`/alcohols/${post.id}`);
+                  push.push(`/alcohols/${post.apiId}`);
                 }}
               >
                 <img
@@ -96,7 +96,7 @@ const GetMyAlcohols = () => {
                     objectFit: 'cover',
                     borderRadius: '12px',
                   }}
-                  src={post.postList[0]}
+                  src={post.postList[0].s3Url}
                   alt={post.place_name}
                 />
                 <div>

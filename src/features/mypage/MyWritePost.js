@@ -60,10 +60,15 @@ const MyWritePost = (data) => {
       <div>
         <ContainerDiv>
           {currentPageData.map((post) => (
-            <PostDiv key={post.id}>
+            <PostDiv
+              key={post.id}
+              onClick={() => {
+                push.push(`/community/${post.id}`);
+              }}
+            >
               <img
                 className="image"
-                src="{post.s3URl}"
+                src={post.s3URl}
                 alt="내가 쓴 게시물"
                 onerror="this.onerror=null; this.src='Group 2017.png';"
               />

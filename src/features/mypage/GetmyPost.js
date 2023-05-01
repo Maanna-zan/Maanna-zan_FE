@@ -25,7 +25,7 @@ const GetmyPost = () => {
           Access_Token: `${token}`,
         },
       });
-      console.log('dataPost--------------', data.data.posts);
+      // console.log('dataPost--------------', data.data.posts);
       return data.data.posts;
     },
   });
@@ -34,7 +34,7 @@ const GetmyPost = () => {
   //map을 돌릴 데이터를 4개씩 끊어서 라는 뜯 입니다 (9개ㅈ씩 끊고 싶으면 9 적으면 됩니다. )
   const chunkedData = data ? chunk(data, 9) : [];
   const currentPageData = chunkedData[activePage - 1] ?? [];
-  console.log('currentPageData', currentPageData);
+  // console.log('currentPageData', currentPageData);
 
   if (!data || data?.length === 0) {
     return (
