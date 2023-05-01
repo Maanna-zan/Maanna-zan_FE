@@ -46,7 +46,7 @@ export const useGetLikeStore = () => {
     },
     onSuccess: (data) => {
       console.log('likeAlkol success:', data);
-      alert(data);
+      // alert(data);
     },
   });
 

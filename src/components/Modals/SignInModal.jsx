@@ -56,19 +56,19 @@ export default function SignInModal({ onClose }) {
       const data = await apis.post('/users/login', user);
       //디코드 활용
       const decoded = jwtDecode(data.headers.access_token);
-      console.log('decoded', decoded);
-      console.log('로그인data', data.data.data);
+      // console.log('decoded', decoded);
+      // console.log('로그인data', data.data.data);
       alert(`${decoded.sub}로그인 성공 했습니다❤️`);
       cookies.set('access_token', data.headers.access_token, { path: '/' });
       cookies.set('refresh_token', data.headers.refresh_token, { path: '/' });
       cookies.set('nick_name', data.data.data, { path: '/' });
       localStorage.setItem('nick_name', data.data.data, { path: '/' });
 
-      console.log('login', data);
+      // console.log('login', data);
       return data;
     },
     onSuccess: (data) => {
-      console.log('login', data);
+      // console.log('login', data);
       if (data.data.message == '비밀번호 변경이 필요합니다') {
         router.push('/OAuth');
       } else {
@@ -76,7 +76,7 @@ export default function SignInModal({ onClose }) {
       }
     },
     onError: (e) => {
-      console.log('error login', e.response.data.message);
+      // console.log('error login', e.response.data.message);
       const error = e.response.data.message;
       alert(error);
     },
@@ -86,14 +86,14 @@ export default function SignInModal({ onClose }) {
   const { mutate: findMyEmail } = useMutation({
     mutationFn: async (email) => {
       const data = await apis.post('users/check/findEmail', email);
-      console.log('data', data);
+      // console.log('data', data);
       return data;
     },
     onError: (error) => {
       setFindEmailError(error.response.data.message);
     },
     onSuccess: (data) => {
-      console.log('data', data.data.data);
+      // console.log('data', data.data.data);
       setFindEmailSuccess(data.data.data);
     },
   });
@@ -102,15 +102,15 @@ export default function SignInModal({ onClose }) {
   const { mutate: findPw, isLoading } = useMutation({
     mutationFn: async (user) => {
       const data = await apis.post('users/check/findPw', user);
-      console.log('data', data);
+      // console.log('data', data);
       return data;
     },
     onError: (error) => {
-      console.log('error', error.response.data.message);
+      // console.log('error', error.response.data.message);
       alert(error.response.data.message);
     },
     onSuccess: (data) => {
-      console.log('data', data);
+      // console.log('data', data);
       alert(`${data.data.message}🥹`);
     },
   });
@@ -181,6 +181,7 @@ export default function SignInModal({ onClose }) {
                   register(user);
                 }}
               />
+              {/* <KakaoButton /> */}
               <EttingDiv>
                 {/* <div className="loginKeepGoing">
               <input name="name" type="radio" />

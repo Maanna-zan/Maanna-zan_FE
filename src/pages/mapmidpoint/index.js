@@ -1,12 +1,14 @@
-import MapMidPoint from '@features/map/MapMidPoint'
-import React from 'react'
+import MapAppointment from '@features/map/MapAppointment';
+import MapMidPoint from '@features/map/MapMidPoint';
+import React from 'react';
 
 function index() {
-    return (
-        <>
-            <MapMidPoint/>
-        </>
-    )
+  return (
+    <>
+      <MapMidPoint />
+      <MapAppointment />
+    </>
+  );
 }
 
-export default index
+export default index;
