@@ -11,7 +11,7 @@ export const Store = ({ storeData, store }) => {
   const { alkolsLike, alkolsIsLikeLoading } = useGetLikeStore();
 
   const apiId = store.apiId;
-  console.log('apiId', apiId);
+
   //게시글 좋아요한 가게와 현재가게 매칭
   const storeLikeMine =
     (alkolsLike && alkolsLike.flat().find((obj) => obj.apiId === apiId)) || {};

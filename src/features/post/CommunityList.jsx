@@ -79,10 +79,14 @@ const CommunityList = () => {
               <div
                 style={{
                   position: 'absolute',
-                  right: '16px',
-                  top: '16px',
+                  width: '30px',
+                  height: '30px',
+                  right: '12px',
+                  top: '12px',
                   zIndex: '10',
                   padding: '10px',
+                  backgroundColor: 'white',
+                  borderRadius: '50px',
                 }}
                 onClick={() => likePostHandler(store?.id)}
               >

@@ -34,6 +34,7 @@ import {
 } from '../hook/alcohol/useGetAllStore';
 import { ButtonText } from '@components/Atoms/Button';
 import { InputArea } from '@components/Atoms/Input';
+import { Ranking1, Ranking2, Ranking3 } from '@components/Atoms/Ranking';
 
 // const [like, setLike] = useState(like);
 const AlcoholList = () => {
@@ -172,6 +173,8 @@ const AlcoholList = () => {
     fetchData();
   }, []);
 
+  let ranking = 0;
+
   if (isLoading) {
     return <WebWrapper>Loading...</WebWrapper>;
   }
@@ -185,7 +188,7 @@ const AlcoholList = () => {
           </StHeade3_name>
           <span
             style={{
-              color: `${LightTheme.PRIMARY_Pretendard}`,
+              color: `${LightTheme.PRIMARY_NORMAL}`,
               font: `var(--title1-semibold) Pretendard sans-serif`,
             }}
           >
