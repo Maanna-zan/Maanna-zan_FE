@@ -8,6 +8,7 @@ export default function SignInPotalExample() {
   return (
     <>
       <ButtonText
+        style={{ font: `var( --title2-semibold) Pretendard sans-serif` }}
         variant="hoverRed"
         label={'로그인'}
         onClick={() => setShowModal(true)}

@@ -107,6 +107,14 @@ export const InputArea = ({
       focusBorderColor = LightTheme.PRIMARY_NORMAL;
       placeColor = LightTheme.FONT_SECONDARY;
       break;
+    case 'gray':
+      backgroundColor = LightTheme.GRAY_200;
+      fontColor = LightTheme.PRIMARY_HEAVY;
+      borderColor = LightTheme.WHITE;
+      focusBackgroundColor = LightTheme.PRIMARY_NORMAL;
+      focusBorderColor = LightTheme.GRAY_200;
+      placeColor = LightTheme.FONT_SECONDARY;
+      break;
   }
   return (
     <StyledInput

@@ -8,6 +8,7 @@ export default function SignUpPortalExample() {
   return (
     <>
       <ButtonText
+        style={{ font: `var( --title2-semibold) Pretendard sans-serif` }}
         variant="hoverRed"
         label={'회원가입'}
         onClick={() => setShowModal(true)}
