@@ -35,8 +35,8 @@ export const LinkToNav = () => {
   useEffect(() => {
     setIsLoginMode(!!token);
     setShowSubMenu(false); // 추가된 코드
-  }, [token]);
-
+  }, [token, setShowSubMenu]);
+  //Token Error
   const { data, isLoading, isError, isSuccess } = useQuery({
     queryKey: ['GET_MYPAGE'],
     queryFn: async () => {
@@ -52,7 +52,7 @@ export const LinkToNav = () => {
 
     // onError 콜백 함수 구현
     onError: (error) => {
-      console.log(error);
+      console.log('error', error);
       // // 에러 처리
       if (error.response.data.statusCode === 401) {
         const refreshToken = cookies.get('refresh_token');

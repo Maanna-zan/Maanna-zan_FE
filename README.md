@@ -48,6 +48,8 @@ yarn storybook
 kakao map api
 => react-kakao-maps-sdk
 
+yarn add react-toastify
+=> 토스트메시지
 
 - [feat] : 새로운 기능 추가
 - [fix] : 버그 수정

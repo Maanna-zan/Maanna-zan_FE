@@ -440,8 +440,8 @@ const Div = styled.div`
     width: 8px;
     background-color: #f87171;
     border-radius: 50%;
-    margin-left: 22px;
-    position: fixed;
+    margin-left: 19px;
+    position: absolute;
   }
 `;
 
