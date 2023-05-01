@@ -356,7 +356,7 @@ export default function KeywordSearchModal({ onClose, onUpdate}) {
                     borderRadius: '8px',
                     position: "absolute",
                     bottom: "20px",
-                    right: "20px", 
+                    right: "5%", 
                     fontSize: "13px",
                     padding: "6px 20px 6px 20px"
                 }}
@@ -415,22 +415,25 @@ const MapSection = styled.div`
         position: relative,
         overflow: hidden;
         border-radius: 8px;
-        z-index: "1";
+        z-index: 3;
     }
     #menuDiv {
         display: flex;
         position: relative;
         z-index: 2;
         font-size: 4px;
+        margin-top: 9px;
+        /* background-color: green; */
+        //지도랑 붙이고 z-index로 가림
+        right: 10px
     }
 
     #menu_wrap {
         position: relative;
         width: 570px;
-        height: 430px;
+        height: 47vh;
         border-radius: 5px;
         overflow-y: auto;
-        background: rgba(255, 255, 255, 0.7);
     }
 
     /* #map_title {
@@ -479,18 +482,24 @@ const MapSection = styled.div`
     }
 }
 
-    #placesList h6 {
-        color: #FF4740;
-        font-size: 15px;
+    #placesList h5 {
+        color: black;
+        font-size: 7px;
+        font-weight: 800;
+        line-height: 1px;
     }
 
     #placesList li {
         /* list-style: square; */
+        border : 1px solid ${LightTheme.GRAY_100};
+        border-radius: 12px
     }
     #placesList .item {
-        border-bottom: 1px solid #888;
+        /* border-bottom: 0 solid #888; */
         overflow: hidden;
         cursor: pointer;
+        margin-bottom: 5px;
+        padding-right: 3px;
     }
 
     #placesList .item .info {

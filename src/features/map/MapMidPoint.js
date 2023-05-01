@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { apis } from '@shared/axios';
 import { WebWrapper, WebWrapperHeight } from '@components/Atoms/Wrapper'
-import { FlexRow } from '@components/Atoms/Flex'
+import { FlexColumnCenter, FlexRow } from '@components/Atoms/Flex'
 import { Map, MapMarker } from 'react-kakao-maps-sdk';
 import styled from 'styled-components';
 import Pagination from '@components/Modals/Pagenation2';
+import { LightTheme } from '@components/Themes/theme';
+import { ButtonText } from '@components/Atoms/Button';
 
 function MapMidPoint() {
     // queryKey에 캐싱하여 값 불러오기위해 queryClient선언
@@ -13,6 +15,8 @@ function MapMidPoint() {
     // getQueryData로 캐싱한 값 MIDPOINTPROP키로 불러오기.
     const midPointProp = queryClient.getQueryData({queryKey: ['MIDPOINTPROP']});
     console.log("@midPointProp@",midPointProp)
+    //  클릭 선택된 장소를 저장할 state 변수
+    const [checkedPlace, setCheckedPlace] = useState('')
     // 중간지점 좌표 받아온 값으로 서버와 통신하여 kakaoAPI값 DB저장 및 목록 불러오기
         const { data, isLoading, isError, refetch } = useQuery({
         queryKey: ['GET_KAKAOAPI'],
@@ -43,9 +47,58 @@ function MapMidPoint() {
     console.log("@@날것의data",data?.data)
     const kakaoApi = data?.data?.documents
     console.log("@@kakaoApi",kakaoApi)
+    //칵테일바
+    const [cocktailPage, setCocktailPage] = useState(null);
+    async function getCocktailPage() {
+        const response = await apis.get(`/kakaoApi?y=${midPointProp?.lat}&x=%20${midPointProp?.lng}&query=칵테일바&radius=1500&page=1&size=15&sort=distance`, midPointProp);
+        setCocktailPage(response?.data);
+    }
+    const getCocktailPageSubmitHandler = async (e) => {
+        e.preventDefault();
+        const cocktailPage = await getCocktailPage();
+        if (cocktailPage) {
+            GetSpotsNearbyMidPoint(cocktailPage?.documents);
+        }
+        GetSpotsNearbyMidPoint(kakaoApiCocktail)
+        console.log("cocktailPage", cocktailPage)
+    };
+    const kakaoApiCocktail = cocktailPage?.documents
+    console.log("kakaoApiCocktail", kakaoApiCocktail)
+    //일본식주점
+    const [izakayaPage, setIzakayaPage] = useState(null);
+    async function getIzakayaPage() {
+        const response = await apis.get(`/kakaoApi?y=${midPointProp?.lat}&x=%20${midPointProp?.lng}&query=일본식주점&radius=1500&page=1&size=15&sort=distance`, midPointProp);
+        setIzakayaPage(response?.data);
+    }
+    const getIzakayaPageSubmitHandler = async (e) => {
+        e.preventDefault();
+        const izakayaPage = await getIzakayaPage();
+        if (izakayaPage) {
+            GetSpotsNearbyMidPoint(izakayaPage?.documents);
+        }
+        GetSpotsNearbyMidPoint(kakaoApiIzakaya)
+        console.log("izakayaPage", izakayaPage)
+    };
+    const kakaoApiIzakaya = izakayaPage?.documents
+    console.log("kakaoApiIzakaya", kakaoApiIzakaya)
 
-    //  클릭 선택된 장소를 저장할 state 변수
-    const [checkedPlace, setCheckedPlace] = useState('')
+    //실내포장마차
+    const [pochaPage, setPochaPage] = useState(null);
+    async function getPochaPage() {
+        const response = await apis.get(`/kakaoApi?y=${midPointProp?.lat}&x=%20${midPointProp?.lng}&query=실내포장마차&radius=1500&page=1&size=15&sort=distance`, midPointProp);
+        setPochaPage(response?.data);
+    }
+    const getPochaPageSubmitHandler = async (e) => {
+        e.preventDefault();
+        const pochaPage = await getPochaPage();
+        if (pochaPage) {
+            GetSpotsNearbyMidPoint(pochaPage?.documents);
+        }
+        GetSpotsNearbyMidPoint(kakaoApiPocha)
+        console.log("pochaPage", pochaPage)
+    };
+    const kakaoApiPocha = pochaPage?.documents
+    console.log("kakaoApiPocha", kakaoApiPocha)
 
     //  임시적인 Submit Handler (GetSpotsNearbyMidPoint함수 실행)
     const keywordSearchSubmitHandler = (e) => {
@@ -53,7 +106,7 @@ function MapMidPoint() {
         // 지도 불러오기 및 마커 및 인포윈도우, pagination생성 함수 실행
         GetSpotsNearbyMidPoint(kakaoApi)
     };
-
+    
     // 페이지 렌더링 되자마자 지도 불러오기.@@(한 번 더 실행이 되어야 마커들찍히는 문제 해결 필요)@@
     useEffect(() => {
         GetSpotsNearbyMidPoint(kakaoApi)
@@ -85,52 +138,38 @@ function MapMidPoint() {
             // MidPointMarkerSet(midPointProp)
             });
         }
-        //  중간지점 마커 시도.
-        // function MidPointMarkerSet() {  
-        //     MidPointMarker()
-        //     displayMidPointMarker()
-        //     function MidPointMarker(midPointProp) {
-        //         const imageMidPointSrc = 'MaannajanLogo.png', // 마커 이미지 url, 스프라이트 이미지를 씁니다
-        //         imageSize = new kakao.maps.Size(36, 37),  // 마커 이미지의 크기
-        //         imgOptions =  {
-        //             spriteSize : new kakao.maps.Size(36, 691), // 스프라이트 이미지의 크기
-        //             spriteOrigin : new kakao.maps.Point(0, (idx*46)+10), // 스프라이트 이미지 중 사용할 영역의 좌상단 좌표
-        //             offset: new kakao.maps.Point(13, 37) // 마커 좌표에 일치시킬 이미지 내에서의 좌표
-        //         },
-        //         markerImage = new kakao.maps.MarkerImage(imageMidPointSrc, imageSize, imgOptions),
-        //         MidPointMarker = new kakao.maps.Marker({
-        //             position: midPointProp, // 마커의 위치
-        //             image: markerImage 
-        //         });
-        //         MidPointMarker.setMap(map); // 지도 위에 마커를 표출
-        //     // markers.push(marker);  // 배열에 생성된 마커를 추가
-        //     return MidPointMarker;
-        //     }
-        //     function displayMidPointMarker(midPointProp) {
-        //         let marker = new kakao.maps.Marker({
-        //         map: map,
-        //         position: new kakao.maps.LatLng(midPointProp.lat, place.lng)
-        //         });
-        // }}
-        // kakao Pagination API중 gotoPage 함수(시도 실패) 
-        // function gotoPage(page) {
-        //     const pageSize = 15; // 페이지당 표시할 장소 수
-        //     const pageCenter = (page - 1) * pageSize + pageSize / 2; // 페이지 중심 장소 인덱스
-        //     const center = new kakao.maps.LatLng(kakaoApi[pageCenter]?.y, kakaoApi[pageCenter]?.x); // 페이지 중심 좌표
-        //     map.setCenter(center); // 지도의 중심 좌표를 페이지 중심 좌표로 설정
-        //     refetch({
-        //         url: `/kakaoApi?y=${midPointProp?.lat}&x=%20${midPointProp?.lng}&query=술집&radius=1500&page=${page}&size=15&sort=distance`
-        //     });
-        // }
-        
+        const searchFormCocktail = document.getElementById('submit_btn2');
+        if (kakaoApiCocktail) {
+            searchFormCocktail?.addEventListener('click', function (e) {
+            e.preventDefault();
+            //kakaoApi넣어줘야 작동
+            showingOnMap(kakaoApiCocktail)
+            // MidPointMarkerSet(midPointProp)
+            });
+        }
+        const searchFormIzakaya = document.getElementById('submit_btn3');
+        if (kakaoApiIzakaya) {
+            searchFormIzakaya?.addEventListener('click', function (e) {
+            e.preventDefault();
+            //kakaoApi넣어줘야 작동
+            showingOnMap(kakaoApiIzakaya)
+            // MidPointMarkerSet(midPointProp)
+            });
+        }
+        const searchFormPocha = document.getElementById('submit_btn4');
+        if (kakaoApiPocha) {
+            searchFormPocha?.addEventListener('click', function (e) {
+            e.preventDefault();
+            //kakaoApi넣어줘야 작동
+            showingOnMap(kakaoApiPocha)
+            // MidPointMarkerSet(midPointProp)
+            });
+        }
         // 마커 및 인포윈도우, pagination
-        function showingOnMap(data, pagination) {
+        function showingOnMap(data) {
                 // 검색 목록과 마커를 표출합니다
                 displayPlaces(data);
-                // 페이지 목록 보여주는 displayPagination() 추가
-                displayPagination(data);
                 console.log("###data###", data)
-                console.log("###pagination###", pagination)
             const bounds = new kakao.maps.LatLngBounds();
             for (let i = 0; i < data.length; i++) {
                 displayMarker(data[i]);
@@ -160,7 +199,8 @@ function MapMidPoint() {
             listEl && removeAllChildNods(listEl);
             // 지도에 표시되고 있는 마커를 제거합니다
             removeMarker();
-            for ( let i=0; i<places.length; i++ ) {
+            for ( let i=0; i<places?.length; i++ ) {
+                console.log("places", places)
                 // 마커를 생성하고 지도에 표시합니다
                 const placePosition = new kakao.maps.LatLng(places[i].y, places[i].x);
                 const marker = addMarker(placePosition, i);
@@ -296,44 +336,7 @@ function MapMidPoint() {
             }
         }
         
-        // 검색결과 목록 하단에 페이지 번호 표시
-        function displayPagination(pagination) {
-            const paginationEl = document.getElementById('pagination');
-            const fragment = document.createDocumentFragment();
-            // 기존에 추가된 페이지 번호 삭제
-            while (paginationEl?.hasChildNodes()) {
-                paginationEl.lastChild &&
-                paginationEl.removeChild(paginationEl.lastChild)
-            }
-    
-            const totalPage = Math.ceil(data?.data?.meta?.pageable_count / 3); // 전체 페이지 수
-            const currentPage = pagination.currentPage; // 현재 페이지
 
-            for (let i = 1; i <= totalPage; i++) {
-                const el = document.createElement('a')
-                el.href = '#'
-                el.innerHTML = i
-                if (i === currentPage) {
-                el.className = 'on';
-                } else {
-                el.onclick = (function (i) {
-                    return function () {
-                        refetch({
-                            url: `/kakaoApi?y=${midPointProp?.lat}&x=%20${midPointProp?.lng}&query=술집&radius=1500&page=${i}&size=15&sort=distance`
-                        });
-                        pagination.currentPage = i;
-                        displayPagination(pagination);
-                    }
-                })(i)
-                }
-    
-                fragment.appendChild(el)
-            }
-            // paginationEl이 null이 아닐 때 appendChild 메소드를 호출
-            if (paginationEl !== null) { 
-                paginationEl.appendChild(fragment);
-            }
-        }
         // 마커를 생성하고 지도에 표시
         function displayMarker(place) {
             let marker = new kakao.maps.Marker({
@@ -360,39 +363,7 @@ function MapMidPoint() {
             <FlexRow style={{ justifyContent: 'space-between' }}>
         <MapSection>
             {/* <H1Styled style={{textAlign: "center", width: "100%"}}>위치검색</H1Styled> */}
-    
-            <form 
-            id="form" 
-            className="inputForm" 
-            onSubmit={keywordSearchSubmitHandler}
-            >
-                <div style={{ width: "100%" }}>
-                    <button
-                    id="submit_btn" 
-                    type="submit"
-                    >체크</button>
-                </div>
-            </form>
-    
                         <div style={{ width: '100%', height: 'calc(100% - 80px)', display: 'flex' }}>
-                            {/* <Map 
-                                id='map'
-                                center={{
-                                    lat: midPointProp?.lat,
-                                    lng: midPointProp?.lng
-                                }}
-                                level={3}
-                                style={{
-                                    width: '690px',
-                                    height: '803px',
-                                }}
-                                >
-                                <MapMarker
-                                    position={{ lat: midPointProp?.lat, lng: midPointProp?.lng }}
-                                    >
-                                        <div style={{ color: "#000" }}>InfoWindow</div>
-                                    </MapMarker>
-                            </Map> */}
                             <div id='map'
                                 center={{
                                     lat: midPointProp?.lat,
@@ -404,21 +375,80 @@ function MapMidPoint() {
                                     height: '803px',
                                 }}
                             />
-                            
-                            <div style={{width: '50%'}}>
-                                <div id="menuDiv">
-                                    <div id="menu_wrap">
-                                        <div>
-                                            <div id="map_title">
+                            <FlexColumnCenter>
+                                <TitleWrapper>
+                                    <TitleStyled>중간 위치에 있는 </TitleStyled>
+                                    <Highlighting>술집입니다.</Highlighting>
+                                    <CategoryWrapper>
+                                        <form 
+                                        id="form" 
+                                        className="inputForm" 
+                                        onSubmit={keywordSearchSubmitHandler}
+                                        >
+                                            <ButtonText
+                                                id="submit_btn" 
+                                                type="submit"
+                                                size='xxsm'
+                                                label='술집(종합)'
+                                                variant='primaryBolder'
+                                            />
+                                        </form>
+                                        <form 
+                                        id="form" 
+                                        className="inputForm" 
+                                        onSubmit={getCocktailPageSubmitHandler}
+                                        >
+                                            <ButtonText
+                                                id="submit_btn2" 
+                                                type="submit"
+                                                size='xxsm'
+                                                label='칵테일바'
+                                                variant='primaryBolder'
+                                                />
+                                        </form>
+                                        <form 
+                                        id="form" 
+                                        className="inputForm" 
+                                        onSubmit={getIzakayaPageSubmitHandler}
+                                        >
+                                            <ButtonText
+                                                id="submit_btn3" 
+                                                type="submit"
+                                                size='xxsm'
+                                                label='일본식주점'
+                                                variant='primaryBolder'
+                                                />
+
+                                        </form>
+                                        <form 
+                                        id="form" 
+                                        className="inputForm" 
+                                        onSubmit={getPochaPageSubmitHandler}
+                                        >
+                                            <ButtonText
+                                                id="submit_btn4" 
+                                                type="submit"
+                                                size='xxsm'
+                                                label='실내포장마차'
+                                                variant='primaryBolder'
+                                            />
+                                        </form>
+                                    </CategoryWrapper>
+                                </TitleWrapper>
+                                <div>
+                                    <div id="menuDiv">
+                                        <div id="menu_wrap">
+                                            <div>
+                                                <div id="map_title">
+                                                </div>
                                             </div>
+                                                <ul id="placesList"></ul>
+                                                <div id="pagination"></div>
                                         </div>
-                                            <ul id="placesList"></ul>
-                                            <div id="pagination"></div>
                                     </div>
                                 </div>
-                            </div>
+                            </FlexColumnCenter>
                         </div>
-
                     </MapSection>
                 </FlexRow>
             </WebWrapperHeight>
@@ -427,15 +457,37 @@ function MapMidPoint() {
     }
     
     export default MapMidPoint
+
+    const TitleWrapper = styled.div`
+    margin: 0 0 3px 20px;
+    `
+    const TitleStyled = styled.div`
+        font-size: 40px;
+        font-weight: 500;
+        line-height: 48px;
+        font-family: var(--display2-medium) Pretendard sans-serif,
+    `;
+    const Highlighting = styled.div`
+    //width값있어야 전체 width늘어남..
+        width: 487px;
+        font-size: 40px;
+        font-weight: 700;
+        line-height: 48px;
+        font-family: var(--display2-bold) Pretendard sans-serif,
+    `;
+    const CategoryWrapper = styled.div`
+        display: flex;
+        justify-content: flex-end;
+        align-items: flex-end;
+    `;
     const MapSection = styled.div`
-    /* display: flex; */
     #map {
         /* width: 920px;
         height: 600px;
         position: absolute; */
         overflow: hidden;
         border-radius: 8px;
-        /* z-index: "1"; */
+        z-index: "3";
         width: '50%',
         height: '100%',
         position: "relative"
@@ -443,17 +495,20 @@ function MapMidPoint() {
     #menuDiv {
         display: flex;
         position: relative;
+        height: 65vh;
         z-index: 2;
         font-size: 4px;
+        top: 3%
     }
     
     #menu_wrap {
         position: relative;
-        width: 570px;
-        height: 430px;
+        /* width: 570px; */
+        width: 100%;
+        height: 100%;
         border-radius: 5px;
         overflow-y: auto;
-        background: rgba(255, 255, 255, 0.7);
+        /* background-color: green; */
     }
     
     /* #map_title {
@@ -476,25 +531,29 @@ function MapMidPoint() {
     }
     
     #submit_btn {
-        background-color: #F4F5F6;
+        /* background-color: #F4F5F6;
         color: #7e7979;
         border: none;
         border-radius:10px;
-        outline: none;
+        outline: none; */
     }
     
-    #placesList h6 {
-        color: #FF4740;
-        font-size: 15px;
+    #placesList h5 {
+        color: black;
+        font-size: 7px;
+        font-weight: 800;
+        line-height: 1px;
     }
     
     #placesList li {
-        /* list-style: square; */
+        border : 1px solid ${LightTheme.GRAY_100};
+        border-radius: 12px
     }
     #placesList .item {
-        border-bottom: 1px solid #888;
+        /* border-bottom: 1px solid #888; */
         overflow: hidden;
         cursor: pointer;
+        margin-bottom: 5px
     }
     
     #placesList .item .info {
@@ -567,3 +626,85 @@ function MapMidPoint() {
         outline: none;
     }
     `;
+
+
+
+
+
+        //  중간지점 마커 시도.
+        // function MidPointMarkerSet() {  
+        //     MidPointMarker()
+        //     displayMidPointMarker()
+        //     function MidPointMarker(midPointProp) {
+        //         const imageMidPointSrc = 'MaannajanLogo.png', // 마커 이미지 url, 스프라이트 이미지를 씁니다
+        //         imageSize = new kakao.maps.Size(36, 37),  // 마커 이미지의 크기
+        //         imgOptions =  {
+        //             spriteSize : new kakao.maps.Size(36, 691), // 스프라이트 이미지의 크기
+        //             spriteOrigin : new kakao.maps.Point(0, (idx*46)+10), // 스프라이트 이미지 중 사용할 영역의 좌상단 좌표
+        //             offset: new kakao.maps.Point(13, 37) // 마커 좌표에 일치시킬 이미지 내에서의 좌표
+        //         },
+        //         markerImage = new kakao.maps.MarkerImage(imageMidPointSrc, imageSize, imgOptions),
+        //         MidPointMarker = new kakao.maps.Marker({
+        //             position: midPointProp, // 마커의 위치
+        //             image: markerImage 
+        //         });
+        //         MidPointMarker.setMap(map); // 지도 위에 마커를 표출
+        //     // markers.push(marker);  // 배열에 생성된 마커를 추가
+        //     return MidPointMarker;
+        //     }
+        //     function displayMidPointMarker(midPointProp) {
+        //         let marker = new kakao.maps.Marker({
+        //         map: map,
+        //         position: new kakao.maps.LatLng(midPointProp.lat, place.lng)
+        //         });
+        // }}
+        // kakao Pagination API중 gotoPage 함수(시도 실패) 
+        // function gotoPage(page) {
+        //     const pageSize = 15; // 페이지당 표시할 장소 수
+        //     const pageCenter = (page - 1) * pageSize + pageSize / 2; // 페이지 중심 장소 인덱스
+        //     const center = new kakao.maps.LatLng(kakaoApi[pageCenter]?.y, kakaoApi[pageCenter]?.x); // 페이지 중심 좌표
+        //     map.setCenter(center); // 지도의 중심 좌표를 페이지 중심 좌표로 설정
+        //     refetch({
+        //         url: `/kakaoApi?y=${midPointProp?.lat}&x=%20${midPointProp?.lng}&query=술집&radius=1500&page=${page}&size=15&sort=distance`
+        //     });
+        // }
+
+
+            // 검색결과 목록 하단에 페이지 번호 표시
+        // function displayPagination(pagination) {
+        //     const paginationEl = document.getElementById('pagination');
+        //     const fragment = document.createDocumentFragment();
+        //     // 기존에 추가된 페이지 번호 삭제
+        //     while (paginationEl?.hasChildNodes()) {
+        //         paginationEl.lastChild &&
+        //         paginationEl.removeChild(paginationEl.lastChild)
+        //     }
+    
+        //     const totalPage = Math.ceil(data?.data?.meta?.pageable_count / 3); // 전체 페이지 수
+        //     const currentPage = pagination.currentPage; // 현재 페이지
+
+        //     for (let i = 1; i <= totalPage; i++) {
+        //         const el = document.createElement('a')
+        //         el.href = '#'
+        //         el.innerHTML = i
+        //         if (i === currentPage) {
+        //         el.className = 'on';
+        //         } else {
+        //         el.onclick = (function (i) {
+        //             return function () {
+        //                 refetch({
+        //                     url: `/kakaoApi?y=${midPointProp?.lat}&x=%20${midPointProp?.lng}&query=술집&radius=1500&page=${i}&size=15&sort=distance`
+        //                 });
+        //                 pagination.currentPage = i;
+        //                 displayPagination(pagination);
+        //             }
+        //         })(i)
+        //         }
+    
+        //         fragment.appendChild(el)
+        //     }
+        //     // paginationEl이 null이 아닐 때 appendChild 메소드를 호출
+        //     if (paginationEl !== null) { 
+        //         paginationEl.appendChild(fragment);
+        //     }
+        // }
