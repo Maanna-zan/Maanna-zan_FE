@@ -49,6 +49,7 @@ const MapBeginning = () => {
                         size='xl'
                         variant='primary'
                         fontColor= "white"
+                        style={{cursor: 'pointer'}}
                         onClick={moveToMapSearchButtonClickHandler}
                     >
                     중간 위치 검색하기    
