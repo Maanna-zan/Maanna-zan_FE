@@ -29,6 +29,7 @@ import { apis } from '@shared/axios';
 import { useLikeStore } from '../../hook/useLikes';
 import { PenIcon } from '@components/Atoms/PenIcon';
 import { Map, MapMarker } from 'react-kakao-maps-sdk';
+import { MinStar } from '@components/Atoms/PostStar';
 const StoreDetail = () => {
   const router = useRouter();
   const { query } = useRouter();
@@ -41,7 +42,7 @@ const StoreDetail = () => {
 
   const { likeStore } = useLikeStore();
   const { alkolsLike, alkolsIsLikeLoading } = useGetLikeStore();
-  const [center, setCenter] = useState({lat: data?.y,lng: data?.x,});
+  const [center, setCenter] = useState({ lat: data?.y, lng: data?.x });
   const apiIdFind = router.query.id;
   const apiId = apiIdFind;
   //게시글 좋아요한 가게와 현재가게 매칭
@@ -81,6 +82,21 @@ const StoreDetail = () => {
   if (!data) {
     return <div>Store not found.</div>;
   }
+  const handleShareClick = async ({ title, text, url }) => {
+    try {
+      await navigator.share({
+        title,
+        text,
+        url,
+      });
+      console.alert('성공적으로 공유가 되었습니다.');
+    } catch (error) {
+      console.error('공유에 실패하였습니다.', error);
+    }
+    console.log('url:', url);
+    console.log('title:', title);
+    console.log('text:', text);
+  };
   const storeId = data.apiId;
   return (
     <>
@@ -108,7 +124,8 @@ const StoreDetail = () => {
               {roomLike ? <LikeHeartIcon /> : <DisLikeHeartIcon />}
             </span>
             <ShareApiBtn
-              style={{ cursor: ' pointer' }}
+              handleShareClick={handleShareClick}
+              style={{ cursor: 'pointer' }}
               title={`만나잔에 오신걸 환영합니다!`}
               url={`${apis}/${data.id}/`}
               text={`여기서 만나잔!!${data?.place_name}친구가 공유한 가게 구경하기`}
@@ -255,20 +272,8 @@ const StoreDetail = () => {
                         >
                           <FlexColumn style={{ gap: '10px' }}>
                             <div>{post.nickname}</div>
-                            <svg
-                              width="14px"
-                              height="13px"
-                              viewBox="0 0 14 13"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="M7 0L8.5716 4.83688H13.6574L9.5429 7.82624L11.1145 12.6631L7 9.67376L2.8855 12.6631L4.4571 7.82624L0.342604 4.83688H5.4284L7 0Z"
-                                fill="#F9BD1A"
-                              />
-                            </svg>
                           </FlexColumn>
-
+                          <MinStar />
                           <FlexRow
                             style={{
                               width: '20%',
@@ -305,7 +310,12 @@ const StoreDetail = () => {
                         <div
                           style={{
                             margin: '0px 0px',
-                            font: `var( --label2-regular) Pretendard sans-serif`,
+                            font: `var(--label2-regular) Pretendard sans-serif`,
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            display: '-webkit-box',
+                            WebkitLineClamp: '1',
+                            WebkitBoxOrient: 'vertical',
                           }}
                         >
                           {post.title}
@@ -314,6 +324,11 @@ const StoreDetail = () => {
                           style={{
                             margin: '0px 0px 8px 0 ',
                             font: `var( --label2-regular) Pretendard sans-serif`,
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            display: '-webkit-box',
+                            WebkitLineClamp: '2',
+                            WebkitBoxOrient: 'vertical',
                           }}
                         >
                           {post.description}
@@ -383,7 +398,7 @@ const StoreDetail = () => {
             >
               <Map
                 center={center}
-                level= '5'
+                level="5"
                 style={{
                   width: '100%',
                   height: '18vh',
@@ -393,15 +408,16 @@ const StoreDetail = () => {
                 }}
               >
                 <MapMarker
-                position={center} // 마커를 표시할 위치
+                  position={center} // 마커를 표시할 위치
                   image={{
                     src: 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png',
                     size: {
                       width: 24,
                       height: 35,
                     },
-                  }}>
-                  <div style={{ color: "#000" }}>{data?.place_name}</div>
+                  }}
+                >
+                  <div style={{ color: '#000' }}>{data?.place_name}</div>
                 </MapMarker>
               </Map>
             </div>
