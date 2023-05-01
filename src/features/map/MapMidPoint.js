@@ -27,6 +27,7 @@ function MapMidPoint() {
         // queryClient.setQueryData(['MIDPOINTPROP'], null);
         // 이전 페이지로 이동
         // router.push('/map');
+
         //라우터의 이점을 활용하지 못한다는 단점있지만, 새로고침 하며 키값 초기화. 다른 방법 고민해보기
         window.location.href = '/map';
     }
@@ -60,12 +61,13 @@ function MapMidPoint() {
         }
     });
     const kakaoApi = data?.data?.documents
-    //칵테일바
+    //  칵테일바 마커 및 리스트 불러오기
     const [cocktailPage, setCocktailPage] = useState(null);
     async function getCocktailPage() {
         const response = await apis.get(`/kakaoApi?y=${midPointProp?.lat}&x=%20${midPointProp?.lng}&query=칵테일바&radius=1500&page=1&size=15&sort=distance`, midPointProp);
         setCocktailPage(response?.data);
     }
+    //  칵테일바 submit button Handler
     const getCocktailPageSubmitHandler = async (e) => {
         e.preventDefault();
         const cocktailPage = await getCocktailPage();
@@ -75,12 +77,13 @@ function MapMidPoint() {
         GetSpotsNearbyMidPoint(kakaoApiCocktail)
     };
     const kakaoApiCocktail = cocktailPage?.documents
-    //일본식주점
+    //  일본식주점 마커 및 리스트 불러오기
     const [izakayaPage, setIzakayaPage] = useState(null);
     async function getIzakayaPage() {
         const response = await apis.get(`/kakaoApi?y=${midPointProp?.lat}&x=%20${midPointProp?.lng}&query=일본식주점&radius=1500&page=1&size=15&sort=distance`, midPointProp);
         setIzakayaPage(response?.data);
     }
+    //  일본식주점 submit button Handler
     const getIzakayaPageSubmitHandler = async (e) => {
         e.preventDefault();
         const izakayaPage = await getIzakayaPage();
@@ -90,13 +93,13 @@ function MapMidPoint() {
         GetSpotsNearbyMidPoint(kakaoApiIzakaya)
     };
     const kakaoApiIzakaya = izakayaPage?.documents
-
-    //실내포장마차
+    //  실내포장마차 마커 및 리스트 불러오기
     const [pochaPage, setPochaPage] = useState(null);
     async function getPochaPage() {
         const response = await apis.get(`/kakaoApi?y=${midPointProp?.lat}&x=%20${midPointProp?.lng}&query=실내포장마차&radius=1500&page=1&size=15&sort=distance`, midPointProp);
         setPochaPage(response?.data);
     }
+    //  실내포장마차 submit button Handler
     const getPochaPageSubmitHandler = async (e) => {
         e.preventDefault();
         const pochaPage = await getPochaPage();
@@ -106,8 +109,73 @@ function MapMidPoint() {
         GetSpotsNearbyMidPoint(kakaoApiPocha)
     };
     const kakaoApiPocha = pochaPage?.documents
+    //  요리주점 마커 및 리스트 불러오기
+    const [diningPubPage, setDiningPubPage] = useState(null);
+    async function getDiningPubPage() {
+        const response = await apis.get(`/kakaoApi?y=${midPointProp?.lat}&x=%20${midPointProp?.lng}&query=요리주점&radius=1500&page=1&size=15&sort=distance`, midPointProp);
+        setDiningPubPage(response?.data);
+    }
+    //  요리주점 submit button Handler
+    const getDiningPubPageSubmitHandler = async (e) => {
+        e.preventDefault();
+        const diningPubPage = await getDiningPubPage();
+        if (diningPubPage) {
+            GetSpotsNearbyMidPoint(diningPubPage?.documents);
+        }
+        GetSpotsNearbyMidPoint(kakaoApiDiningPub)
+    };
+    const kakaoApiDiningPub = diningPubPage?.documents
+        //  호프 마커 및 리스트 불러오기
+        const [hofPage, setHofPage] = useState(null);
+        async function getHofPage() {
+            const response = await apis.get(`/kakaoApi?y=${midPointProp?.lat}&x=%20${midPointProp?.lng}&query=호프&radius=1500&page=1&size=15&sort=distance`, midPointProp);
+            setHofPage(response?.data);
+        }
+        //  호프 submit button Handler
+        const getHofSubmitHandler = async (e) => {
+            e.preventDefault();
+            const hofPage = await getHofPage();
+            if (hofPage) {
+                GetSpotsNearbyMidPoint(hofPage?.documents);
+            }
+            GetSpotsNearbyMidPoint(kakaoApiHof)
+            console.log("kakaoApiHof",kakaoApiHof)
+        };
+        const kakaoApiHof = hofPage?.documents
+        //  와인바 마커 및 리스트 불러오기
+        const [winePage, setWinePage] = useState(null);
+        async function getWinePage() {
+            const response = await apis.get(`/kakaoApi?y=${midPointProp?.lat}&x=%20${midPointProp?.lng}&query=와인바&radius=1500&page=1&size=15&sort=distance`, midPointProp);
+            setWinePage(response?.data);
+        }
+        //  와인바 submit button Handler
+        const getWineSubmitHandler = async (e) => {
+            e.preventDefault();
+            const winePage = await getWinePage();
+            if (winePage) {
+                GetSpotsNearbyMidPoint(winePage?.documents);
+            }
+            GetSpotsNearbyMidPoint(kakaoApiWine)
+        };
+        const kakaoApiWine = winePage?.documents
+        //  오뎅바 마커 및 리스트 불러오기
+        const [fishCakePage, setFishCakePage] = useState(null);
+        async function getFishCakPage() {
+            const response = await apis.get(`/kakaoApi?y=${midPointProp?.lat}&x=%20${midPointProp?.lng}&query=오뎅바바&radius=1500&page=1&size=15&sort=distance`, midPointProp);
+            setFishCakePage(response?.data);
+        }
+        //  오뎅바 submit button Handler
+        const getFishCakeSubmitHandler = async (e) => {
+            e.preventDefault();
+            const fishCakePage = await getFishCakPage();
+            if (fishCakePage) {
+                GetSpotsNearbyMidPoint(fishCakePage?.documents);
+            }
+            GetSpotsNearbyMidPoint(kakaoApiFishCake)
+        };
+        const kakaoApiFishCake = fishCakePage?.documents
 
-    //  임시적인 Submit Handler (GetSpotsNearbyMidPoint함수 실행)
+    //  술집 종합 Submit 버튼 Handler (GetSpotsNearbyMidPoint함수 실행)
     const keywordSearchSubmitHandler = (e) => {
         e.preventDefault();
         // 지도 불러오기 및 마커 및 인포윈도우, pagination생성 함수 실행
@@ -119,25 +187,15 @@ function MapMidPoint() {
     //     keywordSearchSubmitHandler({ preventDefault: () => {} });
     // }, [kakaoApi]);
 
-    useEffect(() => {
-        GetSpotsNearbyMidPoint(kakaoApi, kakaoApiCocktail, kakaoApiIzakaya, kakaoApiPocha)
-    }, [])
-    
-    useEffect(() => {
-        GetSpotsNearbyMidPoint(kakaoApi)
-    },[kakaoApi])
-
-    useEffect(() => {
-        GetSpotsNearbyMidPoint(kakaoApiCocktail)
-    },[kakaoApiCocktail])
-
-    useEffect(() => {
-        GetSpotsNearbyMidPoint(kakaoApiIzakaya)
-    },[kakaoApiIzakaya])
-
-    useEffect(() => {
-        GetSpotsNearbyMidPoint(kakaoApiPocha)
-    },[kakaoApiPocha])
+    useEffect(() => {GetSpotsNearbyMidPoint(kakaoApi, kakaoApiCocktail, kakaoApiIzakaya, kakaoApiPocha)}, [])
+    useEffect(() => {GetSpotsNearbyMidPoint(kakaoApi)},[kakaoApi])
+    useEffect(() => {GetSpotsNearbyMidPoint(kakaoApiCocktail)},[kakaoApiCocktail])
+    useEffect(() => {GetSpotsNearbyMidPoint(kakaoApiIzakaya)},[kakaoApiIzakaya])
+    useEffect(() => {GetSpotsNearbyMidPoint(kakaoApiPocha)},[kakaoApiPocha])
+    useEffect(() => {GetSpotsNearbyMidPoint(kakaoApiPocha)},[kakaoApiDiningPub])
+    useEffect(() => {GetSpotsNearbyMidPoint(kakaoApiPocha)},[kakaoApiHof])
+    useEffect(() => {GetSpotsNearbyMidPoint(kakaoApiPocha)},[kakaoApiWine])
+    // useEffect(() => {GetSpotsNearbyMidPoint(kakaoApiPocha)},[kakaoApiFishCake])
 
     //  키워드 검색 로직
     const GetSpotsNearbyMidPoint =() => {
@@ -162,34 +220,55 @@ function MapMidPoint() {
             e.preventDefault();
             //kakaoApi넣어줘야 작동
             showingOnMap(kakaoApi)
-            // MidPointMarkerSet(midPointProp)
             });
         }
         const searchFormCocktail = document.getElementById('submit_btn2');
         if (kakaoApiCocktail) {
             searchFormCocktail?.addEventListener('click', function (e) {
             e.preventDefault();
-            //kakaoApi넣어줘야 작동
             showingOnMap(kakaoApiCocktail)
-            // MidPointMarkerSet(midPointProp)
             });
         }
         const searchFormIzakaya = document.getElementById('submit_btn3');
         if (kakaoApiIzakaya) {
             searchFormIzakaya?.addEventListener('click', function (e) {
             e.preventDefault();
-            //kakaoApi넣어줘야 작동
             showingOnMap(kakaoApiIzakaya)
-            // MidPointMarkerSet(midPointProp)
             });
         }
         const searchFormPocha = document.getElementById('submit_btn4');
         if (kakaoApiPocha) {
             searchFormPocha?.addEventListener('click', function (e) {
             e.preventDefault();
-            //kakaoApi넣어줘야 작동
             showingOnMap(kakaoApiPocha)
-            // MidPointMarkerSet(midPointProp)
+            });
+        }
+        const searchFormDiningPub = document.getElementById('submit_btn5');
+        if (kakaoApiDiningPub) {
+            searchFormDiningPub?.addEventListener('click', function (e) {
+            e.preventDefault();
+            showingOnMap(kakaoApiDiningPub)
+            });
+        }
+        const searchFormHof = document.getElementById('submit_btn6');
+        if (kakaoApiHof) {
+            searchFormHof?.addEventListener('click', function (e) {
+            e.preventDefault();
+            showingOnMap(kakaoApiHof)
+            });
+        }
+        const searchFormWine = document.getElementById('submit_btn7');
+        if (kakaoApiWine) {
+            searchFormWine?.addEventListener('click', function (e) {
+            e.preventDefault();
+            showingOnMap(kakaoApiWine)
+            });
+        }
+        const searchFormFishCake = document.getElementById('submit_btn8');
+        if (kakaoApiFishCake) {
+            searchFormFishCake?.addEventListener('click', function (e) {
+            e.preventDefault();
+            showingOnMap(kakaoApiFishCake)
             });
         }
         // 마커 및 인포윈도우, pagination
@@ -266,7 +345,6 @@ function MapMidPoint() {
                         // 새 창으로 띄워줌
                         window.open(`/alcohols/${places[i]?.id}`, '_blank');
                     };
-                    console.log("@places@",places)
                     itemEl.addEventListener("click", function (e) {
                         //클릭된 항목을 표시
                         clearClickedItem();
@@ -510,7 +588,6 @@ function MapMidPoint() {
                                                     label='일본식주점'
                                                     variant='primaryBolder'
                                                     />
-
                                             </form>
                                             <form 
                                             id="form" 
@@ -525,6 +602,58 @@ function MapMidPoint() {
                                                     variant='primaryBolder'
                                                 />
                                             </form>
+                                            <form 
+                                            id="form" 
+                                            className="inputForm" 
+                                            onSubmit={getDiningPubPageSubmitHandler}
+                                            >
+                                                <ButtonText
+                                                    id="submit_btn5" 
+                                                    type="submit"
+                                                    size='xxsm'
+                                                    label='요리주점'
+                                                    variant='primaryBolder'
+                                                />
+                                            </form>
+                                            <form 
+                                            id="form" 
+                                            className="inputForm" 
+                                            onSubmit={getHofSubmitHandler}
+                                            >
+                                                <ButtonText
+                                                    id="submit_btn6" 
+                                                    type="submit"
+                                                    size='xxsm'
+                                                    label='호프'
+                                                    variant='primaryBolder'
+                                                />
+                                            </form>
+                                            <form 
+                                            id="form" 
+                                            className="inputForm" 
+                                            onSubmit={getWineSubmitHandler}
+                                            >
+                                                <ButtonText
+                                                    id="submit_btn7" 
+                                                    type="submit"
+                                                    size='xxsm'
+                                                    label='와인바'
+                                                    variant='primaryBolder'
+                                                />
+                                            </form>
+                                            {/* <form 
+                                            id="form" 
+                                            className="inputForm" 
+                                            onSubmit={getFishCakeSubmitHandler}
+                                            >
+                                                <ButtonText
+                                                    id="submit_btn8" 
+                                                    type="submit"
+                                                    size='xxsm'
+                                                    label='오뎅바'
+                                                    variant='primaryBolder'
+                                                />
+                                            </form> */}
                                         </CategoryWrapper>
                                 </TitleWrapper>
                                 <div>
@@ -552,6 +681,8 @@ function MapMidPoint() {
 
     const TitleWrapper = styled.div`
     margin: 0 0 3px 20px;
+    /* height: 100vh; */
+    /* overflow-y: hidden; */
     `
     const TitleStyled = styled.div`
         font-size: 40px;
@@ -579,6 +710,21 @@ function MapMidPoint() {
         justify-content: flex-end;
         align-items: flex-end;
         margin: 1% 0 -24px 0;
+        /* overflow-x: scroll; */
+        overflow-x: auto;
+        white-space: nowrap;
+        flex-direction: row;
+    /* ::-webkit-scrollbar {
+        width: 2px;
+        height: 1px;
+    }
+    ::-webkit-scrollbar-thumb {
+        background-color: rgba(0, 0, 0, 0.2);
+        border-radius: 3px;
+    }
+    ::-webkit-scrollbar-track {
+        background-color: rgba(0, 0, 0, 0.1);
+    } */
     `;
     const MoveBackButtonWrapper = styled.div`
     position: absolute;
