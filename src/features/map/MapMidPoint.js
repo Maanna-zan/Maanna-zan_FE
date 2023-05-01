@@ -109,8 +109,24 @@ function MapMidPoint() {
     
     // 페이지 렌더링 되자마자 지도 불러오기.@@(한 번 더 실행이 되어야 마커들찍히는 문제 해결 필요)@@
     useEffect(() => {
+        GetSpotsNearbyMidPoint(kakaoApi, kakaoApiCocktail, kakaoApiIzakaya, kakaoApiPocha)
+    }, [])
+    
+    useEffect(() => {
         GetSpotsNearbyMidPoint(kakaoApi)
     },[kakaoApi])
+
+    useEffect(() => {
+        GetSpotsNearbyMidPoint(kakaoApiCocktail)
+    },[kakaoApiCocktail])
+
+    useEffect(() => {
+        GetSpotsNearbyMidPoint(kakaoApiIzakaya)
+    },[kakaoApiIzakaya])
+
+    useEffect(() => {
+        GetSpotsNearbyMidPoint(kakaoApiPocha)
+    },[kakaoApiPocha])
 
     //  키워드 검색 로직
     const GetSpotsNearbyMidPoint =() => {
