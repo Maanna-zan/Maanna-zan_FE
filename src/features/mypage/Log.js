@@ -56,7 +56,7 @@ function Log() {
   // const mark = ['2023-04-20', '2023-04-28'];
 
   const clickDayHandler = (value, event) => {
-    console.log('value', value);
+    // console.log('value', value);
     // alert(`Clicked day:  ${value}`);
   };
 
@@ -72,21 +72,21 @@ function Log() {
           Access_Token: `${token}`,
         },
       });
-      console.log('result~~~', data.data);
+      // console.log('result~~~', data.data);
       return data.data.data;
     },
     onSuccess: (data) => {
       if (!data || data.length === 0) {
         return <div>No data available.</div>;
       }
-      console.log('successdata', data);
+      // console.log('successdata', data);
       // setMark([data.data[0].selectedDate]);
       // // // ["2022-02-02", "2022-02-02", "2022-02-10"] 형태로 가져옴
       const mark = data.map((item) => item.selectedDate);
       setMark(mark);
     },
   });
-  console.log('res', data);
+  // console.log('res', data);
 
   // 츄가
   const { mutate } = useMutation({
@@ -96,11 +96,11 @@ function Log() {
           Access_Token: `${token}`,
         },
       });
-      console.log('data', data);
+      // console.log('data', data);
       return data;
     },
     onError: (error) => {
-      console.log('error', error.response.data.message);
+      // console.log('error', error.response.data.message);
       alert(error.response.data.message);
     },
     onSuccess: (data) => {
@@ -122,13 +122,13 @@ function Log() {
   //수정
   const { mutate: calLogUpdate } = useMutation({
     mutationFn: async ({ id, payload }) => {
-      console.log('patloadEdit', payload);
+      // console.log('patloadEdit', payload);
       const { data } = await apis.patch(`/my-page/calendar/${id}`, payload, {
         headers: {
           Access_Token: `${token}`,
         },
       });
-      console.log('editdata', data);
+      // console.log('editdata', data);
       return data;
     },
     onSuccess: () => {

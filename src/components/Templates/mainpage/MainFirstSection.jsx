@@ -16,9 +16,12 @@ import {
   ImgWrapper282x322,
   ImgWrapper84x56,
 } from '@components/Atoms/imgWrapper';
+import { useRouter } from 'next/router';
 const PAGE_SIZE = 3;
 export const MainFirstSection = () => {
   const [getView, seGetView] = useState([]);
+
+  const router = useRouter();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -42,7 +45,11 @@ export const MainFirstSection = () => {
   return (
     <>
       <WebWrapperHeight>
-        <StWebBg></StWebBg>
+        <StWebBg
+          onClick={() => {
+            router.push('/map');
+          }}
+        ></StWebBg>
         <WebWrapper style={{ overflow: 'hidden' }}>
           <GrideGapCol4 style={{ margin: '34px 0 12px 0' }}>
             <FlexRow style={{ justifyContent: 'space-between' }}>
@@ -211,11 +218,11 @@ const StWebBg = styled.div`
 `;
 const StTitleGet = styled.span`
   color: ${LightTheme.FONT_PRIMARY};
-  font: var(--head3-bold) Pretendard sans-serif;
+  font: var(—head3-bold) Pretendard sans-serif;
 `;
 const StSpan = styled.span`
   color: ${LightTheme.FONT_SECONDARY};
-  font: var(--body1-regular) Pretendard sans-serif;
+  font: var(—body1-regular) Pretendard sans-serif;
   display: flex;
   height: 100%;
   align-items: center;

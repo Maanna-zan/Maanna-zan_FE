@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import SettingModal from './SettingModal';
 
 export default function SettingPortalExample({ data }) {
-  console.log('data', data);
+  // console.log('data', data);
   const [showModal, setShowModal] = useState(false);
   return (
     <>

@@ -126,17 +126,17 @@ const CommunityList = () => {
                   <BoxTextReal
                     style={{
                       overflow: 'hidden',
-                      // background:
-                      //   'linear-gradient(180deg, #FFFFFF 65.83%, #26282B 119.72%)',
+                      background:
+                        'linear-gradient(180deg, #FFFFFF 65.83%, #26282B 119.72%)',
                     }}
                     variant="realDefaultBox"
                     size="nonePadding"
                   >
                     <ImgWrapper384x360
-                      style={{
-                        background:
-                          'linear-gradient(180deg, #FFFFFF 65.83%, #26282B 119.72%)',
-                      }}
+                    // style={{
+                    //   background:
+                    //     'linear-gradient(180deg, #c2a8a8 65.83%, #26282B 119.72%)',
+                    // }}
                     >
                       <ImgCenter
                         style={{
@@ -164,10 +164,15 @@ const CommunityList = () => {
                       <div
                         style={{
                           position: 'absolute',
-                          bottom: '20px',
-                          left: '20px',
-                          width: '344px',
+                          // bottom: '20px',
+                          // left: '20px',
+                          width: '384px',
+                          height: '360px',
                           color: 'white',
+                          background:
+                            'linear-gradient(180deg, #7e7e7e70 65.83%, #26282B 119.72%)',
+                          padding: '5px',
+                          borderRadius: '8px',
                         }}
                       >
                         <div
@@ -176,15 +181,21 @@ const CommunityList = () => {
                             width: '344px',
                             height: '26px',
                             marginBottom: '8px',
+                            position: 'relative',
+                            left: '30px',
+                            bottom: '-270px',
                           }}
                         >
-                          {store.title}
+                          {store.storename}/{store.title}
                         </div>
                         <div
                           style={{
                             font: `var(--body2-medium) Pretendard sans-serif`,
                             width: '152px',
                             height: '20px',
+                            position: 'relative',
+                            left: '30px',
+                            bottom: '-270px',
                           }}
                         >
                           {store.nickname}
