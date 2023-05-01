@@ -8,6 +8,7 @@ import styled from 'styled-components';
 import Pagination from '@components/Modals/Pagenation2';
 import { LightTheme } from '@components/Themes/theme';
 import { ButtonText } from '@components/Atoms/Button';
+import { useRouter } from 'next/router';
 
 function MapMidPoint() {
     // queryKey에 캐싱하여 값 불러오기위해 queryClient선언
@@ -15,6 +16,18 @@ function MapMidPoint() {
     // getQueryData로 캐싱한 값 MIDPOINTPROP키로 불러오기.
     const midPointProp = queryClient.getQueryData({queryKey: ['MIDPOINTPROP']});
     console.log("@midPointProp@",midPointProp)
+    //  map page로 뒤로가기 위한 useRouter선언.
+    const router = useRouter();
+    //  뒤로가기 버튼 핸들러
+    const moveBackClickButtonHandler = () => {
+        // 데이터 리셋
+        // queryClient.removeQueries({queryKey: ['MIDPOINTPROP']});
+        // queryClient.setQueryData(['MIDPOINTPROP'], null);
+        // 이전 페이지로 이동
+        // router.push('/map');
+        //라우터의 이점을 활용하지 못한다는 단점있지만, 새로고침 하며 키값 초기화. 다른 방법 고민해보기
+        window.location.href = '/map';
+    }
     //  클릭 선택된 장소를 저장할 state 변수
     const [checkedPlace, setCheckedPlace] = useState('')
     // 중간지점 좌표 받아온 값으로 서버와 통신하여 kakaoAPI값 DB저장 및 목록 불러오기
@@ -371,15 +384,34 @@ function MapMidPoint() {
         }
     }
     }
-
-
+    
     return (
         <WebWrapper>
             <WebWrapperHeight>
             <FlexRow style={{ justifyContent: 'space-between' }}>
+            <MoveBackButtonWrapper>
+            <ButtonText 
+            size='xxsm'
+            variant='hoverRed'
+            label='<  다시 검색하기'
+            style={{
+                borderRadius : '2px', 
+                position: 'absolute',
+                width: '110px',
+                bottom: '0px',
+                left: '-19px',
+                zIndex: '50',
+                backgroundColor: "transparent",
+                border: 'none',
+                fontSize: '12px',
+                fontWeight: '600'
+                }}
+            
+            onClick={moveBackClickButtonHandler}/>
+            </MoveBackButtonWrapper>
         <MapSection>
             {/* <H1Styled style={{textAlign: "center", width: "100%"}}>위치검색</H1Styled> */}
-                        <div style={{ width: '100%', height: 'calc(100% - 80px)', display: 'flex' }}>
+                        <div style={{ width: '100%', height: 'calc(100% - 80px)', display: 'flex'}}>
                             <div id='map'
                                 center={{
                                     lat: midPointProp?.lat,
@@ -496,6 +528,10 @@ function MapMidPoint() {
         justify-content: flex-end;
         align-items: flex-end;
     `;
+    const MoveBackButtonWrapper = styled.div`
+    position: absolute;
+    z-index: 100;
+    `
     const MapSection = styled.div`
     #map {
         /* width: 920px;
