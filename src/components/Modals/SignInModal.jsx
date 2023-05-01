@@ -12,24 +12,43 @@ import KakaoButton from '@features/kakaoLogin/KakaoButton';
 export default function SignInModal({ onClose }) {
   const router = useRouter();
   //로그인
+  //모달창의 상태 변화들
   const [isEditMode, setIsEditMode] = useState('login');
+  // 로그인 관련 useState및 핸들러
   const [user, setUser] = React.useState({
     email: '',
     password: '',
   });
+
   const changHandler = (event) => {
     const { name, value } = event.target;
     setUser((pre) => ({ ...pre, [name]: value }));
   };
 
+  // 이메일찾기 관련 useState및 핸들러
+  const [email, setEmail] = React.useState({
+    userName: '',
+    phoneNumber: '',
+  });
+  const emailchangeHandler = (event) => {
+    const { name, value } = event.target;
+    setEmail((pre) => ({ ...pre, [name]: value }));
+  };
+  //이메일찾기 에러처리
+  const [findEmailError, setFindEmailError] = React.useState('');
+  //이메일찾기 성공시처리
+  const [findEmailSuccess, setFindEmailSuccess] = React.useState('');
+
   //비밀번호 찾기
   const [password, setPassword] = useState('');
+  //비밀번호찾기 에러처리
   const [emailFormatError, setEmailFormatError] = useState(false); // state for email format validation error
   const changeHandler = (event) => {
     const { name, value } = event.target;
     setPassword((prev) => ({ ...prev, [name]: value }));
     setEmailFormatError(false); // clear the email format error when user types in the input field
   };
+
   //access는 헤더로 refresh는 로컬스토리지로
   // passwordCheck 빼고 나머지 라는 뜻
   //3번째 옵션 config////////////////////
@@ -64,6 +83,22 @@ export default function SignInModal({ onClose }) {
     },
   });
 
+  //이메일찾기
+  const { mutate: findMyEmail } = useMutation({
+    mutationFn: async (email) => {
+      const data = await apis.post('users/check/findEmail', email);
+      console.log('data', data);
+      return data;
+    },
+    onError: (error) => {
+      setFindEmailError(error.response.data.message);
+    },
+    onSuccess: (data) => {
+      console.log('data', data.data.data);
+      setFindEmailSuccess(data.data.data);
+    },
+  });
+
   //비밀번호찾기
   const { mutate: findPw, isLoading } = useMutation({
     mutationFn: async (user) => {
@@ -93,6 +128,7 @@ export default function SignInModal({ onClose }) {
       return;
     }
     findPw(password);
+    setIsEditMode('successFindPw');
   };
 
   return (
@@ -136,19 +172,6 @@ export default function SignInModal({ onClose }) {
                 onChange={changHandler}
                 placeholder="비밀번호를 입력하세요"
               />
-              <EttingDiv>
-                {/* <div className="loginKeepGoing">
-              <input name="name" type="radio" />
-              <label htmlFor="name">로그인 유지</label>
-            </div> */}
-                <FindButton
-                  onClick={() => {
-                    setIsEditMode('findPassword');
-                  }}
-                >
-                  비밀번호 찾기
-                </FindButton>
-              </EttingDiv>
               <ButtonText
                 style={{ marginTop: '30px' }}
                 label="로그인"
@@ -159,7 +182,28 @@ export default function SignInModal({ onClose }) {
                   register(user);
                 }}
               />
-              <KakaoButton />
+              <EttingDiv>
+                {/* <div className="loginKeepGoing">
+              <input name="name" type="radio" />
+              <label htmlFor="name">로그인 유지</label>
+            </div> */}
+
+                <FindButton
+                  onClick={() => {
+                    setIsEditMode('findPassword');
+                  }}
+                >
+                  비밀번호 찾기
+                </FindButton>
+                <FindButton
+                  onClick={() => {
+                    setIsEditMode('findEmailMode');
+                  }}
+                >
+                  아이디 찾기
+                </FindButton>
+              </EttingDiv>
+
               <BottomDiv>
                 <p className="question"> 아이디가 없으신가요?</p>
                 <p className="goToSignUp" onClick={onClose}>
@@ -167,7 +211,122 @@ export default function SignInModal({ onClose }) {
                 </p>
               </BottomDiv>
             </InnerDiv>
-          ) : (
+          ) : isEditMode === 'findEmailMode' ? (
+            <InnerDiv>
+              <h1 className="Login">아이디 찾기</h1>
+              <p className="notice">가입 시 입력한 전화번호를 입력해주세요.</p>
+              <InputWrapper>
+                <InputArea
+                  style={{
+                    marginTop: '-15px',
+                    borderColor: findEmailError
+                      ? '#EF2B2A'
+                      : findEmailSuccess
+                      ? '#3DC061'
+                      : 'default',
+                  }}
+                  type="text"
+                  size="lg"
+                  variant="default"
+                  name="userName"
+                  value={email.userName}
+                  onChange={emailchangeHandler}
+                  placeholder="이름를 입력하세요"
+                />
+                {findEmailSuccess && (
+                  <img
+                    style={{
+                      position: 'absolute',
+                      right: '5%',
+                      top: '35%',
+                      transform: 'translateY(-50%)',
+                      height: '20px',
+                      width: '20px',
+                    }}
+                    src="Group 2066.png"
+                    alt="이메일찾기 완료"
+                  />
+                )}
+              </InputWrapper>
+              <InputWrapper>
+                <InputArea
+                  style={{
+                    marginTop: '-15px',
+                    borderColor: emailFormatError
+                      ? '#EF2B2A'
+                      : findEmailSuccess
+                      ? '#3DC061'
+                      : 'default',
+                  }}
+                  type="text"
+                  size="lg"
+                  variant="default"
+                  name="phoneNumber"
+                  value={email.phoneNumber}
+                  onChange={emailchangeHandler}
+                  placeholder="전화번호를 입력하세요"
+                />
+                {findEmailSuccess && (
+                  <img
+                    style={{
+                      position: 'absolute',
+                      right: '5%',
+                      top: '35%',
+                      transform: 'translateY(-50%)',
+                      height: '20px',
+                      width: '20px',
+                    }}
+                    src="Group 2066.png"
+                    alt="이메일찾기 완료"
+                  />
+                )}
+              </InputWrapper>
+
+              {findEmailError && (
+                <p style={{ color: 'red', marginTop: '-10px' }}>
+                  {findEmailError}
+                </p>
+              )}
+
+              {findEmailSuccess && (
+                <SuccessDiv>
+                  <p className="answer">회원님의 아이디입니다.</p>
+                  <p className="myEmail">"{findEmailSuccess}"</p>
+                </SuccessDiv>
+              )}
+              {findEmailSuccess ? (
+                <ButtonText
+                  style={{
+                    marginBottom: '50px',
+                  }}
+                  label="로그인"
+                  size="md"
+                  variant="primary"
+                  active={true}
+                  onClick={() => {
+                    setIsEditMode('login');
+                    setEmail('');
+                    setFindEmailSuccess(''); // 확인 상태로 돌아가도록 합니다.
+                  }}
+                />
+              ) : (
+                <ButtonText
+                  style={{
+                    marginBottom: '50px',
+                    marginTop: '50px',
+                  }}
+                  최
+                  label="확인"
+                  size="md"
+                  variant="primary"
+                  active={true}
+                  onClick={() => {
+                    findMyEmail(email);
+                  }}
+                />
+              )}
+            </InnerDiv>
+          ) : isEditMode === 'findPassword' ? (
             <InnerDiv>
               <h1 className="Login">비밀번호 찾기</h1>
               <p className="notice">
@@ -175,7 +334,10 @@ export default function SignInModal({ onClose }) {
               </p>
               <p className="notice1">로그인 후 비밀번호를 변경해주세요.</p>
               <InputArea
-                style={{ marginTop: '-15px' }}
+                style={{
+                  marginTop: '-15px',
+                  borderColor: emailFormatError ? '#EF2B2A' : 'default',
+                }}
                 type="text"
                 size="lg"
                 variant="default"
@@ -210,6 +372,46 @@ export default function SignInModal({ onClose }) {
                 </p>
               </BottomDiv>
             </InnerDiv>
+          ) : (
+            <InnerDiv>
+              <h1 className="Login">비밀번호 찾기</h1>
+              <p className="notice">
+                가입 시 입력한 이메일 주소로 임시 비밀번호를 보내드립니다.
+              </p>
+              <p className="notice1">로그인 후 비밀번호를 변경해주세요.</p>
+              <InputArea
+                style={{
+                  marginTop: '-15px',
+                  borderColor: emailFormatError ? '#EF2B2A' : 'default',
+                }}
+                type="text"
+                size="lg"
+                variant="gray"
+                name="email"
+                value={password.email}
+                onChange={changeHandler}
+                placeholder="이메일 주소를 입력하세요"
+              />
+              <ButtonText
+                style={{ marginTop: '30px' }}
+                label="로그인"
+                size="md"
+                variant="primary"
+                active={true}
+                disabled={isLoading}
+                onClick={() => {
+                  setIsEditMode('login');
+                }}
+              />
+              <p
+                className="oneMoreSend"
+                onClick={() => {
+                  setIsEditMode('findPassword');
+                }}
+              >
+                이메일 다시보내기
+              </p>
+            </InnerDiv>
           )}
         </div>
       </ModalDiv>
@@ -239,7 +441,7 @@ const ModalDiv = styled.div`
     z-index: 1000;
     max-width: 410px;
     min-width: 280px;
-    width: 50%;
+    width: 90%;
     border: 1px solid #939aa0;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
@@ -251,6 +453,7 @@ const InnerDiv = styled.div`
   justify-content: center;
   align-content: center;
   row-gap: 20px;
+
   .InputArea {
     width: 250px;
     display: flex;
@@ -282,11 +485,16 @@ const InnerDiv = styled.div`
     line-height: 16px;
     color: #9fa4a9;
   }
+  .oneMoreSend {
+    padding-top: 130px;
+    margin: 0 auto;
+    color: #ff6a64;
+  }
 `;
 
 const EttingDiv = styled.div`
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   align-items: center;
   .loginKeepGoing {
     color: #9fa4a9;
@@ -301,7 +509,7 @@ const FindButton = styled.button`
   color: #9fa4a9;
   background-color: transparent;
   width: fit-content;
-  font-size: 11px;
+  font-size: 12px;
 `;
 
 const BottomDiv = styled.div`
@@ -316,5 +524,27 @@ const BottomDiv = styled.div`
   }
   .goToSignUp {
     color: #ff6a64;
+  }
+`;
+
+const InputWrapper = styled.div`
+  position: relative;
+  display: inline-block;
+  margin-bottom: 40x;
+`;
+
+const SuccessDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .answer {
+    margin-top: 30px;
+    color: #9ea4aa;
+  }
+  .myEmail {
+    font-weight: 700px;
+    font-size: 14px;
+    line-height: 20px;
+    margin-top: -10px;
   }
 `;

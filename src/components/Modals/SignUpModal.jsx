@@ -15,6 +15,7 @@ export default function SignUpModal({ onClose }) {
 
   // 비동기서버통신을 위한 커스텀 훅
   const [confirm] = useConfirm();
+
   const confirmEmail = () => {
     confirm({ type: 'email', value: user.email });
   };
@@ -171,7 +172,6 @@ export default function SignUpModal({ onClose }) {
               label="중복확인"
             />
           </div>
-
           <Detaildiv>
             <div className="detailSignUp">비밀번호</div>
             <div className="notice">
@@ -363,4 +363,10 @@ const Detaildiv = styled.div`
     line-height: 16px;
     color: #9ea4aa;
   }
+`;
+
+const InputWrapper = styled.div`
+  position: relative;
+  display: inline-block;
+  margin-bottom: 40x;
 `;

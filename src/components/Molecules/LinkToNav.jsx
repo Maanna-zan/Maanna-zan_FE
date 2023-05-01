@@ -69,12 +69,21 @@ export const LinkToNav = () => {
 
   return (
     <nav>
+      <Link href="/">
+        <span>
+          <ButtonText
+            style={{ font: `var(--title2-semibold) Pretendard sans-serif` }}
+            variant={router.pathname === '/alcohols' ? 'activeRed' : 'hoverRed'}
+            label={'만족도 조사'}
+          ></ButtonText>
+        </span>
+      </Link>
       <Link href="/alcohols">
         <span>
           <ButtonText
             style={{ font: `var(--title2-semibold) Pretendard sans-serif` }}
             variant={router.pathname === '/alcohols' ? 'activeRed' : 'hoverRed'}
-            label={'리스트'}
+            label={'술집 리스트'}
           ></ButtonText>
         </span>
       </Link>
