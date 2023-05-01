@@ -2,6 +2,7 @@ import { InputArea } from "@components/Atoms/Input";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Map } from "react-kakao-maps-sdk";
+import { LightTheme } from "@components/Themes/theme";
 
 export default function KeywordSearchModal({ onClose, onUpdate}) {
         //  키워드 검색 값 state
@@ -35,8 +36,8 @@ export default function KeywordSearchModal({ onClose, onUpdate}) {
         const { kakao } = window;
         const map = new kakao.maps.Map(document.getElementById('myMap'), 
         {
-            center: new kakao.maps.LatLng(37.5546788388674, 126.970606917394),
-            level: 3
+            center: new kakao.maps.LatLng(37.56682420267543, 126.978652258823),
+            level: 4
         });
         const ps = new kakao.maps.services.Places();
         const infowindow = new kakao.maps.InfoWindow({ zIndex: 1 });
@@ -54,10 +55,10 @@ export default function KeywordSearchModal({ onClose, onUpdate}) {
         function searchPlaces() 
         {
             const keyword = document.getElementById("keyword").value;
-            if (!keyword?.replace(/^\s+|\s+$/g, "")) {
-                alert("키워드를 입력해주세요!");
-                return;
-        }
+        //     if (!keyword?.replace(/^\s+|\s+$/g, "")) {
+        //         alert("키워드를 입력해주세요!");
+        //         return;
+        // }
         // 장소검색 객체를 통해 키워드로 장소검색을 요청
         ps.keywordSearch(keyword, placesSearchCB);
         }
@@ -303,40 +304,31 @@ export default function KeywordSearchModal({ onClose, onUpdate}) {
             <H1Styled style={{textAlign: "center", width: "100%"}}>위치검색</H1Styled>
 
             <form id="form" className="inputForm" onSubmit={keywordSearchSubmitHandler}>
-                <InputWrapper style={{ width: "100%" }}>
-                    <InputArea 
+                <InputWrapper style={{ width: "100%", position: "relative" }}>
+                    <label style={{width : "90%"}}>
+                        {inputText.length === 0 && (
+                        <span style={{ color: "red", fontSize: "12px", position: "absolute", top: "-50%"}}>정확한 위치를 입력해주세요.</span>
+                        )}
+                    <input 
                         id="keyword"
                         type="text" 
                         placeholder="위치를 입력해주세요."
                         onChange={inputTextHandler} 
                         value={inputText}
-                        color='default'
-                        style={{border: '1px solid #9EA4AA', borderRadius: '12px'}}
-                    />
-                    <button
-                        id="submit_btn" 
-                        type="submit"
-                    >
-                        검색
-                    </button>
+                        // style={{border :'1px solid black'}}
+                        />
+                        {/* {inputText.length >= 1 && ( */}
+                        <button type="submit" id="submit_btn">
+                            <img src="ModalPortalSearchBarIcon.png" alt="검색" />
+                        </button>
+                        {/* )} */}
+                    </label>
                 </InputWrapper>
             </form>
 
             <div style={{ width: '100%', height: 'calc(100% - 80px)', display: 'flex' }}>
                 
-                    <div
-                        id='myMap'
-                        center={{
-                            lat: 37.56682420267543,
-                            lng: 126.978652258823
-                        }}
-                        level={3}
-                        style={{
-                            width: '50%',
-                            height: '105%',
-                            position: "relative"
-                        }}
-                    >
+                    <div id='myMap'>
                     </div>
                     <div style={{width: '50%'}}>
                         
@@ -415,41 +407,15 @@ const InputWrapper = styled.div`
     align-items: center;
     justify-content: space-between;
     width: 100%;
-
-    input {
-        width: 90%;
-        height: 40px;
-        padding: 0 10px;
-        border: 1px solid #9EA4AA;
-        border-radius: 4px;
-        font-size: 16px;
-        color: #333;
-    }
-
-    button {
-        width: 40px;
-        height: 40px;
-        margin-left: 10px;
-        border: none;
-        border-radius: 4px;
-        font-size: 14px;
-        color: #fff;
-        background-color: #FF4740;
-        cursor: pointer;
-    }
 `;
 const MapSection = styled.div`
-    /* display: flex; */
     #myMap {
-        /* width: 920px;
-        height: 600px;
-        position: absolute; */
+        width: 50%;
+        height: 100%,
+        position: relative,
         overflow: hidden;
         border-radius: 8px;
-        /* z-index: "1"; */
-        width: '50%',
-        height: '100%',
-        position: "relative"
+        z-index: "1";
     }
     #menuDiv {
         display: flex;
@@ -481,18 +447,37 @@ const MapSection = styled.div`
     }
 
     #keyword {
-        width: 100%;
-        border: none;
-        outline: none;
+    width: 100%;
+    height: 34px;
+    padding: 0 40px 0 16px;
+    border: 1px solid ${LightTheme.GRAY_400};
+    border-radius: 12px;
+    color: ${LightTheme.GRAY_600};
+    background-color: ${LightTheme.WHITE};
+    &:active {
+        border-color: ${LightTheme.GRAY_900};
     }
-
+    ::placeholder {
+        color: ${LightTheme.GRAY_400};
+    }
+    &:focus {
+        outline: none;
+        box-shadow: none;
+        border-color: ${LightTheme.GRAY_900};
+    }
+    }
     #submit_btn {
-        background-color: #F4F5F6;
-        color: #7e7979;
-        border: none;
-        border-radius:10px;
-        outline: none;
+    position: absolute;
+    top: 19%;
+    right: 1%;
+    border: none;
+    background: none;
+    cursor: pointer;
+    img {
+        width: 18px;
+        height: 18px;
     }
+}
 
     #placesList h6 {
         color: #FF4740;
