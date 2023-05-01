@@ -311,7 +311,6 @@ export default function SettingModal({ onClose, data }) {
               </div>
             </ModeParentsDiv>
 
-            <p>다크모드 넣어주기</p>
             <p
               onClick={() => {
                 setIsEditMode('delete');

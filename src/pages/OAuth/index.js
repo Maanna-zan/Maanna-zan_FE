@@ -8,10 +8,16 @@ import styled from 'styled-components';
 import { InputArea } from '@components/Atoms/Input';
 import { ButtonText } from '@components/Atoms/Button';
 
-const OAuth = () => {
+import { toast } from 'react-toastify';
+const OAuth = (Toast) => {
   const router = useRouter();
 
   const [password, setPassword] = useState('');
+
+  const handleClick = () => {
+    router.push('/');
+    toast.info('임시비밀번호로 로그인하셨습니다.');
+  };
 
   const access_token = cookies.get('access_token');
 
@@ -138,12 +144,7 @@ const OAuth = () => {
           </p>
         )}
         <div className="twoButton">
-          <button
-            className="cancel"
-            onClick={() => {
-              router.push('/');
-            }}
-          >
+          <button className="cancel" onClick={handleClick}>
             취소
           </button>
 
