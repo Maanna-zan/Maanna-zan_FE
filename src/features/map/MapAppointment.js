@@ -14,6 +14,12 @@ import { ButtonText } from '@components/Atoms/Button';
 const MapAppointment = () => {
   const router = useRouter();
   const [isLoginMode, setIsLoginMode] = useState(false);
+  //버튼으로 보내줄 값들
+  const [appointment, setAppointment] = React.useState({
+    selectedDate: '',
+    //필요한 key, value 값 추가해서 사용하세용 !
+    //1번 출발 : '',
+  });
   useEffect(() => {
     const token = cookies.get('access_token');
     setIsLoginMode(token);
@@ -32,6 +38,13 @@ const MapAppointment = () => {
     alert(`Clicked day:  ${moment(value).format('YYYY-MM-DD')}`);
   };
   //value -> 원래 형태 'YYYY년 MM월 DD일' , 'YYYY-MM-DD', 'MM-DD' 이런식으로 변경이 가능합니다
+
+  const selectAppointmentHandler = () => {
+    setAppointment({
+      selectedDate: moment(value).format('YYYY-MM-DD'),
+    });
+  };
+  console.log('setAppointmentvalue', appointment);
   const nickName =
     typeof window !== 'undefined'
       ? localStorage.getItem('nick_name') ?? ''
@@ -85,7 +98,12 @@ const MapAppointment = () => {
                 </span>
                 입니다.
               </p>
-              <ButtonText size="lg" variant="primary" label="약속잡기" />
+              <ButtonText
+                size="lg"
+                variant="primary"
+                label="약속잡기"
+                onClick={selectAppointmentHandler}
+              />
             </Div>
             <Region>
               <div>출발 장소</div>
