@@ -11,7 +11,7 @@ export const Footer = () => {
         <WebWrapper>
           <InnerDiv>
             <div style={{ display: 'flex', flexDirection: 'column' }}>
-              <LogoFoot alt="만나잔 로고" />
+              <LogoFoot style={{ cursor: 'pointer' }} alt="만나잔 로고" />
               {/* <img className="logoimg" src="Group 1893.png" alt="만나잔 로고" /> */}
               <div className="informationB">
                 <p className="Bp">(주)만나잔</p>
@@ -43,8 +43,8 @@ export const Footer = () => {
               <a className="aTag">개인정보처리방침</a>
             </div>
           </InnerDiv>
+          <Hr />
         </WebWrapper>
-        <Hr />
       </FooterDiv>
     </>
   );
@@ -70,10 +70,13 @@ const InnerDiv = styled.div`
     width: 30%;
     justify-content: center;
     gap: 28px;
-    font-weight: 400;
+    font-weight: 300;
     font-size: 12px;
     line-height: 16px;
     color: #e8ebed;
+    :hover {
+      color: white !important;
+    }
   }
   .informationB {
     padding-top: 30px;
@@ -85,14 +88,24 @@ const InnerDiv = styled.div`
     font-size: 11px;
     line-height: 14px;
     color: #e8ebed;
+    :hover {
+      color: white;
+    }
   }
   .Bp {
     margin-top: -10px;
+  }
+  .aTag {
+    color: #e8ebed;
+    :hover {
+      font-weight: 500;
+      color: white !important;
+    }
   }
 `;
 
 const Hr = styled.hr`
   margin-top: 53px;
   background: #72787f;
-  width: 85%;
+  width: 100%;
 `;

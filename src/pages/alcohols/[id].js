@@ -81,8 +81,6 @@ const StoreDetail = () => {
     return <div>Store not found.</div>;
   }
   const storeId = data.apiId;
-  console.log('data지도확인용 x y 나옴!!', data);
-
   return (
     <>
       <WebWrapper>
