@@ -52,11 +52,11 @@ export default function SignUpModal({ onClose }) {
   const { mutate: register, status } = useMutation({
     mutationFn: async (user) => {
       const data = await apis.post('users/signup', user);
-      console.log('data', data);
+      // console.log('data', data);
       return data;
     },
     onError: (error) => {
-      console.log('error', error.response.data.message);
+      // console.log('error', error.response.data.message);
       alert(error.response.data.message);
     },
     onSuccess: () => {

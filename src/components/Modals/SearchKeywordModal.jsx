@@ -13,8 +13,28 @@ export default function KeywordSearchModal({ onClose, onUpdate}) {
         const inputTextHandler = (e) => {
             setInputText(e.target.value)
         }
+        //  모달창 닫기 버튼
+        const closeModalClickHandler = () => {
+            onClose();
+        }
         //  선택된 장소 값 저장 및 부모 컴포넌트 배달 Handler & 모달창 닫기
+        //  조건 추가. 장소 선택 없이 확인 버튼 누르면 인풋보더에 빨간색 및 포커싱.
         const saveStateHandler = () => {
+            if (!checkedPlace) {
+                const inputBox = document.getElementById('keyword');
+                inputBox.style.border = "1px solid red";
+                inputBox.focus();
+                inputBox.addEventListener("input", () => {
+                    if (inputBox.value.length > 0) {
+                    inputBox.style.border = "1px solid black";
+                    }
+                    });
+                return;
+            }
+            // if (!checkedPlace) {
+            //     alert("장소를 선택하고 확인 버튼을 눌러주세요.");
+            //     return;
+            // }
             //  부모 컴포넌트로 선택된 장소 값 전달 props
             onUpdate(checkedPlace);
             //  모달 창 닫기 props
@@ -71,8 +91,6 @@ export default function KeywordSearchModal({ onClose, onUpdate}) {
                 // 페이지 목록 보여주는 displayPagination() 추가
                 displayPagination(pagination);
                 // setPlaces(data)
-            console.log("~~~data~~~", data)
-            console.log("###pagination###", pagination)
             const bounds = new kakao.maps.LatLngBounds();
             for (let i = 0; i < data.length; i++) {
                 displayMarker(data[i]);
@@ -91,7 +109,6 @@ export default function KeywordSearchModal({ onClose, onUpdate}) {
         }
         // 검색 결과 목록과 마커를 표출하는 함수입니다
         function displayPlaces(places) {
-            console.log("~~~places~~~", places)
             const listEl = document.getElementById('placesList');
             const menuEl = document.getElementById('menu_wrap');
             const fragment = document.createDocumentFragment();
@@ -301,13 +318,20 @@ export default function KeywordSearchModal({ onClose, onUpdate}) {
         <div className="modal-overlay">
 
         <MapSection>
-            <H1Styled style={{textAlign: "center", width: "100%"}}>위치검색</H1Styled>
+            {/* <H1Styled style={{textAlign: "center", width: "100%"}}>위치검색</H1Styled> */}
+            <div style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "10px" }}>
+                <H1Styled style={{ marginLeft: "45%" }}>위치검색</H1Styled>
+                    <button style={{ backgroundColor: "transparent", border: "none", outline: "none", margin: '0 3% 4% 0', position: "relative" }}>
+                        {/* 이모티콘 이미지 추가 */}
+                        <img src="Group 1972.png" alt="닫기" onClick={closeModalClickHandler} style={{ position: "absolute", right: 0 }} />
+                    </button>
+            </div>
 
             <form id="form" className="inputForm" onSubmit={keywordSearchSubmitHandler}>
                 <InputWrapper style={{ width: "100%", position: "relative" }}>
                     <label style={{width : "90%"}}>
                         {inputText.length === 0 && (
-                        <span style={{ color: "red", fontSize: "12px", position: "absolute", top: "-50%"}}>정확한 위치를 입력해주세요.</span>
+                        <span style={{ color: "red", fontSize: "12px", position: "absolute", top: "-50%"}}>출발할 위치를 입력해 주세요.</span>
                         )}
                     <input 
                         id="keyword"
@@ -315,13 +339,10 @@ export default function KeywordSearchModal({ onClose, onUpdate}) {
                         placeholder="위치를 입력해주세요."
                         onChange={inputTextHandler} 
                         value={inputText}
-                        // style={{border :'1px solid black'}}
-                        />
-                        {/* {inputText.length >= 1 && ( */}
+                    />
                         <button type="submit" id="submit_btn">
                             <img src="ModalPortalSearchBarIcon.png" alt="검색" />
                         </button>
-                        {/* )} */}
                     </label>
                 </InputWrapper>
             </form>

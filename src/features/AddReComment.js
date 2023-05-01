@@ -35,7 +35,7 @@ const AddReComment = (comment) => {
       alert('댓글 추가를 완료하였습니다.');
     },
     onError: (error) => {
-      console.log('error', error.response.data.message);
+      // console.log('error', error.response.data.message);
       alert(error.response.data.message);
     },
   });
@@ -81,4 +81,9 @@ export default AddReComment;
 const Button = styled.button`
   border: none;
   background-color: transparent;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  color: #72787f;
+  width: 60px;
 `;

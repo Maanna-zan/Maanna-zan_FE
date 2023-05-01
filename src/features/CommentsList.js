@@ -51,7 +51,7 @@ const CommentsList = () => {
           Access_Token: `${token}`,
         },
       });
-      console.log('data', data);
+      // console.log('data', data);
       return data.data.commentList;
     },
     //enabled: -> 참일 때 실행시켜준다.
@@ -118,23 +118,26 @@ const CommentsList = () => {
               <div key={comment.id}>
                 <div className="nickName">{comment.nickName}</div>
                 <h2 className="content">{comment.content}</h2>
-                <AddReComment comment={comment} />
-                {userNickName === comment.nickName && (
-                  <>
-                    <button
-                      className="Button"
-                      onClick={() => handleDelete(comment.id)}
-                    >
-                      삭제
-                    </button>
-                    <button
-                      className="Button"
-                      onClick={() => handleEdit(comment)}
-                    >
-                      수정
-                    </button>
-                  </>
-                )}
+                <div className="mycomment">
+                  <AddReComment comment={comment} />
+                  {userNickName === comment.nickName && (
+                    <>
+                      <button
+                        className="Button"
+                        onClick={() => handleEdit(comment)}
+                      >
+                        수정
+                      </button>
+                      <button
+                        className="Button"
+                        onClick={() => handleDelete(comment.id)}
+                      >
+                        삭제
+                      </button>
+                    </>
+                  )}
+                </div>
+
                 <div>
                   <ReCommentList comment={comment} />
                 </div>
@@ -174,5 +177,8 @@ const CommentDiv = styled.div`
     line-height: 16px;
     color: #72787f;
     width: 50px;
+  }
+  .mycomment {
+    display: flex;
   }
 `;

@@ -33,7 +33,7 @@ const OAuth = (Toast) => {
     },
     // onError 콜백 함수 구현
     onError: (error) => {
-      console.error(error);
+      // console.error(error);
       // 에러 처리
       alert('입력 된 비밀번호에 문제가 있습니다. 다시 한 번 살펴봐주세요.');
     },

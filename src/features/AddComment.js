@@ -34,7 +34,7 @@ const AddComment = () => {
       setCommentList({ content: '' });
     },
     onError: (error) => {
-      console.log('error', error.response.data.message);
+      // console.log('error', error.response.data.message);
       alert(error.response.data.message);
     },
   });

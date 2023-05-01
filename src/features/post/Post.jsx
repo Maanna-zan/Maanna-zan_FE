@@ -117,6 +117,7 @@ export const Post = ({ post, onSubmit, apiId, postId }) => {
               }}
             >
               <FlexRow style={{ gap: '8px', alignItems: 'center' }}>
+                {post.storename}
                 <StProfile />
                 <StSpanNic>{post?.nickname}</StSpanNic>
               </FlexRow>
@@ -157,7 +158,7 @@ const StSpanNic = styled.span`
 `;
 const StAddress_name = styled.div`
   margin-top: 20px;
-  font: var(--body1-medium) Pretendard sans-serif;
+  font: var(—body1-medium) Pretendard sans-serif;
 `;
 const StProfile = styled.div`
   background-color: aliceblue;
