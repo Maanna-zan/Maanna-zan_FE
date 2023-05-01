@@ -9,13 +9,16 @@ import Pagination from '@components/Modals/Pagenation2';
 import { LightTheme } from '@components/Themes/theme';
 import { ButtonText } from '@components/Atoms/Button';
 import { useRouter } from 'next/router';
+import { InputArea } from '@components/Atoms/Input';
 
 function MapMidPoint() {
     // queryKey에 캐싱하여 값 불러오기위해 queryClient선언
     const queryClient = useQueryClient();
     // getQueryData로 캐싱한 값 MIDPOINTPROP키로 불러오기.
     const midPointProp = queryClient.getQueryData({queryKey: ['MIDPOINTPROP']});
-    console.log("@midPointProp@",midPointProp)
+    // getQueryData로 캐싱한 값 INPUTVALUESPROP키로 불러오기.
+    const InputValuesProp = queryClient.getQueryData({queryKey: ['INPUTVALUESPROP']});
+    console.log("@InputValuesProp@",InputValuesProp)
     //  map page로 뒤로가기 위한 useRouter선언.
     const router = useRouter();
     //  뒤로가기 버튼 핸들러
@@ -57,9 +60,7 @@ function MapMidPoint() {
             alert(data);
         }
     });
-    console.log("@@날것의data",data?.data)
     const kakaoApi = data?.data?.documents
-    console.log("@@kakaoApi",kakaoApi)
     //칵테일바
     const [cocktailPage, setCocktailPage] = useState(null);
     async function getCocktailPage() {
@@ -73,10 +74,8 @@ function MapMidPoint() {
             GetSpotsNearbyMidPoint(cocktailPage?.documents);
         }
         GetSpotsNearbyMidPoint(kakaoApiCocktail)
-        console.log("cocktailPage", cocktailPage)
     };
     const kakaoApiCocktail = cocktailPage?.documents
-    console.log("kakaoApiCocktail", kakaoApiCocktail)
     //일본식주점
     const [izakayaPage, setIzakayaPage] = useState(null);
     async function getIzakayaPage() {
@@ -90,10 +89,8 @@ function MapMidPoint() {
             GetSpotsNearbyMidPoint(izakayaPage?.documents);
         }
         GetSpotsNearbyMidPoint(kakaoApiIzakaya)
-        console.log("izakayaPage", izakayaPage)
     };
     const kakaoApiIzakaya = izakayaPage?.documents
-    console.log("kakaoApiIzakaya", kakaoApiIzakaya)
 
     //실내포장마차
     const [pochaPage, setPochaPage] = useState(null);
@@ -108,10 +105,8 @@ function MapMidPoint() {
             GetSpotsNearbyMidPoint(pochaPage?.documents);
         }
         GetSpotsNearbyMidPoint(kakaoApiPocha)
-        console.log("pochaPage", pochaPage)
     };
     const kakaoApiPocha = pochaPage?.documents
-    console.log("kakaoApiPocha", kakaoApiPocha)
 
     //  임시적인 Submit Handler (GetSpotsNearbyMidPoint함수 실행)
     const keywordSearchSubmitHandler = (e) => {
@@ -121,6 +116,10 @@ function MapMidPoint() {
     };
     
     // 페이지 렌더링 되자마자 지도 불러오기.@@(한 번 더 실행이 되어야 마커들찍히는 문제 해결 필요)@@
+    // useEffect(() => {
+    //     keywordSearchSubmitHandler({ preventDefault: () => {} });
+    // }, [kakaoApi]);
+
     useEffect(() => {
         GetSpotsNearbyMidPoint(kakaoApi, kakaoApiCocktail, kakaoApiIzakaya, kakaoApiPocha)
     }, [])
@@ -198,7 +197,6 @@ function MapMidPoint() {
         function showingOnMap(data) {
                 // 검색 목록과 마커를 표출합니다
                 displayPlaces(data);
-                console.log("###data###", data)
             const bounds = new kakao.maps.LatLngBounds();
             for (let i = 0; i < data.length; i++) {
                 displayMarker(data[i]);
@@ -208,7 +206,6 @@ function MapMidPoint() {
         
         // 검색 결과 목록과 마커를 표출하는 함수입니다
         function displayPlaces(places) {
-            console.log("###places###",places)
             const listEl = document.getElementById('placesList');
             const menuEl = document.getElementById('menu_wrap');
             const fragment = document.createDocumentFragment();
@@ -229,7 +226,6 @@ function MapMidPoint() {
             // 지도에 표시되고 있는 마커를 제거합니다
             removeMarker();
             for ( let i=0; i<places?.length; i++ ) {
-                console.log("places", places)
                 // 마커를 생성하고 지도에 표시합니다
                 const placePosition = new kakao.maps.LatLng(places[i].y, places[i].x);
                 const marker = addMarker(placePosition, i);
@@ -423,65 +419,104 @@ function MapMidPoint() {
                                     height: '803px',
                                 }}
                             />
+                                    <DeparturesWrapper>
+                                        {InputValuesProp.filter(value => value !== "").map((value, index) => ( 
+                                            <div key={index} style={{ display: 'flex', alignItems: 'center', zIndex: '1000'}}>
+                                                <div 
+                                                style={{ 
+                                                    width: '40px',
+                                                    height: '30px',
+                                                    borderRadius: '50%',
+                                                    backgroundColor: 'white',
+                                                    display: 'flex',
+                                                    justifyContent: 'center',
+                                                    alignItems: 'center',
+                                                    color: 'red',               //String.fromCharCode(65 + index)는 A, B, C, D와 같은 알파벳을 생성. 
+                                                    margin: '3px 1px 3px 10px'  //index가 0부터 시작하기 때문에 65를 더하여 A의 아스키 코드 65부터 시작하도록 설정
+                                                    }}>                     
+                                                    {String.fromCharCode(65 + index)} 
+                                                </div>
+                                            <InputArea       //출발지 받아온 값 Map으로 돌려 그 갯수만큼 input 만들기            
+                                                key={index}  //(""값도 카운트가 되는데 그 경우 filter로 제외하고 map으로 돌리기)                
+                                                value={value} 
+                                                type="text"
+                                                variant="default"
+                                                size="lg"
+                                                readOnly={true}
+                                                style={{
+                                                    width: '100%',
+                                                    margin: '3px 0 3px 10px',
+                                                    padding: '2%',
+                                                    border: '1px solid white',
+                                                    backgroundColor: `${LightTheme.GRAY_50}`,
+                                                    fontFamily: `${'var(--label1-regular)'} Pretendard sans-serif`,
+                                                    fontSize: '14px',
+                                                    lineHeight: '18px',
+                                                    zIndex: '1000'
+                                                }}
+                                                />
+                                            </div>
+                                        ))}
+                                    </DeparturesWrapper>
                             <FlexColumnCenter>
                                 <TitleWrapper>
                                     <TitleStyled>중간 위치에 있는 </TitleStyled>
                                     <Highlighting>술집입니다.</Highlighting>
-                                    <CategoryWrapper>
-                                        <form 
-                                        id="form" 
-                                        className="inputForm" 
-                                        onSubmit={keywordSearchSubmitHandler}
-                                        >
-                                            <ButtonText
-                                                id="submit_btn" 
-                                                type="submit"
-                                                size='xxsm'
-                                                label='술집(종합)'
-                                                variant='primaryBolder'
-                                            />
-                                        </form>
-                                        <form 
-                                        id="form" 
-                                        className="inputForm" 
-                                        onSubmit={getCocktailPageSubmitHandler}
-                                        >
-                                            <ButtonText
-                                                id="submit_btn2" 
-                                                type="submit"
-                                                size='xxsm'
-                                                label='칵테일바'
-                                                variant='primaryBolder'
+                                        <CategoryWrapper>
+                                            <form 
+                                            id="form" 
+                                            className="inputForm" 
+                                            onSubmit={keywordSearchSubmitHandler}
+                                            >
+                                                <ButtonText
+                                                    id="submit_btn" 
+                                                    type="submit"
+                                                    size='xxsm'
+                                                    label='술집(종합)'
+                                                    variant='primaryBolder'
                                                 />
-                                        </form>
-                                        <form 
-                                        id="form" 
-                                        className="inputForm" 
-                                        onSubmit={getIzakayaPageSubmitHandler}
-                                        >
-                                            <ButtonText
-                                                id="submit_btn3" 
-                                                type="submit"
-                                                size='xxsm'
-                                                label='일본식주점'
-                                                variant='primaryBolder'
-                                                />
+                                            </form>
+                                            <form 
+                                            id="form" 
+                                            className="inputForm" 
+                                            onSubmit={getCocktailPageSubmitHandler}
+                                            >
+                                                <ButtonText
+                                                    id="submit_btn2" 
+                                                    type="submit"
+                                                    size='xxsm'
+                                                    label='칵테일바'
+                                                    variant='primaryBolder'
+                                                    />
+                                            </form>
+                                            <form 
+                                            id="form" 
+                                            className="inputForm" 
+                                            onSubmit={getIzakayaPageSubmitHandler}
+                                            >
+                                                <ButtonText
+                                                    id="submit_btn3" 
+                                                    type="submit"
+                                                    size='xxsm'
+                                                    label='일본식주점'
+                                                    variant='primaryBolder'
+                                                    />
 
-                                        </form>
-                                        <form 
-                                        id="form" 
-                                        className="inputForm" 
-                                        onSubmit={getPochaPageSubmitHandler}
-                                        >
-                                            <ButtonText
-                                                id="submit_btn4" 
-                                                type="submit"
-                                                size='xxsm'
-                                                label='실내포장마차'
-                                                variant='primaryBolder'
-                                            />
-                                        </form>
-                                    </CategoryWrapper>
+                                            </form>
+                                            <form 
+                                            id="form" 
+                                            className="inputForm" 
+                                            onSubmit={getPochaPageSubmitHandler}
+                                            >
+                                                <ButtonText
+                                                    id="submit_btn4" 
+                                                    type="submit"
+                                                    size='xxsm'
+                                                    label='실내포장마차'
+                                                    variant='primaryBolder'
+                                                />
+                                            </form>
+                                        </CategoryWrapper>
                                 </TitleWrapper>
                                 <div>
                                     <div id="menuDiv">
@@ -523,10 +558,18 @@ function MapMidPoint() {
         line-height: 48px;
         font-family: var(--display2-bold) Pretendard sans-serif,
     `;
+    const DeparturesWrapper = styled.div`
+    position:absolute;
+    display: flex;
+    flex-direction: column;
+    width: 20%;
+    bottom: 10%;
+    `
     const CategoryWrapper = styled.div`
         display: flex;
         justify-content: flex-end;
         align-items: flex-end;
+        margin: 1.5% 0 0 0;
     `;
     const MoveBackButtonWrapper = styled.div`
     position: absolute;
@@ -547,7 +590,7 @@ function MapMidPoint() {
     #menuDiv {
         display: flex;
         position: relative;
-        height: 65vh;
+        height: 63vh;
         z-index: 2;
         font-size: 4px;
         top: 3%

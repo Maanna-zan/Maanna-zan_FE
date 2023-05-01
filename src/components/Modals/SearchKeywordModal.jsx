@@ -26,9 +26,9 @@ export default function KeywordSearchModal({ onClose, onUpdate}) {
                 inputBox.focus();
                 inputBox.addEventListener("input", () => {
                     if (inputBox.value.length > 0) {
-                      inputBox.style.border = "1px solid black";
+                    inputBox.style.border = "1px solid black";
                     }
-                  });
+                    });
                 return;
             }
             // if (!checkedPlace) {
