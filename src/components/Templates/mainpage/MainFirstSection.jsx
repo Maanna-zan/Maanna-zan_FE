@@ -22,7 +22,7 @@ export const MainFirstSection = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await apis.get(`/alkol/best?page=${1}&size=3`);
+      const response = await apis.get(`/alkol/view?page=${1}&size=3`);
       seGetBest(response.data);
     };
     fetchData();
@@ -30,7 +30,7 @@ export const MainFirstSection = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await apis.get(`/alkol/view?page=${1}&size=4`);
+      const response = await apis.get(`/alkol/best?page=${1}&size=4`);
       seGetView(response.data);
     };
 
@@ -38,7 +38,7 @@ export const MainFirstSection = () => {
   }, []);
 
   const [getBest, seGetBest] = useState([]);
-
+  console.log('여기확인', getView);
   return (
     <>
       <WebWrapperHeight>
@@ -50,7 +50,7 @@ export const MainFirstSection = () => {
             </FlexRow>
             <div></div>
             <div>
-              <Link href="/community">
+              <Link href="/alcohols">
                 <StSpan style={{ float: 'right' }}>모두 보기</StSpan>
               </Link>
             </div>
@@ -172,7 +172,7 @@ export const MainFirstSection = () => {
                                 font: `var(caption1-bold) Pretendard sans-serif`,
                               }}
                             >
-                              {store?.roomViewCount}
+                              {store?.postList.length}
                             </span>
                           </div>
                         </FlexColumn>
