@@ -225,9 +225,6 @@ const AlcoholList = () => {
                     }
                     alt="store"
                   />
-                  <div>
-                    {ranking == 0 ? (<Ranking1></Ranking1>)((ranking += 1)) : 1}
-                  </div>
                 </ImgWrapper384x242>
               </BoxTextReal>
               <StPlace_name>{store.place_name}</StPlace_name>
