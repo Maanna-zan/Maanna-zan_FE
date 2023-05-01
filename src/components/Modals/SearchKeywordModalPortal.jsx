@@ -69,10 +69,6 @@ function SearchedKeywordLandingPage() {
     setCheckedPlace(newCheckedPlace);
     //	positions state에 검색된 state값 차곡차곡 담기위한 다중마커state값 (place는 모달창에서 검색 및 선택된 값)
     setCheckedMarkerPlace(place);
-    //  newInputValues값 쿼리로 저장 위해 선언
-    const InputValuesProp = newInputValues
-    //  INPUTVALUESPROP키값으로 newInputValues값 저장. 해당 키 값으로 값 불러올 수 있음.
-    queryClient.setQueryData(['INPUTVALUESPROP'], InputValuesProp);
   }
   //  Input Box 추가 Button Handler
   const addingInputBoxButtonHandler = () => {
@@ -122,7 +118,8 @@ function SearchedKeywordLandingPage() {
           value={inputValues[index]}
           variant="default"
           size="leftIcon"
-          readOnly={true}
+          readOnly={midPoint ? true : false}
+          disabled={midPoint ? true : false}
           onClick={() => onInputClickHandler(index)}
           style={{
             width: 'calc(100%)', //X 버튼 너비를 제외한 인풋박스의 너비를 설정위해 calc활용(필요시 연산자를 사용하여 값 계산하기) 
@@ -132,7 +129,7 @@ function SearchedKeywordLandingPage() {
             fontFamily: `${'var(--label1-regular)'} Pretendard sans-serif`,
             fontSize: '14px',
             lineHeight: '18px',
-            cursor:"pointer",
+            cursor: midPoint ? 'default' : 'pointer',
             //Icon style
             // inputValues에 값 들어가면 돋보기 아이콘 사라지게하기. 반대로 X 버튼 나타나기.
             //  (...spread연산자 쓴 이유는 inputValues 배열의 모든 요소를 새로운 배열에 펼쳐서 복사하기위해)
@@ -156,6 +153,8 @@ function SearchedKeywordLandingPage() {
         position: 'absolute', 
         marginLeft: '500px',
         paddingTop: '6px',
+        pointerEvents: midPoint ? 'none' : 'auto', // midPoint가 true이면 pointerEvents를 none으로 지정
+        opacity: midPoint ? 0.5 : 1, // midPoint가 true이면 투명도를 0.5로 지정
       }}>
       <img 
       src="ModalPortalInputXButton.png" alt="X button" />
@@ -253,10 +252,7 @@ function SearchedKeywordLandingPage() {
   const midPointProp = midPoint;
   //  MIDPOINTPROP키값으로 midPoint값 저장. 해당 키 값으로 값 불러올 수 있음.
   queryClient.setQueryData(['MIDPOINTPROP'], midPointProp);
-  //  CheckedPlace값 쿼리로 저장 위해 선언
-  const checkedPlaceProp = checkedPlace
-  //  CHECKPLACEPROP키값으로 midPoint값 저장. 해당 키 값으로 값 불러올 수 있음.
-  queryClient.setQueryData(['CHECKPLACEPROP'], checkedPlaceProp);
+
   // 266 으로 가서 글을 확인해주세요 ~
   const [value, onChange] = useState(new Date());
   console.log('onChange', Calendar);
@@ -354,6 +350,8 @@ function SearchedKeywordLandingPage() {
               {renderModal()}
                 <ArrangeCenterWrapper>
                   <AddInputButtonStyle inputCount={inputCount} onClick={addingInputBoxButtonHandler}
+                  disabled={midPoint}
+                  {...(midPoint ? { style: { cursor: 'default' } } : null)}
                   /* styled-components로 해당 버튼 꾸며주기에 아래와 같은 조건을 걸기 위해서는 props를 내려준다. */> 
                   {inputCount < 4 ? '친구 위치 추가하기' : '최대 4명까지 추가할 수 있습니다.'}
                   </AddInputButtonStyle>
