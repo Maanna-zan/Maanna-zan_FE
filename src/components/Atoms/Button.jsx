@@ -141,6 +141,17 @@ export const ButtonText = ({
       hoverBorderColor = LightTheme.WHITE;
       hoverFontColor = LightTheme.PRIMARY_NORMAL;
       break;
+    case 'activeRedTab':
+      backgroundColor = LightTheme.PRIMARY_NORMAL;
+      hoverFontColor = LightTheme.WHITE;
+      fontColor = LightTheme.WHITE;
+      borderStyle = 'solid';
+      borderWidth = '1px';
+      borderColor = LightTheme.WHITE;
+      hoverBackgroundColor = LightTheme.PRIMARY_STRONG;
+      hoverBorderColor = LightTheme.WHITE;
+
+      break;
     case 'borderColorWhite':
       backgroundColor = LightTheme.WHITE;
       fontColor = LightTheme.BLACK;

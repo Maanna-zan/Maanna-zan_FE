@@ -80,7 +80,7 @@ const CommunityList = () => {
   };
   if (postIsLikeLoading || postIsLoading || postIsBestLoading)
     return <div>로딩중...</div>;
-  console.log('zzzzz', posts);
+
   return (
     <>
       <StWebBg />
@@ -133,10 +133,7 @@ const CommunityList = () => {
                     size="nonePadding"
                   >
                     <ImgWrapper384x360
-                    // style={{
-                    //   background:
-                    //     'linear-gradient(180deg, #c2a8a8 65.83%, #26282B 119.72%)',
-                    // }}
+
                     >
                       <ImgCenter
                         style={{
@@ -145,7 +142,7 @@ const CommunityList = () => {
                           overflow: 'hidden',
                           borderRadius: '10px',
                           // background:
-                          //   'linear-gradient(180deg, #FFFFFF 65.83%, #26282B 119.72%)',
+                          //   'linear-gradient(180deg, #ffffff0 65.83%, #26282B 119.72%)',
                         }}
                         src={
                           store.s3Url ? store.s3Url : '/noimage_282x248_.png'

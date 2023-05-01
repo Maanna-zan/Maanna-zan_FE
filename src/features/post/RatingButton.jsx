@@ -16,16 +16,16 @@ const ReviewForm = ({ post, onChange, handleRatingChange }) => {
     satisfaction: null,
   });
 
-  const handleRatingChange = (key, rating) => {
-    setSelectedRatings((prevState) => ({
-      ...prevState,
-      [key]: rating,
-    }));
+  // const handleRatingChange = (key, rating) => {
+  //   setSelectedRatings((prevState) => ({
+  //     ...prevState,
+  //     [key]: rating,
+  //   }));
 
-    if (onChange) {
-      onChange(key, rating.value);
-    }
-  };
+  //   if (onChange) {
+  //     onChange(key, rating.value);
+  //   }
+  // };
 
   return (
     <>

@@ -25,10 +25,17 @@ import { useUpdatePost } from '../../hook/post/useUpdatePost';
 import { useLikePost } from '../../hook/useLikes';
 import { LightTheme } from '@components/Themes/theme';
 import { ButtonText } from '@components/Atoms/Button';
+import { PostWrtingIcon } from '@components/Atoms/PostWrtingIcon';
+import { PostArrow } from '@components/Atoms/PostArrow';
+import { ReviewForm } from '@features/post/ReviewForm';
+import { useGetStoredetail } from '../../hook/alcohol/useGetStore';
 const Community = () => {
   const { query } = useRouter();
   const router = useRouter();
-
+  const { store, storeIsLoading } = useGetStoredetail({
+    apiId: router.query.id,
+  });
+  console.log(' store 여기를 봐 여기를!!', store);
   const { id } = router.query;
   const { data, isLoading, isError, isSuccess } = useQuery({
     queryKey: ['GET_COMMUNITYDETAIL'],
@@ -41,6 +48,7 @@ const Community = () => {
     enabled: Boolean(query.id),
     onSuccess: () => {},
   });
+
   const [isUpdated, setIsUpdated] = useState(false);
 
   const { posts, postIsLoading } = useGetPost();
@@ -54,16 +62,25 @@ const Community = () => {
   const postId = query.id;
   const post = posts.find((p) => p.id === Number(postId)) || {};
   const postLikeMine = potLikeMatch.find((p) => p.id === Number(postId)) || {};
-
+  console.log('카테고리 찾아 삼만리', postLikeMine);
+  // const [newPost, setNewPost] = useState({
+  //   title: post?.title ?? '',
+  //   description: post?.description ?? '',
+  //   s3Url: post?.s3Url || '',
+  //   taste: post?.null,
+  //   service: post?.null,
+  //   atmosphere: post?.null,
+  //   satisfaction: post?.null,
+  //   postStarAvg: post?.null,
+  // });
   const [newPost, setNewPost] = useState({
-    title: post?.title ?? '',
-    description: post?.description ?? '',
-    s3Url: post?.s3Url || '',
-    taste: post?.null,
-    service: post?.null,
-    atmosphere: post?.null,
-    satisfaction: post?.null,
-    postStarAvg: post?.null,
+    title: '',
+    description: '',
+    s3Url: null,
+    taste: '',
+    service: '',
+    atmosphere: '',
+    satisfaction: '',
   });
   console.log('---postLikeMine', postLikeMine);
   const { updatePost } = useUpdatePost(postId);
@@ -100,12 +117,13 @@ const Community = () => {
     document.getElementById('image-preview').src = imageUrl;
   };
   const handleRatingChange = (name, value) => {
-    setPost((prevPost) => ({
+    setNewPost((prevPost) => ({
       ...prevPost,
       [name]: value[name],
     }));
     console.log('setPosthandleRatingChange', post);
   };
+
   const [hoveredStar, setHoveredStar] = useState(0);
 
   const handleStarClick = (clickedStar) => {
@@ -113,7 +131,7 @@ const Community = () => {
       ...post,
       postStarAvg: clickedStar,
     };
-    setPost(newPost);
+    setNewPost(newPost);
   };
 
   const handleStarHover = (hoveredStar) => {
@@ -147,6 +165,13 @@ const Community = () => {
       console.error(error);
     }
   };
+  const [showReviewForm, setShowReviewForm] = useState(false);
+
+  //카테고리
+  // const category_name = store.category_name;
+  // const indexAllName = category_name.lastIndexOf('>'); // 마지막 ">"의 인덱스
+  // const result = category_name.slice(indexAllName + 2); //">" 이후의 문자열
+  // console.log('테스트카테고리', result);
 
   useEffect(() => {
     if (isUpdated) {
@@ -158,8 +183,9 @@ const Community = () => {
       setIsUpdated(false);
     }
   }, [isUpdated]);
+  console.log('post카테고리', postsLike);
+
   if (postIsLoading || postIsLikeLoading) return <div>로딩중...</div>;
-  const [showReviewForm, setShowReviewForm] = useState(false);
   return (
     <div>
       {isEditMode ? (
@@ -181,14 +207,61 @@ const Community = () => {
                 borderRadius: '10px',
               }}
             >
-              {showReviewForm && (
-                <ReviewForm
-                  post={post}
-                  handleRatingChange={handleRatingChange}
-                  handleStarClick={handleStarClick}
-                  handleStarHover={handleStarHover}
-                />
-              )}
+              <FlexRow
+                style={{
+                  // alignItems: 'center',
+                  gap: '20px',
+                }}
+              >
+                <PostWrtingIcon />
+                <FlexColumn
+                  style={{
+                    justifyContent: 'space-between',
+                    // alignItems: 'center',
+                    gap: '20px',
+                    marginBottom: '16px',
+                    width: '100%',
+                  }}
+                >
+                  <FlexRow
+                    style={{
+                      justifyContent: 'space-between',
+                      // alignItems: 'center',
+                      gap: '20px',
+                      marginBottom: '16px',
+                    }}
+                  >
+                    <span
+                      style={{
+                        font: `var(--body1-bold) Pretendard sans-serif`,
+                      }}
+                    >
+                      해당 가게의 평가를 작성해주세요.
+                    </span>
+                    <span
+                      onClick={() => setShowReviewForm(!showReviewForm)}
+                      style={{
+                        width: '24',
+                        height: '24px',
+                        transform: showReviewForm
+                          ? 'rotate(180deg)'
+                          : 'rotate(0deg)',
+                        transition: 'all, 0.3s',
+                      }}
+                    >
+                      <PostArrow />
+                    </span>
+                  </FlexRow>
+                  {showReviewForm && (
+                    <ReviewForm
+                      post={post}
+                      handleRatingChange={handleRatingChange}
+                      handleStarClick={handleStarClick}
+                      handleStarHover={handleStarHover}
+                    />
+                  )}
+                </FlexColumn>
+              </FlexRow>
               <div
                 style={{
                   font: `var(--head2-bold) Pretendard sans-serif`,
@@ -217,6 +290,7 @@ const Community = () => {
                     onChange={(e) =>
                       setNewPost({ ...newPost, title: e.target.value })
                     }
+                    required
                   />
                 </FlexRow>
               </div>
@@ -345,13 +419,14 @@ const Community = () => {
                   onChange={(e) =>
                     setNewPost({ ...newPost, description: e.target.value })
                   }
+                  required
                 />
               </FlexColumn>
               <div
                 style={{
                   width: '100%',
-                  marginBottom: '50px',
-                  paddingBottom: '50px',
+                  // marginBottom: '50px',
+                  // paddingBottom: '50px',
                 }}
               ></div>
               <button
@@ -386,7 +461,6 @@ const Community = () => {
             paddingTop: '28px',
             overflow: 'hidden',
             boxSizing: 'border-box',
-            height: `calc(100vh - ${394}px)`,
           }}
         >
           <WebWrapper792px style={{ margin: '0 auto', position: 'relative' }}>
@@ -487,8 +561,6 @@ const Community = () => {
                 </BoxTextReal>
               </FlexRow>
             </div>
-            <AddComment />
-            <CommentsList />
 
             <FlexColumn
               style={{
@@ -574,6 +646,9 @@ const Community = () => {
           </WebWrapper792px>
         </form>
       )}
+
+      <AddComment />
+      <CommentsList style={{ paddingBottom: '80px' }}></CommentsList>
     </div>
   );
 };

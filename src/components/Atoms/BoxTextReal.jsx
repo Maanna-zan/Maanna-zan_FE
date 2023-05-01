@@ -142,11 +142,13 @@ export const BoxTextReal = ({
       break;
     case 'redBox':
       backgroundColor = LightTheme.PRIMARY_NORMAL;
+
       fontColor = LightTheme.WHITE;
       borderStyle = 'none';
       borderWidth = '0px';
       borderColor = 'none';
-      hoverBackgroundColor = LightTheme.PRIMARY_NORMAL;
+      hoverBackgroundColor = LightTheme.PRIMARY_STRONG;
+      break;
   }
 
   return (
