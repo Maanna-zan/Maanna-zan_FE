@@ -12,6 +12,7 @@ import chunk from '@components/Modals/chunk';
 
 const GetmyPost = () => {
   const token = cookies.get('access_token');
+  const push = useRouter();
 
   //페이지 네이션 처음 시작이 1번창부터 켜지도록
   const [activePage, setActivePage] = useState(1);
@@ -84,7 +85,11 @@ const GetmyPost = () => {
         >
           {currentPageData.map((post) => (
             <ContainerDiv key={post.id}>
-              <div>
+              <div
+                onClick={() => {
+                  push.push(`/community/${post.id}`);
+                }}
+              >
                 <img
                   style={{
                     width: '384px',
