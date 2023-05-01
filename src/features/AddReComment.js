@@ -81,4 +81,9 @@ export default AddReComment;
 const Button = styled.button`
   border: none;
   background-color: transparent;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  color: #72787f;
+  width: 60px;
 `;

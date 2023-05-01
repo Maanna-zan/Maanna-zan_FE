@@ -104,15 +104,15 @@ const ReCommentList = ({ comment }) => {
                   <>
                     <button
                       className="Button"
-                      onClick={() => handleDelete(comment.id)}
-                    >
-                      삭제
-                    </button>
-                    <button
-                      className="Button"
                       onClick={() => handleEdit(comment)}
                     >
                       수정
+                    </button>
+                    <button
+                      className="Button"
+                      onClick={() => handleDelete(comment.id)}
+                    >
+                      삭제
                     </button>
                   </>
                 )}
