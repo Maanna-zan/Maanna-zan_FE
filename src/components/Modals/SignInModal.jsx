@@ -242,6 +242,7 @@ export default function SignInModal({ onClose, setShowSignUpModal }) {
                   value={email.userName}
                   onChange={emailchangeHandler}
                   placeholder="이름를 입력하세요"
+                  maxLength="5"
                 />
                 {findEmailSuccess && (
                   <img
@@ -262,7 +263,7 @@ export default function SignInModal({ onClose, setShowSignUpModal }) {
                 <InputArea
                   style={{
                     marginTop: '-15px',
-                    borderColor: emailFormatError
+                    borderColor: findEmailError
                       ? '#EF2B2A'
                       : findEmailSuccess
                       ? '#3DC061'
@@ -275,6 +276,7 @@ export default function SignInModal({ onClose, setShowSignUpModal }) {
                   value={email.phoneNumber}
                   onChange={emailchangeHandler}
                   placeholder="전화번호를 입력하세요"
+                  maxLength="11"
                 />
                 {findEmailSuccess && (
                   <img
@@ -315,7 +317,11 @@ export default function SignInModal({ onClose, setShowSignUpModal }) {
                   active={true}
                   onClick={() => {
                     setIsEditMode('login');
-                    setEmail('');
+                    setEmail({
+                      userName: '',
+                      phoneNumber: '',
+                    });
+
                     setFindEmailSuccess(''); // 확인 상태로 돌아가도록 합니다.
                   }}
                 />
@@ -325,13 +331,13 @@ export default function SignInModal({ onClose, setShowSignUpModal }) {
                     marginBottom: '50px',
                     marginTop: '50px',
                   }}
-                  최
                   label="확인"
                   size="md"
                   variant="primary"
                   active={true}
                   onClick={() => {
                     findMyEmail(email);
+                    setFindEmailError(false);
                   }}
                 />
               )}
