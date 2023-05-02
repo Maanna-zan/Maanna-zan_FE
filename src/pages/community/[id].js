@@ -91,7 +91,10 @@ const Community = () => {
   const [isEditMode, setIsEditMode] = useState(false);
 
   const deletePostHandler = (postId) => {
-    deletePost(postId);
+    const confirmed = window.confirm('정말로 삭제하시기를 원하십니까?');
+    if (confirmed) {
+      deletePost(postId);
+    }
   };
 
   const [like, setLike] = useState(postLikeMine.like);

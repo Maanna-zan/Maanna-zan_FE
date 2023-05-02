@@ -89,7 +89,7 @@ const AddPostForm = () => {
     ) {
       alert('해당 가게의 평가를 작성해주세요.');
       return false;
-    } else {
+    } else if (false) {
       alert('모든 항목에 체크해주세요');
     }
 
