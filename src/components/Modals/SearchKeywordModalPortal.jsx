@@ -70,7 +70,7 @@ function SearchedKeywordLandingPage() {
     //	positions state에 검색된 state값 차곡차곡 담기위한 다중마커state값 (place는 모달창에서 검색 및 선택된 값)
     setCheckedMarkerPlace(place);
     //  newInputValues값 쿼리로 저장 위해 선언
-    const InputValuesProp = newInputValues
+    const InputValuesProp = newInputValues;
     //  INPUTVALUESPROP키값으로 newInputValues값 저장. 해당 키 값으로 값 불러올 수 있음.
     queryClient.setQueryData(['INPUTVALUESPROP'], InputValuesProp);
   }
@@ -97,7 +97,7 @@ function SearchedKeywordLandingPage() {
   //     newInputValues[index] = '';
   //     return newInputValues;
   //   });
-    
+
   // }
   const onInputClearHandler = (index) => {
     const newInputValues = [...inputValues];
@@ -110,11 +110,11 @@ function SearchedKeywordLandingPage() {
       [index === 0 ? 'y' : `y${index + 1}`]: undefined,
     };
     setCheckedPlace(newCheckedPlace);
-  }
+  };
   //Input 박스 추가
   const renderInputArea = (index) => {
     return (
-      <div style={{ display: 'flex', alignItems: 'center' }} >
+      <div style={{ display: 'flex', alignItems: 'center' }}>
         <InputArea
           key={index}
           type="text"
@@ -126,7 +126,7 @@ function SearchedKeywordLandingPage() {
           disabled={midPoint ? true : false}
           onClick={() => onInputClickHandler(index)}
           style={{
-            width: 'calc(100%)', //X 버튼 너비를 제외한 인풋박스의 너비를 설정위해 calc활용(필요시 연산자를 사용하여 값 계산하기) 
+            width: 'calc(100%)', //X 버튼 너비를 제외한 인풋박스의 너비를 설정위해 calc활용(필요시 연산자를 사용하여 값 계산하기)
             margin: '8px 0 5px 10px',
             border: 'none',
             backgroundColor: `${LightTheme.GRAY_50}`,
@@ -137,34 +137,35 @@ function SearchedKeywordLandingPage() {
             //Icon style
             // inputValues에 값 들어가면 돋보기 아이콘 사라지게하기. 반대로 X 버튼 나타나기.
             //  (...spread연산자 쓴 이유는 inputValues 배열의 모든 요소를 새로운 배열에 펼쳐서 복사하기위해)
-            ...(inputValues[index] 
+            ...(inputValues[index]
               ? {
-                paddingLeft: "12px",
-                border: "1px solid black"
-              } : {
-                backgroundImage: `url(ModalPortalSearchBarIcon.png)`, //Icon 불러오기
-                backgroundRepeat: "no-repeat", //이미지 한번만
-                backgroundPosition: "12px center", // 위치
-                backgroundSize: "18px", // 이미지 크기
-                paddingLeft: "36px", //  placeholder와의 거리
-              }),
-              boxSizing: "border-box", //   input의 넓이가 부모 넓이보다 넘는 현상방지
+                  paddingLeft: '12px',
+                  border: '1px solid black',
+                }
+              : {
+                  backgroundImage: `url(ModalPortalSearchBarIcon.png)`, //Icon 불러오기
+                  backgroundRepeat: 'no-repeat', //이미지 한번만
+                  backgroundPosition: '12px center', // 위치
+                  backgroundSize: '18px', // 이미지 크기
+                  paddingLeft: '36px', //  placeholder와의 거리
+                }),
+            boxSizing: 'border-box', //   input의 넓이가 부모 넓이보다 넘는 현상방지
           }}
         ></InputArea>
         {inputValues[index] && (
-      <div onClick={() => onInputClearHandler(index)}
-      style={{ 
-        position: 'absolute', 
-        marginLeft: '500px',
-        paddingTop: '6px',
-        pointerEvents: midPoint ? 'none' : 'auto', // midPoint가 true이면 pointerEvents를 none으로 지정
-        opacity: midPoint ? 0.5 : 1, // midPoint가 true이면 투명도를 0.5로 지정
-      }}>
-      <img 
-      src="ModalPortalInputXButton.png" alt="X button" />
-    </div>
-  )}
-
+          <div
+            onClick={() => onInputClearHandler(index)}
+            style={{
+              position: 'absolute',
+              marginLeft: '500px',
+              paddingTop: '6px',
+              pointerEvents: midPoint ? 'none' : 'auto', // midPoint가 true이면 pointerEvents를 none으로 지정
+              opacity: midPoint ? 0.5 : 1, // midPoint가 true이면 투명도를 0.5로 지정
+            }}
+          >
+            <img src="ModalPortalInputXButton.png" alt="X button" />
+          </div>
+        )}
       </div>
     );
   };
@@ -270,8 +271,8 @@ function SearchedKeywordLandingPage() {
 
   return (
     <WebWrapper>
-      <WebWrapperHeight>
-        <FlexRow style={{ justifyContent: 'space-between' }}>
+      <WebWrapperHeight style={{}}>
+        <FlexRow style={{ justifyContent: 'space-between', paddingTop: '5vh' }}>
           <div>
             <Map
               center={center}
@@ -280,6 +281,7 @@ function SearchedKeywordLandingPage() {
                 height: '803px',
                 maxWidth: '100%',
                 maxHeight: '100%',
+                backgroundColor: 'aliceblue',
               }}
             >
               {positions.map((position, index) => (
@@ -309,7 +311,7 @@ function SearchedKeywordLandingPage() {
             </Map>
           </div>
 
-          <FlexColumnCenter style={{margin: '0 200px 250px 25px'}}>
+          <FlexColumnCenter style={{ margin: '0 200px 250px 25px' }}>
             <TitleStyled>친구와 본인의 </TitleStyled>
             <Highlighting>위치를 입력해주세요</Highlighting>
             {/* <Div className="calendar-container">
@@ -349,58 +351,67 @@ function SearchedKeywordLandingPage() {
                 {moment(value).format('YYYY- MM- DD')}
               </div>
             </Div> */}
-            <div style={{width: '100%'}}>
+            <div style={{ width: '100%' }}>
               {inputs}
               {renderModal()}
-                <ArrangeCenterWrapper>
-                  <AddInputButtonStyle inputCount={inputCount} onClick={addingInputBoxButtonHandler}
+              <ArrangeCenterWrapper>
+                <AddInputButtonStyle
+                  inputCount={inputCount}
+                  onClick={addingInputBoxButtonHandler}
                   disabled={midPoint}
                   {...(midPoint ? { style: { cursor: 'default' } } : null)}
-                  /* styled-components로 해당 버튼 꾸며주기에 아래와 같은 조건을 걸기 위해서는 props를 내려준다. */> 
-                  {inputCount < 4 ? '친구 위치 추가하기' : '최대 4명까지 추가할 수 있습니다.'}
-                  </AddInputButtonStyle>
-                </ArrangeCenterWrapper>
+                  /* styled-components로 해당 버튼 꾸며주기에 아래와 같은 조건을 걸기 위해서는 props를 내려준다. */
+                >
+                  {inputCount < 4
+                    ? '친구 위치 추가하기'
+                    : '최대 4명까지 추가할 수 있습니다.'}
+                </AddInputButtonStyle>
+              </ArrangeCenterWrapper>
             </div>
             <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
               {!midPoint && inputValues.filter(Boolean).length < 2 && (
-                  <ButtonText
-                  size='lg'
-                  variant='basic'
-                  label= '중간 위치 찾기'
-                  fontSize= '14px'
-                  fontColor= {LightTheme.GRAY_400}
-                  borderStyle = 'none'
-                  borderWidth = '0px'
-                  backgroundColor = {LightTheme.GRAY_100}
-                  hoverBackgroundColor = 'null'
-                  hoverBorderColor = 'null'
-                  hoverFontColor = 'null'
-                  style={{ cursor: 'default'}}
+                <ButtonText
+                  size="lg"
+                  variant="basic"
+                  label="중간 위치 찾기"
+                  fontSize="14px"
+                  fontColor={LightTheme.GRAY_400}
+                  borderStyle="none"
+                  borderWidth="0px"
+                  backgroundColor={LightTheme.GRAY_100}
+                  hoverBackgroundColor="null"
+                  hoverBorderColor="null"
+                  hoverFontColor="null"
+                  style={{ cursor: 'default' }}
                   disabled={true}
                 />
               )}
-              {!midPoint && inputValues.filter(Boolean).length >= 2 && ( //filter(Boolean)은 inputValues 배열에서 falsy 값 
-                <ButtonText         //(즉, undefined, null, false, "", 0, NaN)를 필터링한다. 
-                size = 'lg'
-                variant = 'primaryBolder'
-                label= '중간 위치 찾기'
-                fontSize= '14px'
-                fontColor = {`${LightTheme.PRIMARY_NORMAL}`}
-                hoverBackgroundColor = {`${LightTheme.HOVER_BASIC}`}
-                hoverFontColor = {`${LightTheme.PRIMARY_NORMAL}`}
-                active = {`${LightTheme.ACTIVE_BASIC}`}
-                  onClick={() => {      //그러므로 inputValues 배열에서 값이 있는 요소만을 가지고 있는 새로운 배열을 반환한다.
-                    mutate(checkedPlace);
-                  }}/>
-              )}
+              {!midPoint &&
+                inputValues.filter(Boolean).length >= 2 && ( //filter(Boolean)은 inputValues 배열에서 falsy 값
+                  <ButtonText //(즉, undefined, null, false, "", 0, NaN)를 필터링한다.
+                    size="lg"
+                    variant="primaryBolder"
+                    label="중간 위치 찾기"
+                    fontSize="14px"
+                    fontColor={`${LightTheme.PRIMARY_NORMAL}`}
+                    hoverBackgroundColor={`${LightTheme.HOVER_BASIC}`}
+                    hoverFontColor={`${LightTheme.PRIMARY_NORMAL}`}
+                    active={`${LightTheme.ACTIVE_BASIC}`}
+                    onClick={() => {
+                      //그러므로 inputValues 배열에서 값이 있는 요소만을 가지고 있는 새로운 배열을 반환한다.
+                      mutate(checkedPlace);
+                    }}
+                  />
+                )}
               {midPoint && (
-              <ButtonText 
-              size = 'lg'
-              variant = 'primary'
-              label= '중간 술집 검색'
-              fontSize= '14px'
-              hoverBackgroundColor = {LightTheme.PRIMARY_LIGHT}
-              onClick={moveToMapMidPointButtonClickHandler}/>
+                <ButtonText
+                  size="lg"
+                  variant="primary"
+                  label="중간 술집 검색"
+                  fontSize="14px"
+                  hoverBackgroundColor={LightTheme.PRIMARY_LIGHT}
+                  onClick={moveToMapMidPointButtonClickHandler}
+                />
               )}
             </div>
           </FlexColumnCenter>
@@ -415,7 +426,7 @@ const TitleStyled = styled.div`
   font-size: 40px;
   font-weight: 500;
   line-height: 48px;
-  font-family: var(--display2-medium) Pretendard sans-serif,
+  font-family: var(--display2-medium) Pretendard sans-serif;
 `;
 const Highlighting = styled.div`
   //width값있어야 전체 width늘어남..
@@ -423,7 +434,7 @@ const Highlighting = styled.div`
   font-size: 40px;
   font-weight: 700;
   line-height: 48px;
-  font-family: var(--display2-bold) Pretendard sans-serif,
+  font-family: var(--display2-bold) Pretendard sans-serif;
 `;
 const AddInputButtonStyle = styled.button`
   font-size: 14px;
@@ -435,11 +446,12 @@ const AddInputButtonStyle = styled.button`
   border: none;
   border-radius: 10px;
   // inputCount를 props로 내려 inputCount가 4개가 되면 pointer 속성을 없앤다.
-  cursor: ${props => props.inputCount < 4 ? 'pointer' : 'default'};
+  cursor: ${(props) => (props.inputCount < 4 ? 'pointer' : 'default')};
   //Icon style
   // inputCount를 props로 내려 inputCount가 4개가 되면 plus img를 없앤다.
-  background-image: ${props => props.inputCount < 4 ? 'url(ModalPortalAddInputPlus.png)' : 'none'};
-  background-repeat: no-repeat;  //이미지 한번만
+  background-image: ${(props) =>
+    props.inputCount < 4 ? 'url(ModalPortalAddInputPlus.png)' : 'none'};
+  background-repeat: no-repeat; //이미지 한번만
   background-position: 140px center; //  위치
   background-size: 22px; // 이미지 크기
   box-sizing: border-box; //   input의 넓이가 부모 넓이보다 넘는 현상방지 */

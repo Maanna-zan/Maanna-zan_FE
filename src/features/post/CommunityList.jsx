@@ -139,8 +139,8 @@ const CommunityList = () => {
                           height: '100%',
                           overflow: 'hidden',
                           borderRadius: '10px',
-                          // background:
-                          //   'linear-gradient(180deg, #ffffff0 65.83%, #26282B 119.72%)',
+                          background:
+                            'linear-gradient(180deg, #ffffff0 65.83%, #26282B 119.72%)',
                         }}
                         src={
                           store.s3Url ? store.s3Url : '/noimage_282x248_.png'
