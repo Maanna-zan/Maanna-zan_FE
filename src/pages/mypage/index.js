@@ -41,7 +41,7 @@ const MyPage = () => {
         <UserDiv key={data?.id}>
           <div className="userSetting">
             <UserNameP>
-              <Span>{data?.userName}</Span>님
+              <Span>{data?.nickName}</Span>님
             </UserNameP>
             <SettingPortalExample data={data} />
           </div>
@@ -53,11 +53,9 @@ const MyPage = () => {
       {settingMyPage === 'log' ? (
         <>
           <WebWrapper>
-            <div
-              style={{ display: 'flex', gap: '40px', alignContent: 'center' }}
-            >
+            <TabButton>
               <p
-                style={{ color: 'red', cursor: 'pointer' }}
+                className="active"
                 onClick={() => {
                   setSettingMyPage('log');
                 }}
@@ -65,7 +63,7 @@ const MyPage = () => {
                 기록
               </p>
               <p
-                style={{ cursor: 'pointer' }}
+                className="wait"
                 onClick={() => {
                   setSettingMyPage('post');
                 }}
@@ -73,14 +71,14 @@ const MyPage = () => {
                 내가 작성한 글 보기
               </p>
               <p
-                style={{ cursor: 'pointer' }}
+                className="wait"
                 onClick={() => {
                   setSettingMyPage('like');
                 }}
               >
                 좋아요
               </p>
-            </div>
+            </TabButton>
           </WebWrapper>
           <BottomDiv>
             <WebWrapper>
@@ -91,15 +89,9 @@ const MyPage = () => {
       ) : settingMyPage === 'post' ? (
         <>
           <WebWrapper>
-            <div
-              style={{
-                display: 'flex',
-                gap: '40px',
-                alignContent: 'center',
-              }}
-            >
+            <TabButton>
               <p
-                style={{ cursor: 'pointer' }}
+                className="wait"
                 onClick={() => {
                   setSettingMyPage('log');
                 }}
@@ -107,7 +99,7 @@ const MyPage = () => {
                 기록
               </p>
               <p
-                style={{ color: 'red', cursor: 'pointer' }}
+                className="active"
                 onClick={() => {
                   setSettingMyPage('post');
                 }}
@@ -115,14 +107,14 @@ const MyPage = () => {
                 내가 작성한 글 보기
               </p>
               <p
-                style={{ cursor: 'pointer' }}
+                className="wait"
                 onClick={() => {
                   setSettingMyPage('like');
                 }}
               >
                 좋아요
               </p>
-            </div>
+            </TabButton>
           </WebWrapper>
 
           <BottomDiv>
@@ -134,15 +126,9 @@ const MyPage = () => {
       ) : settingMyPage === 'like' ? (
         <>
           <WebWrapper>
-            <div
-              style={{
-                display: 'flex',
-                gap: '40px',
-                alignContent: 'center',
-              }}
-            >
+            <TabButton>
               <p
-                style={{ cursor: 'pointer' }}
+                className="wait"
                 onClick={() => {
                   setSettingMyPage('log');
                 }}
@@ -150,7 +136,7 @@ const MyPage = () => {
                 기록
               </p>
               <p
-                style={{ cursor: 'pointer' }}
+                className="wait"
                 onClick={() => {
                   setSettingMyPage('post');
                 }}
@@ -158,14 +144,14 @@ const MyPage = () => {
                 내가 작성한 글 보기
               </p>
               <p
-                style={{ color: 'red', cursor: 'pointer' }}
+                className="active"
                 onClick={() => {
                   setSettingMyPage('like');
                 }}
               >
                 좋아요
               </p>
-            </div>
+            </TabButton>
           </WebWrapper>
           <BottomDiv>
             <WebWrapper>
@@ -176,9 +162,7 @@ const MyPage = () => {
       ) : (
         <>
           <WebWrapper>
-            <div
-              style={{ display: 'flex', gap: '10px', alignContent: 'center' }}
-            >
+            <TabButton>
               <p
                 onClick={() => {
                   setSettingMyPage('log');
@@ -208,7 +192,7 @@ const MyPage = () => {
               >
                 보관함
               </p>
-            </div>
+            </TabButton>
           </WebWrapper>
 
           <BottomDiv>
@@ -223,6 +207,22 @@ const MyPage = () => {
 };
 
 export default MyPage;
+const TabButton = styled.div`
+  display: flex;
+  gap: 40px;
+  align-items: center;
+  .active {
+    color: #ff4840;
+    cursor: pointer;
+    font-size: 15px;
+  }
+  .wait {
+    cursor: pointer;
+    :hover {
+      color: #ff6a64;
+    }
+  }
+`;
 
 const UserDiv = styled.div`
   margin-top: 49px;

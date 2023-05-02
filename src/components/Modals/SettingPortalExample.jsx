@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
 import SettingModal from './SettingModal';
+import styled from 'styled-components';
 
 export default function SettingPortalExample({ data }) {
   // console.log('data', data);
@@ -9,11 +10,7 @@ export default function SettingPortalExample({ data }) {
     <>
       <div onClick={() => setShowModal(true)}>
         {' '}
-        <img
-          style={{ width: '20px', height: '20px' }}
-          src="Group 2000.png"
-          alt="유저 설정버튼 입니다."
-        />
+        <Img src="Group 2000.png" alt="유저 설정버튼 입니다." />
       </div>
       {showModal &&
         createPortal(
@@ -23,3 +20,13 @@ export default function SettingPortalExample({ data }) {
     </>
   );
 }
+
+const Img = styled.img`
+  margin-top: 7px;
+  width: 20px;
+  height: 20px;
+  :hover {
+    height: 24px;
+    width: 24px;
+  }
+`;

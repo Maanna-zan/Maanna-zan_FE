@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { useRouter } from 'next/router';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
+import { LikeHeartIcon } from '@components/Atoms/HeartIcon';
 
 //페이지네이션 임포트
 import Pagination from '@components/Modals/Pagenation2';
@@ -99,8 +100,12 @@ const GetMyAlcohols = () => {
                   src={post.postList[0].s3Url}
                   alt={post.place_name}
                 />
-                <div>
-                  <p>{post.place_name}</p>
+                <div className="flexGap">
+                  <p className="title">{post.place_name}</p>
+                  <div className="flex">
+                    <LikeHeartIcon />
+                    <p className="likecnt">{post.roomLikecnt}</p>
+                  </div>
                 </div>
               </div>
             </ContainerDiv>
@@ -129,5 +134,20 @@ const ContainerDiv = styled.div`
   .p {
     margin-top: 12px;
     font-size: 16px;
+  }
+  .title {
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+  }
+  .flexGap {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+  }
+  .flex {
+    display: flex;
+    align-items: center;
+    gap: 10px;
   }
 `;

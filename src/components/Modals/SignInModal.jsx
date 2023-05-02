@@ -116,8 +116,11 @@ export default function SignInModal({ onClose, setShowSignUpModal }) {
       alert(error.response.data.message);
     },
     onSuccess: (data) => {
+      setPassword('');
       // console.log('data', data);
-      alert(`${data.data.message}🥹`);
+      alert(
+        `${data.data.message}\n해당 계정의 메일함으로 가서 임시비밀번호를 확인해주세요.`,
+      );
     },
   });
   // validate email format function
@@ -166,7 +169,7 @@ export default function SignInModal({ onClose, setShowSignUpModal }) {
                 name="email"
                 value={user.email}
                 onChange={changHandler}
-                placeholder="id를 입력하세요"
+                placeholder="이메일을 입력하세요"
               />
               <InputArea
                 className="InputArea"

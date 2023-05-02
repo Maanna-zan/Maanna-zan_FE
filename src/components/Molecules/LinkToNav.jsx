@@ -1,7 +1,7 @@
 import React from 'react';
 import { ButtonText } from '@components/Atoms/Button';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { cookies } from '../../shared/cookie';
 import { useRouter } from 'next/router';
 import SignInPotalExample from '@components/Modals/SignInPortalExample';
@@ -20,9 +20,13 @@ export const LinkToNav = () => {
   const router = useRouter();
   const [isLoginMode, setIsLoginMode] = useState(false);
   const [showSubMenu, setShowSubMenu] = useState(false);
+
   //모달창 여닫는 useState
   const [showsignInModal, setShowsignInModal] = useState(false);
   const [showSignUpModal, setShowSignUpModal] = useState(false);
+
+  const token = cookies.get('access_token');
+  const nickName = cookies.get('nick_name');
 
   // 토큰 삭제 함수
   const deleteTokens = () => {
@@ -35,10 +39,9 @@ export const LinkToNav = () => {
     deleteTokens();
     router.push('/');
   };
-  const token = cookies.get('access_token');
-  const refresh_token = cookies.get('refresh_token');
+
   // console.log('access_token', token);
-  // console.log('refresh_token', refresh_token);
+  // console.log('nickName', nickName);
 
   useEffect(() => {
     setIsLoginMode(!!token);
@@ -76,6 +79,20 @@ export const LinkToNav = () => {
       }
     },
   });
+
+  const ref = useRef(null); // nav 태그를 참조하기 위한 useRef
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (ref.current && !ref.current.contains(event.target)) {
+        setShowSubMenu(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [ref]);
 
   return (
     <nav style={{ display: 'flex' }}>
@@ -164,14 +181,14 @@ export const LinkToNav = () => {
             className="userNameBT"
             variant="hoverRed"
             onClick={() => setShowSubMenu(!showSubMenu)}
-            label={`${data?.userName}님`}
+            label={`${nickName}님`}
           ></ButtonText>
           {showSubMenu && (
-            <Ullist className="ullist">
+            <Ullist ref={ref} className="ullist">
               <li className="listName">
                 <a
                   onClick={() => setShowSubMenu(!showSubMenu)}
-                >{`${data?.userName}님`}</a>
+                >{`${nickName}님`}</a>
               </li>
               <li className="list">
                 <a
