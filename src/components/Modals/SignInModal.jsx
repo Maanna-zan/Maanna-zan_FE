@@ -135,20 +135,21 @@ export default function SignInModal({ onClose }) {
     <>
       <ModalDiv className="modal">
         <div className="modal-overlay">
-          <img
+          <span
             style={{
               position: 'fixed',
-              right: '20px',
+              right: '30px',
               top: '20px',
-              // display: 'flex',
-              // justifyContent: 'flex-end',
+
               width: '12px',
               height: '12px',
             }}
             onClick={onClose}
             src="Group 1972.png"
             alt="취소 버튼"
-          />
+          >
+            <CloseBtn />
+          </span>
 
           {isEditMode === 'login' ? (
             <InnerDiv>

@@ -57,7 +57,7 @@ const StoreDetail = () => {
   }
 
   const [roomLike, setRoomLike] = useState(storeLikeMine?.roomLike);
-  console.log('스토어 좋아요한 값', storeLikeMine.roomLike);
+  // console.log('스토어 좋아요한 값', storeLikeMine.roomLike);
 
   const likeStoreHandler = async (apiId) => {
     try {
