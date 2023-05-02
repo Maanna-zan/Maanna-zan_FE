@@ -37,6 +37,7 @@ export const Rating = ({ name, value, onChange }) => {
             value={rating.value}
             checked={rating.value === checkedState}
             onChange={() => handleRatingChange(rating.value)}
+            required
           />
           <span className="radio-icon" style={{ marginRight: '4px' }}>
             {rating.value === checkedState ? (
