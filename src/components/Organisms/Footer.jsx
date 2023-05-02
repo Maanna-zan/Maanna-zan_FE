@@ -31,7 +31,7 @@ export const Footer = () => {
                 리스트
               </Link>
               <Link href="/map" className="aTag">
-                탐색
+                지도 검색
               </Link>
               <Link href="/community" className="aTag">
                 커뮤니티

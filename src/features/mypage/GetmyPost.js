@@ -9,6 +9,7 @@ import { useState } from 'react';
 //페이지네이션 임포트
 import Pagination from '@components/Modals/Pagenation2';
 import chunk from '@components/Modals/chunk';
+import { LikeHeartIcon } from '@components/Atoms/HeartIcon';
 
 const GetmyPost = () => {
   const token = cookies.get('access_token');
@@ -25,7 +26,7 @@ const GetmyPost = () => {
           Access_Token: `${token}`,
         },
       });
-      // console.log('dataPost--------------', data.data.posts);
+      console.log('dataPost--------------', data.data.posts);
       return data.data.posts;
     },
   });
@@ -100,7 +101,13 @@ const GetmyPost = () => {
                   src={post.s3Url}
                   alt={post.title}
                 />
-                <p>{post.title}</p>
+                <div className="flexGap">
+                  <p className="title">{post.title}</p>
+                  <div className="flex">
+                    <LikeHeartIcon />
+                    <p className="likecnt">{post.likecnt}</p>
+                  </div>
+                </div>
               </div>
             </ContainerDiv>
           ))}
@@ -128,5 +135,20 @@ const ContainerDiv = styled.div`
   .p {
     margin-top: 12px;
     font-size: 16px;
+  }
+  .title {
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+  }
+  .flexGap {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+  }
+  .flex {
+    display: flex;
+    align-items: center;
+    gap: 10px;
   }
 `;

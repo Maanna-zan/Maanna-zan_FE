@@ -85,52 +85,58 @@ export default function SignUpModal({ onClose }) {
 
     return isValid;
   };
-
-  const handlePasswordChange = (e) => {
+  const handlePasswordChange1 = (e) => {
     const { name, value } = e.target;
     setUser((pre) => ({ ...pre, [name]: value }));
-
-    if (name === 'checkPassword') {
-      setPasswordError(user.password !== value);
-    }
-
-    if (name === 'password') {
-      const validPassword = validatePassword(value);
-      setPasswordError(!validPassword);
-      setIsValidPassword(validPassword);
-
-      if (user.checkPassword) {
-        setPasswordError(!validPassword || user.checkPassword !== value);
-      }
-    }
 
     if (name === 'checkPassword') {
       setPasswordError(user.password !== value);
       if (user.password) {
         setPasswordError(user.password !== value || !isValidPassword);
       }
+    } else if (name === 'password') {
+      const validPassword = validatePassword(value);
+      setPasswordError(!validPassword);
+      setIsValidPassword(validPassword);
     }
   };
 
+  const handlePasswordChange = (e) => {
+    const { name, value } = e.target;
+    setUser((pre) => ({ ...pre, [name]: value }));
+
+    if (name === 'checkPassword') {
+      setPasswordError(user.password !== value || !isValidPassword);
+    } else if (name === 'password') {
+      const validPassword = validatePassword(value);
+      setPasswordError(!validPassword);
+      setIsValidPassword(validPassword);
+      if (user.checkPassword) {
+        setPasswordError(user.checkPassword !== value || !validPassword);
+      }
+    }
+  };
   //타당성 검사 코드
   const validateForm = (userData) => {
     if (!userData.userName) {
-      alert('이름을 입력해주세요.');
+      alert('성명을 입력해주세요.');
       return false;
     }
-    const userNickName = /^(?=.*[a-z0-9가-힣])[a-z0-9가-힣]{2,16}$/;
+    const userNickName = /^(?=.*[a-z0-9가-힣])[a-z0-9가-힣]{2,8}$/;
     if (!userNickName.test(userData.nickName)) {
-      alert('닉네임을 입력해주세요.');
-      return false;
-    }
-    if (!validatePassword(userData.password)) {
       alert(
-        '비밀번호는 알파벳 소문자, 대문자, 숫자, 특수문자를 포함한 9~20자여야 합니다.',
+        '닉네임은 영어,숫자,한글로 구성되어야하며 최소 2글자 최대 8글자로 구성되어야합니다.',
       );
       return false;
     }
     if (!validatePassword(userData.password)) {
-      alert('비밀번호 확인을 입력해주세요.');
+      alert(
+        '비밀번호는 알파벳 소문자, 대문자, 숫자, 특수문자를 포함한 8~16자여야 합니다.',
+      );
+      return false;
+    }
+    if (passwordError) {
+      alert('비밀번호 확인을 비밀번호와 맞춰 입력해주세요.');
       return false;
     }
     const userPhoneNumber = /^01([0|1|6|7|8|9]?)([0-9]{3,4})([0-9]{4})$/;
@@ -157,7 +163,7 @@ export default function SignUpModal({ onClose }) {
     if (!user.userName) return false;
     if (!user.nickName) return false;
     if (!validatePassword(user.password)) return false;
-    if (!user.checkPassword) return false;
+    if (passwordError) return false;
 
     return true;
   };
@@ -191,11 +197,12 @@ export default function SignUpModal({ onClose }) {
             value={user.userName}
             placeholder="이름을 입력해주세요."
             onChange={changHandler}
+            maxLength="5"
             required
           />
           <Detaildiv>
             <div className="detailSignUp">닉네임</div>
-            <div className="notice">닉네임 8글자 이내</div>
+            <div className="notice">8자리 이내/영어,한글,숫자로 구성</div>
           </Detaildiv>
           <div style={{ display: 'flex', gap: '20px' }}>
             <InputArea
@@ -206,7 +213,8 @@ export default function SignUpModal({ onClose }) {
               value={user.nickName}
               placeholder="닉네임을 입력해주세요."
               onChange={changHandler}
-              maxLength="16"
+              minLength="2"
+              maxLength="8"
               required
             />
 
@@ -238,7 +246,8 @@ export default function SignUpModal({ onClose }) {
               value={user.password}
               placeholder="비밀번호를 입력해주세요."
               onChange={handlePasswordChange}
-              maxLength="20"
+              minLength="8"
+              maxLength="16"
               required
             />
             {isValidPassword && (
@@ -275,7 +284,9 @@ export default function SignUpModal({ onClose }) {
                   : '#9EA4AA',
               }}
               placeholder="비밀번호를 입력해주세요."
-              onChange={handlePasswordChange}
+              onChange={handlePasswordChange1}
+              minLength="8"
+              maxLength="16"
               required
             />
             {!passwordError && user.password && (
@@ -320,6 +331,7 @@ export default function SignUpModal({ onClose }) {
                 value={user.phoneNumber}
                 placeholder="전화번호를 입력해주세요."
                 onChange={changHandler}
+                maxLength="11"
                 required
               />
               <div className="detailSignUp">이메일</div>
@@ -360,6 +372,7 @@ export default function SignUpModal({ onClose }) {
                 variant="default"
                 name="birth"
                 value={user.birth}
+                maxLength="8"
                 placeholder="생년월일 8글자를 입력해주세요."
                 onChange={changHandler}
               />

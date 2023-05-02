@@ -4,10 +4,11 @@ import styled from 'styled-components';
 import { useState } from 'react';
 import Pagination from '@components/Modals/Pagenation2';
 import chunk from '@components/Modals/chunk';
+import { LikeHeartIcon } from '@components/Atoms/HeartIcon';
 
 const MyWritePost = (data) => {
   const push = useRouter();
-  console.log('mywrutedata', data.data.posts);
+  // console.log('mywrutedata', data.data.posts);
   const myData = data.data.posts;
 
   //페이지 네이션 처음 시작이 1번창부터 켜지도록
@@ -73,7 +74,14 @@ const MyWritePost = (data) => {
                 onerror="this.onerror=null; this.src='Group 2017.png';"
               />
               <div className="innerDiv">
-                <p className="title">{post.title}</p>
+                <div className="flexGap">
+                  <p className="title">{post.title}</p>
+                  <div className="flex">
+                    <LikeHeartIcon />
+                    <p className="title">{post.likecnt}</p>
+                  </div>
+                </div>
+
                 <p className="description">{post.description}</p>
               </div>
             </PostDiv>
@@ -93,7 +101,7 @@ export default MyWritePost;
 
 const ContainerDiv = styled.div`
   display: flex;
-  gap: 24px;
+  gap: 0px 24px;
   flex-wrap: wrap;
 `;
 
@@ -137,5 +145,14 @@ const PostDiv = styled.div`
     word-wrap: break-word;
     overflow-y: hidden;
     height: 30px;
+  }
+  .flexGap {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+  }
+  .flex {
+    display: flex;
+    gap: 10px;
   }
 `;
