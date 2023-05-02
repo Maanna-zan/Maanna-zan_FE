@@ -38,14 +38,15 @@ export default function SignUpModal({ onClose }) {
     setUser((pre) => ({ ...pre, [name]: value }));
   };
   const [passwordError, setPasswordError] = useState(false);
-  const handlePasswordChange = (e) => {
-    const { name, value } = e.target;
-    setUser((pre) => ({ ...pre, [name]: value }));
 
-    if (name === 'checkPassword') {
-      setPasswordError(user.password !== value);
-    }
-  };
+  // const handlePasswordChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setUser((pre) => ({ ...pre, [name]: value }));
+
+  //   if (name === 'checkPassword') {
+  //     setPasswordError(user.password !== value);
+  //   }
+  // };
 
   // passwordCheck 빼고 나머지 라는 뜻
   //3번째 옵션 config
@@ -64,6 +65,8 @@ export default function SignUpModal({ onClose }) {
       onClose();
     },
   });
+  // 유효성 검사 후, 이미지를 띄우기 위한 state 추가
+  const [isValidPassword, setIsValidPassword] = useState(false);
 
   //비밀번호 조건
   const validatePassword = (password) => {
@@ -72,12 +75,43 @@ export default function SignUpModal({ onClose }) {
     const regex =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_])[A-Za-z\d\W_]{9,20}$/;
 
-    return (
+    const isValid =
       password.length >= minLength &&
       password.length <= maxLength &&
-      regex.test(password)
-    );
+      regex.test(password);
+
+    // 유효성 검사 후, 상태 업데이트
+    setIsValidPassword(isValid);
+
+    return isValid;
   };
+
+  const handlePasswordChange = (e) => {
+    const { name, value } = e.target;
+    setUser((pre) => ({ ...pre, [name]: value }));
+
+    if (name === 'checkPassword') {
+      setPasswordError(user.password !== value);
+    }
+
+    if (name === 'password') {
+      const validPassword = validatePassword(value);
+      setPasswordError(!validPassword);
+      setIsValidPassword(validPassword);
+
+      if (user.checkPassword) {
+        setPasswordError(!validPassword || user.checkPassword !== value);
+      }
+    }
+
+    if (name === 'checkPassword') {
+      setPasswordError(user.password !== value);
+      if (user.password) {
+        setPasswordError(user.password !== value || !isValidPassword);
+      }
+    }
+  };
+
   //타당성 검사 코드
   const validateForm = (userData) => {
     if (!userData.userName) {
@@ -87,6 +121,16 @@ export default function SignUpModal({ onClose }) {
     const userNickName = /^(?=.*[a-z0-9가-힣])[a-z0-9가-힣]{2,16}$/;
     if (!userNickName.test(userData.nickName)) {
       alert('닉네임을 입력해주세요.');
+      return false;
+    }
+    if (!validatePassword(userData.password)) {
+      alert(
+        '비밀번호는 알파벳 소문자, 대문자, 숫자, 특수문자를 포함한 9~20자여야 합니다.',
+      );
+      return false;
+    }
+    if (!validatePassword(userData.password)) {
+      alert('비밀번호 확인을 입력해주세요.');
       return false;
     }
     const userPhoneNumber = /^01([0|1|6|7|8|9]?)([0-9]{3,4})([0-9]{4})$/;
@@ -105,15 +149,19 @@ export default function SignUpModal({ onClose }) {
       alert('올바른 생년월일 형식으로 입력해주세요.');
       return false;
     }
-    if (!validatePassword(userData.password)) {
-      alert(
-        '비밀번호는 알파벳 소문자, 대문자, 숫자, 특수문자를 포함한 9~20자여야 합니다.',
-      );
-      return false;
-    }
 
     return true;
   };
+
+  const isNextButtonActive = () => {
+    if (!user.userName) return false;
+    if (!user.nickName) return false;
+    if (!validatePassword(user.password)) return false;
+    if (!user.checkPassword) return false;
+
+    return true;
+  };
+
   return (
     <ModalDiv className="modal">
       <div className="modal-overlay">
@@ -178,46 +226,92 @@ export default function SignUpModal({ onClose }) {
               8~16 자리 / 영문 대소문자,숫자,특수문자 포함
             </div>
           </Detaildiv>
-          <InputArea
-            type="password"
-            name="password"
-            size="lg"
-            variant="default"
-            value={user.password}
-            placeholder="비밀번호를 입력해주세요."
-            onChange={handlePasswordChange}
-            maxLength="20"
-            required
-          />
+          <div style={{ position: 'relative' }}>
+            <InputArea
+              style={{
+                borderColor: isValidPassword ? '#3DC061' : '#9EA4AA',
+              }}
+              type="password"
+              name="password"
+              size="lg"
+              variant="default"
+              value={user.password}
+              placeholder="비밀번호를 입력해주세요."
+              onChange={handlePasswordChange}
+              maxLength="20"
+              required
+            />
+            {isValidPassword && (
+              <img
+                src="Group 2066.png"
+                alt="Valid password"
+                style={{
+                  position: 'absolute',
+                  top: '12px',
+                  right: '12px',
+                  width: '20px',
+                  height: '20px',
+                }}
+              />
+            )}
+          </div>
           <Detaildiv>
             <div className="detailSignUp">비밀번호 확인</div>
             <div className="notice">
               8~16 자리 / 영문 대소문자,숫자,특수문자 포함
             </div>
           </Detaildiv>
-          <InputArea
-            type="password"
-            name="checkPassword"
-            size="lg"
-            variant="default"
-            // value={user.checkPassword}
-            placeholder="비밀번호를 입력해주세요."
-            onChange={handlePasswordChange}
-            required
-          />
+          <div style={{ position: 'relative' }}>
+            <InputArea
+              type="password"
+              name="checkPassword"
+              size="lg"
+              variant="default"
+              style={{
+                borderColor: passwordError
+                  ? 'red'
+                  : !passwordError && user.password
+                  ? '#3DC061'
+                  : '#9EA4AA',
+              }}
+              placeholder="비밀번호를 입력해주세요."
+              onChange={handlePasswordChange}
+              required
+            />
+            {!passwordError && user.password && (
+              <img
+                src="Group 2066.png"
+                alt="Valid password"
+                style={{
+                  position: 'absolute',
+                  top: '12px',
+                  right: '12px',
+                  width: '20px',
+                  height: '20px',
+                }}
+              />
+            )}
+          </div>
+
           {passwordError && (
             <p style={{ color: 'red', fontSize: '12px', marginTop: '-5px' }}>
               비밀번호가 일치하지 않습니다.
             </p>
           )}
-          {!passwordError && (
-            <p style={{ color: 'red', fontSize: '12px', marginTop: '-5px' }}>
+          {!passwordError && user.password && (
+            <p
+              style={{ color: '#3DC061', fontSize: '12px', marginTop: '-5px' }}
+            >
               비밀번호가 일치합니다.
             </p>
           )}
           {next ? (
             <>
-              <div className="detailSignUp">전화번호</div>
+              <Detaildiv>
+                <div className="detailSignUp">전화번호</div>
+                <div className="notice">숫자로 이루어진 11자리</div>
+              </Detaildiv>
+
               <InputArea
                 type="text"
                 size="lg"
@@ -256,7 +350,10 @@ export default function SignUpModal({ onClose }) {
                   label="중복확인"
                 />
               </div>
-              <div className="detailSignUp">생년월일</div>
+              <Detaildiv>
+                <div className="detailSignUp">생년월일</div>
+                <div className="notice">숫자로 이루어진 8자리</div>
+              </Detaildiv>
               <InputArea
                 type="text"
                 size="lg"
@@ -287,7 +384,11 @@ export default function SignUpModal({ onClose }) {
               style={{ cursor: 'pointer' }}
               label="다음"
               onClick={() => {
-                setNext(true);
+                if (isNextButtonActive()) {
+                  setNext(true);
+                } else {
+                  validateForm(user);
+                }
               }}
             />
           )}
