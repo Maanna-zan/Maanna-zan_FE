@@ -30,6 +30,7 @@ import { useLikeStore } from '../../hook/useLikes';
 import { PenIcon } from '@components/Atoms/PenIcon';
 import { Map, MapMarker } from 'react-kakao-maps-sdk';
 import { MinStar } from '@components/Atoms/PostStar';
+import Link from 'next/link';
 const StoreDetail = () => {
   const router = useRouter();
   const { query } = useRouter();
@@ -428,14 +429,16 @@ const StoreDetail = () => {
                   <FlexColumn style={{ gap: '10px', marginTop: '8px' }}>
                     <StTab>위치</StTab>
 
-                    <StTab>링크</StTab>
+                    <StTab>카카오 링크</StTab>
                     <StTab>전화번호</StTab>
                   </FlexColumn>
                   <FlexColumn style={{ gap: '10px', justifyContent: 'center' }}>
                     <div>{data?.address_name}</div>
                     <FlexRow style={{ gap: '10px' }}></FlexRow>
 
-                    <div>{data?.place_url}</div>
+                    <Link href={data?.place_url}>
+                      <div>{data?.place_url}</div>
+                    </Link>
                     <div>{data?.phone}</div>
                   </FlexColumn>
                 </FlexRow>

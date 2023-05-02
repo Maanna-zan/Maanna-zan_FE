@@ -13,10 +13,14 @@ import { ButtonText } from '@components/Atoms/Button';
 import { useQueryClient } from '@tanstack/react-query';
 import { InputArea } from '@components/Atoms/Input';
 import { LightTheme } from '@components/Themes/theme';
+import ApporintmentModal from '@components/Modals/AppointmentModal';
+import { createPortal } from 'react-dom';
 
 const MapAppointment = ({ checkedPlace }) => {
   const router = useRouter();
   const [isLoginMode, setIsLoginMode] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+
   //버튼으로 보내줄 값들
   const [appointment, setAppointment] = React.useState({
     selectedDate: '',
@@ -52,8 +56,9 @@ const MapAppointment = ({ checkedPlace }) => {
     setAppointment({
       selectedDate: moment(value).format('YYYY-MM-DD'),
     });
+    setShowModal(true);
   };
-  console.log('setAppointmentvalue', appointment);
+  console.log('약속잡기버튼', appointment);
   const nickName =
     typeof window !== 'undefined'
       ? localStorage.getItem('nick_name') ?? ''
@@ -146,6 +151,13 @@ const MapAppointment = ({ checkedPlace }) => {
                 <span className="departChild">서울시 개포동 문래아파트</span>
               </p>
             </Region>
+            <div>
+              {showModal &&
+                createPortal(
+                  <ApporintmentModal onClose={() => setShowModal(false)} />,
+                  document.body,
+                )}
+            </div>
           </WebWrapper>
         </div>
       )}
@@ -154,6 +166,37 @@ const MapAppointment = ({ checkedPlace }) => {
 };
 
 export default MapAppointment;
+
+const Ddiv = styled.div`
+  .category-slider {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .category-slide {
+    flex: 0 0 33%;
+    margin-right: 10px;
+    scroll-snap-align: center;
+  }
+
+  .category-slide:last-child {
+    margin-right: 0;
+  }
+
+  .category-slide img {
+    width: 100%;
+    height: auto;
+  }
+
+  .category-slide p {
+    margin-top: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+  }
+`;
 
 const Div = styled.div`
   width: 100%;
