@@ -34,6 +34,17 @@ function MapMidPoint() {
     }
     //  클릭 선택된 장소를 저장할 state 변수
     const [checkedPlace, setCheckedPlace] = useState('')
+    function handleCheckedPlaceChange(e) {
+        setCheckedPlace(e.target.value);
+        // return (
+        //     <>
+        //         <input type="text" value={checkedPlace} onChange={handleCheckedPlaceChange} />
+        //         <MapAppointment checkedPlace={checkedPlace} />
+        //     </>
+        // );
+    }
+    
+    // console.log("111checkedPlace",checkedPlace)
     // 중간지점 좌표 받아온 값으로 서버와 통신하여 kakaoAPI값 DB저장 및 목록 불러오기
         const { data, isLoading, isError, refetch } = useQuery({
         queryKey: ['GET_KAKAOAPI'],
@@ -140,7 +151,6 @@ function MapMidPoint() {
                 GetSpotsNearbyMidPoint(hofPage?.documents);
             }
             GetSpotsNearbyMidPoint(kakaoApiHof)
-            console.log("kakaoApiHof",kakaoApiHof)
         };
         const kakaoApiHof = hofPage?.documents
         //  와인바 마커 및 리스트 불러오기
@@ -355,7 +365,7 @@ function MapMidPoint() {
                         const selected = places[i];
                         //  검색 후 선택한 값 중 i 번째 값 state에 저장
                         setCheckedPlace(selected)
-
+                        // console.log("222checkedPlace",checkedPlace)
                         displayInfowindow(marker, title);
                         map.panTo(placePosition);
                     });
@@ -467,7 +477,7 @@ function MapMidPoint() {
         }
     }
     }
-    
+    // console.log("333checkedPlace",checkedPlace)
     return (
         <WebWrapper>
             <WebWrapperHeight>
@@ -672,8 +682,8 @@ function MapMidPoint() {
                             </FlexColumnCenter>
                         </div>
                     </MapSection>
-                    <MapAppointment checkedPlace={checkedPlace} />
-                        {/* <p>선택한 장소: {checkedPlace?.place_name}</p> */}
+                    {/* <input type="text" value={checkedPlace} onChange={handleCheckedPlaceChange} />
+                    <MapAppointment checkedPlace={checkedPlace}/> */}
                 </FlexRow>
             </WebWrapperHeight>
         </WebWrapper>

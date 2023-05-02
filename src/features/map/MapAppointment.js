@@ -10,11 +10,12 @@ import { useRouter } from 'next/router';
 import { Link } from 'react-scroll';
 import { WebWrapper } from '@components/Atoms/Wrapper';
 import { ButtonText } from '@components/Atoms/Button';
-import { useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { InputArea } from '@components/Atoms/Input';
 import { LightTheme } from '@components/Themes/theme';
 import ApporintmentModal from '@components/Modals/AppointmentModal';
 import { createPortal } from 'react-dom';
+import MapMidPoint from './MapMidPoint';
 
 const MapAppointment = ({ checkedPlace }) => {
   const router = useRouter();
@@ -31,8 +32,14 @@ const MapAppointment = ({ checkedPlace }) => {
   const queryClient = useQueryClient();
   // getQueryData로 캐싱한 값 INPUTVALUESPROP키로 불러오기.
   const InputValuesProp = queryClient.getQueryData({queryKey: ['INPUTVALUESPROP']});
-   // getQueryData로 캐싱한 값 INPUTVALUESPROP키로 불러오기.
-  const CheckedPlaceProp = queryClient.getQueryData({queryKey: ['CHECKEDPLACEPROP']});
+  //  checkedPlace값 가져오기
+  const { data: placeData } = useQuery(['places', checkedPlace], () =>
+  fetch(`/mapmidpoint?query=${checkedPlace}`).then((res) => res.json())
+);
+  console.log("checkedPlace",checkedPlace)
+  useEffect(() => {
+    console.log('checkedPlace updated: ', checkedPlace);
+  }, [checkedPlace]);
   useEffect(() => {
     const token = cookies.get('access_token');
     setIsLoginMode(token);
@@ -147,8 +154,8 @@ const MapAppointment = ({ checkedPlace }) => {
                   ))}
                 </DeparturesWrapper>
               <p className="depart">
-                중간위치 술집장소:{CheckedPlaceProp?.place_name}
-                <span className="departChild">서울시 개포동 문래아파트</span>
+                중간위치 술집장소:
+                <span className="departChild">{checkedPlace?.place_name}</span>
               </p>
             </Region>
             <div>
