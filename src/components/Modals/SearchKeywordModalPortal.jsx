@@ -11,9 +11,6 @@ import { FlexColumnCenter, FlexRow } from '@components/Atoms/Flex';
 import { InputArea } from '@components/Atoms/Input';
 import { ButtonText } from '@components/Atoms/Button';
 import { ArrangeCenterWrapper } from '@components/Atoms/Wrapper';
-import Calendar from 'react-calendar';
-import moment from 'moment';
-import 'react-calendar/dist/Calendar.css';
 import { LightTheme } from '@components/Themes/theme';
 
 function SearchedKeywordLandingPage() {
@@ -64,11 +61,20 @@ function SearchedKeywordLandingPage() {
       [currentInputIndex === 0 ? 'x' : `x${currentInputIndex + 1}`]: x,
       [currentInputIndex === 0 ? 'y' : `y${currentInputIndex + 1}`]: y,
     };
-    // console.log("@@111111newInputValues@@",newInputValues)
     //  setCheckedPlace함수 서버 통신위하여 가공
     setCheckedPlace(newCheckedPlace);
     //	positions state에 검색된 state값 차곡차곡 담기위한 다중마커state값 (place는 모달창에서 검색 및 선택된 값)
     setCheckedMarkerPlace(place);
+    console.log("newInputValues",newInputValues)
+    console.log("inputValues",inputValues)
+    // positions 업데이트 (정확히 원하는 마커 지워 지도록 positions값 currentInputIndex 같이 엮어서 업데이트 해줌. 매우 중요)
+    const newPositions = [...positions];
+    newPositions[currentInputIndex] = {
+      title: place.place_name,
+      latlng: { lat: place.y, lng: place.x },
+    };
+    setPositions(newPositions);
+
     //  newInputValues값 쿼리로 저장 위해 선언
     const InputValuesProp = newInputValues;
     //  INPUTVALUESPROP키값으로 newInputValues값 저장. 해당 키 값으로 값 불러올 수 있음.
@@ -97,12 +103,20 @@ function SearchedKeywordLandingPage() {
   //     newInputValues[index] = '';
   //     return newInputValues;
   //   });
-
   // }
+  useEffect (() => {
+    inputValues
+  },[inputValues])
+  //  X버튼 핸들러(inputValue 초기화)
   const onInputClearHandler = (index) => {
     const newInputValues = [...inputValues];
     newInputValues[index] = '';
     setInputValues(newInputValues);
+
+    // positions 업데이트 (정확한 해당 마커 지워지도록 positions 업데이트 코드 추가)
+  const newPositions = [...positions];
+  newPositions[index] = undefined;
+  setPositions(newPositions);
 
     let newCheckedPlace = {
       ...checkedPlace,
@@ -160,7 +174,7 @@ function SearchedKeywordLandingPage() {
               marginLeft: '500px',
               paddingTop: '6px',
               pointerEvents: midPoint ? 'none' : 'auto', // midPoint가 true이면 pointerEvents를 none으로 지정
-              opacity: midPoint ? 0.5 : 1, // midPoint가 true이면 투명도를 0.5로 지정
+              opacity: midPoint ? 0.3 : 1, // midPoint가 true이면 투명도를 0.3로 지정
             }}
           >
             <img src="ModalPortalInputXButton.png" alt="X button" />
@@ -258,17 +272,6 @@ function SearchedKeywordLandingPage() {
   //  MIDPOINTPROP키값으로 midPoint값 저장. 해당 키 값으로 값 불러올 수 있음.
   queryClient.setQueryData(['MIDPOINTPROP'], midPointProp);
 
-  // 266 으로 가서 글을 확인해주세요 ~
-  // const [value, onChange] = useState(new Date());
-  // console.log('onChange', Calendar);
-  // const mark = ['2023-04-20', '2023-04-28'];
-
-  // const clickDayHandler = (value, event) => {
-  //   console.log('value', value);
-  //   alert(`Clicked day:  ${moment(value).format('MM - DD')}`);
-  // };
-  //value -> 원래 형태 'YYYY년 MM월 DD일' , 'YYYY-MM-DD', 'MM-DD' 이런식으로 변경이 가능합니다
-
   return (
     <WebWrapper>
       <WebWrapperHeight style={{}}>
@@ -284,19 +287,21 @@ function SearchedKeywordLandingPage() {
                 backgroundColor: 'aliceblue',
               }}
             >
-              {positions.map((position, index) => (
-                <MapMarker
-                  key={index}
-                  position={position.latlng} // 마커를 표시할 위치
-                  image={{
-                    src: 'MarkerIMG.png', // 마커이미지의 주소
-                    size: {
-                      width: 38,
-                      height: 50,
-                    }, // 마커이미지의 크기
-                  }}
-                  title={position.title} // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시된다
-                />
+              {positions?.map((position, index) => (
+                inputValues[index] && (
+                  <MapMarker
+                    key={index}
+                    position={position?.latlng}
+                    image={{
+                      src: 'MarkerIMG.png',
+                      size: {
+                        width: 38,
+                        height: 50,
+                      },
+                    }}
+                    title={position?.title}
+                  />
+                )
               ))}
               {midPoint && (
                 <MapMarker
@@ -314,43 +319,6 @@ function SearchedKeywordLandingPage() {
           <FlexColumnCenter style={{ margin: '0 200px 250px 25px' }}>
             <TitleStyled>친구와 본인의 </TitleStyled>
             <Highlighting>위치를 입력해주세요</Highlighting>
-            {/* <Div className="calendar-container">
-              <Calendar
-                //196 줄의 핸들러 함수 -> 날짜 얼럿이 뜹니다.
-                onChange={clickDayHandler}
-                //유즈스테이트로 달력에서 누른 날의 밸류 값이 밑에 글씨로 떠오릅니다.
-                // onChange={onChange}
-                value={value}
-                //일에서 토요일로 요일을 정렬해줍니다.
-                calendarType="US"
-                //1일 2일 의 일자를 화면상에서 뺴줍니다.
-                formatDay={(locale, date) => moment(date).format('DD')}
-                className="mx-auto w-full text-sm border-b"
-                //타일에 dot를 찍어주는 기능을 합니다.
-                tileContent={({ date, view }) => {
-                  // 날짜 타일에 컨텐츠 추가하기 (html 태그)
-                  // 추가할 html 태그를 변수 초기화
-                  let html = [];
-                  // 현재 날짜가 post 작성한 날짜 배열(mark)에 있다면, dot div 추가
-                  if (
-                    mark.find((x) => x === moment(date).format('YYYY-MM-DD'))
-                  ) {
-                    html.push(<div className="dot"></div>);
-                  }
-                  // 다른 조건을 주어서 html.push 에 추가적인 html 태그를 적용할 수 있음.
-                  return (
-                    <>
-                      <div className="flex justify-center items-center absoluteDiv">
-                        {html}
-                      </div>
-                    </>
-                  );
-                }}
-              />
-              <div className="text-gray-500 mt-4">
-                {moment(value).format('YYYY- MM- DD')}
-              </div>
-            </Div> */}
             <div style={{ width: '100%' }}>
               {inputs}
               {renderModal()}
@@ -455,76 +423,4 @@ const AddInputButtonStyle = styled.button`
   background-position: 140px center; //  위치
   background-size: 22px; // 이미지 크기
   box-sizing: border-box; //   input의 넓이가 부모 넓이보다 넘는 현상방지 */
-`;
-
-const Div = styled.div`
-  .react-calendar {
-    width: 487px;
-    height: 318px;
-    background: rgb(255, 255, 255);
-    /* border: 1px solid #a0a096; */
-    border-radius: 8px;
-    border: 1px solid #e8ebed;
-    font-family: Arial, Helvetica, sans-serif;
-    line-height: 1.125em;
-    padding: 10px;
-    margin: 15px 0 5px 0;
-  }
-  .react-calendar__viewContainer {
-    /* margin-top: -20px; */
-  }
-  .react-calendar__tile {
-    padding: 8px 10px;
-  }
-  .react-calendar__tile--now:enabled:hover,
-  .react-calendar__tile--now:enabled:focus {
-    color: #ff4840;
-    background: white;
-  }
-  .react-calendar__tile--now {
-    background: #ff4840;
-    border-radius: 12px;
-    width: fit-content;
-    block-size: fit-content;
-  }
-  .react-calendar__navigation__label > span {
-    font-weight: 600;
-    font-size: 16px;
-    line-height: 24px;
-  }
-  .react-calendar__tile:enabled:hover,
-  .react-calendar__tile:enabled:focus {
-    border-radius: 12px;
-    /* Primary Color/active */
-
-    background: #ffe0df;
-  }
-  .react-calendar__month-view__days__day--weekend {
-    color: black;
-  }
-  /* react-calendar__tile react-calendar__month-view__days__day react-calendar__month-view__days__day--weekend default_pointer_cs */
-  .react-calendar__tile--active {
-    background: #ff6a64;
-    border-radius: 12px;
-  }
-  .react-calendar__month-view__days__day—weekend {
-    color: #000000;
-  }
-  /* react-calendar__navigation__arrow react-calendar__navigation__next2-button default_pointer_cs */
-  .react-calendar__navigation :hover {
-    border-radius: 50%;
-    color: red;
-  }
-  .react-calendar__month-view__weekdays {
-    font-weight: 600;
-    font-size: 16px;
-    line-height: 24px;
-  }
-  .dot {
-    height: 8px;
-    width: 8px;
-    background-color: #f87171;
-    border-radius: 50%;
-    margin-left: 22px;
-  }
 `;
