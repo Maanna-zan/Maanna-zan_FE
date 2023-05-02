@@ -6,7 +6,7 @@ function index() {
   return (
     <>
       <MapMidPoint />
-      <MapAppointment />
+      {/* <MapAppointment /> */}
     </>
   );
 }

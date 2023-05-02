@@ -642,9 +642,9 @@ const Community = () => {
                   display: 'flex',
                   textAlign: 'center',
                 }}
+                onClick={() => setIsEditMode(!isEditMode)}
               >
                 <div
-                  onClick={() => setIsEditMode(!isEditMode)}
                   style={{
                     justifyContent: 'center',
                     alignItems: 'center',
@@ -681,6 +681,7 @@ const Community = () => {
                   textAlign: 'center',
                   cursor: 'pointer',
                 }}
+                onClick={() => deletePostHandler(postId)}
               >
                 <BoxTextReal
                   size="nonePadding"
@@ -690,7 +691,6 @@ const Community = () => {
                   <DeleteIcon />
                 </BoxTextReal>
                 <div
-                  onClick={() => deletePostHandler(postId)}
                   style={{
                     color: `${LightTheme.FONT_SECONDARY}`,
                     cursor: 'pointer',

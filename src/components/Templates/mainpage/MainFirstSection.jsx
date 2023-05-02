@@ -22,8 +22,6 @@ const PAGE_SIZE = 3;
 export const MainFirstSection = () => {
   const [getView, seGetView] = useState([]);
 
-  const router = useRouter();
-
   useEffect(() => {
     const fetchData = async () => {
       const response = await apis.get(`/alkol/view?page=${1}&size=3`);

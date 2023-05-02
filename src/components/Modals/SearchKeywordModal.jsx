@@ -432,7 +432,7 @@ const InputWrapper = styled.div`
 const MapSection = styled.div`
     #myMap {
         width: 50%;
-        height: 100%,
+        height: 50%,
         position: relative,
         overflow: hidden;
         border-radius: 8px;
@@ -452,7 +452,7 @@ const MapSection = styled.div`
     #menu_wrap {
         position: relative;
         width: 570px;
-        height: 47vh;
+        height: 45vh;
         border-radius: 5px;
         overflow-y: auto;
     }

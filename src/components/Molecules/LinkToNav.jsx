@@ -70,12 +70,17 @@ export const LinkToNav = () => {
   });
 
   return (
-    <nav>
-      <Link href="/">
+    <nav style={{ display: 'flex' }}>
+      <Link href="https://docs.google.com/forms/d/1GHw9Do1jnrXyFOnKtbj46YexAJjdh_HCwk7CvVha_Lo/edit">
         <span>
           <ButtonText
             style={{ font: `var(--title2-semibold) Pretendard sans-serif` }}
-            variant={router.pathname === '/alcohols' ? 'activeRed' : 'hoverRed'}
+            variant={
+              router.pathname ===
+              'https://docs.google.com/forms/d/1GHw9Do1jnrXyFOnKtbj46YexAJjdh_HCwk7CvVha_Lo/edit'
+                ? 'activeRed'
+                : 'hoverRed'
+            }
             label={'만족도 조사'}
           ></ButtonText>
         </span>
@@ -109,12 +114,19 @@ export const LinkToNav = () => {
           <SignUpPortalExample />
         </>
       ) : (
-        <>
+        <div
+          style={{
+            position: 'relative',
+            width: 'fit-content',
+            zIndex: '700',
+          }}
+        >
           <ButtonText
             style={{
               font: `var(--title2-semibold) Pretendard sans-serif`,
-              position: 'relative',
+              // position: 'relative',
             }}
+            className="userNameBT"
             variant="hoverRed"
             onClick={() => setShowSubMenu(!showSubMenu)}
             label={`${data?.userName}님`}
@@ -142,7 +154,7 @@ export const LinkToNav = () => {
               </li>
             </Ullist>
           )}
-        </>
+        </div>
       )}
     </nav>
   );
@@ -151,15 +163,16 @@ export const LinkToNav = () => {
 const Ullist = styled.ul`
   z-index: 800;
   position: absolute;
+  left: 5px;
   gap: 24px;
   display: flex;
-  border-radius: 0px 0px 12px 12px;
   flex-direction: column;
   align-items: flex-start;
+  border-radius: 0px 0px 12px 12px;
   width: 166px;
   height: 170px;
-  margin-left: 330px;
-  margin-top: -1px;
+  /* margin-left: 400px;
+  margin-top: -1px; */
   background-color: white;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 10px 15px -3px,
     rgba(0, 0, 0, 0.05) 0px 4px 6px -2px;

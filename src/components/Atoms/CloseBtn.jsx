@@ -12,16 +12,17 @@ export const CloseBtn = () => {
       <path
         d="M20 8L8 20"
         stroke="#1B1D1F"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
       <path
         d="M8 8L20 20"
         stroke="#1B1D1F"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+
       />
     </svg>
   );
