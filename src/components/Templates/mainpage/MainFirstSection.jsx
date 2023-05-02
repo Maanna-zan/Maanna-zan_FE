@@ -49,10 +49,12 @@ export const MainFirstSection = () => {
             router.push('/map');
           }}
           style={{ position: 'relative' }}
-        >
-          <MainDeco style={{ position: 'absolute' }} />
-        </StWebBg>
-        <WebWrapper style={{ overflow: 'hidden' }}>
+        ></StWebBg>
+
+        <WebWrapper style={{ position: 'relative' }}>
+          <span style={{ position: 'absolute', left: '-49px', top: '-83px' }}>
+            <MainDeco />
+          </span>
           <GrideGapCol4 style={{ margin: '34px 0 12px 0' }}>
             <FlexRow style={{ justifyContent: 'space-between' }}>
               <StTitleGet>HOT, 여기서 만나잔</StTitleGet>
