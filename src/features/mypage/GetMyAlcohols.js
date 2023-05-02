@@ -76,41 +76,44 @@ const GetMyAlcohols = () => {
   } else {
     return (
       <div>
-        <div
-          style={{
-            display: 'flex',
-            gap: '24px',
-            flexWrap: 'wrap',
-          }}
-        >
-          {currentPageData.map((post) => (
-            <ContainerDiv key={post.apiId}>
-              <div
-                onClick={() => {
-                  push.push(`/alcohols/${post.apiId}`);
-                }}
-              >
-                <img
-                  style={{
-                    width: '384px',
-                    height: '242px',
-                    objectFit: 'cover',
-                    borderRadius: '12px',
+        <LogBox>
+          <div
+            style={{
+              display: 'flex',
+              gap: '24px',
+              flexWrap: 'wrap',
+            }}
+          >
+            {currentPageData.map((post) => (
+              <ContainerDiv key={post.apiId}>
+                <div
+                  onClick={() => {
+                    push.push(`/alcohols/${post.apiId}`);
                   }}
-                  src={post.postList[0].s3Url}
-                  alt={post.place_name}
-                />
-                <div className="flexGap">
-                  <p className="title">{post.place_name}</p>
-                  <div className="flex">
-                    <LikeHeartIcon />
-                    <p className="likecnt">{post.roomLikecnt}</p>
+                >
+                  <img
+                    style={{
+                      width: '384px',
+                      height: '242px',
+                      objectFit: 'cover',
+                      borderRadius: '12px',
+                    }}
+                    src={post.postList[0]?.s3Url || 'noimage_282x200____.png'}
+                    alt={post.place_name}
+                  />
+                  <div className="flexGap">
+                    <p className="title">{post.place_name}</p>
+                    <div className="flex">
+                      <LikeHeartIcon />
+                      <p className="likecnt">{post.roomLikecnt}</p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </ContainerDiv>
-          ))}
-        </div>
+              </ContainerDiv>
+            ))}
+          </div>
+        </LogBox>
+
         <Pagination
           pages={chunkedData.map((_, i) => i + 1)}
           activePage={activePage}
@@ -122,6 +125,12 @@ const GetMyAlcohols = () => {
 };
 
 export default GetMyAlcohols;
+
+const LogBox = styled.div`
+  /* border: 1px solid black; */
+  width: 1210px;
+  height: 960px;
+`;
 
 const ContainerDiv = styled.div`
   display: flex;

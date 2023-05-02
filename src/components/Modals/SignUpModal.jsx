@@ -7,6 +7,7 @@ import { HeadInfo } from '@components/Atoms/SEO/HeadInfo';
 import { ButtonText } from '@components/Atoms/Button';
 import { InputArea } from '@components/Atoms/Input';
 import { useConfirm } from '../../hook/useConfirm';
+import { LightTheme } from '@components/Themes/theme';
 
 export default function SignUpModal({ onClose }) {
   const router = useRouter();
@@ -38,15 +39,6 @@ export default function SignUpModal({ onClose }) {
     setUser((pre) => ({ ...pre, [name]: value }));
   };
   const [passwordError, setPasswordError] = useState(false);
-
-  // const handlePasswordChange = (e) => {
-  //   const { name, value } = e.target;
-  //   setUser((pre) => ({ ...pre, [name]: value }));
-
-  //   if (name === 'checkPassword') {
-  //     setPasswordError(user.password !== value);
-  //   }
-  // };
 
   // passwordCheck 빼고 나머지 라는 뜻
   //3번째 옵션 config
@@ -85,21 +77,6 @@ export default function SignUpModal({ onClose }) {
 
     return isValid;
   };
-  const handlePasswordChange1 = (e) => {
-    const { name, value } = e.target;
-    setUser((pre) => ({ ...pre, [name]: value }));
-
-    if (name === 'checkPassword') {
-      setPasswordError(user.password !== value);
-      if (user.password) {
-        setPasswordError(user.password !== value || !isValidPassword);
-      }
-    } else if (name === 'password') {
-      const validPassword = validatePassword(value);
-      setPasswordError(!validPassword);
-      setIsValidPassword(validPassword);
-    }
-  };
 
   const handlePasswordChange = (e) => {
     const { name, value } = e.target;
@@ -116,6 +93,21 @@ export default function SignUpModal({ onClose }) {
       }
     }
   };
+  const handleCheckPasswordChange = (e) => {
+    const { name, value } = e.target;
+    setUser((pre) => ({ ...pre, [name]: value }));
+    if (name === 'checkPassword') {
+      setPasswordError(user.password !== value);
+      if (user.password) {
+        setPasswordError(user.password !== value || !isValidPassword);
+      }
+    } else if (name === 'password') {
+      const validPassword = validatePassword(value);
+      setPasswordError(!validPassword);
+      setIsValidPassword(validPassword);
+    }
+  };
+
   //타당성 검사 코드
   const validateForm = (userData) => {
     if (!userData.userName) {
@@ -199,6 +191,9 @@ export default function SignUpModal({ onClose }) {
             onChange={changHandler}
             maxLength="5"
             required
+            onKeyDown={(e) => {
+              if (e.key === ' ') e.preventDefault();
+            }}
           />
           <Detaildiv>
             <div className="detailSignUp">닉네임</div>
@@ -206,6 +201,7 @@ export default function SignUpModal({ onClose }) {
           </Detaildiv>
           <div style={{ display: 'flex', gap: '20px' }}>
             <InputArea
+              variant="default"
               size="lg"
               style={{ width: '100%' }}
               type="text"
@@ -216,6 +212,9 @@ export default function SignUpModal({ onClose }) {
               minLength="2"
               maxLength="8"
               required
+              onKeyDown={(e) => {
+                if (e.key === ' ') e.preventDefault();
+              }}
             />
 
             <ButtonText
@@ -237,7 +236,9 @@ export default function SignUpModal({ onClose }) {
           <div style={{ position: 'relative' }}>
             <InputArea
               style={{
-                borderColor: isValidPassword ? '#3DC061' : '#9EA4AA',
+                borderColor: isValidPassword
+                  ? LightTheme.STATUS_POSITIVE
+                  : LightTheme.GRAY_200,
               }}
               type="password"
               name="password"
@@ -249,6 +250,9 @@ export default function SignUpModal({ onClose }) {
               minLength="8"
               maxLength="16"
               required
+              onKeyDown={(e) => {
+                if (e.key === ' ') e.preventDefault();
+              }}
             />
             {isValidPassword && (
               <img
@@ -279,42 +283,52 @@ export default function SignUpModal({ onClose }) {
               style={{
                 borderColor: passwordError
                   ? 'red'
-                  : !passwordError && user.password
-                  ? '#3DC061'
-                  : '#9EA4AA',
+                  : !passwordError &&
+                    user.checkPassword &&
+                    user.password === user.checkPassword
+                  ? LightTheme.STATUS_POSITIVE
+                  : LightTheme.GRAY_200,
               }}
               placeholder="비밀번호를 입력해주세요."
-              onChange={handlePasswordChange1}
+              onChange={handleCheckPasswordChange}
               minLength="8"
               maxLength="16"
               required
+              onKeyDown={(e) => {
+                if (e.key === ' ') e.preventDefault();
+              }}
             />
-            {!passwordError && user.password && (
-              <img
-                src="Group 2066.png"
-                alt="Valid password"
-                style={{
-                  position: 'absolute',
-                  top: '12px',
-                  right: '12px',
-                  width: '20px',
-                  height: '20px',
-                }}
-              />
-            )}
+            {!passwordError &&
+              user.checkPassword &&
+              user.password === user.checkPassword && (
+                <img
+                  src="Group 2066.png"
+                  alt="Valid password"
+                  style={{
+                    position: 'absolute',
+                    top: '12px',
+                    right: '12px',
+                    width: '20px',
+                    height: '20px',
+                  }}
+                />
+              )}
           </div>
 
-          {passwordError && (
+          {passwordError ? (
             <p style={{ color: 'red', fontSize: '12px', marginTop: '-5px' }}>
               비밀번호가 일치하지 않습니다.
             </p>
-          )}
-          {!passwordError && user.password && (
+          ) : !passwordError &&
+            user.checkPassword &&
+            user.password === user.checkPassword ? (
             <p
               style={{ color: '#3DC061', fontSize: '12px', marginTop: '-5px' }}
             >
               비밀번호가 일치합니다.
             </p>
+          ) : (
+            <></>
           )}
           {next ? (
             <>
@@ -333,6 +347,9 @@ export default function SignUpModal({ onClose }) {
                 onChange={changHandler}
                 maxLength="11"
                 required
+                onKeyDown={(e) => {
+                  if (e.key === ' ') e.preventDefault();
+                }}
               />
               <div className="detailSignUp">이메일</div>
 
@@ -351,6 +368,9 @@ export default function SignUpModal({ onClose }) {
                   placeholder="이메일을 입력해주세요."
                   onChange={changHandler}
                   required
+                  onKeyDown={(e) => {
+                    if (e.key === ' ') e.preventDefault();
+                  }}
                 />
                 <ButtonText
                   type="button"
@@ -375,6 +395,9 @@ export default function SignUpModal({ onClose }) {
                 maxLength="8"
                 placeholder="생년월일 8글자를 입력해주세요."
                 onChange={changHandler}
+                onKeyDown={(e) => {
+                  if (e.key === ' ') e.preventDefault();
+                }}
               />
               <ButtonText
                 size="md"

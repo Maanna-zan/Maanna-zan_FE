@@ -184,6 +184,9 @@ export default function SettingModal({ onClose, data }) {
                 name="nickName"
                 value={password.nickName}
                 onChange={changePWInputHandler}
+                onKeyDown={(e) => {
+                  if (e.key === ' ') e.preventDefault();
+                }}
               />
 
               <ButtonText
@@ -255,6 +258,9 @@ export default function SettingModal({ onClose, data }) {
               onChange={handlePasswordChange}
               maxLength="20"
               required
+              onKeyDown={(e) => {
+                if (e.key === ' ') e.preventDefault();
+              }}
             />
             <p>새 비밀번호</p>
             <InputArea
@@ -267,6 +273,9 @@ export default function SettingModal({ onClose, data }) {
               onChange={handlePasswordChange}
               maxLength="20"
               required
+              onKeyDown={(e) => {
+                if (e.key === ' ') e.preventDefault();
+              }}
             />
             <p>비밀번호 확인</p>
             <InputArea
@@ -278,6 +287,9 @@ export default function SettingModal({ onClose, data }) {
               placeholder="비밀번호를 확인해주세요."
               onChange={handlePasswordChange}
               required
+              onKeyDown={(e) => {
+                if (e.key === ' ') e.preventDefault();
+              }}
             />
             {passwordError && (
               <p style={{ color: 'red', fontSize: '12px', marginTop: '-5px' }}>

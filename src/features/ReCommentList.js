@@ -6,6 +6,7 @@ import { InputArea } from '@components/Atoms/Input';
 import { apis } from '@shared/axios';
 import styled from 'styled-components';
 import AddReComment from './AddReComment';
+import { LightTheme } from '@components/Themes/theme';
 
 const ReCommentList = ({ comment }) => {
   // console.log('comment', comment.commentList);
@@ -17,7 +18,7 @@ const ReCommentList = ({ comment }) => {
   const [userNickName, setUserNickName] = useState('');
 
   useEffect(() => {
-    const nick_name = localStorage.getItem('nick_name');
+    const nick_name = cookies.get('nick_name');
     setUserNickName(nick_name);
   }, []);
 
@@ -106,13 +107,13 @@ const ReCommentList = ({ comment }) => {
                       className="Button"
                       onClick={() => handleEdit(comment)}
                     >
-                      수정
+                      수정하기
                     </button>
                     <button
                       className="Button"
                       onClick={() => handleDelete(comment.id)}
                     >
-                      삭제
+                      삭제하기
                     </button>
                   </>
                 )}
@@ -135,22 +136,22 @@ const CommentDiv = styled.div`
   gap: 10px;
   padding: 20px;
   .nickName {
-    font-weight: 700;
+    font-weight: ${LightTheme.FONT_BOLD};
     font-size: 12px;
     line-height: 16px;
   }
   .content {
-    font-weight: 400;
-    font-size: 12px;
+    font-weight: ${LightTheme.FONT_REGULAR};
+    font-size: 14px;
     line-height: 16px;
   }
   .Button {
     border: none;
     background-color: transparent;
-    font-weight: 400;
-    font-size: 12px;
+    font-weight: ${LightTheme.FONT_REGULAR};
+    font-size: 10px;
     line-height: 16px;
-    color: #72787f;
+    color: ${LightTheme.GRAY_500};
     width: 50px;
   }
 `;

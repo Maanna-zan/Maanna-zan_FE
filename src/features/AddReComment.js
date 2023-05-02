@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import { apis } from '@shared/axios';
 import { cookies } from '@shared/cookie';
 import styled from 'styled-components';
+import { LightTheme } from '@components/Themes/theme';
 
 const AddReComment = (comment) => {
   const [reComments, setReComments] = useState(false);
@@ -32,6 +33,7 @@ const AddReComment = (comment) => {
       );
     },
     onSuccess: () => {
+      setReCommentList('');
       alert('댓글 추가를 완료하였습니다.');
     },
     onError: (error) => {
@@ -41,10 +43,10 @@ const AddReComment = (comment) => {
   });
 
   return (
-    <div>
+    <Recomments>
       {reComments ? (
-        <div>
-          <input
+        <div className="Editmode">
+          <Input
             type="text"
             placeholder="답글 입력"
             name="content"
@@ -69,14 +71,21 @@ const AddReComment = (comment) => {
             setReComments(true);
           }}
         >
-          답글달기
+          답글 달기
         </Button>
       )}
-    </div>
+    </Recomments>
   );
 };
 
 export default AddReComment;
+const Recomments = styled.div`
+  display: flex;
+  gap: 20px;
+  .Editmode {
+    display: flex;
+  }
+`;
 
 const Button = styled.button`
   border: none;
@@ -84,6 +93,17 @@ const Button = styled.button`
   font-weight: 400;
   font-size: 12px;
   line-height: 16px;
-  color: #72787f;
+  color: ${LightTheme.GRAY_400};
   width: 60px;
+  cursor: pointer;
+  :hover {
+    color: ${LightTheme.GRAY_800};
+  }
+`;
+const Input = styled.input`
+  font-size: 12px;
+  width: 550px;
+  ::placeholder {
+    color: ${LightTheme.GRAY_200};
+  }
 `;

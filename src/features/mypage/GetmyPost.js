@@ -77,41 +77,44 @@ const GetmyPost = () => {
   } else {
     return (
       <div>
-        <div
-          style={{
-            display: 'flex',
-            gap: '24px',
-            flexWrap: 'wrap',
-          }}
-        >
-          {currentPageData.map((post) => (
-            <ContainerDiv key={post.id}>
-              <div
-                onClick={() => {
-                  push.push(`/community/${post.id}`);
-                }}
-              >
-                <img
-                  style={{
-                    width: '384px',
-                    height: '242px',
-                    objectFit: 'cover',
-                    borderRadius: '12px',
+        <LogBox>
+          <div
+            style={{
+              display: 'flex',
+              gap: '24px',
+              flexWrap: 'wrap',
+            }}
+          >
+            {currentPageData.map((post) => (
+              <ContainerDiv key={post.id}>
+                <div
+                  onClick={() => {
+                    push.push(`/community/${post.id}`);
                   }}
-                  src={post.s3Url}
-                  alt={post.title}
-                />
-                <div className="flexGap">
-                  <p className="title">{post.title}</p>
-                  <div className="flex">
-                    <LikeHeartIcon />
-                    <p className="likecnt">{post.likecnt}</p>
+                >
+                  <img
+                    style={{
+                      width: '384px',
+                      height: '242px',
+                      objectFit: 'cover',
+                      borderRadius: '12px',
+                    }}
+                    src={post.s3Url || 'noimage_282x200____.png'}
+                    alt={post.title}
+                  />
+                  <div className="flexGap">
+                    <p className="title">{post.title}</p>
+                    <div className="flex">
+                      <LikeHeartIcon />
+                      <p className="likecnt">{post.likecnt}</p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </ContainerDiv>
-          ))}
-        </div>
+              </ContainerDiv>
+            ))}
+          </div>
+        </LogBox>
+
         <Pagination
           pages={chunkedData.map((_, i) => i + 1)}
           activePage={activePage}
@@ -123,6 +126,12 @@ const GetmyPost = () => {
 };
 
 export default GetmyPost;
+
+const LogBox = styled.div`
+  /* border: 1px solid black; */
+  width: 1210px;
+  height: 960px;
+`;
 
 const ContainerDiv = styled.div`
   display: flex;

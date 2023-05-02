@@ -165,21 +165,27 @@ export default function SignInModal({ onClose, setShowSignUpModal }) {
                 className="InputArea"
                 type="text"
                 size="lg"
-                variant="default"
+                variant="defaultWithActive"
                 name="email"
                 value={user.email}
                 onChange={changHandler}
                 placeholder="이메일을 입력하세요"
+                onKeyDown={(e) => {
+                  if (e.key === ' ') e.preventDefault();
+                }}
               />
               <InputArea
                 className="InputArea"
                 size="lg"
-                variant="default"
+                variant="defaultWithActive"
                 type="password"
                 name="password"
                 value={user.password}
                 onChange={changHandler}
                 placeholder="비밀번호를 입력하세요"
+                onKeyDown={(e) => {
+                  if (e.key === ' ') e.preventDefault();
+                }}
               />
               <ButtonText
                 style={{ marginTop: '30px' }}
