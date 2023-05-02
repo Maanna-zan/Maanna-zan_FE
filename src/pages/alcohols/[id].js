@@ -30,6 +30,7 @@ import { useLikeStore } from '../../hook/useLikes';
 import { PenIcon } from '@components/Atoms/PenIcon';
 import { Map, MapMarker } from 'react-kakao-maps-sdk';
 import { MinStar } from '@components/Atoms/PostStar';
+import Link from 'next/link';
 const StoreDetail = () => {
   const router = useRouter();
   const { query } = useRouter();
@@ -223,107 +224,109 @@ const StoreDetail = () => {
             <div style={{ marginBottom: '80px' }}>
               {data?.postList.map((post) => (
                 <div key={post.id}>
-                  <BoxTextReal
-                    size="20px"
-                    variant="gray400BolderBox"
-                    style={{ height: '316px', marginBottom: '12px' }}
-                  >
-                    <FlexRow style={{ gap: '10px' }}>
-                      <StProfile>{/* 왼쪽이미지 */}</StProfile>
-                      <div style={{ width: '100%', height: '24px' }}>
-                        {/* 오른쪽 내용 */}
-                        <FlexRow
-                          style={{
-                            justifyContent: 'space-between',
-                            marginBottom: '10px',
-                            textAline: 'right',
-                          }}
-                        >
-                          <FlexColumn style={{ gap: '10px' }}>
-                            <div>{post.nickname}</div>
-                          </FlexColumn>
-                          <MinStar />
+                  <Link href={`/community/${post?.id}`}>
+                    <BoxTextReal
+                      size="20px"
+                      variant="gray400BolderBox"
+                      style={{ height: '316px', marginBottom: '12px' }}
+                    >
+                      <FlexRow style={{ gap: '10px' }}>
+                        <StProfile>{/* 왼쪽이미지 */}</StProfile>
+                        <div style={{ width: '100%', height: '24px' }}>
+                          {/* 오른쪽 내용 */}
                           <FlexRow
                             style={{
-                              width: '20%',
-                              gap: '10px',
-                              alignItems: 'center',
                               justifyContent: 'space-between',
-                              font: `var(   --body2-bold) Pretendard sans-serif`,
+                              marginBottom: '10px',
+                              textAline: 'right',
                             }}
                           >
-                            <span
-                              onClick={() => likeStoreHandler(apiId)}
-                              style={{ cursor: 'pointer' }}
-                            >
-                              {likeComment ? (
-                                <LikeHeartIcon
-                                  style={{
-                                    fill: `${LightTheme.FONT_SECONDARY}`,
-                                  }}
-                                ></LikeHeartIcon>
-                              ) : (
-                                <DisLikeHeartIcon
-                                  className="heartGray"
-                                  style={{
-                                    fill: `${LightTheme.FONT_SECONDARY}`,
-                                  }}
-                                />
-                              )}
-                            </span>
-                            <div>좋아요</div>
-                            <div> {post.likecnt}개</div>
-                          </FlexRow>
-                        </FlexRow>
-
-                        <div
-                          style={{
-                            margin: '0px 0px',
-                            font: `var(--label2-regular) Pretendard sans-serif`,
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                            display: '-webkit-box',
-                            WebkitLineClamp: '1',
-                            WebkitBoxOrient: 'vertical',
-                          }}
-                        >
-                          {post.title}
-                        </div>
-                        <div
-                          style={{
-                            margin: '0px 0px 8px 0 ',
-                            font: `var( --label2-regular) Pretendard sans-serif`,
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                            display: '-webkit-box',
-                            WebkitLineClamp: '2',
-                            WebkitBoxOrient: 'vertical',
-                          }}
-                        >
-                          {post.description}
-                        </div>
-
-                        <GrideGapCol4>
-                          <ImgWrapper152>
-                            <ImgCenter
+                            <FlexColumn style={{ gap: '10px' }}>
+                              <div>{post.nickname}</div>
+                            </FlexColumn>
+                            <MinStar />
+                            <FlexRow
                               style={{
-                                width: '100%',
-                                height: '100%',
-                                overflow: 'hidden',
-                                borderRadius: '8px',
+                                width: '20%',
+                                gap: '10px',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                font: `var(   --body2-bold) Pretendard sans-serif`,
                               }}
-                              src={
-                                post.s3Url
-                                  ? post.s3Url
-                                  : '/noimage_282x248_.png'
-                              }
-                              alt="store"
-                            />
-                          </ImgWrapper152>
-                        </GrideGapCol4>
-                      </div>
-                    </FlexRow>
-                  </BoxTextReal>
+                            >
+                              <span
+                                onClick={() => likeStoreHandler(apiId)}
+                                style={{ cursor: 'pointer' }}
+                              >
+                                {likeComment ? (
+                                  <LikeHeartIcon
+                                    style={{
+                                      fill: `${LightTheme.FONT_SECONDARY}`,
+                                    }}
+                                  ></LikeHeartIcon>
+                                ) : (
+                                  <DisLikeHeartIcon
+                                    className="heartGray"
+                                    style={{
+                                      fill: `${LightTheme.FONT_SECONDARY}`,
+                                    }}
+                                  />
+                                )}
+                              </span>
+                              <div>좋아요</div>
+                              <div> {post.likecnt}개</div>
+                            </FlexRow>
+                          </FlexRow>
+
+                          <div
+                            style={{
+                              margin: '0px 0px',
+                              font: `var(--label2-regular) Pretendard sans-serif`,
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              display: '-webkit-box',
+                              WebkitLineClamp: '1',
+                              WebkitBoxOrient: 'vertical',
+                            }}
+                          >
+                            {post.title}
+                          </div>
+                          <div
+                            style={{
+                              margin: '0px 0px 8px 0 ',
+                              font: `var( --label2-regular) Pretendard sans-serif`,
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              display: '-webkit-box',
+                              WebkitLineClamp: '2',
+                              WebkitBoxOrient: 'vertical',
+                            }}
+                          >
+                            {post.description}
+                          </div>
+
+                          <GrideGapCol4>
+                            <ImgWrapper152>
+                              <ImgCenter
+                                style={{
+                                  width: '100%',
+                                  height: '100%',
+                                  overflow: 'hidden',
+                                  borderRadius: '8px',
+                                }}
+                                src={
+                                  post.s3Url
+                                    ? post.s3Url
+                                    : '/noimage_282x248_.png'
+                                }
+                                alt="store"
+                              />
+                            </ImgWrapper152>
+                          </GrideGapCol4>
+                        </div>
+                      </FlexRow>
+                    </BoxTextReal>
+                  </Link>
                 </div>
               ))}
             </div>

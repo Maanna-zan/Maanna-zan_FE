@@ -36,7 +36,7 @@ const StPlace_name = styled.div`
 const StWebBg = styled.div`
   width: 100vw;
   height: 300px;
-  background-image: url('/banner-CommunityList.png');
+  background-image: url('/banner-community.jpg');
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
@@ -132,9 +132,7 @@ const CommunityList = () => {
                     variant="realDefaultBox"
                     size="nonePadding"
                   >
-                    <ImgWrapper384x360
-
-                    >
+                    <ImgWrapper384x360>
                       <ImgCenter
                         style={{
                           width: '100%',
