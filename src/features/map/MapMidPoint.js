@@ -10,6 +10,7 @@ import { LightTheme } from '@components/Themes/theme';
 import { ButtonText } from '@components/Atoms/Button';
 import { useRouter } from 'next/router';
 import { InputArea } from '@components/Atoms/Input';
+import MapAppointment from './MapAppointment';
 
 function MapMidPoint() {
     // queryKey에 캐싱하여 값 불러오기위해 queryClient선언
@@ -506,7 +507,7 @@ function MapMidPoint() {
                                 }}
                             />
                                     <DeparturesWrapper>
-                                        {InputValuesProp.filter(value => value !== "").map((value, index) => ( 
+                                        {InputValuesProp?.filter(value => value !== "").map((value, index) => ( 
                                             <div key={index} style={{ display: 'flex', alignItems: 'center', zIndex: '1000'}}>
                                                 <div 
                                                 style={{ 
@@ -671,6 +672,8 @@ function MapMidPoint() {
                             </FlexColumnCenter>
                         </div>
                     </MapSection>
+                    <MapAppointment checkedPlace={checkedPlace} />
+                        {/* <p>선택한 장소: {checkedPlace?.place_name}</p> */}
                 </FlexRow>
             </WebWrapperHeight>
         </WebWrapper>

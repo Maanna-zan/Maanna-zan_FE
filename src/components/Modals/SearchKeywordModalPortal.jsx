@@ -25,8 +25,7 @@ function SearchedKeywordLandingPage() {
   const [currentInputIndex, setCurrentInputIndex] = useState(-1);
   //  입력값 상태값 설정
   const [inputValues, setInputValues] = useState(
-    Array.from({ length: 4 }, () => ''),
-  );
+    Array.from({ length: 4 }, () => ''),);
   //  자식 컴포넌트의 props 값 state
   const [checkedPlace, setCheckedPlace] = useState();
   //  모달창 검색값 있는 그대로 배열로 만들어주는 state 값(다중마커위한)
@@ -38,17 +37,11 @@ function SearchedKeywordLandingPage() {
   //  지도 초기 위치 및 위도경도 state값
   const [center, setCenter] = useState({
     lat: 37.49676871972202,
-    lng: 127.02474726969814,
-  });
+    lng: 127.02474726969814,});
   //  자식 컴포넌트 props 꺼내서 쓸 수 있도록 한다.
   function checkedPlaceHandler(place) {
     // checkedPlace 객체를 request 폼으로 가공
     const { x, y } = place;
-    //  x,y값 undefined일 시 조건문
-    if (!x || !y) {
-      console.error('Invalid place object:', place);
-      return;
-    }
     //  place 매개변수 받아 모달창 props의 좌표값 받아서 지도 옮겨줌.
     setCenter({ lat: y, lng: x });
     // 인풋박스 각각의 값에 각각의 props state값 주는 로직.
@@ -64,7 +57,6 @@ function SearchedKeywordLandingPage() {
       [currentInputIndex === 0 ? 'x' : `x${currentInputIndex + 1}`]: x,
       [currentInputIndex === 0 ? 'y' : `y${currentInputIndex + 1}`]: y,
     };
-    console.log("@@111111newInputValues@@",newInputValues)
     //  setCheckedPlace함수 서버 통신위하여 가공
     setCheckedPlace(newCheckedPlace);
     //	positions state에 검색된 state값 차곡차곡 담기위한 다중마커state값 (place는 모달창에서 검색 및 선택된 값)
@@ -92,12 +84,10 @@ function SearchedKeywordLandingPage() {
   // X 버튼 Handler(해당 인풋박스 값 초기화(index줘서 각각의 인풋 박스 값 취소 가능) -> 수정(인풋박스값 삭제하더라도 checkedPlace값은 반영 안 되어 서버 페이로드가 잘못 감)
   // const onInputClearHandler = (index) => {
   //   setInputValues(prevInputValues => {
-  //     console.log("@@22222newInputValues@@",newInputValues)
   //     const newInputValues = [...prevInputValues];
   //     newInputValues[index] = '';
   //     return newInputValues;
   //   });
-    
   // }
   const onInputClearHandler = (index) => {
     const newInputValues = [...inputValues];
@@ -222,7 +212,6 @@ function SearchedKeywordLandingPage() {
       setCenter(midPoint);
     }
   }, [midPoint]);
-  console.log('midPoint=>', midPoint);
 
   //  checkedPlace로 props값 받아오면 useEffect 실행하여 지도에 마커 찍히도록 gettingLocation 함수 실행.
   useEffect(() => {
@@ -256,17 +245,6 @@ function SearchedKeywordLandingPage() {
   const midPointProp = midPoint;
   //  MIDPOINTPROP키값으로 midPoint값 저장. 해당 키 값으로 값 불러올 수 있음.
   queryClient.setQueryData(['MIDPOINTPROP'], midPointProp);
-
-  // 266 으로 가서 글을 확인해주세요 ~
-  // const [value, onChange] = useState(new Date());
-  // console.log('onChange', Calendar);
-  // const mark = ['2023-04-20', '2023-04-28'];
-
-  // const clickDayHandler = (value, event) => {
-  //   console.log('value', value);
-  //   alert(`Clicked day:  ${moment(value).format('MM - DD')}`);
-  // };
-  //value -> 원래 형태 'YYYY년 MM월 DD일' , 'YYYY-MM-DD', 'MM-DD' 이런식으로 변경이 가능합니다
 
   return (
     <WebWrapper>
@@ -312,43 +290,6 @@ function SearchedKeywordLandingPage() {
           <FlexColumnCenter style={{margin: '0 200px 250px 25px'}}>
             <TitleStyled>친구와 본인의 </TitleStyled>
             <Highlighting>위치를 입력해주세요</Highlighting>
-            {/* <Div className="calendar-container">
-              <Calendar
-                //196 줄의 핸들러 함수 -> 날짜 얼럿이 뜹니다.
-                onChange={clickDayHandler}
-                //유즈스테이트로 달력에서 누른 날의 밸류 값이 밑에 글씨로 떠오릅니다.
-                // onChange={onChange}
-                value={value}
-                //일에서 토요일로 요일을 정렬해줍니다.
-                calendarType="US"
-                //1일 2일 의 일자를 화면상에서 뺴줍니다.
-                formatDay={(locale, date) => moment(date).format('DD')}
-                className="mx-auto w-full text-sm border-b"
-                //타일에 dot를 찍어주는 기능을 합니다.
-                tileContent={({ date, view }) => {
-                  // 날짜 타일에 컨텐츠 추가하기 (html 태그)
-                  // 추가할 html 태그를 변수 초기화
-                  let html = [];
-                  // 현재 날짜가 post 작성한 날짜 배열(mark)에 있다면, dot div 추가
-                  if (
-                    mark.find((x) => x === moment(date).format('YYYY-MM-DD'))
-                  ) {
-                    html.push(<div className="dot"></div>);
-                  }
-                  // 다른 조건을 주어서 html.push 에 추가적인 html 태그를 적용할 수 있음.
-                  return (
-                    <>
-                      <div className="flex justify-center items-center absoluteDiv">
-                        {html}
-                      </div>
-                    </>
-                  );
-                }}
-              />
-              <div className="text-gray-500 mt-4">
-                {moment(value).format('YYYY- MM- DD')}
-              </div>
-            </Div> */}
             <div style={{width: '100%'}}>
               {inputs}
               {renderModal()}
@@ -443,76 +384,4 @@ const AddInputButtonStyle = styled.button`
   background-position: 140px center; //  위치
   background-size: 22px; // 이미지 크기
   box-sizing: border-box; //   input의 넓이가 부모 넓이보다 넘는 현상방지 */
-`;
-
-const Div = styled.div`
-  .react-calendar {
-    width: 487px;
-    height: 318px;
-    background: rgb(255, 255, 255);
-    /* border: 1px solid #a0a096; */
-    border-radius: 8px;
-    border: 1px solid #e8ebed;
-    font-family: Arial, Helvetica, sans-serif;
-    line-height: 1.125em;
-    padding: 10px;
-    margin: 15px 0 5px 0;
-  }
-  .react-calendar__viewContainer {
-    /* margin-top: -20px; */
-  }
-  .react-calendar__tile {
-    padding: 8px 10px;
-  }
-  .react-calendar__tile--now:enabled:hover,
-  .react-calendar__tile--now:enabled:focus {
-    color: #ff4840;
-    background: white;
-  }
-  .react-calendar__tile--now {
-    background: #ff4840;
-    border-radius: 12px;
-    width: fit-content;
-    block-size: fit-content;
-  }
-  .react-calendar__navigation__label > span {
-    font-weight: 600;
-    font-size: 16px;
-    line-height: 24px;
-  }
-  .react-calendar__tile:enabled:hover,
-  .react-calendar__tile:enabled:focus {
-    border-radius: 12px;
-    /* Primary Color/active */
-
-    background: #ffe0df;
-  }
-  .react-calendar__month-view__days__day--weekend {
-    color: black;
-  }
-  /* react-calendar__tile react-calendar__month-view__days__day react-calendar__month-view__days__day--weekend default_pointer_cs */
-  .react-calendar__tile--active {
-    background: #ff6a64;
-    border-radius: 12px;
-  }
-  .react-calendar__month-view__days__day—weekend {
-    color: #000000;
-  }
-  /* react-calendar__navigation__arrow react-calendar__navigation__next2-button default_pointer_cs */
-  .react-calendar__navigation :hover {
-    border-radius: 50%;
-    color: red;
-  }
-  .react-calendar__month-view__weekdays {
-    font-weight: 600;
-    font-size: 16px;
-    line-height: 24px;
-  }
-  .dot {
-    height: 8px;
-    width: 8px;
-    background-color: #f87171;
-    border-radius: 50%;
-    margin-left: 22px;
-  }
 `;
