@@ -32,7 +32,18 @@ import { useGetStoredetail } from '../../hook/alcohol/useGetStore';
 const Community = () => {
   const { query } = useRouter();
   const router = useRouter();
-
+  const handleShareClick = async () => {
+    try {
+      await navigator.share({
+        title,
+        text,
+        url,
+      });
+      alert('성공적으로 공유가 되었습니다.');
+    } catch (err) {
+      alert('공유중에 에러가 났습니다. 다시 시도해주십시오', err);
+    }
+  };
   const { id } = router.query;
   const { data, isLoading, isError, isSuccess } = useQuery({
     queryKey: ['GET_COMMUNITYDETAIL'],
@@ -207,27 +218,33 @@ const Community = () => {
       setIsUpdated(false);
     }
   }, [isUpdated]);
+  console.log(handleShareClick, 'handleShareClick');
 
   if (postIsLoading || postIsLikeLoading) return <div>로딩중...</div>;
   return (
     <div>
       {isEditMode ? (
-        <StBgeditMode>
+        <StBgeditMode style={{ paddingBottom: '200px' }}>
           <form
             onSubmit={handleSubmit}
             style={{
               paddingTop: '28px',
+              // paddingBottom: '300px',
               overflow: 'hidden',
               boxSizing: 'border-box',
-              height: `calc(100vh - ${394}px)`,
+              height: '1200px',
+              borderRadius: '10px',
             }}
           >
             <WebWrapper792px
               style={{
                 margin: '0 auto',
                 position: 'relative',
+                overflow: 'hidden',
+                boxSizing: 'border-box',
                 backgroundColor: 'white',
                 borderRadius: '10px',
+                paddingBottom: ' 40px',
               }}
             >
               <FlexRow
@@ -369,18 +386,21 @@ const Community = () => {
                   >
                     {like ? <LikeHeartIcon /> : <DisLikeHeartIcon />}
                   </span>
-                  <ShareApiBtn
+                  <span
                     style={{
                       cursor: ' pointer',
                       height: '24px',
                       marginRight: '2px',
                     }}
                     title={`만나잔에 오신걸 환영합니다!`}
-                    url={`${apis}/posts/${posts[query.id - 1]}/`}
+                    url={`${apis}/community/${posts[query.id - 1]}/`}
                     text={`여기서 만나잔!! ${
                       posts[query.id - 1]?.storename
                     }친구가 공유한 가게 구경하기`}
-                  ></ShareApiBtn>
+                    onClick={() => handleShareClick}
+                  >
+                    <ShareBtn />
+                  </span>
                 </FlexRow>
               </FlexRow>
               <div style={{ width: '100%', margin: '24px auto' }}>
@@ -462,6 +482,7 @@ const Community = () => {
                   backgroundColor: 'transparent',
                   boxShadow: 'none',
                   float: 'right',
+                  marginTop: '18px',
                 }}
                 type="submit"
               >
@@ -469,7 +490,7 @@ const Community = () => {
                   variant="redBox"
                   style={{
                     padding: '10px 20px',
-                    marginBottom: '28px',
+
                     border: 'none',
                     color: 'white',
                     borderRadius: '10px',
@@ -482,230 +503,242 @@ const Community = () => {
           </form>
         </StBgeditMode>
       ) : (
-        <form
-          style={{
-            paddingTop: '28px',
-            overflow: 'hidden',
-            boxSizing: 'border-box',
-          }}
-        >
-          <WebWrapper792px style={{ margin: '0 auto', position: 'relative' }}>
-            <div style={{ marginBottom: '24px' }}>
-              <div
-                style={{
-                  font: `var(--head2-bold) Pretendard sans-serif`,
-
-                  marginBottom: '28px',
-                }}
-              >
-                {post?.title}
-              </div>
-              <FlexRow
-                style={{
-                  justifyContent: 'space-between',
-                  marginBottom: '10px',
-                }}
-              >
-                <FlexRow
-                  style={{
-                    gap: '10px',
-                    font: `var( --body1-medium) Pretendard sans-serif`,
-                  }}
-                >
-                  <div></div>
-                  <div>{post?.nickname}</div>
-                </FlexRow>
-
-                {/* <div>{post?.createAt.substr(0, 10)}</div> */}
-              </FlexRow>
-              <FlexRow
-                style={{
-                  justifyContent: 'space-between',
-                  marginBottom: '10px',
-                }}
-              >
-                <FlexRow style={{ gap: '24px' }}>
-                  <FlexRow style={{ gap: '10px' }}>
-                    <div>
-                      <AderessMarker />
-                    </div>
-                    <div>장소</div>
-                  </FlexRow>
-
-                  <div>{post?.storename}</div>
-                </FlexRow>
-                <FlexRow
-                  style={{
-                    gap: '20px',
-                    height: '24px',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <span
-                    onClick={() => likePostHandler(postId)}
-                    style={{ cursor: 'pointer' }}
-                  >
-                    {like ? <LikeHeartIcon /> : <DisLikeHeartIcon />}
-                  </span>
-                  <ShareApiBtn
-                    style={{ cursor: ' pointer' }}
-                    title={`만나잔에 오신걸 환영합니다!`}
-                    url={`${apis}/posts/${post?.id}/`}
-                    text={`여기서 만나잔!! ${post?.storename}친구가 공유한 가게 구경하기`}
-                  ></ShareApiBtn>
-                </FlexRow>
-              </FlexRow>
-              <div style={{ width: '100%', marginBottom: '24px' }}>
-                <ImgWrapper792>
-                  <ImgCenter
-                    src={post?.s3Url ? post?.s3Url : '/noimage_282x248_.png'}
-                  ></ImgCenter>
-                </ImgWrapper792>
-              </div>
-              <div style={{ width: '100%', marginBottom: '50px' }}>
-                {post?.description}
-              </div>
-              <FlexRow
-                style={{
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                }}
-              >
-                <FlexRow style={{ gap: '24px' }}>
-                  <FlexRow style={{ gap: '10px' }}>
-                    <div
-                      style={{
-                        font: `var(--body2-medium) Pretendard sans-serif`,
-                      }}
-                    >
-                      좋아요
-                    </div>
-                    <div>{post?.likecnt}</div>
-                  </FlexRow>
-                  <FlexRow style={{ gap: '10px' }}>
-                    <div
-                      style={{
-                        font: `var(--body2-medium) Pretendard sans-serif`,
-                      }}
-                    >
-                      댓글
-                    </div>
-                    <div>{post?.commentList?.length}</div>
-                  </FlexRow>
-                  <FlexRow style={{ gap: '10px' }}>
-                    <div
-                      style={{
-                        font: `var(--body2-medium) Pretendard sans-serif`,
-                      }}
-                    >
-                      조회수
-                    </div>
-                    <div>{post?.viewCount}</div>
-                  </FlexRow>
-                </FlexRow>
-                {/* 카테고리 */}
-                <BoxTextReal
-                  size="nonePadding"
-                  variant="grayBolderBox"
-                  padding="4px 16px"
-                  borderRadius="20px"
-                  style={{
-                    font: `var(--caption1-regular) Pretendard sans-serif`,
-                  }}
-                >
-                  {resultcategoryNames}
-                </BoxTextReal>
-              </FlexRow>
-            </div>
-
-            <FlexColumn
-              style={{
-                width: '80px',
-                height: '192px',
-                gap: '24px',
-                position: 'absolute',
-                top: '200px',
-                right: '-110px',
-                border: '1px solid #eee',
-                padding: '8px auto',
-                borderRadius: '8px',
-                boxSizing: 'border-box',
-                justifyContent: 'space-around',
-              }}
-            >
-              <FlexColumn
-                style={{
-                  gap: '4px',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  display: 'flex',
-                  textAlign: 'center',
-                }}
-                onClick={() => setIsEditMode(!isEditMode)}
-              >
+        <div>
+          <form
+            style={{
+              paddingTop: '28px',
+              overflow: 'hidden',
+              boxSizing: 'border-box',
+            }}
+          >
+            <WebWrapper792px style={{ margin: '0 auto', position: 'relative' }}>
+              <div style={{ marginBottom: '24px' }}>
                 <div
                   style={{
+                    font: `var(--head2-bold) Pretendard sans-serif`,
+
+                    marginBottom: '28px',
+                  }}
+                >
+                  {post?.title}
+                </div>
+                <FlexRow
+                  style={{
+                    justifyContent: 'space-between',
+                    marginBottom: '10px',
+                  }}
+                >
+                  <FlexRow
+                    style={{
+                      gap: '10px',
+                      font: `var( --body1-medium) Pretendard sans-serif`,
+                    }}
+                  >
+                    <div></div>
+                    <div>{post?.nickname}</div>
+                  </FlexRow>
+
+                  {/* <div>{post?.createAt.substr(0, 10)}</div> */}
+                </FlexRow>
+                <FlexRow
+                  style={{
+                    justifyContent: 'space-between',
+                    marginBottom: '10px',
+                  }}
+                >
+                  <FlexRow style={{ gap: '24px' }}>
+                    <FlexRow style={{ gap: '10px' }}>
+                      <div>
+                        <AderessMarker />
+                      </div>
+                      <div>장소</div>
+                    </FlexRow>
+
+                    <div>{post?.storename}</div>
+                  </FlexRow>
+                  <FlexRow
+                    style={{
+                      gap: '20px',
+                      height: '24px',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <span
+                      onClick={() => likePostHandler(postId)}
+                      style={{ cursor: 'pointer' }}
+                    >
+                      {like ? <LikeHeartIcon /> : <DisLikeHeartIcon />}
+                    </span>
+                    <span
+                      style={{
+                        cursor: ' pointer',
+                        height: '24px',
+                        marginRight: '2px',
+                      }}
+                      title={`만나잔에 오신걸 환영합니다!`}
+                      url={`${apis}/community/${posts[query.id - 1]}/`}
+                      text={`여기서 만나잔!! ${
+                        posts[query.id - 1]?.storename
+                      }친구가 공유한 가게 구경하기`}
+                      onClick={() => handleShareClick}
+                    >
+                      <ShareBtn />
+                    </span>
+                  </FlexRow>
+                </FlexRow>
+                <div style={{ width: '100%', marginBottom: '24px' }}>
+                  <ImgWrapper792>
+                    <ImgCenter
+                      src={post?.s3Url ? post?.s3Url : '/noimage_282x248_.png'}
+                    ></ImgCenter>
+                  </ImgWrapper792>
+                </div>
+                <div style={{ width: '100%', marginBottom: '50px' }}>
+                  {post?.description}
+                </div>
+                <FlexRow
+                  style={{
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}
+                >
+                  <FlexRow style={{ gap: '24px' }}>
+                    <FlexRow style={{ gap: '10px' }}>
+                      <div
+                        style={{
+                          font: `var(--body2-medium) Pretendard sans-serif`,
+                        }}
+                      >
+                        좋아요
+                      </div>
+                      <div>{post?.likecnt}</div>
+                    </FlexRow>
+                    <FlexRow style={{ gap: '10px' }}>
+                      <div
+                        style={{
+                          font: `var(--body2-medium) Pretendard sans-serif`,
+                        }}
+                      >
+                        댓글
+                      </div>
+                      <div>{post?.commentList?.length}</div>
+                    </FlexRow>
+                    <FlexRow style={{ gap: '10px' }}>
+                      <div
+                        style={{
+                          font: `var(--body2-medium) Pretendard sans-serif`,
+                        }}
+                      >
+                        조회수
+                      </div>
+                      <div>{post?.viewCount}</div>
+                    </FlexRow>
+                  </FlexRow>
+                  {/* 카테고리 */}
+                  <BoxTextReal
+                    size="nonePadding"
+                    variant="grayBolderBox"
+                    padding="4px 16px"
+                    borderRadius="20px"
+                    style={{
+                      font: `var(--caption1-regular) Pretendard sans-serif`,
+                    }}
+                  >
+                    {resultcategoryNames}
+                  </BoxTextReal>
+                </FlexRow>
+              </div>
+
+              <FlexColumn
+                style={{
+                  width: '80px',
+                  height: '192px',
+                  gap: '24px',
+                  position: 'absolute',
+                  top: '200px',
+                  right: '-110px',
+                  border: '1px solid #eee',
+                  padding: '8px auto',
+                  borderRadius: '8px',
+                  boxSizing: 'border-box',
+                  justifyContent: 'space-around',
+                }}
+              >
+                <FlexColumn
+                  style={{
+                    gap: '4px',
                     justifyContent: 'center',
                     alignItems: 'center',
                     display: 'flex',
                     textAlign: 'center',
-                    font: `var( --body1-medium) Pretendard sans-serif`,
+                  }}
+                  onClick={() => setIsEditMode(!isEditMode)}
+                >
+                  <div
+                    style={{
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      display: 'flex',
+                      textAlign: 'center',
+                      font: `var( --body1-medium) Pretendard sans-serif`,
+                      cursor: 'pointer',
+                    }}
+                  >
+                    <BoxTextReal
+                      size="nonePadding"
+                      variant="realDefaultBox"
+                      style={{}}
+                    >
+                      <AderessIcon />
+                    </BoxTextReal>
+                  </div>
+                  <div
+                    type="submit"
+                    style={{
+                      color: `${LightTheme.FONT_SECONDARY}`,
+                      cursor: 'pointer',
+                    }}
+                  >
+                    수정하기
+                  </div>
+                </FlexColumn>
+                <FlexColumn
+                  style={{
+                    gap: '4px',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    display: 'flex',
+                    textAlign: 'center',
                     cursor: 'pointer',
                   }}
+                  onClick={() => deletePostHandler(postId)}
                 >
                   <BoxTextReal
                     size="nonePadding"
                     variant="realDefaultBox"
-                    style={{}}
+                    style={{
+                      font: `var( --body1-medium) Pretendard sans-serif`,
+                    }}
                   >
-                    <AderessIcon />
+                    <DeleteIcon />
                   </BoxTextReal>
-                </div>
-                <div
-                  type="submit"
-                  style={{
-                    color: `${LightTheme.FONT_SECONDARY}`,
-                    cursor: 'pointer',
-                  }}
-                >
-                  수정하기
-                </div>
+                  <div
+                    style={{
+                      color: `${LightTheme.FONT_SECONDARY}`,
+                      cursor: 'pointer',
+                    }}
+                  >
+                    삭제하기
+                  </div>
+                </FlexColumn>
               </FlexColumn>
-              <FlexColumn
-                style={{
-                  gap: '4px',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  display: 'flex',
-                  textAlign: 'center',
-                  cursor: 'pointer',
-                }}
-                onClick={() => deletePostHandler(postId)}
-              >
-                <BoxTextReal
-                  size="nonePadding"
-                  variant="realDefaultBox"
-                  style={{ font: `var( --body1-medium) Pretendard sans-serif` }}
-                >
-                  <DeleteIcon />
-                </BoxTextReal>
-                <div
-                  style={{
-                    color: `${LightTheme.FONT_SECONDARY}`,
-                    cursor: 'pointer',
-                  }}
-                >
-                  삭제하기
-                </div>
-              </FlexColumn>
-            </FlexColumn>
-          </WebWrapper792px>
-        </form>
+            </WebWrapper792px>
+          </form>
+          <AddComment />
+          <CommentsList style={{ paddingBottom: '80px' }}></CommentsList>
+        </div>
       )}
-
-      <AddComment />
-      <CommentsList style={{ paddingBottom: '80px' }}></CommentsList>
     </div>
   );
 };
