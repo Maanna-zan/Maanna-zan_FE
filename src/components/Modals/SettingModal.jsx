@@ -37,7 +37,7 @@ export default function SettingModal({ onClose, data }) {
     },
     // onError 콜백 함수 구현
     onError: (error) => {
-      console.log(error.response.status);
+      // console.log(error.response.status);
       const status = error.response.status;
       // // 에러 처리
       if (status == 415) {
@@ -47,7 +47,7 @@ export default function SettingModal({ onClose, data }) {
       }
     },
     onSuccess: (data) => {
-      console.log('data', data);
+      // console.log('data', data);
       alert('닉네임 변경이 완료됐습니다.');
       onClose();
       router.push('/mypage');
