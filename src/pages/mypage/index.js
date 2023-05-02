@@ -57,7 +57,7 @@ const MyPage = () => {
               style={{ display: 'flex', gap: '40px', alignContent: 'center' }}
             >
               <p
-                style={{ color: 'red' }}
+                style={{ color: 'red', cursor: 'pointer' }}
                 onClick={() => {
                   setSettingMyPage('log');
                 }}
@@ -65,6 +65,7 @@ const MyPage = () => {
                 기록
               </p>
               <p
+                style={{ cursor: 'pointer' }}
                 onClick={() => {
                   setSettingMyPage('post');
                 }}
@@ -72,6 +73,7 @@ const MyPage = () => {
                 내가 작성한 글 보기
               </p>
               <p
+                style={{ cursor: 'pointer' }}
                 onClick={() => {
                   setSettingMyPage('like');
                 }}
@@ -97,6 +99,7 @@ const MyPage = () => {
               }}
             >
               <p
+                style={{ cursor: 'pointer' }}
                 onClick={() => {
                   setSettingMyPage('log');
                 }}
@@ -104,7 +107,7 @@ const MyPage = () => {
                 기록
               </p>
               <p
-                style={{ color: 'red' }}
+                style={{ color: 'red', cursor: 'pointer' }}
                 onClick={() => {
                   setSettingMyPage('post');
                 }}
@@ -112,6 +115,7 @@ const MyPage = () => {
                 내가 작성한 글 보기
               </p>
               <p
+                style={{ cursor: 'pointer' }}
                 onClick={() => {
                   setSettingMyPage('like');
                 }}
@@ -138,6 +142,7 @@ const MyPage = () => {
               }}
             >
               <p
+                style={{ cursor: 'pointer' }}
                 onClick={() => {
                   setSettingMyPage('log');
                 }}
@@ -145,6 +150,7 @@ const MyPage = () => {
                 기록
               </p>
               <p
+                style={{ cursor: 'pointer' }}
                 onClick={() => {
                   setSettingMyPage('post');
                 }}
@@ -152,7 +158,7 @@ const MyPage = () => {
                 내가 작성한 글 보기
               </p>
               <p
-                style={{ color: 'red' }}
+                style={{ color: 'red', cursor: 'pointer' }}
                 onClick={() => {
                   setSettingMyPage('like');
                 }}

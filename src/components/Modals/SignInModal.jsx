@@ -8,6 +8,7 @@ import styled from 'styled-components';
 import { InputArea } from '@components/Atoms/Input';
 import { ButtonText } from '@components/Atoms/Button';
 import KakaoButton from '@features/kakaoLogin/KakaoButton';
+import { CloseBtn } from '@components/Atoms/CloseBtn';
 
 export default function SignInModal({ onClose }) {
   const router = useRouter();
@@ -148,6 +149,7 @@ export default function SignInModal({ onClose }) {
             src="Group 1972.png"
             alt="취소 버튼"
           />
+
           {isEditMode === 'login' ? (
             <InnerDiv>
               <h1 className="Login">로그인</h1>
