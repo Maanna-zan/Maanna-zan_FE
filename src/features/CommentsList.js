@@ -9,6 +9,7 @@ import styled from 'styled-components';
 import { InputArea } from '@components/Atoms/Input';
 import AddReComment from './AddReComment';
 import ReCommentList from './ReCommentList';
+import { LightTheme } from '@components/Themes/theme';
 
 const CommentsList = () => {
   const queryClient = useQueryClient();
@@ -20,7 +21,7 @@ const CommentsList = () => {
   const [userNickName, setUserNickName] = useState('');
 
   useEffect(() => {
-    const nick_name = localStorage.getItem('nick_name');
+    const nick_name = cookies.get('nick_name');
     setUserNickName(nick_name);
   }, []);
 
@@ -119,23 +120,24 @@ const CommentsList = () => {
                 <div className="nickName">{comment.nickName}</div>
                 <h2 className="content">{comment.content}</h2>
                 <div className="mycomment">
-                  <AddReComment comment={comment} />
                   {userNickName === comment.nickName && (
                     <>
                       <button
                         className="Button"
                         onClick={() => handleEdit(comment)}
                       >
-                        수정
+                        수정하기
                       </button>
                       <button
                         className="Button"
                         onClick={() => handleDelete(comment.id)}
                       >
-                        삭제
+                        삭제하기
                       </button>
                     </>
                   )}
+
+                  <AddReComment comment={comment} />
                 </div>
 
                 <div>
@@ -169,14 +171,21 @@ const CommentDiv = styled.div`
     font-size: 12px;
     line-height: 16px;
   }
+  .mycomment {
+    width: 100%;
+  }
   .Button {
     border: none;
     background-color: transparent;
-    font-weight: 400;
+    font-weight: ${LightTheme.FONT_REGULAR};
     font-size: 12px;
     line-height: 16px;
-    color: #72787f;
-    width: 50px;
+    color: ${LightTheme.GRAY_400};
+    width: 60px;
+    cursor: pointer;
+  }
+  .Button:hover {
+    color: ${LightTheme.GRAY_800};
   }
   .mycomment {
     display: flex;

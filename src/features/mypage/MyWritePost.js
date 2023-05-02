@@ -58,41 +58,43 @@ const MyWritePost = (data) => {
     );
   } else {
     return (
-      <div>
-        <ContainerDiv>
-          {currentPageData.map((post) => (
-            <PostDiv
-              key={post.id}
-              onClick={() => {
-                push.push(`/community/${post.id}`);
-              }}
-            >
-              <img
-                className="image"
-                src={post.s3Url}
-                alt={post.title}
-                onerror="this.onerror=null; this.src='Group 2017.png';"
-              />
-              <div className="innerDiv">
-                <div className="flexGap">
-                  <p className="title">{post.title}</p>
-                  <div className="flex">
-                    <LikeHeartIcon />
-                    <p className="title">{post.likecnt}</p>
+      <>
+        <LogBox>
+          <ContainerDiv>
+            {currentPageData.map((post) => (
+              <PostDiv
+                key={post.id}
+                onClick={() => {
+                  push.push(`/community/${post.id}`);
+                }}
+              >
+                <img
+                  className="image"
+                  src={post.s3Url}
+                  alt={post.title}
+                  onerror="this.onerror=null; this.src='Group 2017.png';"
+                />
+                <div className="innerDiv">
+                  <div className="flexGap">
+                    <p className="title">{post.title}</p>
+                    <div className="flex">
+                      <LikeHeartIcon />
+                      <p className="title">{post.likecnt}</p>
+                    </div>
                   </div>
-                </div>
 
-                <p className="description">{post.description}</p>
-              </div>
-            </PostDiv>
-          ))}
-        </ContainerDiv>
+                  <p className="description">{post.description}</p>
+                </div>
+              </PostDiv>
+            ))}
+          </ContainerDiv>
+        </LogBox>
         <Pagination
           pages={chunkedData.map((_, i) => i + 1)}
           activePage={activePage}
           setPage={setActivePage}
         />
-      </div>
+      </>
     );
   }
 };
@@ -103,6 +105,11 @@ const ContainerDiv = styled.div`
   display: flex;
   gap: 0px 24px;
   flex-wrap: wrap;
+`;
+const LogBox = styled.div`
+  /* border: 1px solid black; */
+  width: 1250px;
+  height: 860px;
 `;
 
 const PostDiv = styled.div`

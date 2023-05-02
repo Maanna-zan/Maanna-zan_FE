@@ -19,7 +19,8 @@ const StyledInput = styled.input`
     color: ${(props) => props.placeColor};
   }
   &:focus {
-    outline: ${(props) => props.focusBorderColor};
+    //focus시 컬러 변화가 없어 outline에서 border-color로 바꿨습니다 (서윤)
+    border-color: ${(props) => props.focusBorderColor};
     ::placeholder {
       color: transparent;
     }
@@ -81,6 +82,14 @@ export const InputArea = ({
       borderColor = LightTheme.GRAY_400;
       focusBackgroundColor = LightTheme.WHITE;
       focusBorderColor = LightTheme.GRAY_200;
+      placeColor = LightTheme.BLACK;
+      break;
+    case 'defaultWithActive':
+      backgroundColor = LightTheme.WHITE;
+      fontColor = LightTheme.GRAY_200;
+      borderColor = LightTheme.GRAY_400;
+      focusBackgroundColor = LightTheme.BG_COLOR_DARK;
+      focusBorderColor = LightTheme.STATUS_POSITIVE;
       placeColor = LightTheme.BLACK;
       break;
     case 'primary':
