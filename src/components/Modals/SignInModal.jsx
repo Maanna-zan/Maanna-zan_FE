@@ -140,13 +140,11 @@ export default function SignInModal({ onClose }) {
               position: 'fixed',
               right: '30px',
               top: '20px',
-
+              cursor: 'pointer',
               width: '12px',
               height: '12px',
             }}
             onClick={onClose}
-            src="Group 1972.png"
-            alt="취소 버튼"
           >
             <CloseBtn />
           </span>

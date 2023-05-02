@@ -78,6 +78,13 @@ const StoreDetail = () => {
     }
   }, [alkolsLike, apiIdFind]);
 
+  console.log('text------------', data.category_name);
+  //카테고리네임 추출
+  const categoryNames = data.category_name;
+  const indexAllName = categoryNames?.lastIndexOf('>');
+  const resultcategoryNames = categoryNames?.slice(indexAllName + 2);
+  // console.log('알콜카테고리', resultcategoryNames);
+
   if (storeIsLoading || alkolsIsLikeLoading) {
     return <div>Loading...</div>;
   }
@@ -106,11 +113,12 @@ const StoreDetail = () => {
       <WebWrapper>
         <div
           style={{
+            marginTop: '28px',
             marginBottom: '10px',
             font: `var(--caption1-regular) Pretendard sans-serif`,
           }}
         >
-          {data?.category_group_name}
+          {resultcategoryNames}
         </div>
 
         <FlexRow
