@@ -32,10 +32,7 @@ import { useGetStoredetail } from '../../hook/alcohol/useGetStore';
 const Community = () => {
   const { query } = useRouter();
   const router = useRouter();
-  const { store, storeIsLoading } = useGetStoredetail({
-    apiId: router.query.id,
-  });
-  console.log(' store 여기를 봐 여기를!!', store);
+
   const { id } = router.query;
   const { data, isLoading, isError, isSuccess } = useQuery({
     queryKey: ['GET_COMMUNITYDETAIL'],
@@ -63,6 +60,10 @@ const Community = () => {
   const post = posts.find((p) => p.id === Number(postId)) || {};
   const postLikeMine = potLikeMatch.find((p) => p.id === Number(postId)) || {};
   console.log('카테고리 찾아 삼만리', postLikeMine);
+  const { store, storeIsLoading } = useGetStoredetail({
+    apiId: post.apiId,
+  });
+  console.log(' store 여기를 봐 여기를!!', store);
   // const [newPost, setNewPost] = useState({
   //   title: post?.title ?? '',
   //   description: post?.description ?? '',
@@ -90,7 +91,10 @@ const Community = () => {
   const [isEditMode, setIsEditMode] = useState(false);
 
   const deletePostHandler = (postId) => {
-    deletePost(postId);
+    const confirmed = window.confirm('정말로 삭제하시기를 원하십니까?');
+    if (confirmed) {
+      deletePost(postId);
+    }
   };
 
   const [like, setLike] = useState(postLikeMine.like);
@@ -137,8 +141,27 @@ const Community = () => {
   const handleStarHover = (hoveredStar) => {
     setHoveredStar(hoveredStar);
   };
+  const checkFormValidity = () => {
+    if (!post.title || !post.description) {
+      alert('모든 항목에 체크해주세요');
+      return false;
+    } else if (
+      !post.taste ||
+      !post.service ||
+      !post.atmosphere ||
+      !post.satisfaction
+    ) {
+      alert('해당 가게의 평가를 작성해주세요.');
+      return false;
+    }
+
+    return true;
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!checkFormValidity()) {
+      return;
+    }
     const formData = new FormData();
     formData.append('title', newPost.title);
     formData.append('description', newPost.description);
@@ -165,13 +188,14 @@ const Community = () => {
       console.error(error);
     }
   };
-  const [showReviewForm, setShowReviewForm] = useState(false);
+  // const [showReviewForm, setShowReviewForm] = useState(false);
 
   //카테고리
-  // const category_name = store.category_name;
-  // const indexAllName = category_name.lastIndexOf('>'); // 마지막 ">"의 인덱스
-  // const result = category_name.slice(indexAllName + 2); //">" 이후의 문자열
-  // console.log('테스트카테고리', result);
+  const categoryNames = store.map((item) => item.category_name);
+  // console.log('categoryNames', categoryNames);
+  const indexAllName = categoryNames[0]?.lastIndexOf('>');
+  const resultcategoryNames = categoryNames[0]?.slice(indexAllName + 2);
+  // console.log('테스트카테고리', resultcategoryNames);
 
   useEffect(() => {
     if (isUpdated) {
@@ -183,7 +207,6 @@ const Community = () => {
       setIsUpdated(false);
     }
   }, [isUpdated]);
-  console.log('post카테고리', postsLike);
 
   if (postIsLoading || postIsLikeLoading) return <div>로딩중...</div>;
   return (
@@ -211,6 +234,7 @@ const Community = () => {
                 style={{
                   // alignItems: 'center',
                   gap: '20px',
+                  padding: '14px',
                 }}
               >
                 <PostWrtingIcon />
@@ -236,30 +260,30 @@ const Community = () => {
                         font: `var(--body1-bold) Pretendard sans-serif`,
                       }}
                     >
-                      해당 가게의 평가를 작성해주세요.
+                      해당 가게의 평가를 수정해주세요.
                     </span>
                     <span
-                      onClick={() => setShowReviewForm(!showReviewForm)}
+                      // onClick={() => setShowReviewForm(!showReviewForm)}
                       style={{
                         width: '24',
                         height: '24px',
-                        transform: showReviewForm
-                          ? 'rotate(180deg)'
-                          : 'rotate(0deg)',
-                        transition: 'all, 0.3s',
+                        // transform: showReviewForm
+                        //   ? 'rotate(180deg)'
+                        //   : 'rotate(0deg)',
+                        // transition: 'all, 0.3s',
                       }}
                     >
-                      <PostArrow />
+                      {/* <PostArrow /> */}
                     </span>
                   </FlexRow>
-                  {showReviewForm && (
-                    <ReviewForm
-                      post={post}
-                      handleRatingChange={handleRatingChange}
-                      handleStarClick={handleStarClick}
-                      handleStarHover={handleStarHover}
-                    />
-                  )}
+                  {/* {showReviewForm && ( */}
+                  <ReviewForm
+                    post={post}
+                    handleRatingChange={handleRatingChange}
+                    handleStarClick={handleStarClick}
+                    handleStarHover={handleStarHover}
+                  />
+                  {/* )} */}
                 </FlexColumn>
               </FlexRow>
               <div
@@ -271,6 +295,7 @@ const Community = () => {
                 <FlexRow
                   style={{
                     padding: '8px',
+                    margin: '8px',
                     overflow: 'hidden',
                     boxSizing: 'border-box',
                   }}
@@ -282,7 +307,9 @@ const Community = () => {
                       padding: 'auto 4px',
                       overflow: 'hidden',
                       boxSizing: 'border-box',
+                      borderBottom: '1px solid gray',
                     }}
+                    required
                     type="text"
                     id="title"
                     name="title"
@@ -290,7 +317,6 @@ const Community = () => {
                     onChange={(e) =>
                       setNewPost({ ...newPost, title: e.target.value })
                     }
-                    required
                   />
                 </FlexRow>
               </div>
@@ -540,24 +566,55 @@ const Community = () => {
               <div style={{ width: '100%', marginBottom: '50px' }}>
                 {post?.description}
               </div>
-              <FlexRow style={{ justifyContent: 'space-between' }}>
+              <FlexRow
+                style={{
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}
+              >
                 <FlexRow style={{ gap: '24px' }}>
                   <FlexRow style={{ gap: '10px' }}>
-                    <div>좋아요</div>
+                    <div
+                      style={{
+                        font: `var(--body2-medium) Pretendard sans-serif`,
+                      }}
+                    >
+                      좋아요
+                    </div>
                     <div>{post?.likecnt}</div>
                   </FlexRow>
                   <FlexRow style={{ gap: '10px' }}>
-                    <div>댓글</div>
+                    <div
+                      style={{
+                        font: `var(--body2-medium) Pretendard sans-serif`,
+                      }}
+                    >
+                      댓글
+                    </div>
                     <div>{post?.commentList?.length}</div>
                   </FlexRow>
                   <FlexRow style={{ gap: '10px' }}>
-                    <div>조회수</div>
+                    <div
+                      style={{
+                        font: `var(--body2-medium) Pretendard sans-serif`,
+                      }}
+                    >
+                      조회수
+                    </div>
                     <div>{post?.viewCount}</div>
                   </FlexRow>
                 </FlexRow>
-                {/* 카테고린데 카테고리 데이터없음 */}
-                <BoxTextReal size="nonePadding" variant="grayBolderBox">
-                  카테고리
+                {/* 카테고리 */}
+                <BoxTextReal
+                  size="nonePadding"
+                  variant="grayBolderBox"
+                  padding="4px 16px"
+                  borderRadius="20px"
+                  style={{
+                    font: `var(--caption1-regular) Pretendard sans-serif`,
+                  }}
+                >
+                  {resultcategoryNames}
                 </BoxTextReal>
               </FlexRow>
             </div>

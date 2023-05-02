@@ -9,7 +9,7 @@ export const ReviewForm = ({ post, handleRatingChange, handleStarClick }) => {
   const starStyle = { cursor: 'pointer', transition: 'color 0.3s easeInOut' };
   return (
     <FlexColumn style={{ gap: '20px' }}>
-      <FlexRow style={{ alignItems: 'center' }}>
+      {/* <FlexRow style={{ alignItems: 'center' }}>
         <span
           style={{
             font: `var(--body1-bold) Pretendard sans-serif`,
@@ -42,7 +42,7 @@ export const ReviewForm = ({ post, handleRatingChange, handleStarClick }) => {
             )}
           </span>
         ))}
-      </FlexRow>
+      </FlexRow> */}
       <FlexColumn
         style={{
           gap: '20px',

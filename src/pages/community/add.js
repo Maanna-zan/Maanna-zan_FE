@@ -77,8 +77,30 @@ const AddPostForm = () => {
     }));
     console.log('setPosthandleRatingChange', post);
   };
+  const checkFormValidity = () => {
+    if (!post.title || !post.description) {
+      alert('모든 항목에 체크해주세요');
+      return false;
+    } else if (
+      !post.taste ||
+      !post.service ||
+      !post.atmosphere ||
+      !post.satisfaction
+    ) {
+      alert('해당 가게의 평가를 작성해주세요.');
+      return false;
+    } else if (false) {
+      alert('모든 항목에 체크해주세요');
+    }
+
+    return true;
+  };
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!checkFormValidity()) {
+      return;
+    }
+
     const formData = new FormData();
     formData.append('storename', post.storename);
     formData.append('title', post.title);
