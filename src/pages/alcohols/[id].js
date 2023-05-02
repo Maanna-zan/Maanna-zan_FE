@@ -78,9 +78,9 @@ const StoreDetail = () => {
     }
   }, [alkolsLike, apiIdFind]);
 
-  console.log('text------------', data.category_name);
+  console.log('text------------', data);
   //카테고리네임 추출
-  const categoryNames = data.category_name;
+  const categoryNames = data?.category_name;
   const indexAllName = categoryNames?.lastIndexOf('>');
   const resultcategoryNames = categoryNames?.slice(indexAllName + 2);
   // console.log('알콜카테고리', resultcategoryNames);
@@ -252,16 +252,20 @@ const StoreDetail = () => {
                             <FlexColumn style={{ gap: '10px' }}>
                               <div>{post.nickname}</div>
                             </FlexColumn>
-                            <MinStar />
+
                             <FlexRow
                               style={{
-                                width: '20%',
+                                width: '25%',
                                 gap: '10px',
                                 alignItems: 'center',
                                 justifyContent: 'space-between',
                                 font: `var(   --body2-bold) Pretendard sans-serif`,
                               }}
                             >
+                              <span>
+                                {post?.postStarAvg}
+                                <MinStar />
+                              </span>
                               <span
                                 onClick={() => likeStoreHandler(apiId)}
                                 style={{ cursor: 'pointer' }}
