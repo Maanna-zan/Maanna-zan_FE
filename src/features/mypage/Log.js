@@ -123,7 +123,7 @@ function Log() {
   //수정
   const { mutate: calLogUpdate } = useMutation({
     mutationFn: async ({ id, payload }) => {
-      console.log('patloadEdit', payload);
+      // console.log('patloadEdit', payload);
       const { data } = await apis.patch(`/my-page/calendar/${id}`, payload, {
         headers: {
           Access_Token: `${token}`,

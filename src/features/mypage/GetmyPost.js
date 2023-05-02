@@ -26,7 +26,7 @@ const GetmyPost = () => {
           Access_Token: `${token}`,
         },
       });
-      console.log('dataPost--------------', data.data.posts);
+      // console.log('dataPost--------------', data.data.posts);
       return data.data.posts;
     },
   });

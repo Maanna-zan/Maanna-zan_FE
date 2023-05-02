@@ -26,7 +26,7 @@ const GetMyAlcohols = () => {
           Access_Token: `${token}`,
         },
       });
-      console.log('dataPostss--------------', data);
+      // console.log('dataPostss--------------', data);
       return data;
     },
   });
