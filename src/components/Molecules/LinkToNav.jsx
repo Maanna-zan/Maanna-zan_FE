@@ -12,10 +12,18 @@ import instance from '@shared/instance';
 import styled from 'styled-components';
 import { WebWrapper } from '@components/Atoms/Wrapper';
 
+import { createPortal } from 'react-dom';
+import SignInModal from '@components/Modals/SignInModal';
+import SignUpModal from '@components/Modals/SignUpModal';
+
 export const LinkToNav = () => {
   const router = useRouter();
   const [isLoginMode, setIsLoginMode] = useState(false);
   const [showSubMenu, setShowSubMenu] = useState(false);
+  //모달창 여닫는 useState
+  const [showsignInModal, setShowsignInModal] = useState(false);
+  const [showSignUpModal, setShowSignUpModal] = useState(false);
+
   // 토큰 삭제 함수
   const deleteTokens = () => {
     cookies.remove('access_token');
@@ -110,8 +118,35 @@ export const LinkToNav = () => {
       </Link>
       {!token ? (
         <>
-          <SignInPotalExample />
-          <SignUpPortalExample />
+          <>
+            <ButtonText
+              style={{ font: `var( --title2-semibold) Pretendard sans-serif` }}
+              variant="hoverRed"
+              label={'로그인'}
+              onClick={() => setShowsignInModal(true)}
+            ></ButtonText>
+            {showsignInModal &&
+              createPortal(
+                <SignInModal
+                  setShowSignUpModal={setShowSignUpModal}
+                  onClose={() => setShowsignInModal(false)}
+                />,
+                document.body,
+              )}
+          </>
+          <>
+            <ButtonText
+              style={{ font: `var( --title2-semibold) Pretendard sans-serif` }}
+              variant="hoverRed"
+              label={'회원가입'}
+              onClick={() => setShowSignUpModal(true)}
+            ></ButtonText>
+            {showSignUpModal &&
+              createPortal(
+                <SignUpModal onClose={() => setShowSignUpModal(false)} />,
+                document.body,
+              )}
+          </>
         </>
       ) : (
         <div

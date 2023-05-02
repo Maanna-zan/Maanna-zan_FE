@@ -4,18 +4,18 @@ import SignUpModal from './SignUpModal';
 import { ButtonText } from '@components/Atoms/Button';
 
 export default function SignUpPortalExample() {
-  const [showModal, setShowModal] = useState(false);
+  const [showSignUpModal, setShowSignUpModal] = useState(false);
   return (
     <>
       <ButtonText
         style={{ font: `var( --title2-semibold) Pretendard sans-serif` }}
         variant="hoverRed"
         label={'회원가입'}
-        onClick={() => setShowModal(true)}
+        onClick={() => setShowSignUpModal(true)}
       ></ButtonText>
-      {showModal &&
+      {showSignUpModal &&
         createPortal(
-          <SignUpModal onClose={() => setShowModal(false)} />,
+          <SignUpModal onClose={() => setShowSignUpModal(false)} />,
           document.body,
         )}
     </>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { apis } from '@shared/axios';
 import { cookies } from '@shared/cookie';
@@ -10,8 +10,13 @@ import { ButtonText } from '@components/Atoms/Button';
 import KakaoButton from '@features/kakaoLogin/KakaoButton';
 import { CloseBtn } from '@components/Atoms/CloseBtn';
 
-export default function SignInModal({ onClose }) {
+export default function SignInModal({ onClose, setShowSignUpModal }) {
   const router = useRouter();
+
+  const openSignUpModal = useCallback(() => {
+    setShowSignUpModal(true);
+  }, [setShowSignUpModal]);
+
   //로그인
   //모달창의 상태 변화들
   const [isEditMode, setIsEditMode] = useState('login');
@@ -208,7 +213,7 @@ export default function SignInModal({ onClose }) {
 
               <BottomDiv>
                 <p className="question"> 아이디가 없으신가요?</p>
-                <p className="goToSignUp" onClick={onClose}>
+                <p className="goToSignUp" onClick={openSignUpModal}>
                   회원가입
                 </p>
               </BottomDiv>
