@@ -3,8 +3,11 @@ import React from 'react';
 import { ButtonText } from '@components/Atoms/Button';
 const ShareApiBtn = ({ url, title, text, icon, handleShareClick }) => {
   return (
-    <ShareBtn style={{ cursor: ' pointer', height: '24px' }}>
-      <div onClick={handleShareClick}></div>
+    <ShareBtn
+      style={{ cursor: 'pointer', height: '24px' }}
+      onClick={handleShareClick}
+    >
+      {icon}
     </ShareBtn>
   );
 };
