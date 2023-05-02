@@ -844,7 +844,7 @@ function MapMidPoint() {
     }
     
     #placesList .clicked ::after{
-        content: "V"; /* ::after 선택자를 이용하여 V표를 추가합니다. */
+        content: "더블클릭"; /* ::after 선택자를 이용하여 V표를 추가합니다. */
         position: absolute;
         right: 5px;
         top: 50%;
