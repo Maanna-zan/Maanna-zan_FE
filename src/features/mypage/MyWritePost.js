@@ -134,5 +134,8 @@ const PostDiv = styled.div`
     font-weight: 400;
     font-size: 12px;
     line-height: 16px;
+    word-wrap: break-word;
+    overflow-y: hidden;
+    height: 30px;
   }
 `;
