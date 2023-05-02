@@ -10,8 +10,11 @@ import { useRouter } from 'next/router';
 import { Link } from 'react-scroll';
 import { WebWrapper } from '@components/Atoms/Wrapper';
 import { ButtonText } from '@components/Atoms/Button';
+import { useQueryClient } from '@tanstack/react-query';
+import { InputArea } from '@components/Atoms/Input';
+import { LightTheme } from '@components/Themes/theme';
 
-const MapAppointment = () => {
+const MapAppointment = ({ checkedPlace }) => {
   const router = useRouter();
   const [isLoginMode, setIsLoginMode] = useState(false);
   //버튼으로 보내줄 값들
@@ -20,6 +23,12 @@ const MapAppointment = () => {
     //필요한 key, value 값 추가해서 사용하세용 !
     //1번 출발 : '',
   });
+  // queryKey에 캐싱하여 값 불러오기위해 queryClient선언
+  const queryClient = useQueryClient();
+  // getQueryData로 캐싱한 값 INPUTVALUESPROP키로 불러오기.
+  const InputValuesProp = queryClient.getQueryData({queryKey: ['INPUTVALUESPROP']});
+   // getQueryData로 캐싱한 값 INPUTVALUESPROP키로 불러오기.
+  const CheckedPlaceProp = queryClient.getQueryData({queryKey: ['CHECKEDPLACEPROP']});
   useEffect(() => {
     const token = cookies.get('access_token');
     setIsLoginMode(token);
@@ -107,12 +116,33 @@ const MapAppointment = () => {
             </Div>
             <Region>
               <div>출발 장소</div>
-              <p className="depart">1번 출발장소</p>
-              <p className="depart">2번 출발장소</p>
-              <p className="depart">3번 출발장소</p>
-              <p className="depart">4번 출발장소</p>
+                <DeparturesWrapper>
+                  {InputValuesProp?.filter(value => value !== "")?.map((value, index) => ( 
+                    <div key={index} style={{ display: 'flex', alignItems: 'center'}}>
+                    <InputArea       //출발지 받아온 값 Map으로 돌려 그 갯수만큼 input 만들기            
+                        key={index}  //(""값도 카운트가 되는데 그 경우 filter로 제외하고 map으로 돌리기)                
+                        value={value} 
+                        type="text"
+                        variant="default"
+                        size="lg"
+                        readOnly={true}
+                        style={{
+                            width: '100%',
+                            margin: '3px 0 3px 10px',
+                            padding: '2%',
+                            border: '1px solid white',
+                            backgroundColor: `${LightTheme.GRAY_50}`,
+                            fontFamily: `${'var(--label1-regular)'} Pretendard sans-serif`,
+                            fontSize: '14px',
+                            lineHeight: '18px',
+                            zIndex: '1000'
+                        }}
+                        />
+                    </div>
+                  ))}
+                </DeparturesWrapper>
               <p className="depart">
-                중간위치 술집장소:{' '}
+                중간위치 술집장소:{CheckedPlaceProp?.place_name}
                 <span className="departChild">서울시 개포동 문래아파트</span>
               </p>
             </Region>
@@ -237,3 +267,8 @@ const Region = styled.div`
     color: #ff4840;
   }
 `;
+const DeparturesWrapper = styled.div`
+display: flex;
+flex-direction: column;
+width: 40%;
+`
