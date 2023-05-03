@@ -8,7 +8,7 @@ export const useGetBestPost = () => {
     queryKey: keys.GET_BEST_POSTS,
     queryFn: async () => {
       const data = await apis.get('/posts/best', {});
-      console.log('GET_BEST_POSTS--------------', data);
+
       return data.data;
     },
   });

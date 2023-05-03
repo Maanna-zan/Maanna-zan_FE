@@ -218,7 +218,7 @@ const AlcoholList = () => {
   // };
 
   // console.log('술집', storeData?.alkolResponseDtoList?.apiId);
-  console.log('술집라이크', alkolsLike);
+  // console.log('술집라이크', alkolsLike);
   if (isLoading || alkolsIsLikeLoading) {
     return <WebWrapper>로딩중...</WebWrapper>;
   }
