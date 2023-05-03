@@ -8,6 +8,8 @@ import { ButtonText } from '@components/Atoms/Button';
 import { InputArea } from '@components/Atoms/Input';
 import { useConfirm } from '../../hook/useConfirm';
 import { LightTheme } from '@components/Themes/theme';
+import { CloseEye, OpenEye } from '@components/Atoms/EyesIcon';
+import { CloseBtn } from '@components/Atoms/CloseBtn';
 
 export default function SignUpModal({ onClose, onOpen }) {
   const router = useRouter();
@@ -77,6 +79,9 @@ export default function SignUpModal({ onClose, onOpen }) {
       onClose();
     },
   });
+
+  //
+
   // 유효성 검사 후, 이미지를 띄우기 위한 state 추가
   const [isValidPassword, setIsValidPassword] = useState(false);
 
@@ -184,20 +189,22 @@ export default function SignUpModal({ onClose, onOpen }) {
     <>
       <ModalDiv onClick={onClose} className="modal"></ModalDiv>
       <Modal className="modal-overlay">
-        <img
+        <span
           style={{
             position: 'fixed',
-            right: '20px',
+            right: '30px',
             top: '20px',
+            cursor: 'pointer',
             // display: 'flex',
             // justifyContent: 'flex-end',
             width: '12px',
             height: '12px',
           }}
           onClick={onClose}
-          src="Group 1972.png"
-          alt="취소 버튼"
-        />
+        >
+          <CloseBtn />
+        </span>
+
         <InnerDiv>
           <HeadInfo title="로그인해주세요!" />
           <h2 className="signUp">회원가입</h2>
@@ -291,35 +298,59 @@ export default function SignUpModal({ onClose, onOpen }) {
                 }}
               />
             ) : !hidePassword ? (
-              <img
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#9EA4AA"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="feather feather-eye"
+                style={{
+                  cursor: 'pointer',
+                  position: 'absolute',
+                  top: '12px',
+                  right: '12px',
+                  width: '20px',
+                  height: '20px',
+                }}
                 onClick={() => {
                   setHidePassword(true);
                 }}
-                src="Group 2521.png"
-                alt="Show password"
+              >
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+            ) : (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#9EA4AA"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="feather feather-eye-off"
                 style={{
+                  cursor: 'pointer',
                   position: 'absolute',
                   top: '12px',
                   right: '12px',
                   width: '20px',
                   height: '20px',
                 }}
-              />
-            ) : (
-              <img
                 onClick={() => {
                   setHidePassword(false);
                 }}
-                src="Group 2521.png"
-                alt="Show password"
-                style={{
-                  position: 'absolute',
-                  top: '12px',
-                  right: '12px',
-                  width: '20px',
-                  height: '20px',
-                }}
-              />
+              >
+                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                <line x1="1" y1="1" x2="23" y2="23"></line>
+              </svg>
             )}
           </div>
           <Detaildiv>
@@ -406,7 +437,7 @@ export default function SignUpModal({ onClose, onOpen }) {
                 }}
               />
               <div className="detailSignUp">이메일</div>
-              {/* <InputArea
+              <InputArea
                 size="lg"
                 type="text"
                 name="email"
@@ -418,14 +449,14 @@ export default function SignUpModal({ onClose, onOpen }) {
                 onKeyDown={(e) => {
                   if (e.key === ' ') e.preventDefault();
                 }}
-              /> */}
+              />
               <div
                 style={{
                   display: 'flex',
                   gap: '20px',
                 }}
               >
-                <InputArea
+                {/* <InputArea
                   size="lg"
                   type="text"
                   name="email"
@@ -437,7 +468,7 @@ export default function SignUpModal({ onClose, onOpen }) {
                   onKeyDown={(e) => {
                     if (e.key === ' ') e.preventDefault();
                   }}
-                />
+                /> */}
                 <ButtonText
                   type="button"
                   size="md"
@@ -445,7 +476,7 @@ export default function SignUpModal({ onClose, onOpen }) {
                   variant="primary"
                   active={true}
                   onClick={confirmEmail}
-                  label="이메일 인증"
+                  label="중복 확인"
                 />
               </div>
 

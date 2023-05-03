@@ -161,19 +161,20 @@ export default function SignInModal({
       {/* <ModalDiv className="modal"> </ModalDiv> */}
       <Modal className="modal-overlay">
         {/* <Modal className="modal-overlay"> */}
+
         <span
-            style={{
-              position: 'fixed',
-              right: '30px',
-              top: '20px',
-              cursor: 'pointer',
-              width: '12px',
-              height: '12px',
-            }}
-            onClick={onClose}
-          >
-            <CloseBtn />
-          </span>
+          style={{
+            position: 'fixed',
+            right: '30px',
+            top: '20px',
+            cursor: 'pointer',
+            width: '12px',
+            height: '12px',
+          }}
+          onClick={onClose}
+        >
+          <CloseBtn />
+        </span>
 
         {isEditMode === 'login' ? (
           <InnerDiv>

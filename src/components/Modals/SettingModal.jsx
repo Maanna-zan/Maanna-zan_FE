@@ -9,6 +9,8 @@ import { ButtonText } from '@components/Atoms/Button';
 import Save from '@features/mypage/Save';
 import { useConfirm } from '../../hook/useConfirm';
 import { FlexRow } from '@components/Atoms/Flex';
+import { CloseBtn } from '@components/Atoms/CloseBtn';
+import { LightTheme } from '@components/Themes/theme';
 
 export default function SettingModal({ onClose, data }) {
   const router = useRouter();
@@ -16,6 +18,8 @@ export default function SettingModal({ onClose, data }) {
   const [isEditMode, setIsEditMode] = useState('profile');
 
   const [isNickNameAvailable, setIsNickNameAvailable] = useState(false);
+  //input 창 변환
+  const [hidePassword, setHidePassword] = useState(true);
 
   const [password, setPassword] = useState('');
   const changePWInputHandler = (e) => {
@@ -90,20 +94,12 @@ export default function SettingModal({ onClose, data }) {
     },
   });
 
-  const [passwordError, setPasswordError] = useState(false);
-  const handlePasswordChange = (e) => {
-    const { name, value } = e.target;
-    setPassword((pre) => ({ ...pre, [name]: value }));
-
-    if (name === 'checkPassword') {
-      setPasswordError(password.password !== value);
-    }
-  };
-
+  // 유효성 검사 후, 이미지를 띄우기 위한 state 추가
+  const [isValidPassword, setIsValidPassword] = useState(false);
   //비밀번호 조건
   const validatePassword = (password) => {
     const minLength = 9;
-    const maxLength = 20;
+    const maxLength = 16;
     const regex =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_])[A-Za-z\d\W_]{9,20}$/;
 
@@ -112,7 +108,42 @@ export default function SettingModal({ onClose, data }) {
       password.length <= maxLength &&
       regex.test(password)
     );
+    setIsValidPassword(isValid);
+
+    return isValid;
   };
+
+  const [passwordError, setPasswordError] = useState(false);
+  const handlePasswordChange = (e) => {
+    const { name, value } = e.target;
+    setPassword((pre) => ({ ...pre, [name]: value }));
+
+    if (name === 'checkPassword') {
+      setPasswordError(password.password !== value || !isValidPassword);
+    } else if (name === 'password') {
+      const validPassword = validatePassword(value);
+      setPasswordError(!validPassword);
+      setIsValidPassword(validPassword);
+      if (password.checkPassword) {
+        setPasswordError(password.checkPassword !== value || !validPassword);
+      }
+    }
+  };
+  const handleCheckPasswordChange = (e) => {
+    const { name, value } = e.target;
+    setPassword((pre) => ({ ...pre, [name]: value }));
+    if (name === 'checkPassword') {
+      setPasswordError(password.password !== value);
+      if (password.password) {
+        setPasswordError(password.password !== value || !isValidPassword);
+      }
+    } else if (name === 'password') {
+      const validPassword = validatePassword(value);
+      setPasswordError(!validPassword);
+      setIsValidPassword(validPassword);
+    }
+  };
+
   const validateForm = (userData) => {
     if (!validatePassword(userData.password)) {
       alert(
@@ -127,20 +158,20 @@ export default function SettingModal({ onClose, data }) {
     <>
       <ModalDiv onClick={onClose} className="modal"></ModalDiv>
       <Modal className="modal-overlay">
-        <img
+        <span
           style={{
             position: 'fixed',
-            right: '20px',
+            right: '30px',
             top: '20px',
-            // display: 'flex',
-            // justifyContent: 'flex-end',
+            cursor: 'pointer',
             width: '12px',
             height: '12px',
           }}
           onClick={onClose}
-          src="Group 1972.png"
-          alt="취소 버튼"
-        />
+        >
+          <CloseBtn />
+        </span>
+
         {isEditMode === 'profile' ? (
           <InnerDiv>
             <EttingDiv>
@@ -248,68 +279,186 @@ export default function SettingModal({ onClose, data }) {
                 회원 탈퇴
               </p>
             </ModeParentsDiv>
-            <p>기존 비밀번호</p>
+            <div className="detailSignUp">기존 비밀번호</div>
             <InputArea
               size="lg"
               variant="default"
               type="password"
               name="oldPassword"
-              placeholder="현재 비밀번호를 입력해주세요."
+              placeholder="변경할 비밀번호를 입력해주세요."
               value={password.oldPassword}
               onChange={handlePasswordChange}
-              maxLength="20"
+              minLength="8"
+              maxLength="16"
               required
               onKeyDown={(e) => {
                 if (e.key === ' ') e.preventDefault();
               }}
             />
-            <p>새 비밀번호</p>
-            <InputArea
-              size="lg"
-              variant="default"
-              type="password"
-              name="password"
-              placeholder="변경할 비밀번호를 입력해주세요."
-              value={password.password}
-              onChange={handlePasswordChange}
-              maxLength="20"
-              required
-              onKeyDown={(e) => {
-                if (e.key === ' ') e.preventDefault();
-              }}
-            />
-            <p>비밀번호 확인</p>
-            <InputArea
-              size="lg"
-              variant="default"
-              type="password"
-              name="checkPassword"
-              value={password.checkPassword}
-              placeholder="비밀번호를 확인해주세요."
-              onChange={handlePasswordChange}
-              required
-              onKeyDown={(e) => {
-                if (e.key === ' ') e.preventDefault();
-              }}
-            />
-            {passwordError && (
+
+            <Detaildiv>
+              <div className="detailSignUp">새 비밀번호</div>
+              <div className="notice">
+                8~16 자리 / 영문 대소문자,숫자,특수문자 포함
+              </div>
+            </Detaildiv>
+            <div style={{ position: 'relative' }}>
+              <InputArea
+                style={{
+                  borderColor: isValidPassword
+                    ? LightTheme.STATUS_POSITIVE
+                    : LightTheme.GRAY_400,
+                }}
+                type={hidePassword ? 'password' : 'text'}
+                name="password"
+                size="lg"
+                variant="default"
+                value={password.password}
+                placeholder="비밀번호를 입력해주세요."
+                onChange={handlePasswordChange}
+                minLength="8"
+                maxLength="16"
+                required
+                onKeyDown={(e) => {
+                  if (e.key === ' ') e.preventDefault();
+                }}
+              />
+
+              {isValidPassword ? (
+                <img
+                  src="Group 2066.png"
+                  alt="Valid password"
+                  style={{
+                    position: 'absolute',
+                    top: '12px',
+                    right: '12px',
+                    width: '20px',
+                    height: '20px',
+                  }}
+                />
+              ) : !hidePassword ? (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#9EA4AA"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="feather feather-eye"
+                  style={{
+                    cursor: 'pointer',
+                    position: 'absolute',
+                    top: '12px',
+                    right: '12px',
+                    width: '20px',
+                    height: '20px',
+                  }}
+                  onClick={() => {
+                    setHidePassword(true);
+                  }}
+                >
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+              ) : (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#9EA4AA"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="feather feather-eye-off"
+                  style={{
+                    cursor: 'pointer',
+                    position: 'absolute',
+                    top: '12px',
+                    right: '12px',
+                    width: '20px',
+                    height: '20px',
+                  }}
+                  onClick={() => {
+                    setHidePassword(false);
+                  }}
+                >
+                  <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path>
+                  <line x1="1" y1="1" x2="23" y2="23"></line>
+                </svg>
+              )}
+            </div>
+            <Detaildiv>
+              <div className="detailSignUp">비밀번호 확인</div>
+              <div className="notice">
+                8~16 자리 / 영문 대소문자,숫자,특수문자 포함
+              </div>
+            </Detaildiv>
+            <div style={{ position: 'relative' }}>
+              <InputArea
+                type="password"
+                name="checkPassword"
+                size="lg"
+                variant="default"
+                style={{
+                  borderColor: passwordError
+                    ? 'red'
+                    : !passwordError &&
+                      password.checkPassword &&
+                      password.password === password.checkPassword
+                    ? LightTheme.STATUS_POSITIVE
+                    : LightTheme.GRAY_400,
+                }}
+                placeholder="비밀번호를 입력해주세요."
+                onChange={handleCheckPasswordChange}
+                minLength="8"
+                maxLength="16"
+                required
+                onKeyDown={(e) => {
+                  if (e.key === ' ') e.preventDefault();
+                }}
+              />
+              {!passwordError &&
+                password.checkPassword &&
+                password.password === password.checkPassword && (
+                  <img
+                    src="Group 2066.png"
+                    alt="Valid password"
+                    style={{
+                      position: 'absolute',
+                      top: '12px',
+                      right: '12px',
+                      width: '20px',
+                      height: '20px',
+                    }}
+                  />
+                )}
+            </div>
+
+            {passwordError ? (
               <p style={{ color: 'red', fontSize: '12px', marginTop: '-5px' }}>
                 비밀번호가 일치하지 않습니다.
               </p>
-            )}
-            {!passwordError && (
-              <p style={{ color: 'red', fontSize: '12px', marginTop: '-5px' }}>
+            ) : !passwordError &&
+              password.checkPassword &&
+              password.password === password.checkPassword ? (
+              <p
+                style={{
+                  color: '#3DC061',
+                  fontSize: '12px',
+                  marginTop: '-5px',
+                }}
+              >
                 비밀번호가 일치합니다.
               </p>
+            ) : (
+              <></>
             )}
-            <p
-              style={{
-                margin: '0 auto',
-                fontStyle: 'normal',
-                fontWeight: '400',
-                fontSize: '12px',
-                lineHeight: '16px',
-              }}
+            <ButtonTab
               onClick={() => {
                 if (validateForm(password)) {
                   changePassword(password);
@@ -318,7 +467,7 @@ export default function SettingModal({ onClose, data }) {
               }}
             >
               변경하기
-            </p>
+            </ButtonTab>
             <BottomHr />
             <ButtonText
               label="저장하기"
@@ -452,6 +601,34 @@ export default function SettingModal({ onClose, data }) {
     </>
   );
 }
+const ButtonTab = styled.p`
+  font-size: 14px;
+  margin: 0 auto;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 16px;
+  color: ${LightTheme.PRIMARY_NORMAL};
+  cursor: pointer;
+  :hover {
+    color: ${LightTheme.PRIMARY_HEAVY};
+  }
+`;
+const Detaildiv = styled.div`
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  .detailSignUp {
+    font-size: 14px;
+    margin-bottom: -7px;
+    font-weight: 700;
+  }
+  .notice {
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 16px;
+    color: #9ea4aa;
+  }
+`;
 
 const ModalDiv = styled.div`
   position: fixed;
@@ -526,6 +703,9 @@ const ModeParentsDiv = styled.div`
   .unModeP {
     cursor: pointer;
     color: #9ea4aa;
+    :hover {
+      color: ${LightTheme.FONT_PRIMARY};
+    }
   }
   .modeP {
   }
@@ -537,7 +717,7 @@ const ModeParentsDiv = styled.div`
   }
 `;
 const Hr = styled.hr`
-  border: 0.5px solid #ff4840;
+  border: 0.5px solid ${LightTheme.PRIMARY_NORMAL};
   width: 60px;
   height: 0px;
   border-bottom: 0px;
@@ -545,7 +725,7 @@ const Hr = styled.hr`
 `;
 
 const BottomHr = styled.hr`
-  border: 0.5px solid#E8EBED;
+  border: 0.5px solid ${LightTheme.GRAY_100};
   width: 368px;
   height: 0px;
   border-bottom: 0px;
