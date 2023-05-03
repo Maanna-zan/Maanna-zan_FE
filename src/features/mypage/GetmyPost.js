@@ -146,6 +146,9 @@ const ContainerDiv = styled.div`
     font-size: 16px;
   }
   .title {
+    word-wrap: break-word;
+    overflow-y: hidden;
+    height: 20px;
     font-weight: 500;
     font-size: 16px;
     line-height: 24px;

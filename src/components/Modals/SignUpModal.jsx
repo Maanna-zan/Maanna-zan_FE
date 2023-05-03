@@ -13,15 +13,28 @@ export default function SignUpModal({ onClose, onOpen }) {
   const router = useRouter();
   //회원가입 다음 버튼 눌렀을 때햣
   const [next, setNext] = React.useState(false);
+  const [isNickNameAvailable, setIsNickNameAvailable] = useState(false);
+  const [isEmailAvailable, setIsEmailAvailable] = useState(false);
+  //input 창 변환
+  const [hidePassword, setHidePassword] = useState(true);
+
+  const toggleHidePassword = () => {
+    setHidePassword(!hidePassword);
+  };
+
+  // console.log('setIsNickNameAvailable', isNickNameAvailable);
+  // console.log('isEmailAvailable', isEmailAvailable);
 
   // 비동기서버통신을 위한 커스텀 훅
   const [confirm] = useConfirm();
 
-  const confirmEmail = () => {
-    confirm({ type: 'email', value: user.email });
-  };
   const confirmNickName = () => {
+    setIsNickNameAvailable(true);
     confirm({ type: 'nickName', value: user.nickName });
+  };
+  const confirmEmail = () => {
+    setIsEmailAvailable(true);
+    confirm({ type: 'email', value: user.email });
   };
   //유저 관련 정보들 처리해줄 useState
   const [user, setUser] = React.useState({
@@ -42,7 +55,7 @@ export default function SignUpModal({ onClose, onOpen }) {
 
   // passwordCheck 빼고 나머지 라는 뜻
   //3번째 옵션 config
-  const { mutate: register, status } = useMutation({
+  const { mutate: register } = useMutation({
     mutationFn: async (user) => {
       const data = await apis.post('users/signup', user);
       // console.log('data', data);
@@ -51,6 +64,13 @@ export default function SignUpModal({ onClose, onOpen }) {
     onError: (error) => {
       // console.log('error', error.response.data.message);
       alert(error.response.data.message);
+      const errormsg = error.response.data.message;
+      if (errormsg == '중복된 이메일이 존재합니다') {
+        alert('중복된 이메일이거나 중복확인이 필요합니다');
+      }
+      if (errormsg == '중복된 닉네임이 존재합니다') {
+        alert('중복된 닉네임이거나 중복확인이 필요합니다');
+      }
     },
     onSuccess: () => {
       alert('회원가입 완료했습니다');
@@ -188,7 +208,7 @@ export default function SignUpModal({ onClose, onOpen }) {
             variant="default"
             name="userName"
             value={user.userName}
-            placeholder="이름을 입력해주세요."
+            placeholder="성명을 입력해주세요."
             onChange={changHandler}
             maxLength="5"
             required
@@ -198,7 +218,9 @@ export default function SignUpModal({ onClose, onOpen }) {
           />
           <Detaildiv>
             <div className="detailSignUp">닉네임</div>
-            <div className="notice">8자리 이내/영어,한글,숫자로 구성</div>
+            <div className="notice">
+              8자리 이내/영어 소문자,한글,숫자로 구성
+            </div>
           </Detaildiv>
           <div style={{ display: 'flex', gap: '20px' }}>
             <InputArea
@@ -221,7 +243,7 @@ export default function SignUpModal({ onClose, onOpen }) {
             <ButtonText
               type="button"
               // size="md"
-              style={{ width: '120px' }}
+              style={{ width: '140px' }}
               variant="primary"
               active={true}
               onClick={confirmNickName}
@@ -241,7 +263,7 @@ export default function SignUpModal({ onClose, onOpen }) {
                   ? LightTheme.STATUS_POSITIVE
                   : LightTheme.GRAY_200,
               }}
-              type="password"
+              type={hidePassword ? 'password' : 'text'}
               name="password"
               size="lg"
               variant="default"
@@ -255,10 +277,41 @@ export default function SignUpModal({ onClose, onOpen }) {
                 if (e.key === ' ') e.preventDefault();
               }}
             />
-            {isValidPassword && (
+
+            {isValidPassword ? (
               <img
                 src="Group 2066.png"
                 alt="Valid password"
+                style={{
+                  position: 'absolute',
+                  top: '12px',
+                  right: '12px',
+                  width: '20px',
+                  height: '20px',
+                }}
+              />
+            ) : !hidePassword ? (
+              <img
+                onClick={() => {
+                  setHidePassword(true);
+                }}
+                src="Group 2521.png"
+                alt="Show password"
+                style={{
+                  position: 'absolute',
+                  top: '12px',
+                  right: '12px',
+                  width: '20px',
+                  height: '20px',
+                }}
+              />
+            ) : (
+              <img
+                onClick={() => {
+                  setHidePassword(false);
+                }}
+                src="Group 2521.png"
+                alt="Show password"
                 style={{
                   position: 'absolute',
                   top: '12px',
@@ -353,7 +406,19 @@ export default function SignUpModal({ onClose, onOpen }) {
                 }}
               />
               <div className="detailSignUp">이메일</div>
-
+              {/* <InputArea
+                size="lg"
+                type="text"
+                name="email"
+                style={{ width: '100%' }}
+                value={user.email}
+                placeholder="이메일을 입력해주세요."
+                onChange={changHandler}
+                required
+                onKeyDown={(e) => {
+                  if (e.key === ' ') e.preventDefault();
+                }}
+              /> */}
               <div
                 style={{
                   display: 'flex',
@@ -376,13 +441,14 @@ export default function SignUpModal({ onClose, onOpen }) {
                 <ButtonText
                   type="button"
                   size="md"
-                  style={{ width: '120px' }}
+                  style={{ width: '140px' }}
                   variant="primary"
                   active={true}
                   onClick={confirmEmail}
-                  label="중복확인"
+                  label="이메일 인증"
                 />
               </div>
+
               <Detaildiv>
                 <div className="detailSignUp">생년월일</div>
                 <div className="notice">숫자로 이루어진 8자리</div>
@@ -405,9 +471,16 @@ export default function SignUpModal({ onClose, onOpen }) {
                 variant="primary"
                 active={true}
                 style={{ cursor: 'pointer' }}
+                // disabled={isLoading || !isNickNameAvailable}
                 onClick={() => {
                   if (validateForm(user)) {
-                    register(user);
+                    if (!isNickNameAvailable || !isEmailAvailable) {
+                      alert('중복확인을 해주세요');
+                    } else {
+                      setIsEmailAvailable(false);
+                      setIsNickNameAvailable(false);
+                      register(user);
+                    }
                   }
                 }}
                 label="회원가입"

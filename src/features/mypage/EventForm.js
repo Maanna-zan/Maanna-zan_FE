@@ -108,6 +108,7 @@ const Textarea = styled.textarea`
   width: 100%;
   border: none;
   height: 207px;
+  resize: none; /* 크기 조절 못하게 함 */
   ::placeholder {
     color: ${LightTheme.FONT_SECONDARY};
   }

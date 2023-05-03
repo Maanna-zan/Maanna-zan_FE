@@ -11,6 +11,7 @@ import Log from '@features/mypage/Log';
 import Save from '@features/mypage/Save';
 import { WebWrapper } from '@components/Atoms/Wrapper';
 import MyWritePost from '@features/mypage/MyWritePost';
+import NoToken from '@components/Templates/withoutToken/NoToken';
 
 const MyPage = () => {
   const router = useRouter();
@@ -43,7 +44,11 @@ const MyPage = () => {
 
   return (
     <>
-      {userNickName === data?.nickName ? (
+      {!token ? (
+        <>
+          <NoToken />
+        </>
+      ) : (
         <div style={{ zIndex: '200' }}>
           <WebWrapper>
             <UserDiv key={data?.id}>
@@ -211,10 +216,6 @@ const MyPage = () => {
             </>
           )}
         </div>
-      ) : (
-        <>
-          <div>로그인 후 이용이 가능합니다</div>
-        </>
       )}
     </>
   );
