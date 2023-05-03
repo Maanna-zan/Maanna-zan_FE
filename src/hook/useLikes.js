@@ -19,7 +19,16 @@ export const useLikePost = () => {
       }),
     {
       onError: (error, postId, previousPost) => {
-        queryClient.setQueryData(['post', postId], previousPost);
+        const response = error?.response;
+        if (
+          response &&
+          response.data &&
+          response.data.message === 'Token Error'
+        ) {
+          alert('로그인 후 시도해 주세요');
+        } else {
+          queryClient.setQueryData(['post', postId], previousPost);
+        }
       },
       onMutate: (postId) => {
         const previousPost = queryClient.getQueryData(['post', postId]);
@@ -36,6 +45,9 @@ export const useLikePost = () => {
         } else {
           queryClient.invalidateQueries(['post', postId]);
         }
+      },
+      onSuccess: (response) => {
+        alert(JSON.stringify(response.data.data));
       },
     },
   );

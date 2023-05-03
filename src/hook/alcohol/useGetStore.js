@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { apis } from '@shared/axios';
 import { cookies } from '@shared/cookie';
 import { keys } from '@utils/createQueryKey';
@@ -30,6 +30,7 @@ export const useGetStoredetail = ({ apiId }) => {
   return { store: data, storeIsLoading: isLoading };
 };
 
+// 술집 리스트 조회용  좋아요
 export const useGetLikeStore = () => {
   const access_token = cookies.get('access_token');
 
@@ -41,12 +42,10 @@ export const useGetLikeStore = () => {
           access_token: `${access_token}`,
         },
       });
-      console.log('likeAlkol--------------', data);
       return data.data;
     },
-    onSuccess: (data) => {
-      console.log('likeAlkol success:', data);
-      // alert(data);
+    onSuccess: (response) => {
+      // alert(response.data);
     },
   });
 
@@ -59,4 +58,21 @@ export const useGetLikeStore = () => {
   }
 
   return { alkolsLike: data, alkolsIsLikeLoading: isLoading };
+};
+
+export const useLikeStore = () => {
+  const [alkolsLike, setAlkolsLike] = useState(null);
+
+  const { data: likeData, isLoading } = useQuery('getLikes', async () => {
+    const response = await apis.get('/bar/like');
+    return response.data.data;
+  });
+
+  useEffect(() => {
+    if (likeData) {
+      setAlkolsLike(likeData);
+    }
+  }, [likeData]);
+
+  return { alkolsLike, alkolsIsLikeLoading: isLoading };
 };
