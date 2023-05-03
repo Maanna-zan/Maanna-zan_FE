@@ -33,10 +33,10 @@ export const LinkToNav = () => {
     cookies.remove('access_token');
     cookies.remove('refresh_token');
     cookies.remove('nick_name');
-    localStorage.removeItem('nick_name');
   };
   const handleLogout = () => {
     deleteTokens();
+    setShowsignInModal(false);
     router.push('/');
   };
 
