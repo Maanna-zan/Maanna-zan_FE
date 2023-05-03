@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { apis } from '@shared/axios';
 import { cookies } from '@shared/cookie';
 import { keys } from '@utils/createQueryKey';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 export const useGetStoredetail = ({ apiId }) => {
   const access_token = cookies.get('access_token');
@@ -33,7 +33,7 @@ export const useGetStoredetail = ({ apiId }) => {
 // 술집 리스트 조회용  좋아요
 export const useGetLikeStore = () => {
   const access_token = cookies.get('access_token');
-
+  const queryClient = useQueryClient();
   const { data, isLoading, isError } = useQuery({
     queryKey: keys.GET_LIKE_STORE,
     queryFn: async () => {
@@ -44,9 +44,11 @@ export const useGetLikeStore = () => {
       });
       return data.data;
     },
-    onSuccess: (response) => {
-      // alert(response.data);
+    onSuccess: () => {
+      queryClient.invalidateQueries(['GET_LIKE_STORE']);
     },
+    // 1분마다 데이터를 무효화합니다.
+    // 이렇게 함으로써 1분마다 최신 데이터를 가져올 수 있습니다.
   });
 
   if (isLoading) {

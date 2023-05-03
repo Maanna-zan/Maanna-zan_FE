@@ -1,7 +1,7 @@
 import React from 'react';
 import { apis } from '@shared/axios';
 import { keys } from '@utils/createQueryKey';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { cookies } from '@shared/cookie';
 
 export const useGetPost = () => {
@@ -31,7 +31,7 @@ export const useGetPost = () => {
 
 export const useGetLikePost = () => {
   const access_token = cookies.get('access_token');
-
+  const queryClient = useQueryClient();
   const { data, isLoading, isError } = useQuery({
     queryKey: keys.GET_LIKE_POSTS,
     queryFn: async () => {
@@ -42,7 +42,11 @@ export const useGetLikePost = () => {
       });
       return data.data;
     },
+    onSuccess: () => {
+      queryClient.invalidateQueries(['GET_LIKE_POSTS']);
+    },
   });
+
   if (isLoading) {
     return { postsLike: data, postIsLoading: true };
   }
