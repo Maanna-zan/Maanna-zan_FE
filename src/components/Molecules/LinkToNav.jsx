@@ -181,16 +181,16 @@ export const LinkToNav = () => {
           <div
             style={{
               font: `var(--title2-semibold) Pretendard sans-serif`,
-              padding: '11px 0px 11px 20px',
+
               position: 'relative',
               width: 'fit-content',
               zIndex: '700',
-
             }}
           >
             <ButtonText
               style={{
                 font: `var(--title2-semibold) Pretendard sans-serif`,
+                padding: '11px 0px 11px 20px',
                 // position: 'relative',
               }}
               className="userNameBT"
