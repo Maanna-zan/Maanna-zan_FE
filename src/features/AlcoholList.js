@@ -229,7 +229,13 @@ const AlcoholList = () => {
             value={query}
             onChange={handleQueryChange}
             placeholder="술집을 검색해보세요"
+            onKeyDown={(event) => {
+              if (event.key === 'Enter') {
+                handleSearch();
+              }
+            }}
           />
+
           <div
             style={{ position: 'absolute', top: '11px', right: '20px' }}
             onClick={handleSearch}
