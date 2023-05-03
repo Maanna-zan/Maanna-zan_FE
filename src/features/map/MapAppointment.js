@@ -47,7 +47,7 @@ const MapAppointment = ({checkedPlace}) => {
   const mark = ['2023-04-20', '2023-04-28'];
 
   const clickDayHandler = (value, event) => {
-    console.log('value', value);
+    // console.log('value', value);
     alert(`Clicked day:  ${moment(value).format('YYYY-MM-DD')}`);
   };
   //value -> 원래 형태 'YYYY년 MM월 DD일' , 'YYYY-MM-DD', 'MM-DD' 이런식으로 변경이 가능합니다
@@ -63,7 +63,7 @@ const MapAppointment = ({checkedPlace}) => {
       ? localStorage.getItem('nick_name') ?? ''
       : '';
   return (
-    <WebWrapper>
+    <WebWrapper style={{marginTop: '150px'}}>
       <WebWrapperHeight>
         <FlexRow style={{maxWidth: '100wh'}}>
           {!isLoginMode ? (
