@@ -43,7 +43,7 @@ function SearchedKeywordLandingPage() {
     const { x, y } = place;
     //  x,y값 undefined일 시 조건문
     if (!x || !y) {
-      console.error('Invalid place object:', place);
+      // console.error('Invalid place object:', place);
       return;
     }
     //  place 매개변수 받아 모달창 props의 좌표값 받아서 지도 옮겨줌.
@@ -133,8 +133,9 @@ function SearchedKeywordLandingPage() {
           value={inputValues[index]}
           variant="default"
           size="leftIcon"
-          readOnly={midPoint ? true : false}
-          disabled={midPoint ? true : false}
+          // readOnly={midPoint ? true : false}
+          // disabled={midPoint ? true : false}
+          readOnly={true}
           onClick={() => onInputClickHandler(index)}
           style={{
             width: 'calc(100%)', //X 버튼 너비를 제외한 인풋박스의 너비를 설정위해 calc활용(필요시 연산자를 사용하여 값 계산하기)
@@ -144,7 +145,8 @@ function SearchedKeywordLandingPage() {
             fontFamily: `${'var(--label1-regular)'} Pretendard sans-serif`,
             fontSize: '14px',
             lineHeight: '18px',
-            cursor: midPoint ? 'default' : 'pointer',
+            // cursor: midPoint ? 'default' : 'pointer',
+            cursor: 'pointer',
             //Icon style
             // inputValues에 값 들어가면 돋보기 아이콘 사라지게하기. 반대로 X 버튼 나타나기.
             //  (...spread연산자 쓴 이유는 inputValues 배열의 모든 요소를 새로운 배열에 펼쳐서 복사하기위해)

@@ -453,6 +453,8 @@ const MapSection = styled.div`
     #myMap {
         width: 50%;
         height: 50%,
+        max-width: 270px;
+        max-height: 486px;
         position: relative,
         overflow: hidden;
         border-radius: 8px;
@@ -463,7 +465,6 @@ const MapSection = styled.div`
         position: relative;
         z-index: 2;
         font-size: 4px;
-        margin-top: 9px;
         /* background-color: green; */
         //지도랑 붙이고 z-index로 가림
         overflow: hidden;
@@ -474,6 +475,8 @@ const MapSection = styled.div`
         position: relative;
         width: 570px;
         height: 52vh;
+        max-width: 570px;
+        max-height: 52vh;
         border-radius: 5px;
         overflow-y: auto;
     ::-webkit-scrollbar {

@@ -469,7 +469,7 @@ function MapMidPoint() {
     }
     return (
     <> 
-        <WebWrapper style={{borderBottom : '1px solid black'}}>
+        <WebWrapper /*style={{borderBottom : '1px solid black'}}*/>
             <WebWrapperHeight>
                 <FlexRow style={{ justifyContent: 'space-between' }}>
                     <MoveBackButtonWrapper>
@@ -489,7 +489,6 @@ function MapMidPoint() {
                         fontSize: '12px',
                         fontWeight: '600'
                         }}
-                    
                     onClick={moveBackClickButtonHandler}/>
                     </MoveBackButtonWrapper>
                     <MapSection>
@@ -532,14 +531,12 @@ function MapMidPoint() {
                                                 size="lg"
                                                 readOnly={true}
                                                 style={{
-                                                    width: '100%',
+                                                    width: '14vw',
                                                     margin: '3px 0 3px 10px',
-                                                    padding: '2%',
+                                                    padding: '6px',
                                                     border: '1px solid white',
                                                     backgroundColor: `${LightTheme.GRAY_50}`,
-                                                    fontFamily: `${'var(--label1-regular)'} Pretendard sans-serif`,
-                                                    fontSize: '14px',
-                                                    lineHeight: '18px',
+                                                    font: `${'var(--label1-regular)'} Pretendard sans-serif`,
                                                     zIndex: '1000'
                                                 }}
                                                 />
@@ -548,8 +545,9 @@ function MapMidPoint() {
                                     </DeparturesWrapper>
                             <FlexColumnCenter style={{maxWidth: '518px',maxHeight: '90vh'}}>
                                 <TitleWrapper>
-                                    <TitleStyled>중간 위치에 있는 </TitleStyled>
-                                    <Highlighting>술집입니다.</Highlighting>
+                                    <div style={{font: `${'var(--head1-medium)'} Pretendard sans-serif`,}}>중간 위치에 있는 </div>
+                                    <div style={{font: `${'var(--head1-bold)'} Pretendard sans-serif`,}}>술집입니다.</div>
+                                </TitleWrapper>
                                         <CategoryWrapper>
                                             <form 
                                             id="form" 
@@ -656,7 +654,7 @@ function MapMidPoint() {
                                                 />
                                             </form> */}
                                         </CategoryWrapper>
-                                </TitleWrapper>
+                                
                                 <div>
                                     <div id="menuDiv">
                                         <div id="menu_wrap">
@@ -672,6 +670,7 @@ function MapMidPoint() {
                             </FlexColumnCenter>
                         </div>
                     </MapSection>
+
                 </FlexRow>
                 <div style={{ display: 'flex', justifyContent: 'center' }}>
                 <div id="create-appointment"></div>
@@ -698,22 +697,8 @@ function MapMidPoint() {
     const TitleWrapper = styled.div`
     margin: 0 0 3px 20px;
     /* height: 100vh; */
-    /* overflow-y: hidden; */
+    overflow-y: hidden;
     `
-    const TitleStyled = styled.div`
-        font-size: 40px;
-        font-weight: 500;
-        line-height: 48px;
-        font-family: var(--display2-medium) Pretendard sans-serif,
-    `;
-    const Highlighting = styled.div`
-    //width값있어야 전체 width늘어남..
-        width: 487px;
-        font-size: 40px;
-        font-weight: 700;
-        line-height: 48px;
-        font-family: var(--display2-bold) Pretendard sans-serif,
-    `;
     const DeparturesWrapper = styled.div`
     position:absolute;
     display: flex;
@@ -723,21 +708,22 @@ function MapMidPoint() {
     `
     const CategoryWrapper = styled.div`
         display: flex;
-        justify-content: flex-end;
-        align-items: flex-end;
+        /* justify-content: flex-end; */
+        /* align-items: flex-end; */
         width: 32rem;
-        /* overflow-x: scroll; */
+        max-width:622px;
+        margin: 2px 0 2px 16px;
+        overflow-x: scroll;
         /* overflow-x: auto; */
-        /* white-space: nowrap; */
-        flex-direction: row;
-        /* overflow: hidden; */
-        overflow-y: hidden;
+        white-space: nowrap;
+        /* overflow: hidden;
+        overflow-y: hidden; */
         resize: none; 
-    /* ::-webkit-scrollbar {
-        width: 4px;
-        height: 1px;
+    ::-webkit-scrollbar {
+        width: 1px;
+        height: 3px;
     }
-    ::-webkit-scrollbar-thumb {
+    /* ::-webkit-scrollbar-thumb {
         background-color: rgba(0, 0, 0, 0.2);
         border-radius: 3px;
     }
@@ -753,26 +739,27 @@ function MapMidPoint() {
     #map {
         overflow: hidden;
         border-radius: 8px;
-        z-index: "3";
-        width: '50vh',
-        height: '90vh',
-        position: "relative"
+        z-index: 3;
+        width: 50vh;
+        height: 90vh;
+        position: relative;
         overflow: hidden;
     }
     #menuDiv {
         display: flex;
         position: relative;
-        height: 50vh;
+        height: 65vh;
+        max-width:622px;
+        max-height:782px;
         z-index: 2;
         font-size: 4px;
-        top: 3%
         overflow: hidden;
     }
     
     #menu_wrap {
         position: relative;
         width: 35rem;
-        height: 60vh;
+        height: 65vh;
         max-width: 50vw;
         border-radius: 5px;
         overflow-y: auto;
@@ -801,20 +788,6 @@ function MapMidPoint() {
         display: flex;
         justify-content: space-between;
         padding: 0px 15px 10px 0;
-    }
-    
-    #keyword {
-        width: 100%;
-        border: none;
-        outline: none;
-    }
-    
-    #submit_btn {
-        /* background-color: #F4F5F6;
-        color: #7e7979;
-        border: none;
-        border-radius:10px;
-        outline: none; */
     }
     
     #placesList h5 {
@@ -868,122 +841,4 @@ function MapMidPoint() {
         color: #3DC060;
         font-weight: bold;
     }
-    
-    #btnDiv {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-    }
-    
-    #pagination {
-        margin: 10px auto;
-        text-align: center;
-    }
-    #pagination a {
-        display: inline-block;
-        margin-right: 10px;
-        color: #7b7b7b;
-    }
-    #pagination .on {
-        font-weight: bold;
-        cursor: default;
-        color: #ff6e30;
-    }
-    #btnOn {
-        height: 600px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-    }
-    
-    #searchBtn {
-        width: 20px;
-        padding: 0px;
-        height: 70px;
-        background-color: #ffa230;
-        border: none;
-        outline: none;
-    }
     `;
-
-
-
-
-
-        //  중간지점 마커 시도.
-        // function MidPointMarkerSet() {  
-        //     MidPointMarker()
-        //     displayMidPointMarker()
-        //     function MidPointMarker(midPointProp) {
-        //         const imageMidPointSrc = 'MaannajanLogo.png', // 마커 이미지 url, 스프라이트 이미지를 씁니다
-        //         imageSize = new kakao.maps.Size(36, 37),  // 마커 이미지의 크기
-        //         imgOptions =  {
-        //             spriteSize : new kakao.maps.Size(36, 691), // 스프라이트 이미지의 크기
-        //             spriteOrigin : new kakao.maps.Point(0, (idx*46)+10), // 스프라이트 이미지 중 사용할 영역의 좌상단 좌표
-        //             offset: new kakao.maps.Point(13, 37) // 마커 좌표에 일치시킬 이미지 내에서의 좌표
-        //         },
-        //         markerImage = new kakao.maps.MarkerImage(imageMidPointSrc, imageSize, imgOptions),
-        //         MidPointMarker = new kakao.maps.Marker({
-        //             position: midPointProp, // 마커의 위치
-        //             image: markerImage 
-        //         });
-        //         MidPointMarker.setMap(map); // 지도 위에 마커를 표출
-        //     // markers.push(marker);  // 배열에 생성된 마커를 추가
-        //     return MidPointMarker;
-        //     }
-        //     function displayMidPointMarker(midPointProp) {
-        //         let marker = new kakao.maps.Marker({
-        //         map: map,
-        //         position: new kakao.maps.LatLng(midPointProp.lat, place.lng)
-        //         });
-        // }}
-        // kakao Pagination API중 gotoPage 함수(시도 실패) 
-        // function gotoPage(page) {
-        //     const pageSize = 15; // 페이지당 표시할 장소 수
-        //     const pageCenter = (page - 1) * pageSize + pageSize / 2; // 페이지 중심 장소 인덱스
-        //     const center = new kakao.maps.LatLng(kakaoApi[pageCenter]?.y, kakaoApi[pageCenter]?.x); // 페이지 중심 좌표
-        //     map.setCenter(center); // 지도의 중심 좌표를 페이지 중심 좌표로 설정
-        //     refetch({
-        //         url: `/kakaoApi?y=${midPointProp?.lat}&x=%20${midPointProp?.lng}&query=술집&radius=1500&page=${page}&size=15&sort=distance`
-        //     });
-        // }
-
-
-            // 검색결과 목록 하단에 페이지 번호 표시
-        // function displayPagination(pagination) {
-        //     const paginationEl = document.getElementById('pagination');
-        //     const fragment = document.createDocumentFragment();
-        //     // 기존에 추가된 페이지 번호 삭제
-        //     while (paginationEl?.hasChildNodes()) {
-        //         paginationEl.lastChild &&
-        //         paginationEl.removeChild(paginationEl.lastChild)
-        //     }
-    
-        //     const totalPage = Math.ceil(data?.data?.meta?.pageable_count / 3); // 전체 페이지 수
-        //     const currentPage = pagination.currentPage; // 현재 페이지
-
-        //     for (let i = 1; i <= totalPage; i++) {
-        //         const el = document.createElement('a')
-        //         el.href = '#'
-        //         el.innerHTML = i
-        //         if (i === currentPage) {
-        //         el.className = 'on';
-        //         } else {
-        //         el.onclick = (function (i) {
-        //             return function () {
-        //                 refetch({
-        //                     url: `/kakaoApi?y=${midPointProp?.lat}&x=%20${midPointProp?.lng}&query=술집&radius=1500&page=${i}&size=15&sort=distance`
-        //                 });
-        //                 pagination.currentPage = i;
-        //                 displayPagination(pagination);
-        //             }
-        //         })(i)
-        //         }
-    
-        //         fragment.appendChild(el)
-        //     }
-        //     // paginationEl이 null이 아닐 때 appendChild 메소드를 호출
-        //     if (paginationEl !== null) { 
-        //         paginationEl.appendChild(fragment);
-        //     }
-        // }
