@@ -2,20 +2,26 @@ import React from 'react';
 import { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useLikeStore } from '../../hook/alcohol/useGetStore';
-import { LikeHeartIcon, DisLikeHeartIcon } from '@components/Atoms/HeartIcon';
+import {
+  LikeCircleHeartIcon,
+  DisLikeCircleHeartIcon,
+} from '@components/Atoms/HeartIcon';
 import { useGetLikeStore } from '../../hook/alcohol/useGetStore';
+
 //주의
 export const Store = ({
   storeData,
   store,
   alkolsIsLikeLoading,
   alkolsLike,
+  // storeLikeMine,
+  // roomLikeMark,
 }) => {
   const queryClient = useQueryClient();
   const { likeStore } = useLikeStore();
 
   const apiId = store.apiId;
-
+  // console.log('apiId', apiId);
   //게시글 좋아요한 가게와 현재가게 매칭
   const storeLikeMine =
     (alkolsLike && alkolsLike.flat().find((obj) => obj.apiId === apiId)) || {};
@@ -25,8 +31,7 @@ export const Store = ({
     alkolLikeMatch = alkolsLike.data;
   }
   const [roomLike, setRoomLike] = useState(storeLikeMine?.roomLike);
-
-  const { handleLike } = useLikeStore();
+  // console.log('storeLikeMine', storeLikeMine, 'storeLikeMine');
   const pushLike = storeLikeMine.apiId;
   const likeStoreHandler = async (apiId) => {
     try {
@@ -51,7 +56,11 @@ export const Store = ({
           <div>Loading...</div>
         ) : (
           <>
-            {alkolsLike && roomLike ? <LikeHeartIcon /> : <DisLikeHeartIcon />}
+            {alkolsLike && roomLike ? (
+              <LikeCircleHeartIcon />
+            ) : (
+              <DisLikeCircleHeartIcon />
+            )}
           </>
         )}
       </div>

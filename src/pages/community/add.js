@@ -14,7 +14,6 @@ const AddPostForm = () => {
   const router = useRouter();
   const apiIdReal = router.query.storeId;
 
-  console.log('apiIdReal-------------', apiIdReal);
   const [post, setPost] = useState({
     title: '',
     description: '',
@@ -37,7 +36,6 @@ const AddPostForm = () => {
           access_token: `${access_token}`,
         },
       });
-      console.log('dataAdd------------>', data);
       return data;
     },
     onSuccess: (data) => {
@@ -74,7 +72,6 @@ const AddPostForm = () => {
       ...prevPost,
       [name]: value[name],
     }));
-    console.log('setPosthandleRatingChange', post);
   };
   const checkFormValidity = () => {
     if (!post.title || !post.description) {
@@ -117,7 +114,6 @@ const AddPostForm = () => {
   };
   const [showReviewForm, setShowReviewForm] = useState(false);
 
-  console.log('showReviewForm', showReviewForm);
   return (
     <div style={{ backgroundColor: `${LightTheme.GRAY_50}` }}>
       <WebWrapper792px style={{ margin: '0 auto' }}>

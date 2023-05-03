@@ -11,7 +11,12 @@ import { useState } from 'react';
 // import 생략
 import { cookies } from '../../shared/cookie';
 import { useGetPost, useGetLikePost } from '../../hook/post/useGetPost';
-import { LikeHeartIcon, DisLikeHeartIcon } from '@components/Atoms/HeartIcon';
+import {
+  LikeHeartIcon,
+  DisLikeHeartIcon,
+  LikeCircleHeartIcon,
+  DisLikeCircleHeartIcon,
+} from '@components/Atoms/HeartIcon';
 import {
   ImgCenter,
   ImgWrapper282x248,
@@ -90,7 +95,7 @@ const CommunityList = () => {
                 }}
                 onClick={() => likePostHandler(store?.id)}
               >
-                {like ? <LikeHeartIcon /> : <DisLikeHeartIcon />}
+                {like ? <LikeCircleHeartIcon /> : <LikeCircleHeartIcon />}
               </div>
               <div
                 onClick={() => {
