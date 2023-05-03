@@ -7,8 +7,9 @@ import { HeadInfo } from '@components/Atoms/SEO/HeadInfo';
 import { ButtonText } from '@components/Atoms/Button';
 import { InputArea } from '@components/Atoms/Input';
 import { useConfirm } from '../../hook/useConfirm';
+import { LightTheme } from '@components/Themes/theme';
 
-export default function SignUpModal({ onClose }) {
+export default function SignUpModal({ onClose, onOpen }) {
   const router = useRouter();
   //회원가입 다음 버튼 눌렀을 때햣
   const [next, setNext] = React.useState(false);
@@ -38,14 +39,6 @@ export default function SignUpModal({ onClose }) {
     setUser((pre) => ({ ...pre, [name]: value }));
   };
   const [passwordError, setPasswordError] = useState(false);
-  const handlePasswordChange = (e) => {
-    const { name, value } = e.target;
-    setUser((pre) => ({ ...pre, [name]: value }));
-
-    if (name === 'checkPassword') {
-      setPasswordError(user.password !== value);
-    }
-  };
 
   // passwordCheck 빼고 나머지 라는 뜻
   //3번째 옵션 config
@@ -64,6 +57,8 @@ export default function SignUpModal({ onClose }) {
       onClose();
     },
   });
+  // 유효성 검사 후, 이미지를 띄우기 위한 state 추가
+  const [isValidPassword, setIsValidPassword] = useState(false);
 
   //비밀번호 조건
   const validatePassword = (password) => {
@@ -72,21 +67,68 @@ export default function SignUpModal({ onClose }) {
     const regex =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_])[A-Za-z\d\W_]{9,20}$/;
 
-    return (
+    const isValid =
       password.length >= minLength &&
       password.length <= maxLength &&
-      regex.test(password)
-    );
+      regex.test(password);
+
+    // 유효성 검사 후, 상태 업데이트
+    setIsValidPassword(isValid);
+
+    return isValid;
   };
+
+  const handlePasswordChange = (e) => {
+    const { name, value } = e.target;
+    setUser((pre) => ({ ...pre, [name]: value }));
+
+    if (name === 'checkPassword') {
+      setPasswordError(user.password !== value || !isValidPassword);
+    } else if (name === 'password') {
+      const validPassword = validatePassword(value);
+      setPasswordError(!validPassword);
+      setIsValidPassword(validPassword);
+      if (user.checkPassword) {
+        setPasswordError(user.checkPassword !== value || !validPassword);
+      }
+    }
+  };
+  const handleCheckPasswordChange = (e) => {
+    const { name, value } = e.target;
+    setUser((pre) => ({ ...pre, [name]: value }));
+    if (name === 'checkPassword') {
+      setPasswordError(user.password !== value);
+      if (user.password) {
+        setPasswordError(user.password !== value || !isValidPassword);
+      }
+    } else if (name === 'password') {
+      const validPassword = validatePassword(value);
+      setPasswordError(!validPassword);
+      setIsValidPassword(validPassword);
+    }
+  };
+
   //타당성 검사 코드
   const validateForm = (userData) => {
     if (!userData.userName) {
-      alert('이름을 입력해주세요.');
+      alert('성명을 입력해주세요.');
       return false;
     }
-    const userNickName = /^(?=.*[a-z0-9가-힣])[a-z0-9가-힣]{2,16}$/;
+    const userNickName = /^(?=.*[a-z0-9가-힣])[a-z0-9가-힣]{2,8}$/;
     if (!userNickName.test(userData.nickName)) {
-      alert('닉네임을 입력해주세요.');
+      alert(
+        '닉네임은 영어,숫자,한글로 구성되어야하며 최소 2글자 최대 8글자로 구성되어야합니다.',
+      );
+      return false;
+    }
+    if (!validatePassword(userData.password)) {
+      alert(
+        '비밀번호는 알파벳 소문자, 대문자, 숫자, 특수문자를 포함한 8~16자여야 합니다.',
+      );
+      return false;
+    }
+    if (passwordError) {
+      alert('비밀번호 확인을 비밀번호와 맞춰 입력해주세요.');
       return false;
     }
     const userPhoneNumber = /^01([0|1|6|7|8|9]?)([0-9]{3,4})([0-9]{4})$/;
@@ -105,18 +147,23 @@ export default function SignUpModal({ onClose }) {
       alert('올바른 생년월일 형식으로 입력해주세요.');
       return false;
     }
-    if (!validatePassword(userData.password)) {
-      alert(
-        '비밀번호는 알파벳 소문자, 대문자, 숫자, 특수문자를 포함한 9~20자여야 합니다.',
-      );
-      return false;
-    }
 
     return true;
   };
+
+  const isNextButtonActive = () => {
+    if (!user.userName) return false;
+    if (!user.nickName) return false;
+    if (!validatePassword(user.password)) return false;
+    if (passwordError) return false;
+
+    return true;
+  };
+
   return (
-    <ModalDiv className="modal">
-      <div className="modal-overlay">
+    <>
+      <ModalDiv onClick={onClose} className="modal"></ModalDiv>
+      <Modal className="modal-overlay">
         <img
           style={{
             position: 'fixed',
@@ -143,14 +190,19 @@ export default function SignUpModal({ onClose }) {
             value={user.userName}
             placeholder="이름을 입력해주세요."
             onChange={changHandler}
+            maxLength="5"
             required
+            onKeyDown={(e) => {
+              if (e.key === ' ') e.preventDefault();
+            }}
           />
           <Detaildiv>
             <div className="detailSignUp">닉네임</div>
-            <div className="notice">닉네임 8글자 이내</div>
+            <div className="notice">8자리 이내/영어,한글,숫자로 구성</div>
           </Detaildiv>
           <div style={{ display: 'flex', gap: '20px' }}>
             <InputArea
+              variant="default"
               size="lg"
               style={{ width: '100%' }}
               type="text"
@@ -158,8 +210,12 @@ export default function SignUpModal({ onClose }) {
               value={user.nickName}
               placeholder="닉네임을 입력해주세요."
               onChange={changHandler}
-              maxLength="16"
+              minLength="2"
+              maxLength="8"
               required
+              onKeyDown={(e) => {
+                if (e.key === ' ') e.preventDefault();
+              }}
             />
 
             <ButtonText
@@ -178,46 +234,110 @@ export default function SignUpModal({ onClose }) {
               8~16 자리 / 영문 대소문자,숫자,특수문자 포함
             </div>
           </Detaildiv>
-          <InputArea
-            type="password"
-            name="password"
-            size="lg"
-            variant="default"
-            value={user.password}
-            placeholder="비밀번호를 입력해주세요."
-            onChange={handlePasswordChange}
-            maxLength="20"
-            required
-          />
+          <div style={{ position: 'relative' }}>
+            <InputArea
+              style={{
+                borderColor: isValidPassword
+                  ? LightTheme.STATUS_POSITIVE
+                  : LightTheme.GRAY_200,
+              }}
+              type="password"
+              name="password"
+              size="lg"
+              variant="default"
+              value={user.password}
+              placeholder="비밀번호를 입력해주세요."
+              onChange={handlePasswordChange}
+              minLength="8"
+              maxLength="16"
+              required
+              onKeyDown={(e) => {
+                if (e.key === ' ') e.preventDefault();
+              }}
+            />
+            {isValidPassword && (
+              <img
+                src="Group 2066.png"
+                alt="Valid password"
+                style={{
+                  position: 'absolute',
+                  top: '12px',
+                  right: '12px',
+                  width: '20px',
+                  height: '20px',
+                }}
+              />
+            )}
+          </div>
           <Detaildiv>
             <div className="detailSignUp">비밀번호 확인</div>
             <div className="notice">
               8~16 자리 / 영문 대소문자,숫자,특수문자 포함
             </div>
           </Detaildiv>
-          <InputArea
-            type="password"
-            name="checkPassword"
-            size="lg"
-            variant="default"
-            // value={user.checkPassword}
-            placeholder="비밀번호를 입력해주세요."
-            onChange={handlePasswordChange}
-            required
-          />
-          {passwordError && (
+          <div style={{ position: 'relative' }}>
+            <InputArea
+              type="password"
+              name="checkPassword"
+              size="lg"
+              variant="default"
+              style={{
+                borderColor: passwordError
+                  ? 'red'
+                  : !passwordError &&
+                    user.checkPassword &&
+                    user.password === user.checkPassword
+                  ? LightTheme.STATUS_POSITIVE
+                  : LightTheme.GRAY_200,
+              }}
+              placeholder="비밀번호를 입력해주세요."
+              onChange={handleCheckPasswordChange}
+              minLength="8"
+              maxLength="16"
+              required
+              onKeyDown={(e) => {
+                if (e.key === ' ') e.preventDefault();
+              }}
+            />
+            {!passwordError &&
+              user.checkPassword &&
+              user.password === user.checkPassword && (
+                <img
+                  src="Group 2066.png"
+                  alt="Valid password"
+                  style={{
+                    position: 'absolute',
+                    top: '12px',
+                    right: '12px',
+                    width: '20px',
+                    height: '20px',
+                  }}
+                />
+              )}
+          </div>
+
+          {passwordError ? (
             <p style={{ color: 'red', fontSize: '12px', marginTop: '-5px' }}>
               비밀번호가 일치하지 않습니다.
             </p>
-          )}
-          {!passwordError && (
-            <p style={{ color: 'red', fontSize: '12px', marginTop: '-5px' }}>
+          ) : !passwordError &&
+            user.checkPassword &&
+            user.password === user.checkPassword ? (
+            <p
+              style={{ color: '#3DC061', fontSize: '12px', marginTop: '-5px' }}
+            >
               비밀번호가 일치합니다.
             </p>
+          ) : (
+            <></>
           )}
           {next ? (
             <>
-              <div className="detailSignUp">전화번호</div>
+              <Detaildiv>
+                <div className="detailSignUp">전화번호</div>
+                <div className="notice">숫자로 이루어진 11자리</div>
+              </Detaildiv>
+
               <InputArea
                 type="text"
                 size="lg"
@@ -226,7 +346,11 @@ export default function SignUpModal({ onClose }) {
                 value={user.phoneNumber}
                 placeholder="전화번호를 입력해주세요."
                 onChange={changHandler}
+                maxLength="11"
                 required
+                onKeyDown={(e) => {
+                  if (e.key === ' ') e.preventDefault();
+                }}
               />
               <div className="detailSignUp">이메일</div>
 
@@ -245,6 +369,9 @@ export default function SignUpModal({ onClose }) {
                   placeholder="이메일을 입력해주세요."
                   onChange={changHandler}
                   required
+                  onKeyDown={(e) => {
+                    if (e.key === ' ') e.preventDefault();
+                  }}
                 />
                 <ButtonText
                   type="button"
@@ -256,15 +383,22 @@ export default function SignUpModal({ onClose }) {
                   label="중복확인"
                 />
               </div>
-              <div className="detailSignUp">생년월일</div>
+              <Detaildiv>
+                <div className="detailSignUp">생년월일</div>
+                <div className="notice">숫자로 이루어진 8자리</div>
+              </Detaildiv>
               <InputArea
                 type="text"
                 size="lg"
                 variant="default"
                 name="birth"
                 value={user.birth}
+                maxLength="8"
                 placeholder="생년월일 8글자를 입력해주세요."
                 onChange={changHandler}
+                onKeyDown={(e) => {
+                  if (e.key === ' ') e.preventDefault();
+                }}
               />
               <ButtonText
                 size="md"
@@ -287,13 +421,17 @@ export default function SignUpModal({ onClose }) {
               style={{ cursor: 'pointer' }}
               label="다음"
               onClick={() => {
-                setNext(true);
+                if (isNextButtonActive()) {
+                  setNext(true);
+                } else {
+                  validateForm(user);
+                }
               }}
             />
           )}
         </InnerDiv>
-      </div>
-    </ModalDiv>
+      </Modal>
+    </>
   );
 }
 
@@ -305,25 +443,25 @@ const ModalDiv = styled.div`
   height: 100%;
   background-color: #6a758152;
   z-index: 999;
+`;
 
-  .modal-overlay {
-    padding: 20px 40px;
-    border-radius: 20px;
-    position: fixed;
-    transform: translate(-50%, -50%);
-    top: 50%;
-    left: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: white;
-    z-index: 1000;
-    max-width: 550px;
-    min-width: 380px;
-    width: 50%;
-    border: 1px solid #939aa0;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
+const Modal = styled.div`
+  padding: 20px 40px;
+  border-radius: 20px;
+  position: fixed;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  z-index: 1000;
+  max-width: 550px;
+  min-width: 380px;
+  width: 50%;
+  border: 1px solid #939aa0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 `;
 
 const InnerDiv = styled.div`

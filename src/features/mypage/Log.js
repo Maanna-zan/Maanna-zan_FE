@@ -72,7 +72,7 @@ function Log() {
           Access_Token: `${token}`,
         },
       });
-      // console.log('result~~~', data.data);
+      //console.log('result~~~', data.data);
       return data.data.data;
     },
     onSuccess: (data) => {
@@ -91,6 +91,7 @@ function Log() {
   // 츄가
   const { mutate } = useMutation({
     mutationFn: async (event) => {
+      // console.log('event', event);
       const data = await apis.post('my-page/calendar', event, {
         headers: {
           Access_Token: `${token}`,
@@ -133,11 +134,10 @@ function Log() {
     },
     onSuccess: () => {
       setIsEditMode(false);
-
       queryClient.invalidateQueries(['LOG_DATE']);
       window.alert('수정 완료!');
     },
-    onError: () => {
+    onError: (e) => {
       window.alert('수정 오류!');
     },
   });
@@ -270,7 +270,7 @@ function Log() {
           </Div>
           <ReviewDiv>
             <h1 className="title">기록</h1>
-            <div>
+            <LogBox>
               {currentPageData.map((calLog) => (
                 <CalLogDiv key={calLog.id}>
                   {isEditMode[calLog.id] ? (
@@ -283,6 +283,7 @@ function Log() {
                             size="md"
                             type="text"
                             name="title"
+                            maxLength="50"
                             value={callederTitle}
                             onChange={(e) => setCallenderTitle(e.target.value)}
                           />
@@ -292,6 +293,7 @@ function Log() {
                             size="md"
                             type="date"
                             name="content"
+                            maxLength="1500"
                             value={callederSetDated}
                             onChange={(e) =>
                               setCallenderSetDated(e.target.value)
@@ -342,7 +344,7 @@ function Log() {
                   )}
                 </CalLogDiv>
               ))}
-            </div>
+            </LogBox>
             <Pagination
               pages={chunkedData.map((_, i) => i + 1)}
               activePage={activePage}
@@ -356,10 +358,14 @@ function Log() {
 }
 
 export default Log;
+const LogBox = styled.div`
+  /* border: 1px solid black; */
+  width: fit-content;
+  height: 560px;
+`;
 
 const ReviewDiv = styled.div`
   width: 688px;
-
   display: flex;
   flex-direction: column;
   .p {
@@ -480,6 +486,8 @@ const CalLogDiv = styled.div`
   .textarea {
     margin-top: 5px;
     border: none;
+    height: 100%;
+    width: 100%;
   }
   .del {
     padding: 3px 12px;

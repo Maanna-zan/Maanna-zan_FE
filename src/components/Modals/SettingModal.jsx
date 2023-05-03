@@ -7,13 +7,19 @@ import styled from 'styled-components';
 import { InputArea } from '@components/Atoms/Input';
 import { ButtonText } from '@components/Atoms/Button';
 import Save from '@features/mypage/Save';
+import { useConfirm } from '../../hook/useConfirm';
+import { FlexRow } from '@components/Atoms/Flex';
 
 export default function SettingModal({ onClose, data }) {
   const router = useRouter();
   // console.log('data', data);
   const [isEditMode, setIsEditMode] = useState('profile');
+
+  const [isNickNameAvailable, setIsNickNameAvailable] = useState(false);
+
   const [password, setPassword] = useState('');
   const changePWInputHandler = (e) => {
+    setIsNickNameAvailable(false);
     const { value, name } = e.target;
     setPassword((pre) => ({ ...pre, [name]: value }));
   };
@@ -31,15 +37,38 @@ export default function SettingModal({ onClose, data }) {
     },
     // onError 콜백 함수 구현
     onError: (error) => {
-      // console.log(error.response);
+      // console.log(error.response.status);
+      const status = error.response.status;
       // // 에러 처리
-      alert('중복된 닉네임이 있습니다.');
+      if (status == 415) {
+        alert('입력값을 확인해주세요');
+      } else if (status == 400) {
+        alert('중복확인을 해주세요.');
+      }
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      // console.log('data', data);
       alert('닉네임 변경이 완료됐습니다.');
+      onClose();
       router.push('/mypage');
     },
   });
+  // 비동기서버통신을 위한 커스텀 훅
+  const [confirm] = useConfirm();
+  const confirmNickName = () => {
+    setIsNickNameAvailable(true);
+    confirm({ type: 'nickName', value: password.nickName }, () => {
+      nickName(password);
+    });
+  };
+
+  const changeNickNameButton = () => {
+    if (!isNickNameAvailable || '') {
+      return alert('중복확인을 해주세요');
+    } else {
+      nickName(password);
+    }
+  };
   //비밀번호 변경
   const { mutate: changePassword } = useMutation({
     mutationFn: async (user) => {
@@ -143,18 +172,34 @@ export default function SettingModal({ onClose, data }) {
                   setIsEditMode('env');
                 }}
               >
-                환경설정
+                회원 탈퇴
               </p>
             </ModeParentsDiv>
             <p>닉네임</p>
-            <InputArea
-              size="lg"
-              variant="default"
-              type="text"
-              name="nickName"
-              value={password.nickName}
-              onChange={changePWInputHandler}
-            />
+            <FlexRow style={{ gap: '20px' }}>
+              <InputArea
+                size="lg"
+                variant="default"
+                type="text"
+                name="nickName"
+                value={password.nickName}
+                onChange={changePWInputHandler}
+                onKeyDown={(e) => {
+                  if (e.key === ' ') e.preventDefault();
+                }}
+              />
+
+              <ButtonText
+                type="button"
+                // size="md"
+                style={{ width: '120px' }}
+                variant="primary"
+                active={true}
+                onClick={confirmNickName}
+                label="중복확인"
+              />
+            </FlexRow>
+
             <p>이메일</p>
             <InputDiv>{data.email}</InputDiv>
 
@@ -163,11 +208,8 @@ export default function SettingModal({ onClose, data }) {
               label="저장하기"
               variant="primary"
               active={true}
-              disabled={isLoading}
-              onClick={() => {
-                nickName(password);
-                onClose();
-              }}
+              // disabled={isLoading || !isNickNameAvailable} // add the `!isNickNameAvailable` condition
+              onClick={changeNickNameButton}
             />
           </InnerDiv>
         ) : isEditMode === 'password' ? (
@@ -202,10 +244,10 @@ export default function SettingModal({ onClose, data }) {
                   setIsEditMode('env');
                 }}
               >
-                환경설정
+                회원 탈퇴
               </p>
             </ModeParentsDiv>
-            <p>새 비밀번호</p>
+            <p>기존 비밀번호</p>
             <InputArea
               size="lg"
               variant="default"
@@ -216,6 +258,9 @@ export default function SettingModal({ onClose, data }) {
               onChange={handlePasswordChange}
               maxLength="20"
               required
+              onKeyDown={(e) => {
+                if (e.key === ' ') e.preventDefault();
+              }}
             />
             <p>새 비밀번호</p>
             <InputArea
@@ -228,6 +273,9 @@ export default function SettingModal({ onClose, data }) {
               onChange={handlePasswordChange}
               maxLength="20"
               required
+              onKeyDown={(e) => {
+                if (e.key === ' ') e.preventDefault();
+              }}
             />
             <p>비밀번호 확인</p>
             <InputArea
@@ -239,6 +287,9 @@ export default function SettingModal({ onClose, data }) {
               placeholder="비밀번호를 확인해주세요."
               onChange={handlePasswordChange}
               required
+              onKeyDown={(e) => {
+                if (e.key === ' ') e.preventDefault();
+              }}
             />
             {passwordError && (
               <p style={{ color: 'red', fontSize: '12px', marginTop: '-5px' }}>
@@ -305,7 +356,7 @@ export default function SettingModal({ onClose, data }) {
                     setIsEditMode('env');
                   }}
                 >
-                  환경설정
+                  회원 탈퇴
                 </p>
                 <Hr />
               </div>
@@ -364,7 +415,7 @@ export default function SettingModal({ onClose, data }) {
                     setIsEditMode('env');
                   }}
                 >
-                  환경설정
+                  회원 탈퇴
                 </p>
                 <Hr />
               </div>
@@ -471,12 +522,16 @@ const ModeParentsDiv = styled.div`
   font-size: 14px;
   justify-content: center;
   .unModeP {
+    cursor: pointer;
     color: #9ea4aa;
+  }
+  .modeP {
   }
   .modeDiv {
     display: flex;
     align-items: center;
     flex-direction: column;
+    cursor: pointer;
   }
 `;
 const Hr = styled.hr`

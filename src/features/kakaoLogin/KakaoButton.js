@@ -7,7 +7,7 @@ const KakaoButton = () => {
   const KakaoLoginHandler = () => {
     if (typeof window !== 'undefined') {
       window.location.href = KAKAO_AUTH_URL;
-      console.log('findit', KAKAO_AUTH_URL);
+      // console.log('findit', KAKAO_AUTH_URL);
     }
   };
 

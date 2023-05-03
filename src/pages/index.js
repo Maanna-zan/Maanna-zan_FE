@@ -11,7 +11,10 @@ const App = () => {
     <div>
       <HeadInfo title="만나잔에 오신걸 환영합니다!" />
       <MainFirstSection />
-      <MainSecondSection />
+      <div style={{ display: 'flex', marginTop: '-200px' }}>
+        <MainSecondSection />
+      </div>
+
       <MainLastSectionMovie />
     </div>
   );

@@ -7,6 +7,7 @@ import { cookies } from '@shared/cookie';
 import styled from 'styled-components';
 import { InputArea } from '@components/Atoms/Input';
 import { ButtonText } from '@components/Atoms/Button';
+import { LightTheme } from '@components/Themes/theme';
 
 import { toast } from 'react-toastify';
 const OAuth = (Toast) => {
@@ -53,9 +54,32 @@ const OAuth = (Toast) => {
     setPassword((pre) => ({ ...pre, [name]: value }));
 
     if (name === 'checkPassword') {
-      setPasswordError(password.password !== value);
+      setPasswordError(password.password !== value || !isValidPassword);
+    } else if (name === 'password') {
+      const validPassword = validatePassword(value);
+      setPasswordError(!validPassword);
+      setIsValidPassword(validPassword);
+      if (password.checkPassword) {
+        setPasswordError(password.checkPassword !== value || !validPassword);
+      }
     }
   };
+  const handleCheckPasswordChange = (e) => {
+    const { name, value } = e.target;
+    setPassword((pre) => ({ ...pre, [name]: value }));
+    if (name === 'checkPassword') {
+      setPasswordError(password.password !== value);
+      if (password.password) {
+        setPasswordError(password.password !== value || !isValidPassword);
+      }
+    } else if (name === 'password') {
+      const validPassword = validatePassword(value);
+      setPasswordError(!validPassword);
+      setIsValidPassword(validPassword);
+    }
+  };
+  // 유효성 검사 후, 이미지를 띄우기 위한 state 추가
+  const [isValidPassword, setIsValidPassword] = useState(false);
 
   //비밀번호 조건
   const validatePassword = (password) => {
@@ -64,11 +88,15 @@ const OAuth = (Toast) => {
     const regex =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_])[A-Za-z\d\W_]{9,20}$/;
 
-    return (
+    const isValid =
       password.length >= minLength &&
       password.length <= maxLength &&
-      regex.test(password)
-    );
+      regex.test(password);
+
+    // 유효성 검사 후, 상태 업데이트
+    setIsValidPassword(isValid);
+
+    return isValid;
   };
   const validateForm = (userData) => {
     if (!validatePassword(userData.password)) {
@@ -100,6 +128,9 @@ const OAuth = (Toast) => {
           onChange={handlePasswordChange}
           maxLength="20"
           required
+          onKeyDown={(e) => {
+            if (e.key === ' ') e.preventDefault();
+          }}
         />
         <div
           style={{
@@ -110,38 +141,109 @@ const OAuth = (Toast) => {
           <p className="pw">새 비밀번호</p>
           <p className="pwnt">8~16 자리 / 영문 대소문자, 숫자, 특수문자 포함</p>
         </div>
-
-        <InputArea
-          size="lg"
-          variant="default"
-          type="password"
-          name="password"
-          placeholder="변경할 비밀번호를 입력해주세요."
-          value={password.password}
-          onChange={handlePasswordChange}
-          maxLength="20"
-          required
-        />
+        <div style={{ position: 'relative' }}>
+          <InputArea
+            size="lg"
+            variant="default"
+            type="password"
+            name="password"
+            placeholder="변경할 비밀번호를 입력해주세요."
+            value={password.password}
+            onChange={handlePasswordChange}
+            minLength="8"
+            maxLength="16"
+            required
+            onKeyDown={(e) => {
+              if (e.key === ' ') e.preventDefault();
+            }}
+            style={{
+              borderColor: isValidPassword
+                ? LightTheme.STATUS_POSITIVE
+                : LightTheme.GRAY_400,
+            }}
+          />
+          {isValidPassword && (
+            <img
+              src="Group 2066.png"
+              alt="Valid password"
+              style={{
+                position: 'absolute',
+                top: '12px',
+                right: '12px',
+                width: '20px',
+                height: '20px',
+              }}
+            />
+          )}
+        </div>
         <p className="pw">비밀번호 확인</p>
-        <InputArea
-          size="lg"
-          variant="default"
-          type="password"
-          name="checkPassword"
-          value={password.checkPassword}
-          placeholder="비밀번호를 확인해주세요."
-          onChange={handlePasswordChange}
-          required
-        />
-        {passwordError && (
-          <p style={{ color: 'red', fontSize: '12px' }}>
+        <div style={{ position: 'relative' }}>
+          <InputArea
+            size="lg"
+            variant="default"
+            type="password"
+            name="checkPassword"
+            value={password.checkPassword}
+            placeholder="비밀번호를 확인해주세요."
+            onChange={handleCheckPasswordChange}
+            minLength="8"
+            maxLength="16"
+            required
+            style={{
+              borderColor: passwordError
+                ? LightTheme.PRIMARY_NORMAL
+                : !passwordError &&
+                  password.checkPassword &&
+                  password.password === password.checkPassword
+                ? LightTheme.STATUS_POSITIVE
+                : LightTheme.GRAY_400,
+            }}
+            onKeyDown={(e) => {
+              if (e.key === ' ') e.preventDefault();
+            }}
+          />
+          {!passwordError &&
+            password.checkPassword &&
+            password.password === password.checkPassword && (
+              <img
+                src="Group 2066.png"
+                alt="Valid password"
+                style={{
+                  position: 'absolute',
+                  top: '12px',
+                  right: '12px',
+                  width: '20px',
+                  height: '20px',
+                }}
+              />
+            )}
+        </div>
+        {passwordError ? (
+          <p
+            style={{
+              color: LightTheme.PRIMARY_NORMAL,
+              fontSize: '12px',
+              marginTop: '5px',
+              position: 'absolute',
+            }}
+          >
             비밀번호가 일치하지 않습니다.
           </p>
-        )}
-        {!passwordError && (
-          <p style={{ color: 'red', fontSize: '12px' }}>
+        ) : !passwordError &&
+          password.checkPassword &&
+          password.password === password.checkPassword ? (
+          <p
+            style={{
+              color: LightTheme.STATUS_POSITIVE,
+              fontSize: '12px',
+              marginTop: '5px',
+              position: 'absolute',
+            }}
+          >
             비밀번호가 일치합니다.
           </p>
+        ) : (
+          <></>
         )}
         <div className="twoButton">
           <button className="cancel" onClick={handleClick}>
@@ -211,6 +313,7 @@ const Container = styled.div`
   }
   .twoButton {
     display: flex;
+    margin-top: 30px;
     justify-content: flex-end;
     gap: 12px;
   }

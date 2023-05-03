@@ -1,7 +1,7 @@
 import React from 'react';
 import { ButtonText } from '@components/Atoms/Button';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { cookies } from '../../shared/cookie';
 import { useRouter } from 'next/router';
 import SignInPotalExample from '@components/Modals/SignInPortalExample';
@@ -12,10 +12,22 @@ import instance from '@shared/instance';
 import styled from 'styled-components';
 import { WebWrapper } from '@components/Atoms/Wrapper';
 
+import { createPortal } from 'react-dom';
+import SignInModal from '@components/Modals/SignInModal';
+import SignUpModal from '@components/Modals/SignUpModal';
+
 export const LinkToNav = () => {
   const router = useRouter();
   const [isLoginMode, setIsLoginMode] = useState(false);
   const [showSubMenu, setShowSubMenu] = useState(false);
+
+  //모달창 여닫는 useState
+  const [showsignInModal, setShowsignInModal] = useState(false);
+  const [showSignUpModal, setShowSignUpModal] = useState(false);
+  // console.log('setShowSignInModal', showsignInModal);
+  const token = cookies.get('access_token');
+  const nickName = cookies.get('nick_name');
+
   // 토큰 삭제 함수
   const deleteTokens = () => {
     cookies.remove('access_token');
@@ -27,10 +39,9 @@ export const LinkToNav = () => {
     deleteTokens();
     router.push('/');
   };
-  const token = cookies.get('access_token');
-  const refresh_token = cookies.get('refresh_token');
+
   // console.log('access_token', token);
-  // console.log('refresh_token', refresh_token);
+  // console.log('nickName', nickName);
 
   useEffect(() => {
     setIsLoginMode(!!token);
@@ -69,95 +80,153 @@ export const LinkToNav = () => {
     },
   });
 
+  const ref = useRef(null); // nav 태그를 참조하기 위한 useRef
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (ref.current && !ref.current.contains(event.target)) {
+        setShowSubMenu(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [ref]);
+
   return (
-    <nav style={{ display: 'flex' }}>
-      <Link href="https://docs.google.com/forms/d/1GHw9Do1jnrXyFOnKtbj46YexAJjdh_HCwk7CvVha_Lo/edit">
-        <span>
+    <>
+      <nav style={{ display: 'flex' }}>
+        <Link href="https://docs.google.com/forms/d/1GHw9Do1jnrXyFOnKtbj46YexAJjdh_HCwk7CvVha_Lo/edit">
+          <span>
+            <ButtonText
+              style={{ font: `var(--title2-semibold) Pretendard sans-serif` }}
+              variant={
+                router.pathname ===
+                'https://docs.google.com/forms/d/1GHw9Do1jnrXyFOnKtbj46YexAJjdh_HCwk7CvVha_Lo/edit'
+                  ? 'activeRed'
+                  : 'hoverRed'
+              }
+              label={'만족도 조사'}
+            ></ButtonText>
+          </span>
+        </Link>
+        <Link href="/alcohols">
+          <span>
+            <ButtonText
+              style={{ font: `var(--title2-semibold) Pretendard sans-serif` }}
+              variant={
+                router.pathname === '/alcohols' ? 'activeRed' : 'hoverRed'
+              }
+              label={'술집 리스트'}
+            ></ButtonText>
+          </span>
+        </Link>
+        <Link href="/map">
           <ButtonText
             style={{ font: `var(--title2-semibold) Pretendard sans-serif` }}
+            variant={router.pathname === '/map' ? 'activeRed' : 'hoverRed'}
+            label={'지도 검색'}
+          ></ButtonText>
+        </Link>
+        <Link href="/community">
+          <ButtonText
+            style={{ font: `var( --title2-semibold) Pretendard sans-serif` }}
             variant={
-              router.pathname ===
-              'https://docs.google.com/forms/d/1GHw9Do1jnrXyFOnKtbj46YexAJjdh_HCwk7CvVha_Lo/edit'
-                ? 'activeRed'
-                : 'hoverRed'
+              router.pathname === '/community' ? 'activeRed' : 'hoverRed'
             }
-            label={'만족도 조사'}
+            label={'커뮤니티'}
           ></ButtonText>
-        </span>
-      </Link>
-      <Link href="/alcohols">
-        <span>
-          <ButtonText
-            style={{ font: `var(--title2-semibold) Pretendard sans-serif` }}
-            variant={router.pathname === '/alcohols' ? 'activeRed' : 'hoverRed'}
-            label={'술집 리스트'}
-          ></ButtonText>
-        </span>
-      </Link>
-      <Link href="/map">
-        <ButtonText
-          style={{ font: `var(--title2-semibold) Pretendard sans-serif` }}
-          variant={router.pathname === '/map' ? 'activeRed' : 'hoverRed'}
-          label={'지도 검색'}
-        ></ButtonText>
-      </Link>
-      <Link href="/community">
-        <ButtonText
-          style={{ font: `var( --title2-semibold) Pretendard sans-serif` }}
-          variant={router.pathname === '/community' ? 'activeRed' : 'hoverRed'}
-          label={'커뮤니티'}
-        ></ButtonText>
-      </Link>
-      {!token ? (
-        <>
-          <SignInPotalExample />
-          <SignUpPortalExample />
-        </>
-      ) : (
-        <div
-          style={{
-            position: 'relative',
-            width: 'fit-content',
-            zIndex: '700',
-          }}
-        >
-          <ButtonText
+        </Link>
+        {!token ? (
+          <>
+            <ButtonText
+              style={{ font: `var( --title2-semibold) Pretendard sans-serif` }}
+              variant="hoverRed"
+              label={'로그인'}
+              onClick={() => setShowsignInModal(true)}
+            ></ButtonText>
+            {showsignInModal &&
+              createPortal(
+                <SignInModal
+                  setShowsignInModal={setShowsignInModal}
+                  setShowSignUpModal={setShowSignUpModal}
+                  onClose={() => setShowsignInModal(false)}
+                  onOpen={() => setShowsignInModal(true)}
+                  onClosed={() => setShowsignInModal(!showsignInModal)}
+                />,
+                document.body,
+              )}
+
+            <div>
+              <ButtonText
+                style={{
+                  font: `var( --title2-semibold) Pretendard sans-serif`,
+                }}
+                variant="hoverRed"
+                label={'회원가입'}
+                onClick={() => setShowSignUpModal(true)}
+              ></ButtonText>
+              {showSignUpModal &&
+                createPortal(
+                  <SignUpModal
+                    onClose={() => setShowSignUpModal(false)}
+                    onOpen={() => setShowSignUpModal(true)}
+                  />,
+                  document.body,
+                )}
+            </div>
+          </>
+        ) : (
+          <div
             style={{
               font: `var(--title2-semibold) Pretendard sans-serif`,
               padding: '11px 0px 11px 20px',
-              // position: 'relative',
+              position: 'relative',
+              width: 'fit-content',
+              zIndex: '700',
+
             }}
-            className="userNameBT"
-            variant="hoverRed"
-            onClick={() => setShowSubMenu(!showSubMenu)}
-            label={`${data?.userName}님`}
-          ></ButtonText>
-          {showSubMenu && (
-            <Ullist className="ullist">
-              <li className="listName">
-                <a
-                  onClick={() => setShowSubMenu(!showSubMenu)}
-                >{`${data?.userName}님`}</a>
-              </li>
-              <li className="list">
-                <a
-                  className="email"
-                  onClick={() => setShowSubMenu(!showSubMenu)}
-                >{`${data?.email}`}</a>
-              </li>
-              <Link href="/mypage">
-                <li className="list">
-                  <a onClick={() => setShowSubMenu(!showSubMenu)}>마이페이지</a>
+          >
+            <ButtonText
+              style={{
+                font: `var(--title2-semibold) Pretendard sans-serif`,
+                // position: 'relative',
+              }}
+              className="userNameBT"
+              variant="hoverRed"
+              onClick={() => setShowSubMenu(!showSubMenu)}
+              label={`${nickName}님`}
+            ></ButtonText>
+            {showSubMenu && (
+              <Ullist ref={ref} className="ullist">
+                <li className="listName">
+                  <a
+                    onClick={() => setShowSubMenu(!showSubMenu)}
+                  >{`${nickName}님`}</a>
                 </li>
-              </Link>
-              <li className="list">
-                <a onClick={handleLogout}>로그아웃</a>
-              </li>
-            </Ullist>
-          )}
-        </div>
-      )}
-    </nav>
+                <li className="list">
+                  <a
+                    className="email"
+                    onClick={() => setShowSubMenu(!showSubMenu)}
+                  >{`${data?.email}`}</a>
+                </li>
+                <Link href="/mypage">
+                  <li className="list">
+                    <a onClick={() => setShowSubMenu(!showSubMenu)}>
+                      마이페이지
+                    </a>
+                  </li>
+                </Link>
+                <li className="list">
+                  <a onClick={handleLogout}>로그아웃</a>
+                </li>
+              </Ullist>
+            )}
+          </div>
+        )}
+      </nav>
+    </>
   );
 };
 

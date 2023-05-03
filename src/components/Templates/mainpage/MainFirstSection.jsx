@@ -20,6 +20,7 @@ import { MainDeco } from '@components/Atoms/MainDeco';
 import { useRouter } from 'next/router';
 const PAGE_SIZE = 3;
 export const MainFirstSection = () => {
+  const router = useRouter();
   const [getView, seGetView] = useState([]);
   const router = useRouter();
   useEffect(() => {

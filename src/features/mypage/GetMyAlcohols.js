@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { useRouter } from 'next/router';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
+import { LikeHeartIcon } from '@components/Atoms/HeartIcon';
 
 //페이지네이션 임포트
 import Pagination from '@components/Modals/Pagenation2';
@@ -25,7 +26,7 @@ const GetMyAlcohols = () => {
           Access_Token: `${token}`,
         },
       });
-      console.log('dataPostss--------------', data);
+      // console.log('dataPostss--------------', data);
       return data;
     },
   });
@@ -75,37 +76,44 @@ const GetMyAlcohols = () => {
   } else {
     return (
       <div>
-        <div
-          style={{
-            display: 'flex',
-            gap: '24px',
-            flexWrap: 'wrap',
-          }}
-        >
-          {currentPageData.map((post) => (
-            <ContainerDiv key={post.apiId}>
-              <div
-                onClick={() => {
-                  push.push(`/alcohols/${post.apiId}`);
-                }}
-              >
-                <img
-                  style={{
-                    width: '384px',
-                    height: '242px',
-                    objectFit: 'cover',
-                    borderRadius: '12px',
+        <LogBox>
+          <div
+            style={{
+              display: 'flex',
+              gap: '24px',
+              flexWrap: 'wrap',
+            }}
+          >
+            {currentPageData.map((post) => (
+              <ContainerDiv key={post.apiId}>
+                <div
+                  onClick={() => {
+                    push.push(`/alcohols/${post.apiId}`);
                   }}
-                  src={post.postList[0].s3Url}
-                  alt={post.place_name}
-                />
-                <div>
-                  <p>{post.place_name}</p>
+                >
+                  <img
+                    style={{
+                      width: '384px',
+                      height: '242px',
+                      objectFit: 'cover',
+                      borderRadius: '12px',
+                    }}
+                    src={post.postList[0]?.s3Url || 'noimage_282x200____.png'}
+                    alt={post.place_name}
+                  />
+                  <div className="flexGap">
+                    <p className="title">{post.place_name}</p>
+                    <div className="flex">
+                      <LikeHeartIcon />
+                      <p className="likecnt">{post.roomLikecnt}</p>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </ContainerDiv>
-          ))}
-        </div>
+              </ContainerDiv>
+            ))}
+          </div>
+        </LogBox>
+
         <Pagination
           pages={chunkedData.map((_, i) => i + 1)}
           activePage={activePage}
@@ -118,6 +126,12 @@ const GetMyAlcohols = () => {
 
 export default GetMyAlcohols;
 
+const LogBox = styled.div`
+  /* border: 1px solid black; */
+  width: 1210px;
+  height: 960px;
+`;
+
 const ContainerDiv = styled.div`
   display: flex;
   flex-direction: column;
@@ -129,5 +143,20 @@ const ContainerDiv = styled.div`
   .p {
     margin-top: 12px;
     font-size: 16px;
+  }
+  .title {
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+  }
+  .flexGap {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+  }
+  .flex {
+    display: flex;
+    align-items: center;
+    gap: 10px;
   }
 `;
