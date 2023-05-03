@@ -1,30 +1,24 @@
 import { useState, useEffect, useCallback } from 'react';
+import styled from 'styled-components';
 import { apis } from '@shared/axios';
 import { useRouter } from 'next/router';
-import {
-  useQuery,
-  useQueryClient,
-  queryClient,
-  useQueries,
-} from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { WebWrapper } from '@components/Atoms/Wrapper';
+import { InputArea } from '@components/Atoms/Input';
+import { BoxTextReal } from '@components/Atoms/BoxTextReal';
+import { FlexRow } from '@components/Atoms/Flex';
+import { SearchIcon } from '@components/Atoms/SearchIcon';
+import {
+  ImgCenter,
+  ImgWrapper282x248,
+  ImgWrapper384x360,
+} from '@components/Atoms/imgWrapper';
+import { GrideGapCol4, GrideGapCol3 } from '@components/Atoms/Grid';
+import { Ranking1, Ranking2, Ranking3 } from '@components/Atoms/Ranking';
 import { StoreListTabMenu } from '@components/Molecules/StoreListTabMenu';
 import { PageNation } from '@components/Modals/PageNation';
 import { Store } from './alcohol/Store';
-import { GrideGapCol4, GrideGapCol3 } from '@components/Atoms/Grid';
-import styled from 'styled-components';
-import { BoxTextReal } from '@components/Atoms/BoxTextReal';
 import { LightTheme } from '@components/Themes/theme';
-import { FlexRow } from '@components/Atoms/Flex';
-import {
-  ImgCenter,
-  imgWrapper248x248,
-  ImgWrapper282x248,
-  ImgWrapper384x242,
-  ImgWrapper384x360,
-} from '@components/Atoms/imgWrapper';
-import { useLikeStore } from '../hook/useLikes';
-import { useGetLikeStore } from '../hook/alcohol/useGetStore';
 import Link from 'next/link';
 import {
   getAllStore,
@@ -32,18 +26,15 @@ import {
   getView,
   getLike,
 } from '../hook/alcohol/useGetAllStore';
-import { ButtonText } from '@components/Atoms/Button';
-import { InputArea } from '@components/Atoms/Input';
-import { Ranking1, Ranking2, Ranking3 } from '@components/Atoms/Ranking';
-import { SearchIcon } from '@components/Atoms/SearchIcon';
+import { useGetLikeStore } from '../hook/alcohol/useGetStore';
+import { useLikeStore } from '../hook/useLikes';
 
 // const [like, setLike] = useState(like);
 const AlcoholList = () => {
   const { go } = useRouter();
   const router = useRouter();
 
-  const { alkolsLike, alkolsIsLikeLoading } = useGetLikeStore();
-
+  //탭
   const [storeListPage, setStoreListPage] = useState('all');
   const [activeTab, setActiveTab] = useState('all');
   const pages = [1, 2, 3, 4, 5];
@@ -95,7 +86,7 @@ const AlcoholList = () => {
     },
     [storeListPage, setPageNum, keyword],
   );
-  console.log('storedata', keyword);
+  // console.log('storedata', keyword);
 
   const handleStoreListTabChange = useCallback(
     (newTab) => {
@@ -166,7 +157,7 @@ const AlcoholList = () => {
       },
     },
   );
-  console.log('storedata', storeData);
+  // console.log('storedata', storeData);
   const [getView2, seGetView2] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
@@ -191,8 +182,19 @@ const AlcoholList = () => {
         return <Ranking3></Ranking3>;
     }
   };
-
-  if (isLoading) {
+  const { alkolsLike, alkolsIsLikeLoading } = useGetLikeStore();
+  const storeLikeMine =
+    (alkolsLike &&
+      alkolsLike.flat().find((obj) => obj.apiId === storeData.apiId)) ||
+    {};
+  console.log();
+  let alkolLikeMatch = [];
+  if (alkolsLike && alkolsLike.data) {
+    alkolLikeMatch = alkolsLike.data;
+  }
+  const [roomLike, setRoomLike] = useState(storeLikeMine?.roomLike);
+  console.log('술집', storeData);
+  if (isLoading || alkolsIsLikeLoading) {
     return <WebWrapper>Loading...</WebWrapper>;
   }
   return (
@@ -344,7 +346,11 @@ const AlcoholList = () => {
                   padding: '10px',
                 }}
               >
-                <Store store={store}></Store>
+                <Store
+                  store={store}
+                  alkolsLike={alkolsLike}
+                  alkolsIsLikeLoading={alkolsIsLikeLoading}
+                ></Store>
               </div>
               <Link key={store.id} href={`/alcohols/${store.apiId}`}>
                 <BoxTextReal variant="realDefaultBox" size="nonePadding">
