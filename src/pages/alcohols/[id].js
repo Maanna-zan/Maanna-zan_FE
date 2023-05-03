@@ -78,7 +78,6 @@ const StoreDetail = () => {
     }
   }, [alkolsLike, apiIdFind]);
 
-  console.log('text------------', data);
   //카테고리네임 추출
   const categoryNames = data?.category_name;
   const indexAllName = categoryNames?.lastIndexOf('>');
@@ -255,7 +254,7 @@ const StoreDetail = () => {
 
                             <FlexRow
                               style={{
-                                width: '25%',
+                                width: '22%',
                                 gap: '10px',
                                 alignItems: 'center',
                                 justifyContent: 'space-between',
@@ -360,6 +359,7 @@ const StoreDetail = () => {
               boxSizing: 'border-box',
               borderRadius: '8px',
               height: '360px',
+              cursor: 'default',
             }}
           >
             {/* {setTab === 'storeInfor' ? ( */}
@@ -407,6 +407,7 @@ const StoreDetail = () => {
                     width: '100%',
                     justifyContent: ' space-between',
                     display: 'flex',
+                    cursor: 'default',
                   }}
                 >
                   <Map
@@ -446,7 +447,13 @@ const StoreDetail = () => {
                     <StTab>카카오 링크</StTab>
                     <StTab>전화번호</StTab>
                   </FlexColumn>
-                  <FlexColumn style={{ gap: '10px', justifyContent: 'center' }}>
+                  <FlexColumn
+                    style={{
+                      gap: '10px',
+                      justifyContent: 'center',
+                      cursor: 'pointer',
+                    }}
+                  >
                     <div>{data?.address_name}</div>
                     <FlexRow style={{ gap: '10px' }}></FlexRow>
 

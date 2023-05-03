@@ -56,35 +56,25 @@ const Community = () => {
     enabled: Boolean(query.id),
     onSuccess: () => {},
   });
+  console.log('포스트아이디 조회인데 잘되려나', data);
+  // const [isUpdated, setIsUpdated] = useState(false);
 
-  const [isUpdated, setIsUpdated] = useState(false);
+  // const { posts, postIsLoading } = useGetPost();
+  // const { postsLike, postIsLikeLoading } = useGetLikePost();
 
-  const { posts, postIsLoading } = useGetPost();
-  const { postsLike, postIsLikeLoading } = useGetLikePost();
+  // let potLikeMatch = [];
+  // if (postsLike && postsLike.data && postsLike.data.posts) {
+  //   potLikeMatch = postsLike.data.posts;
+  // }
 
-  let potLikeMatch = [];
-  if (postsLike && postsLike.data && postsLike.data.posts) {
-    potLikeMatch = postsLike.data.posts;
-  }
-
-  const postId = query.id;
-  const post = posts.find((p) => p.id === Number(postId)) || {};
-  const postLikeMine = potLikeMatch.find((p) => p.id === Number(postId)) || {};
-  console.log('카테고리 찾아 삼만리', postLikeMine);
-  const { store, storeIsLoading } = useGetStoredetail({
-    apiId: post.apiId,
-  });
-  console.log(' store 여기를 봐 여기를!!', store);
-  // const [newPost, setNewPost] = useState({
-  //   title: post?.title ?? '',
-  //   description: post?.description ?? '',
-  //   s3Url: post?.s3Url || '',
-  //   taste: post?.null,
-  //   service: post?.null,
-  //   atmosphere: post?.null,
-  //   satisfaction: post?.null,
-  //   postStarAvg: post?.null,
+  // const postId = query.id;
+  // const post = posts.find((p) => p.id === Number(postId)) || {};
+  // const postLikeMine = potLikeMatch.find((p) => p.id === Number(postId)) || {};
+  // // console.log('카테고리 찾아 삼만리', postLikeMine);
+  // const { store, storeIsLoading } = useGetStoredetail({
+  //   apiId: post.apiId,
   // });
+  const postId = data?.id;
   const [newPost, setNewPost] = useState({
     title: '',
     description: '',
@@ -94,7 +84,7 @@ const Community = () => {
     atmosphere: '',
     satisfaction: '',
   });
-  console.log('---postLikeMine', postLikeMine);
+
   const { updatePost } = useUpdatePost(postId);
   const { deletePost, onSuccess } = useDeletePost();
   const { likePost } = useLikePost();
@@ -108,7 +98,7 @@ const Community = () => {
     }
   };
 
-  const [like, setLike] = useState(postLikeMine.like);
+  const [like, setLike] = useState(data?.like);
 
   const likePostHandler = async (postId) => {
     try {
@@ -136,31 +126,37 @@ const Community = () => {
       ...prevPost,
       [name]: value[name],
     }));
-    console.log('setPosthandleRatingChange', post);
   };
 
   const [hoveredStar, setHoveredStar] = useState(0);
 
   const handleStarClick = (clickedStar) => {
     const newPost = {
-      ...post,
+      ...data,
       postStarAvg: clickedStar,
     };
     setNewPost(newPost);
   };
 
+  const [userNickName, setUserNickName] = useState('');
+
+  useEffect(() => {
+    const nick_name = cookies.get('nick_name');
+    setUserNickName(nick_name);
+  }, []);
   const handleStarHover = (hoveredStar) => {
     setHoveredStar(hoveredStar);
   };
+  console.log(userNickName, 'userNickName');
   const checkFormValidity = () => {
-    if (!post.title || !post.description) {
+    if (!data.title || !data.description) {
       alert('모든 항목에 체크해주세요');
       return false;
     } else if (
-      !post.taste ||
-      !post.service ||
-      !post.atmosphere ||
-      !post.satisfaction
+      !data.taste ||
+      !data.service ||
+      !data.atmosphere ||
+      !data.satisfaction
     ) {
       alert('해당 가게의 평가를 작성해주세요.');
       return false;
@@ -202,25 +198,25 @@ const Community = () => {
   // const [showReviewForm, setShowReviewForm] = useState(false);
 
   //카테고리
-  const categoryNames = store.map((item) => item.category_name);
+  const categoryNames = data?.category_name;
   // console.log('categoryNames', categoryNames);
-  const indexAllName = categoryNames[0]?.lastIndexOf('>');
-  const resultcategoryNames = categoryNames[0]?.slice(indexAllName + 2);
+  const indexAllName = categoryNames?.lastIndexOf('>');
+  const resultcategoryNames = categoryNames?.slice(indexAllName + 2);
   // console.log('테스트카테고리', resultcategoryNames);
 
-  useEffect(() => {
-    if (isUpdated) {
-      setNewPost({
-        title: post?.title ?? '',
-        description: post?.description ?? '',
-        s3Url: post?.s3Url || '',
-      });
-      setIsUpdated(false);
-    }
-  }, [isUpdated]);
-  console.log(handleShareClick, 'handleShareClick');
+  // useEffect(() => {
+  //   if (isUpdated) {
+  //     setNewPost({
+  //       title: post?.title ?? '',
+  //       description: post?.description ?? '',
+  //       s3Url: post?.s3Url || '',
+  //     });
+  //     setIsUpdated(false);
+  //   }
+  // }, [isUpdated]);
+  // console.log(post?.nickname, 'post?.nickName ');
 
-  if (postIsLoading || postIsLikeLoading) return <div>로딩중...</div>;
+  // if (postIsLoading || postIsLikeLoading) return <div>로딩중...</div>;
   return (
     <div>
       {isEditMode ? (
@@ -295,7 +291,7 @@ const Community = () => {
                   </FlexRow>
                   {/* {showReviewForm && ( */}
                   <ReviewForm
-                    post={post}
+                    post={data}
                     handleRatingChange={handleRatingChange}
                     handleStarClick={handleStarClick}
                     handleStarHover={handleStarHover}
@@ -350,10 +346,10 @@ const Community = () => {
                   }}
                 >
                   <div></div>
-                  <div>{post?.nickname}</div>
+                  <div>{data?.nickname}</div>
                 </FlexRow>
 
-                <div>{posts[query.id - 1]?.createAt.substr(0, 10)}</div>
+                <div>{data?.createAt.substr(0, 10)}</div>
               </FlexRow>
               <FlexRow
                 style={{
@@ -369,7 +365,7 @@ const Community = () => {
                     <div>장소</div>
                   </FlexRow>
 
-                  <div>{post?.storename}</div>
+                  <div>{data?.storename}</div>
                 </FlexRow>
                 <FlexRow
                   style={{
@@ -393,10 +389,8 @@ const Community = () => {
                       marginRight: '2px',
                     }}
                     title={`만나잔에 오신걸 환영합니다!`}
-                    url={`${apis}/community/${posts[query.id - 1]}/`}
-                    text={`여기서 만나잔!! ${
-                      posts[query.id - 1]?.storename
-                    }친구가 공유한 가게 구경하기`}
+                    url={`${apis}/community/${data?.id}/`}
+                    text={`여기서 만나잔!! ${data?.storename}친구가 공유한 가게 구경하기`}
                     onClick={() => handleShareClick}
                   >
                     <ShareBtn />
@@ -409,7 +403,7 @@ const Community = () => {
                     src={
                       newPost?.s3Url
                         ? URL.createObjectURL(newPost.s3Url.get('file'))
-                        : post?.s3Url
+                        : data?.s3Url
                     }
                     alt="uploaded image"
                     id="image-preview"
@@ -431,7 +425,7 @@ const Community = () => {
                   name="s3Url"
                   onChange={changeFileHandler}
                   id="s3Url"
-                  value={post?.s3Url ? post?.s3Url.name : ''}
+                  value={data?.s3Url ? data?.s3Url.name : ''}
                 />
               </FlexRow>
               <FlexColumn
@@ -520,7 +514,7 @@ const Community = () => {
                     marginBottom: '28px',
                   }}
                 >
-                  {post?.title}
+                  {data?.title}
                 </div>
                 <FlexRow
                   style={{
@@ -535,7 +529,7 @@ const Community = () => {
                     }}
                   >
                     <div></div>
-                    <div>{post?.nickname}</div>
+                    <div>{data?.nickname}</div>
                   </FlexRow>
 
                   {/* <div>{post?.createAt.substr(0, 10)}</div> */}
@@ -554,7 +548,7 @@ const Community = () => {
                       <div>장소</div>
                     </FlexRow>
 
-                    <div>{post?.storename}</div>
+                    <div>{data?.storename}</div>
                   </FlexRow>
                   <FlexRow
                     style={{
@@ -577,10 +571,8 @@ const Community = () => {
                         marginRight: '2px',
                       }}
                       title={`만나잔에 오신걸 환영합니다!`}
-                      url={`${apis}/community/${posts[query.id - 1]}/`}
-                      text={`여기서 만나잔!! ${
-                        posts[query.id - 1]?.storename
-                      }친구가 공유한 가게 구경하기`}
+                      url={`${apis}/community/${data?.id}/`}
+                      text={`여기서 만나잔!! ${data?.storename}친구가 공유한 가게 구경하기`}
                       onClick={() => handleShareClick}
                     >
                       <ShareBtn />
@@ -590,12 +582,12 @@ const Community = () => {
                 <div style={{ width: '100%', marginBottom: '24px' }}>
                   <ImgWrapper792>
                     <ImgCenter
-                      src={post?.s3Url ? post?.s3Url : '/noimage_282x248_.png'}
+                      src={data?.s3Url ? data?.s3Url : '/noimage_282x248_.png'}
                     ></ImgCenter>
                   </ImgWrapper792>
                 </div>
                 <div style={{ width: '100%', marginBottom: '50px' }}>
-                  {post?.description}
+                  {data?.description}
                 </div>
                 <FlexRow
                   style={{
@@ -612,7 +604,7 @@ const Community = () => {
                       >
                         좋아요
                       </div>
-                      <div>{post?.likecnt}</div>
+                      <div>{data?.likecnt}</div>
                     </FlexRow>
                     <FlexRow style={{ gap: '10px' }}>
                       <div
@@ -622,7 +614,7 @@ const Community = () => {
                       >
                         댓글
                       </div>
-                      <div>{post?.commentList?.length}</div>
+                      <div>{data?.commentList?.length}</div>
                     </FlexRow>
                     <FlexRow style={{ gap: '10px' }}>
                       <div
@@ -632,10 +624,9 @@ const Community = () => {
                       >
                         조회수
                       </div>
-                      <div>{post?.viewCount}</div>
+                      <div>{data?.viewCount}</div>
                     </FlexRow>
                   </FlexRow>
-                  {/* 카테고리 */}
                   <BoxTextReal
                     size="nonePadding"
                     variant="grayBolderBox"
@@ -649,90 +640,91 @@ const Community = () => {
                   </BoxTextReal>
                 </FlexRow>
               </div>
-
-              <FlexColumn
-                style={{
-                  width: '80px',
-                  height: '192px',
-                  gap: '24px',
-                  position: 'absolute',
-                  top: '200px',
-                  right: '-110px',
-                  border: '1px solid #eee',
-                  padding: '8px auto',
-                  borderRadius: '8px',
-                  boxSizing: 'border-box',
-                  justifyContent: 'space-around',
-                }}
-              >
+              {userNickName === data?.nickName && (
                 <FlexColumn
                   style={{
-                    gap: '4px',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    display: 'flex',
-                    textAlign: 'center',
+                    width: '80px',
+                    height: '192px',
+                    gap: '24px',
+                    position: 'absolute',
+                    top: '200px',
+                    right: '-110px',
+                    border: '1px solid #eee',
+                    padding: '8px auto',
+                    borderRadius: '8px',
+                    boxSizing: 'border-box',
+                    justifyContent: 'space-around',
                   }}
-                  onClick={() => setIsEditMode(!isEditMode)}
                 >
-                  <div
+                  <FlexColumn
                     style={{
+                      gap: '4px',
                       justifyContent: 'center',
                       alignItems: 'center',
                       display: 'flex',
                       textAlign: 'center',
-                      font: `var( --body1-medium) Pretendard sans-serif`,
+                    }}
+                    onClick={() => setIsEditMode(!isEditMode)}
+                  >
+                    <div
+                      style={{
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        display: 'flex',
+                        textAlign: 'center',
+                        font: `var( --body1-medium) Pretendard sans-serif`,
+                        cursor: 'pointer',
+                      }}
+                    >
+                      <BoxTextReal
+                        size="nonePadding"
+                        variant="realDefaultBox"
+                        style={{}}
+                      >
+                        <AderessIcon />
+                      </BoxTextReal>
+                    </div>
+                    <div
+                      type="submit"
+                      style={{
+                        color: `${LightTheme.FONT_SECONDARY}`,
+                        cursor: 'pointer',
+                      }}
+                    >
+                      수정하기
+                    </div>
+                  </FlexColumn>
+                  <FlexColumn
+                    style={{
+                      gap: '4px',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      display: 'flex',
+                      textAlign: 'center',
                       cursor: 'pointer',
                     }}
+                    onClick={() => deletePostHandler(postId)}
                   >
                     <BoxTextReal
                       size="nonePadding"
                       variant="realDefaultBox"
-                      style={{}}
+                      style={{
+                        font: `var( --body1-medium) Pretendard sans-serif`,
+                      }}
                     >
-                      <AderessIcon />
+                      <DeleteIcon />
                     </BoxTextReal>
-                  </div>
-                  <div
-                    type="submit"
-                    style={{
-                      color: `${LightTheme.FONT_SECONDARY}`,
-                      cursor: 'pointer',
-                    }}
-                  >
-                    수정하기
-                  </div>
+                    <div
+                      style={{
+                        color: `${LightTheme.FONT_SECONDARY}`,
+                        cursor: 'pointer',
+                      }}
+                    >
+                      삭제하기
+                    </div>
+                  </FlexColumn>
                 </FlexColumn>
-                <FlexColumn
-                  style={{
-                    gap: '4px',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    display: 'flex',
-                    textAlign: 'center',
-                    cursor: 'pointer',
-                  }}
-                  onClick={() => deletePostHandler(postId)}
-                >
-                  <BoxTextReal
-                    size="nonePadding"
-                    variant="realDefaultBox"
-                    style={{
-                      font: `var( --body1-medium) Pretendard sans-serif`,
-                    }}
-                  >
-                    <DeleteIcon />
-                  </BoxTextReal>
-                  <div
-                    style={{
-                      color: `${LightTheme.FONT_SECONDARY}`,
-                      cursor: 'pointer',
-                    }}
-                  >
-                    삭제하기
-                  </div>
-                </FlexColumn>
-              </FlexColumn>
+              )}
             </WebWrapper792px>
           </form>
           <AddComment />

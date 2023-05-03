@@ -47,6 +47,9 @@ const AlcoholList = () => {
   const [storeListPage, setStoreListPage] = useState('all');
   const [activeTab, setActiveTab] = useState('all');
   const pages = [1, 2, 3, 4, 5];
+  // for (let i = 1; i <= totalPage; i++) {
+  //   pages.push(i);
+  // }
   const { page } = router.query;
   const [pageNum, setPageNum] = useState(1);
   const [pageMap, setPageMap] = useState({
