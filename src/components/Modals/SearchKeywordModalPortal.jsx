@@ -170,8 +170,9 @@ function SearchedKeywordLandingPage() {
               position: 'absolute',
               marginLeft: '435px',
               paddingTop: '6px',
-              pointerEvents: midPoint ? 'none' : 'auto', // midPoint가 true이면 pointerEvents를 none으로 지정
-              opacity: midPoint ? 0.3 : 1, // midPoint가 true이면 투명도를 0.3로 지정
+              pointerEvents: 'auto',
+              // pointerEvents: midPoint ? 'none' : 'auto', // midPoint가 true이면 pointerEvents를 none으로 지정
+              // opacity: midPoint ? 0.3 : 1, // midPoint가 true이면 투명도를 0.3로 지정
             }}
           >
             <img src="ModalPortalInputXButton.png" alt="X button" />
@@ -255,6 +256,12 @@ function SearchedKeywordLandingPage() {
       },
     ]);
   };
+  // midPoint값이 있고 inputValues값이 변경 되면 중간위치값 사라지도록 설정.
+  useEffect(() => {
+    if (midPoint && inputValues.some((value) => !value)) {
+      setMidPoint(null);
+    }
+  }, [inputValues]);
   //  mapmidpoint page로 이동 위한 useRouter선언.
   const router = useRouter();
   //  mapmidpoint 페이지로 이동 위한 핸들러.
@@ -322,8 +329,8 @@ function SearchedKeywordLandingPage() {
                 <AddInputButtonStyle
                   inputCount={inputCount}
                   onClick={addingInputBoxButtonHandler}
-                  disabled={midPoint}
-                  {...(midPoint ? { style: { cursor: 'default' } } : null)}
+                  // disabled={midPoint}
+                  // {...(midPoint ? { style: { cursor: 'default' } } : null)}
                   /* styled-components로 해당 버튼 꾸며주기에 아래와 같은 조건을 걸기 위해서는 props를 내려준다. */
                 >
                   {inputCount < 4
