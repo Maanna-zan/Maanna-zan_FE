@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { Map } from "react-kakao-maps-sdk";
 import { LightTheme } from "@components/Themes/theme";
+import { ButtonText } from "@components/Atoms/Button";
 
 export default function KeywordSearchModal({ onClose, onUpdate}) {
         //  키워드 검색 값 state
@@ -318,9 +319,8 @@ export default function KeywordSearchModal({ onClose, onUpdate}) {
         <div className="modal-overlay">
 
         <MapSection>
-            {/* <H1Styled style={{textAlign: "center", width: "100%"}}>위치검색</H1Styled> */}
-            <div style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "10px" }}>
-                <H1Styled style={{ marginLeft: "45%" }}>위치검색</H1Styled>
+            <div style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between",margin: '-13px 0 10px 0' }}>
+                <H1Styled>위치검색</H1Styled>
                     <button style={{ backgroundColor: "transparent", border: "none", outline: "none", margin: '0 3% 4% 0', position: "relative" }}>
                         {/* 이모티콘 이미지 추가 */}
                         <img src="Group 1972.png" alt="닫기" onClick={closeModalClickHandler} style={{ position: "absolute", right: 0 }} />
@@ -368,23 +368,33 @@ export default function KeywordSearchModal({ onClose, onUpdate}) {
             </div>
         </MapSection>
 
-            <button
-                style={{
-                    cursor: 'pointer',
-                    color: 'white',
-                    backgroundColor: '#FF4740',
-                    border: 'none',
-                    borderRadius: '8px',
-                    position: "absolute",
-                    bottom: "20px",
-                    right: "5%", 
-                    fontSize: "13px",
-                    padding: "6px 20px 6px 20px"
-                }}
-                onClick={saveStateHandler}
-            >
-                확인
-            </button>
+        <div>
+            <div className='labelDiv'
+            style={{
+                position: "absolute",
+                bottom: "12px",
+                left: "3px", 
+                color: "#9EA4AA",
+                fontSize: "13px",
+                padding: "6px 20px 6px 20px",
+                zIndex: '1000'
+            }}
+            >정확한 검색 결과를 위해 정확하게 입력해주세요.
+            </div>
+                <ButtonText
+                label='확인'
+                size="xxsm"
+                variant="primary"
+                    style={{
+                        position: "absolute",
+                        bottom: "12px",
+                        right: "28px", 
+                        fontSize: "13px",
+                        padding: "6px 20px 6px 20px",
+                        zIndex: '1000'
+                    }}
+                    onClick={saveStateHandler}/>
+            </div>
 
         </div>
         </ModalDiv>
@@ -393,13 +403,14 @@ export default function KeywordSearchModal({ onClose, onUpdate}) {
 const H1Styled = styled.h1`
     font-size: 15px;
     font-weight: 700;
+    margin-left: 45%;
 `
 const ModalDiv = styled.div`
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
+    height: 100vh;
     background-color: transparent;
     z-index: 999;
 
@@ -418,9 +429,18 @@ const ModalDiv = styled.div`
         z-index: 1000;
         width: 80%;
         max-width: 620px;
-        height: 80%;
-        max-height: 620px;
+        height: 80vh;
+        max-height: 704px;
         border: 1px solid #c2ccd6;
+    }
+    .labelDiv {
+        position: absolute;
+        bottom: 16px;
+        left: 3px;
+        padding: 6px 20px 6px 20px;
+        z-index: 1000;
+        color: ${LightTheme.FONT_SECONDARY};
+        font: var(--caption2-regular) Pretendard sans-serif;
     }
 `;
 const InputWrapper = styled.div`
@@ -446,15 +466,27 @@ const MapSection = styled.div`
         margin-top: 9px;
         /* background-color: green; */
         //지도랑 붙이고 z-index로 가림
+        overflow: hidden;
         right: 10px
     }
 
     #menu_wrap {
         position: relative;
         width: 570px;
-        height: 45vh;
+        height: 52vh;
         border-radius: 5px;
         overflow-y: auto;
+    ::-webkit-scrollbar {
+        width: 4px;
+        height: 1px;
+    }
+    ::-webkit-scrollbar-thumb {
+        background-color: rgba(0, 0, 0, 0.2);
+        border-radius: 3px;
+    }
+    ::-webkit-scrollbar-track {
+        background-color: rgba(0, 0, 0, 0.1);
+    }
     }
 
     /* #map_title {

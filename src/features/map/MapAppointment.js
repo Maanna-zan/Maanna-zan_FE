@@ -31,20 +31,9 @@ const MapAppointment = ({checkedPlace}) => {
   });
   // queryKey에 캐싱하여 값 불러오기위해 queryClient선언
   const queryClient = useQueryClient();
-  // getQueryData로 캐싱한 값 INPUTVALUESPROP키로 불러오기.
+  // getQueryData로 캐싱한 값(출발지들) INPUTVALUESPROP키로 불러오기.
   const InputValuesProp = queryClient.getQueryData({queryKey: ['INPUTVALUESPROP']});
-  //  checkedPlace값 가져오기
-//   const { data: placeData } = useQuery(['places', checkedPlace], () =>
-//   fetch(`/mapmidpoint?query=${checkedPlace}`).then((res) => res.json())
-// );
-//   console.log("checkedPlace",checkedPlace)
-//   useEffect(() => {
-//     console.log('checkedPlace updated: ', checkedPlace);
-//   }, [checkedPlace]);
-  // useContext Hook을 사용하여 MidPointContext 컨텍스트 값을 가져옵니다.
-// const checkedPlace = useContext(CheckedPlaceContext);
-// midPoint 값을 사용합니다.
-console.log("checkedPlace",checkedPlace);
+
   useEffect(() => {
     const token = cookies.get('access_token');
     setIsLoginMode(token);
@@ -55,7 +44,6 @@ console.log("checkedPlace",checkedPlace);
 
   // 266 으로 가서 글을 확인해주세요 ~
   const [value, onChange] = useState(new Date());
-  console.log('onChange', Calendar);
   const mark = ['2023-04-20', '2023-04-28'];
 
   const clickDayHandler = (value, event) => {
@@ -70,16 +58,14 @@ console.log("checkedPlace",checkedPlace);
     });
     setShowModal(true);
   };
-  console.log('약속잡기버튼', appointment);
   const nickName =
     typeof window !== 'undefined'
       ? localStorage.getItem('nick_name') ?? ''
       : '';
-      console.log("@@@@checkedPlace",checkedPlace)
   return (
     <WebWrapper>
       <WebWrapperHeight>
-        <FlexRow>
+        <FlexRow style={{maxWidth: '100wh'}}>
           {!isLoginMode ? (
             <div>
               <StWebBg

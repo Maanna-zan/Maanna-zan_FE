@@ -21,8 +21,8 @@ const MapBeginning = () => {
           <ImgWrapper690x803 style={{ backgroundColor: 'white' }}>
             <ImgCenter
               style={{
-                width: '100%',
-                height: '100%',
+                width: '100vw',
+                height: '100vh',
                 marginBottom: '200px',
               }}
               src="mainPageSecondScroll.png"
@@ -51,8 +51,7 @@ const MapBeginning = () => {
               variant="primary"
               fontColor="white"
               style={{ cursor: 'pointer' }}
-              onClick={moveToMapSearchButtonClickHandler}
-            >
+              onClick={moveToMapSearchButtonClickHandler}>
               중간 위치 검색하기
             </ButtonStyle>
           </ContentWrapper>

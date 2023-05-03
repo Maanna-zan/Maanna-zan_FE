@@ -125,7 +125,7 @@ function SearchedKeywordLandingPage() {
   //Input 박스 추가
   const renderInputArea = (index) => {
     return (
-      <div style={{ display: 'flex', alignItems: 'center' }}>
+      <div style={{ display: 'flex', alignItems: 'center'}}>
         <InputArea
           key={index}
           type="text"
@@ -168,7 +168,7 @@ function SearchedKeywordLandingPage() {
             onClick={() => onInputClearHandler(index)}
             style={{
               position: 'absolute',
-              marginLeft: '500px',
+              marginLeft: '435px',
               paddingTop: '6px',
               pointerEvents: midPoint ? 'none' : 'auto', // midPoint가 true이면 pointerEvents를 none으로 지정
               opacity: midPoint ? 0.3 : 1, // midPoint가 true이면 투명도를 0.3로 지정
@@ -270,17 +270,17 @@ function SearchedKeywordLandingPage() {
 
   return (
     <WebWrapper>
-      <WebWrapperHeight style={{}}>
+      <WebWrapperHeight>
         <FlexRow style={{ justifyContent: 'space-between', paddingTop: '5vh' }}>
           <div>
             <Map
               center={center}
               style={{
-                width: '690px',
-                height: '803px',
-                maxWidth: '100%',
-                maxHeight: '100%',
-                backgroundColor: 'aliceblue',
+                width: '50vw',
+                height: '90vh',
+                maxWidth: '690px',
+                maxHeight: '90vh',
+                // backgroundColor: 'aliceblue',
               }}
             >
               {positions?.map((position, index) => (
@@ -312,7 +312,7 @@ function SearchedKeywordLandingPage() {
             </Map>
           </div>
 
-          <FlexColumnCenter style={{ margin: '0 200px 250px 25px' }}>
+          <FlexColumnCenter style={{ margin: '0 200px 250px 25px' ,maxWidth: '470px',maxHeight: '90vh'}}>
             <TitleStyled>친구와 본인의 </TitleStyled>
             <Highlighting>위치를 입력해주세요</Highlighting>
             <div style={{ width: '100%' }}>
@@ -394,7 +394,7 @@ const TitleStyled = styled.div`
 `;
 const Highlighting = styled.div`
   //width값있어야 전체 width늘어남..
-  width: 487px;
+  width: 418px;
   font-size: 40px;
   font-weight: 700;
   line-height: 48px;

@@ -7,14 +7,9 @@ import React from 'react';
 export const MainSecondSection = () => {
   return (
     <>
-      <WebWrapper 
-        // style={{ backgroundColor: 'lightyellow' }}
-      >
-        <WebWrapperHeight 
-          // style={{ backgroundColor: 'lightpink' }}
-        >
-          <FlexRow style={{ justifyContent: 'space-between' }}>
-            {/* <MapDefault size="md"></MapDefault> */}
+      <WebWrapper >
+        <WebWrapperHeight >
+          <FlexRow>
             <MapBeginning/>
           </FlexRow>
         </WebWrapperHeight>
