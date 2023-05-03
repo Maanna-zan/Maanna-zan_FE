@@ -144,10 +144,13 @@ const Community = () => {
     const nick_name = cookies.get('nick_name');
     setUserNickName(nick_name);
   }, []);
+
   const handleStarHover = (hoveredStar) => {
     setHoveredStar(hoveredStar);
   };
-  console.log(userNickName, 'userNickName');
+
+  console.log(userNickName, '쿠키닉');
+
   const checkFormValidity = () => {
     if (!data.title || !data.description) {
       alert('모든 항목에 체크해주세요');
@@ -172,10 +175,10 @@ const Community = () => {
     const formData = new FormData();
     formData.append('title', newPost.title);
     formData.append('description', newPost.description);
-    formData.append('taste', post.taste);
-    formData.append('service', post.service);
-    formData.append('atmosphere', post.atmosphere);
-    formData.append('satisfaction', post.satisfaction);
+    formData.append('taste', data.taste);
+    formData.append('service', data.service);
+    formData.append('atmosphere', data.atmosphere);
+    formData.append('satisfaction', data.satisfaction);
 
     if (newPost?.s3Url) {
       for (const [key, value] of newPost.s3Url.entries()) {
@@ -214,7 +217,7 @@ const Community = () => {
   //     setIsUpdated(false);
   //   }
   // }, [isUpdated]);
-  // console.log(post?.nickname, 'post?.nickName ');
+  console.log(data?.nickname, 'data?.nickName ');
 
   // if (postIsLoading || postIsLikeLoading) return <div>로딩중...</div>;
   return (
@@ -640,7 +643,7 @@ const Community = () => {
                   </BoxTextReal>
                 </FlexRow>
               </div>
-              {userNickName === data?.nickName && (
+              {userNickName === data?.nickname && (
                 <FlexColumn
                   style={{
                     width: '80px',
