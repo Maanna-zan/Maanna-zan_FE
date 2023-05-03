@@ -9,6 +9,10 @@ import { BoxTextReal } from '@components/Atoms/BoxTextReal';
 import { FlexRow } from '@components/Atoms/Flex';
 import { SearchIcon } from '@components/Atoms/SearchIcon';
 import {
+  DisLikeCircleHeartIcon,
+  LikeCircleHeartIcon,
+} from '@components/Atoms/HeartIcon';
+import {
   ImgCenter,
   ImgWrapper282x248,
   ImgWrapper384x360,
@@ -168,6 +172,13 @@ const AlcoholList = () => {
     fetchData();
   }, []);
 
+  const { alkolsLike, alkolsIsLikeLoading } = useGetLikeStore();
+  const [likes, setLikes] = useState([]);
+
+  useEffect(() => {
+    setLikes(alkolsLike);
+  }, [alkolsLike]);
+
   let ranking = 1;
   let rankingFn = () => {
     switch (ranking) {
@@ -182,20 +193,34 @@ const AlcoholList = () => {
         return <Ranking3></Ranking3>;
     }
   };
-  const { alkolsLike, alkolsIsLikeLoading } = useGetLikeStore();
-  const storeLikeMine =
-    (alkolsLike &&
-      alkolsLike.flat().find((obj) => obj.apiId === storeData.apiId)) ||
-    {};
-  console.log();
-  let alkolLikeMatch = [];
-  if (alkolsLike && alkolsLike.data) {
-    alkolLikeMatch = alkolsLike.data;
-  }
-  const [roomLike, setRoomLike] = useState(storeLikeMine?.roomLike);
-  console.log('술집', storeData);
+
+  // const [roomLikeMark, setRoomLikeMark] = useState(storeLikeMine?.roomLike);
+  // let alkolLikeMatch = [];
+  // const storeLikeMine =
+  //   alkolsLike
+  //     .flat()
+  //     .find((obj) => obj.apiId === storeData?.alkolResponseDtoList?.apiId) ||
+  //   {};
+  // console.log(storeLikeMine, '흠................');
+  // if (alkolsLike && alkolsLike.data) {
+  //   alkolLikeMatch = alkolsLike.data;
+  // }
+  // const likeStoreHandler = async (apiId) => {
+  //   try {
+  //     await likeStore(apiId);
+  //     setRoomLike(!roomLike);
+
+  //     // 해당 store의 캐시된 데이터 무효화
+  //     queryClient.invalidateQueries(['store', apiId]);
+  //   } catch (error) {
+  //     alert(error);
+  //   }
+  // };
+
+  // console.log('술집', storeData?.alkolResponseDtoList?.apiId);
+  console.log('술집라이크', alkolsLike);
   if (isLoading || alkolsIsLikeLoading) {
-    return <WebWrapper>Loading...</WebWrapper>;
+    return <WebWrapper>로딩중...</WebWrapper>;
   }
   return (
     <>
@@ -350,7 +375,25 @@ const AlcoholList = () => {
                   store={store}
                   alkolsLike={alkolsLike}
                   alkolsIsLikeLoading={alkolsIsLikeLoading}
+                  // storeLikeMine={storeLikeMine}
+                  // roomLikeMark={roomLikeMark}
                 ></Store>
+                {/* <div
+                  className="hearWrap"
+                  onClick={() => likeStoreHandler(store.apiId)}
+                >
+                  {alkolsIsLikeLoading ? (
+                    <div>Loading...</div>
+                  ) : (
+                    <>
+                      {alkolsLike && roomLikeMark ? (
+                        <LikeCircleHeartIcon />
+                      ) : (
+                        <DisLikeCircleHeartIcon />
+                      )}
+                    </>
+                  )}
+                </div> */}
               </div>
               <Link key={store.id} href={`/alcohols/${store.apiId}`}>
                 <BoxTextReal variant="realDefaultBox" size="nonePadding">

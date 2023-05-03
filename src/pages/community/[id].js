@@ -56,7 +56,7 @@ const Community = () => {
     enabled: Boolean(query.id),
     onSuccess: () => {},
   });
-  console.log('포스트아이디 조회인데 잘되려나', data);
+
   // const [isUpdated, setIsUpdated] = useState(false);
 
   // const { posts, postIsLoading } = useGetPost();
@@ -99,13 +99,13 @@ const Community = () => {
   };
 
   const [like, setLike] = useState(data?.like);
-
+  console.log('좋아요 값', data);
   const likePostHandler = async (postId) => {
     try {
       await likePost(postId);
       setLike(!like);
     } catch (error) {
-      console.error(error);
+      // console.error(error);
     }
   };
 
@@ -148,8 +148,6 @@ const Community = () => {
   const handleStarHover = (hoveredStar) => {
     setHoveredStar(hoveredStar);
   };
-
-  console.log(userNickName, '쿠키닉');
 
   const checkFormValidity = () => {
     if (!data.title || !data.description) {
@@ -195,7 +193,7 @@ const Community = () => {
         s3Url: newPost.s3Url || '',
       }); // 새로운 데이터로 상태 업데이트
     } catch (error) {
-      console.error(error);
+      // console.error(error);
     }
   };
   // const [showReviewForm, setShowReviewForm] = useState(false);
@@ -217,9 +215,8 @@ const Community = () => {
   //     setIsUpdated(false);
   //   }
   // }, [isUpdated]);
-  console.log(data?.nickname, 'data?.nickName ');
 
-  // if (postIsLoading || postIsLikeLoading) return <div>로딩중...</div>;
+  if (isLoading) return <div>로딩중...</div>;
   return (
     <div>
       {isEditMode ? (

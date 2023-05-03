@@ -57,7 +57,7 @@ export const useGetLikeStore = () => {
     return { alkolsLike: data, alkolsIsLikeLoading: false };
   }
 
-  return { alkolsLike: data, alkolsIsLikeLoading: isLoading };
+  return { alkolsLike: data, alkolsIsLikeLoading: false };
 };
 
 export const useLikeStore = () => {

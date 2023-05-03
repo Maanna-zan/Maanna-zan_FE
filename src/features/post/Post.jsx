@@ -2,7 +2,11 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 
-import { LikeHeartIcon, DisLikeHeartIcon } from '@components/Atoms/HeartIcon';
+import {
+  LikeHeartIcon,
+  DisLikeCircleHeartIcon,
+  LikeCircleHeartIcon,
+} from '@components/Atoms/HeartIcon';
 import { WebWrapper } from '@components/Atoms/Wrapper';
 //hook
 import { useDeletePost } from '../../hook/post/useDeletePost';
@@ -66,7 +70,7 @@ export const Post = ({ post, onSubmit, apiId, postId }) => {
         }}
         onClick={() => likePostHandler(postId)}
       >
-        {like ? <LikeHeartIcon /> : <DisLikeHeartIcon />}
+        {like ? <LikeCircleHeartIcon /> : <DisLikeCircleHeartIcon />}
       </div>
       <div
         onClick={() => {
