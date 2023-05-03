@@ -9,7 +9,7 @@ import { InputArea } from '@components/Atoms/Input';
 import { useConfirm } from '../../hook/useConfirm';
 import { LightTheme } from '@components/Themes/theme';
 
-export default function SignUpModal({ onClose }) {
+export default function SignUpModal({ onClose, onOpen }) {
   const router = useRouter();
   //회원가입 다음 버튼 눌렀을 때햣
   const [next, setNext] = React.useState(false);
@@ -161,8 +161,9 @@ export default function SignUpModal({ onClose }) {
   };
 
   return (
-    <ModalDiv className="modal">
-      <div className="modal-overlay">
+    <>
+      <ModalDiv onClick={onClose} className="modal"></ModalDiv>
+      <Modal className="modal-overlay">
         <img
           style={{
             position: 'fixed',
@@ -429,8 +430,8 @@ export default function SignUpModal({ onClose }) {
             />
           )}
         </InnerDiv>
-      </div>
-    </ModalDiv>
+      </Modal>
+    </>
   );
 }
 
@@ -442,25 +443,25 @@ const ModalDiv = styled.div`
   height: 100%;
   background-color: #6a758152;
   z-index: 999;
+`;
 
-  .modal-overlay {
-    padding: 20px 40px;
-    border-radius: 20px;
-    position: fixed;
-    transform: translate(-50%, -50%);
-    top: 50%;
-    left: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: white;
-    z-index: 1000;
-    max-width: 550px;
-    min-width: 380px;
-    width: 50%;
-    border: 1px solid #939aa0;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
+const Modal = styled.div`
+  padding: 20px 40px;
+  border-radius: 20px;
+  position: fixed;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  z-index: 1000;
+  max-width: 550px;
+  min-width: 380px;
+  width: 50%;
+  border: 1px solid #939aa0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 `;
 
 const InnerDiv = styled.div`

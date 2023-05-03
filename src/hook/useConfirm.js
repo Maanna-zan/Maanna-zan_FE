@@ -9,7 +9,7 @@ export const useConfirm = () => {
       return data;
     },
     onSuccess: (data) => {
-      console.log('type1', data.config.data.split('"')[3]);
+      // console.log('type1', data.config.data.split('"')[3]);
       if (data.config.data.split('"')[3].includes('@')) {
         alert(`${data.config.data.split('"')[3]}은 사용가능한 이메일 입니다.`);
       } else {

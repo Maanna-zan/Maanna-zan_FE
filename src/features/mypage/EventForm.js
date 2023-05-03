@@ -23,6 +23,7 @@ const EventForm = ({ selectedDate, selectedDateLog, onSubmit }) => {
     onSubmit({ title, content, selectedDate });
     setTitle('');
     setContent('');
+    setTitleLength(0);
     setContentLength(0);
   };
 
