@@ -22,7 +22,7 @@ const PAGE_SIZE = 3;
 export const MainFirstSection = () => {
   const router = useRouter();
   const [getView, seGetView] = useState([]);
-
+  const router = useRouter();
   useEffect(() => {
     const fetchData = async () => {
       const response = await apis.get(`/alkol/view?page=${1}&size=3`);
@@ -41,7 +41,7 @@ export const MainFirstSection = () => {
   }, []);
 
   const [getBest, seGetBest] = useState([]);
-  console.log('여기확인', getView);
+
   return (
     <>
       <WebWrapperHeight>
@@ -49,7 +49,7 @@ export const MainFirstSection = () => {
           onClick={() => {
             router.push('/map');
           }}
-          style={{ position: 'relative' }}
+          style={{ position: 'relative', cursor: 'pointer' }}
         ></StWebBg>
 
         <WebWrapper style={{ position: 'relative' }}>

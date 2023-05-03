@@ -57,7 +57,7 @@ const StoreDetail = () => {
   }
 
   const [roomLike, setRoomLike] = useState(storeLikeMine?.roomLike);
-  console.log('스토어 좋아요한 값', storeLikeMine.roomLike);
+  // console.log('스토어 좋아요한 값', storeLikeMine.roomLike);
 
   const likeStoreHandler = async (apiId) => {
     try {
@@ -77,6 +77,12 @@ const StoreDetail = () => {
       setRoomLike(postLikeMine.roomLike);
     }
   }, [alkolsLike, apiIdFind]);
+
+  //카테고리네임 추출
+  const categoryNames = data?.category_name;
+  const indexAllName = categoryNames?.lastIndexOf('>');
+  const resultcategoryNames = categoryNames?.slice(indexAllName + 2);
+  // console.log('알콜카테고리', resultcategoryNames);
 
   if (storeIsLoading || alkolsIsLikeLoading) {
     return <div>Loading...</div>;
@@ -106,11 +112,12 @@ const StoreDetail = () => {
       <WebWrapper>
         <div
           style={{
+            marginTop: '28px',
             marginBottom: '10px',
             font: `var(--caption1-regular) Pretendard sans-serif`,
           }}
         >
-          {data?.category_group_name}
+          {resultcategoryNames}
         </div>
 
         <FlexRow
@@ -244,16 +251,20 @@ const StoreDetail = () => {
                             <FlexColumn style={{ gap: '10px' }}>
                               <div>{post.nickname}</div>
                             </FlexColumn>
-                            <MinStar />
+
                             <FlexRow
                               style={{
-                                width: '20%',
+                                width: '22%',
                                 gap: '10px',
                                 alignItems: 'center',
                                 justifyContent: 'space-between',
                                 font: `var(   --body2-bold) Pretendard sans-serif`,
                               }}
                             >
+                              <span>
+                                {post?.postStarAvg}
+                                <MinStar />
+                              </span>
                               <span
                                 onClick={() => likeStoreHandler(apiId)}
                                 style={{ cursor: 'pointer' }}
@@ -348,6 +359,7 @@ const StoreDetail = () => {
               boxSizing: 'border-box',
               borderRadius: '8px',
               height: '360px',
+              cursor: 'default',
             }}
           >
             {/* {setTab === 'storeInfor' ? ( */}
@@ -395,6 +407,7 @@ const StoreDetail = () => {
                     width: '100%',
                     justifyContent: ' space-between',
                     display: 'flex',
+                    cursor: 'default',
                   }}
                 >
                   <Map
@@ -434,7 +447,13 @@ const StoreDetail = () => {
                     <StTab>카카오 링크</StTab>
                     <StTab>전화번호</StTab>
                   </FlexColumn>
-                  <FlexColumn style={{ gap: '10px', justifyContent: 'center' }}>
+                  <FlexColumn
+                    style={{
+                      gap: '10px',
+                      justifyContent: 'center',
+                      cursor: 'pointer',
+                    }}
+                  >
                     <div>{data?.address_name}</div>
                     <FlexRow style={{ gap: '10px' }}></FlexRow>
 

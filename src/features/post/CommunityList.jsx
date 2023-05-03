@@ -22,25 +22,6 @@ import { useGetBestPost } from '../../hook/post/useGetBestPost';
 import { useLikePost } from '../../hook/useLikes';
 import { Ranking1, Ranking2, Ranking3 } from '@components/Atoms/Ranking';
 
-const StHeade3_name = styled.div`
-  margin-top: 48px;
-  font: var(--head3-bold) Pretendard sans-serif;
-`;
-const StPlace_name = styled.div`
-  margin-top: 20px;
-  font: var(--title1-semibold) sans-serif;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;
-const StWebBg = styled.div`
-  width: 100vw;
-  height: 300px;
-  background-image: url('/banner-community.jpg');
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-`;
 const CommunityList = () => {
   const router = useRouter();
   const { query } = useRouter();
@@ -78,6 +59,9 @@ const CommunityList = () => {
         return <Ranking3></Ranking3>;
     }
   };
+
+  const [userNickName, setUserNickName] = useState('');
+
   if (postIsLikeLoading || postIsLoading || postIsBestLoading)
     return <div>로딩중...</div>;
 
@@ -222,3 +206,22 @@ const CommunityList = () => {
 };
 
 export default CommunityList;
+const StHeade3_name = styled.div`
+  margin-top: 48px;
+  font: var(--head3-bold) Pretendard sans-serif;
+`;
+const StPlace_name = styled.div`
+  margin-top: 20px;
+  font: var(--title1-semibold) sans-serif;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+const StWebBg = styled.div`
+  width: 100vw;
+  height: 300px;
+  background-image: url('/banner-community.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+`;
