@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { cookies } from '../../shared/cookie';
 import { apis } from '../../shared/axios';
@@ -15,8 +15,14 @@ import MyWritePost from '@features/mypage/MyWritePost';
 const MyPage = () => {
   const router = useRouter();
   const token = cookies.get('access_token');
-  const refresh_token = cookies.get('refresh_token');
   const [settingMyPage, setSettingMyPage] = useState('log');
+  const [userNickName, setUserNickName] = useState('');
+
+  useEffect(() => {
+    const nick_name = cookies.get('nick_name');
+    setUserNickName(nick_name);
+  }, []);
+
   const { data, isLoading, isError, isSuccess } = useQuery({
     queryKey: ['GET_MYPAGE'],
     queryFn: async () => {
@@ -36,173 +42,181 @@ const MyPage = () => {
   });
 
   return (
-    <div style={{ zIndex: '200' }}>
-      <WebWrapper>
-        <UserDiv key={data?.id}>
-          <div className="userSetting">
-            <UserNameP>
-              <Span>{data?.nickName}</Span>님
-            </UserNameP>
-            <SettingPortalExample data={data} />
-          </div>
-          <p className="postsCount">
-            게시글 <span className="spanPostsCount">{data?.postCnt}</span>
-          </p>
-        </UserDiv>
-      </WebWrapper>
-      {settingMyPage === 'log' ? (
-        <>
+    <>
+      {userNickName === data?.nickName ? (
+        <div style={{ zIndex: '200' }}>
           <WebWrapper>
-            <TabButton>
-              <p
-                className="active"
-                onClick={() => {
-                  setSettingMyPage('log');
-                }}
-              >
-                기록
+            <UserDiv key={data?.id}>
+              <div className="userSetting">
+                <UserNameP>
+                  <Span>{data?.nickName}</Span>님
+                </UserNameP>
+                <SettingPortalExample data={data} />
+              </div>
+              <p className="postsCount">
+                게시글 <span className="spanPostsCount">{data?.postCnt}</span>
               </p>
-              <p
-                className="wait"
-                onClick={() => {
-                  setSettingMyPage('post');
-                }}
-              >
-                내가 작성한 글 보기
-              </p>
-              <p
-                className="wait"
-                onClick={() => {
-                  setSettingMyPage('like');
-                }}
-              >
-                좋아요
-              </p>
-            </TabButton>
+            </UserDiv>
           </WebWrapper>
-          <BottomDiv>
-            <WebWrapper>
-              <Log />
-            </WebWrapper>
-          </BottomDiv>
-        </>
-      ) : settingMyPage === 'post' ? (
-        <>
-          <WebWrapper>
-            <TabButton>
-              <p
-                className="wait"
-                onClick={() => {
-                  setSettingMyPage('log');
-                }}
-              >
-                기록
-              </p>
-              <p
-                className="active"
-                onClick={() => {
-                  setSettingMyPage('post');
-                }}
-              >
-                내가 작성한 글 보기
-              </p>
-              <p
-                className="wait"
-                onClick={() => {
-                  setSettingMyPage('like');
-                }}
-              >
-                좋아요
-              </p>
-            </TabButton>
-          </WebWrapper>
+          {settingMyPage === 'log' ? (
+            <>
+              <WebWrapper>
+                <TabButton>
+                  <p
+                    className="active"
+                    onClick={() => {
+                      setSettingMyPage('log');
+                    }}
+                  >
+                    기록
+                  </p>
+                  <p
+                    className="wait"
+                    onClick={() => {
+                      setSettingMyPage('post');
+                    }}
+                  >
+                    내가 작성한 글 보기
+                  </p>
+                  <p
+                    className="wait"
+                    onClick={() => {
+                      setSettingMyPage('like');
+                    }}
+                  >
+                    좋아요
+                  </p>
+                </TabButton>
+              </WebWrapper>
+              <BottomDiv>
+                <WebWrapper>
+                  <Log />
+                </WebWrapper>
+              </BottomDiv>
+            </>
+          ) : settingMyPage === 'post' ? (
+            <>
+              <WebWrapper>
+                <TabButton>
+                  <p
+                    className="wait"
+                    onClick={() => {
+                      setSettingMyPage('log');
+                    }}
+                  >
+                    기록
+                  </p>
+                  <p
+                    className="active"
+                    onClick={() => {
+                      setSettingMyPage('post');
+                    }}
+                  >
+                    내가 작성한 글 보기
+                  </p>
+                  <p
+                    className="wait"
+                    onClick={() => {
+                      setSettingMyPage('like');
+                    }}
+                  >
+                    좋아요
+                  </p>
+                </TabButton>
+              </WebWrapper>
 
-          <BottomDiv>
-            <WebWrapper>
-              <MyWritePost data={data} />
-            </WebWrapper>
-          </BottomDiv>
-        </>
-      ) : settingMyPage === 'like' ? (
-        <>
-          <WebWrapper>
-            <TabButton>
-              <p
-                className="wait"
-                onClick={() => {
-                  setSettingMyPage('log');
-                }}
-              >
-                기록
-              </p>
-              <p
-                className="wait"
-                onClick={() => {
-                  setSettingMyPage('post');
-                }}
-              >
-                내가 작성한 글 보기
-              </p>
-              <p
-                className="active"
-                onClick={() => {
-                  setSettingMyPage('like');
-                }}
-              >
-                좋아요
-              </p>
-            </TabButton>
-          </WebWrapper>
-          <BottomDiv>
-            <WebWrapper>
-              <FindPost />
-            </WebWrapper>
-          </BottomDiv>
-        </>
+              <BottomDiv>
+                <WebWrapper>
+                  <MyWritePost data={data} />
+                </WebWrapper>
+              </BottomDiv>
+            </>
+          ) : settingMyPage === 'like' ? (
+            <>
+              <WebWrapper>
+                <TabButton>
+                  <p
+                    className="wait"
+                    onClick={() => {
+                      setSettingMyPage('log');
+                    }}
+                  >
+                    기록
+                  </p>
+                  <p
+                    className="wait"
+                    onClick={() => {
+                      setSettingMyPage('post');
+                    }}
+                  >
+                    내가 작성한 글 보기
+                  </p>
+                  <p
+                    className="active"
+                    onClick={() => {
+                      setSettingMyPage('like');
+                    }}
+                  >
+                    좋아요
+                  </p>
+                </TabButton>
+              </WebWrapper>
+              <BottomDiv>
+                <WebWrapper>
+                  <FindPost />
+                </WebWrapper>
+              </BottomDiv>
+            </>
+          ) : (
+            <>
+              <WebWrapper>
+                <TabButton>
+                  <p
+                    onClick={() => {
+                      setSettingMyPage('log');
+                    }}
+                  >
+                    기록
+                  </p>
+                  <p
+                    onClick={() => {
+                      setSettingMyPage('post');
+                    }}
+                  >
+                    내가 작성한 글 보기
+                  </p>
+                  <p
+                    onClick={() => {
+                      setSettingMyPage('like');
+                    }}
+                  >
+                    좋아요
+                  </p>
+                  <p
+                    style={{ color: 'red' }}
+                    onClick={() => {
+                      setSettingMyPage('save');
+                    }}
+                  >
+                    보관함
+                  </p>
+                </TabButton>
+              </WebWrapper>
+
+              <BottomDiv>
+                <WebWrapper>
+                  <Save data={data} />
+                </WebWrapper>
+              </BottomDiv>
+            </>
+          )}
+        </div>
       ) : (
         <>
-          <WebWrapper>
-            <TabButton>
-              <p
-                onClick={() => {
-                  setSettingMyPage('log');
-                }}
-              >
-                기록
-              </p>
-              <p
-                onClick={() => {
-                  setSettingMyPage('post');
-                }}
-              >
-                내가 작성한 글 보기
-              </p>
-              <p
-                onClick={() => {
-                  setSettingMyPage('like');
-                }}
-              >
-                좋아요
-              </p>
-              <p
-                style={{ color: 'red' }}
-                onClick={() => {
-                  setSettingMyPage('save');
-                }}
-              >
-                보관함
-              </p>
-            </TabButton>
-          </WebWrapper>
-
-          <BottomDiv>
-            <WebWrapper>
-              <Save data={data} />
-            </WebWrapper>
-          </BottomDiv>
+          <div>로그인 후 이용이 가능합니다</div>
         </>
       )}
-    </div>
+    </>
   );
 };
 

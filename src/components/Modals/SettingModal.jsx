@@ -172,7 +172,7 @@ export default function SettingModal({ onClose, data }) {
                   setIsEditMode('env');
                 }}
               >
-                환경설정
+                회원 탈퇴
               </p>
             </ModeParentsDiv>
             <p>닉네임</p>
@@ -244,7 +244,7 @@ export default function SettingModal({ onClose, data }) {
                   setIsEditMode('env');
                 }}
               >
-                환경설정
+                회원 탈퇴
               </p>
             </ModeParentsDiv>
             <p>기존 비밀번호</p>
@@ -356,7 +356,7 @@ export default function SettingModal({ onClose, data }) {
                     setIsEditMode('env');
                   }}
                 >
-                  환경설정
+                  회원 탈퇴
                 </p>
                 <Hr />
               </div>
@@ -415,7 +415,7 @@ export default function SettingModal({ onClose, data }) {
                     setIsEditMode('env');
                   }}
                 >
-                  환경설정
+                  회원 탈퇴
                 </p>
                 <Hr />
               </div>
@@ -524,6 +524,8 @@ const ModeParentsDiv = styled.div`
   .unModeP {
     cursor: pointer;
     color: #9ea4aa;
+  }
+  .modeP {
   }
   .modeDiv {
     display: flex;
