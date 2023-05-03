@@ -30,10 +30,11 @@ import { Ranking1, Ranking2, Ranking3 } from '@components/Atoms/Ranking';
 const CommunityList = () => {
   const router = useRouter();
   const { query } = useRouter();
-  const { postsLike, postIsLikeLoading } = useGetLikePost();
+
   const { postsBest, postIsBestLoading } = useGetBestPost();
   const { likePost } = useLikePost();
   const { posts, postIsLoading } = useGetPost();
+  const { postsLike, postIsLikeLoading } = useGetLikePost();
   let potLikeMatch = [];
   if (postsLike && postsLike.data && postsLike.data.posts) {
     potLikeMatch = postsLike.data.posts;

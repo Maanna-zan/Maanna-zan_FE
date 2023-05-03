@@ -26,6 +26,7 @@ export const LikeCircleHeartIcon = () => {
       viewBox="0 0 30 30"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      cursor="pointer"
     >
       <circle cx="15" cy="15" r="15" fill="white" />
       <path
@@ -43,6 +44,7 @@ export const DisLikeCircleHeartIcon = () => {
       viewBox="0 0 30 30"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      cursor="pointer"
     >
       <circle cx="15" cy="15" r="15" fill="white" />
       <path

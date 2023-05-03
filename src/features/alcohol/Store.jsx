@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { useLikeStore } from '../../hook/alcohol/useGetStore';
+import { useLikeStore } from '../../hook/useLikes';
 import {
   LikeCircleHeartIcon,
   DisLikeCircleHeartIcon,
