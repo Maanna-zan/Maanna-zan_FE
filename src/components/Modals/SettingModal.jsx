@@ -124,8 +124,9 @@ export default function SettingModal({ onClose, data }) {
     return true;
   };
   return (
-    <ModalDiv className="modal">
-      <div className="modal-overlay">
+    <>
+      <ModalDiv onClick={onClose} className="modal"></ModalDiv>
+      <Modal className="modal-overlay">
         <img
           style={{
             position: 'fixed',
@@ -447,8 +448,8 @@ export default function SettingModal({ onClose, data }) {
         >
           Close
         </button> */}
-      </div>
-    </ModalDiv>
+      </Modal>
+    </>
   );
 }
 
@@ -461,24 +462,25 @@ const ModalDiv = styled.div`
   background-color: #6a758152;
   /* mix-blend-mode: darken; */
   z-index: 999;
-  .modal-overlay {
-    padding: 20px 40px;
-    border-radius: 20px;
-    position: fixed;
-    transform: translate(-50%, -50%);
-    top: 50%;
-    left: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #ffff;
-    z-index: 1000;
-    max-width: 400px;
-    min-width: 280px;
-    width: 50%;
-    border: 1px solid #939aa0;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
+`;
+
+const Modal = styled.div`
+  padding: 20px 40px;
+  border-radius: 20px;
+  position: fixed;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffff;
+  z-index: 1000;
+  max-width: 400px;
+  min-width: 280px;
+  width: 50%;
+  border: 1px solid #939aa0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 `;
 
 const InnerDiv = styled.div`

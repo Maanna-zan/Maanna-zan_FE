@@ -143,6 +143,9 @@ const PostDiv = styled.div`
     font-size: 16px;
     line-height: 24px;
     margin: 0px 0px 0px 0px;
+    word-wrap: break-word;
+    overflow-y: hidden;
+    height: 22px;
   }
   .description {
     margin: 0px 0px 0px 0px;

@@ -333,9 +333,9 @@ function Log() {
                         //   }));
                         // }}
                       />
-                      <div>
-                        <p>{calLog.title}</p>
-                        <p>{calLog.content}</p>
+                      <div className="log">
+                        <p className="title">{calLog.title}</p>
+                        <p className="content">{calLog.content}</p>
                         <p>
                           {calLog.selectedDate.substr(2).replace(/-/gi, '.')}
                         </p>
@@ -368,14 +368,24 @@ const ReviewDiv = styled.div`
   width: 688px;
   display: flex;
   flex-direction: column;
-  .p {
-    font-size: 24px;
-    font-weight: 600;
+  .log {
+    margin-top: -18px;
+    block-size: fit-content;
   }
   .title {
-    font-weight: 600;
+    display: flex;
     font-size: 16px;
-    line-height: 24px;
+    font-weight: 600;
+    word-wrap: break-word;
+    overflow-y: hidden;
+    height: 20px;
+  }
+  .content {
+    font-weight: 400;
+    font-size: 14px;
+    word-wrap: break-word;
+    overflow-y: scroll;
+    height: 40px;
   }
 `;
 

@@ -72,10 +72,24 @@ export default function SignInModal({
       // console.log('decoded', decoded);
       // console.log('로그인data', data.data.data);
       alert(`${decoded.sub}로그인 성공 했습니다❤️`);
-      cookies.set('access_token', data.headers.access_token, { path: '/' });
-      cookies.set('refresh_token', data.headers.refresh_token, { path: '/' });
-      cookies.set('nick_name', data.data.data, { path: '/' });
-      localStorage.setItem('nick_name', data.data.data, { path: '/' });
+      cookies.set('access_token', data.headers.access_token, {
+        path: '/',
+        httpOnly: true,
+      });
+      cookies.set('refresh_token', data.headers.refresh_token, {
+        path: '/',
+        httpOnly: true,
+      });
+      cookies.set('nick_name', data.data.data, { path: '/', httpOnly: true });
+      // cookies.set('access_token', data.headers.access_token, {
+      //   path: '/',
+      //   httpsOnly: true,
+      // });
+      // cookies.set('refresh_token', data.headers.refresh_token, {
+      //   path: '/',
+      //   httpsOnly: true,
+      // });
+      // cookies.set('nick_name', data.data.data, { path: '/', httpsOnly: true });
 
       // console.log('login', data);
       return data;
@@ -85,6 +99,10 @@ export default function SignInModal({
       if (data.data.message == '비밀번호 변경이 필요합니다') {
         router.push('/OAuth');
       } else {
+        setUser({
+          email: '',
+          password: '',
+        });
         router.push('/');
       }
     },

@@ -19,7 +19,7 @@ const CommentsList = () => {
   const [commentId, setCommentId] = useState(null);
   const [commentContent, setCommentContent] = useState('');
   const [userNickName, setUserNickName] = useState('');
-
+  // console.log('setIsEditMode', isEditMode);
   useEffect(() => {
     const nick_name = cookies.get('nick_name');
     setUserNickName(nick_name);
@@ -97,56 +97,65 @@ const CommentsList = () => {
   return (
     <div>
       <CommentDiv>
-        {isEditMode ? (
-          <>
-            <div style={{ display: 'flex' }}>
-              <InputArea
-                variant="default"
-                size="lg"
-                type="text"
-                name="content"
-                value={commentContent}
-                onChange={(e) => setCommentContent(e.target.value)}
-              />
-              <button className="Button" onClick={handleUpdate}>
-                완료
-              </button>
+        <>
+          {data?.map((comment) => (
+            <div key={comment.id}>
+              {isEditMode && comment.id === commentId ? (
+                <>
+                  <div className="nickName">{comment.nickName}</div>
+                  <div style={{ display: 'flex' }}>
+                    <InputArea
+                      variant="default"
+                      size="lg"
+                      type="text"
+                      name="content"
+                      value={commentContent}
+                      onChange={(e) => setCommentContent(e.target.value)}
+                    />
+                    <button
+                      className="Button"
+                      onClick={() => {
+                        setIsEditMode(false);
+                      }}
+                    >
+                      취소
+                    </button>
+                    <button className="Button" onClick={handleUpdate}>
+                      완료
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="nickName">{comment.nickName}</div>
+                  <h2 className="content">{comment.content}</h2>
+                  <div className="mycomment">
+                    {userNickName === comment.nickName && (
+                      <>
+                        <button
+                          className="Button"
+                          onClick={() => handleEdit(comment)}
+                        >
+                          수정하기
+                        </button>
+                        <button
+                          className="Button"
+                          onClick={() => handleDelete(comment.id)}
+                        >
+                          삭제하기
+                        </button>
+                      </>
+                    )}
+                    <AddReComment comment={comment} />
+                  </div>
+                  <div>
+                    <ReCommentList comment={comment} />
+                  </div>
+                </>
+              )}
             </div>
-          </>
-        ) : (
-          <>
-            {data?.map((comment) => (
-              <div key={comment.id}>
-                <div className="nickName">{comment.nickName}</div>
-                <h2 className="content">{comment.content}</h2>
-                <div className="mycomment">
-                  {userNickName === comment.nickName && (
-                    <>
-                      <button
-                        className="Button"
-                        onClick={() => handleEdit(comment)}
-                      >
-                        수정하기
-                      </button>
-                      <button
-                        className="Button"
-                        onClick={() => handleDelete(comment.id)}
-                      >
-                        삭제하기
-                      </button>
-                    </>
-                  )}
-
-                  <AddReComment comment={comment} />
-                </div>
-
-                <div>
-                  <ReCommentList comment={comment} />
-                </div>
-              </div>
-            ))}
-          </>
-        )}
+          ))}
+        </>
       </CommentDiv>
     </div>
   );

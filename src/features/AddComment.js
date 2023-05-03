@@ -90,4 +90,5 @@ const Textarea = styled.textarea`
   padding: 12px;
   border-radius: 8px;
   height: 87px;
+  resize: none; /* 크기 조절 못하게 함 */
 `;
