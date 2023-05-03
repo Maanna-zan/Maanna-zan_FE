@@ -65,8 +65,6 @@ function SearchedKeywordLandingPage() {
     setCheckedPlace(newCheckedPlace);
     //	positions state에 검색된 state값 차곡차곡 담기위한 다중마커state값 (place는 모달창에서 검색 및 선택된 값)
     setCheckedMarkerPlace(place);
-    console.log("newInputValues",newInputValues)
-    console.log("inputValues",inputValues)
     // positions 업데이트 (정확히 원하는 마커 지워 지도록 positions값 currentInputIndex 같이 엮어서 업데이트 해줌. 매우 중요)
     const newPositions = [...positions];
     newPositions[currentInputIndex] = {
@@ -98,7 +96,6 @@ function SearchedKeywordLandingPage() {
   // X 버튼 Handler(해당 인풋박스 값 초기화(index줘서 각각의 인풋 박스 값 취소 가능) -> 수정(인풋박스값 삭제하더라도 checkedPlace값은 반영 안 되어 서버 페이로드가 잘못 감)
   // const onInputClearHandler = (index) => {
   //   setInputValues(prevInputValues => {
-  //     console.log("@@22222newInputValues@@",newInputValues)
   //     const newInputValues = [...prevInputValues];
   //     newInputValues[index] = '';
   //     return newInputValues;
@@ -237,7 +234,6 @@ function SearchedKeywordLandingPage() {
       setCenter(midPoint);
     }
   }, [midPoint]);
-  // console.log('midPoint=>', midPoint);
 
   //  checkedPlace로 props값 받아오면 useEffect 실행하여 지도에 마커 찍히도록 gettingLocation 함수 실행.
   useEffect(() => {

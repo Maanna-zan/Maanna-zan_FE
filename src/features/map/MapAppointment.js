@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Calendar from 'react-calendar';
 import moment from 'moment/moment';
 import { useState } from 'react';
@@ -8,16 +8,17 @@ import 'react-calendar/dist/Calendar.css';
 import { cookies } from '@shared/cookie';
 import { useRouter } from 'next/router';
 import { Link } from 'react-scroll';
-import { WebWrapper } from '@components/Atoms/Wrapper';
+import { WebWrapper, WebWrapperHeight } from '@components/Atoms/Wrapper';
 import { ButtonText } from '@components/Atoms/Button';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { InputArea } from '@components/Atoms/Input';
 import { LightTheme } from '@components/Themes/theme';
 import ApporintmentModal from '@components/Modals/AppointmentModal';
 import { createPortal } from 'react-dom';
-import MapMidPoint from './MapMidPoint';
+import MapMidPoint, { CheckedPlaceContext } from './MapMidPoint';
+import { FlexRow } from '@components/Atoms/Flex';
 
-const MapAppointment = ({ checkedPlace }) => {
+const MapAppointment = ({checkedPlace}) => {
   const router = useRouter();
   const [isLoginMode, setIsLoginMode] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -33,13 +34,17 @@ const MapAppointment = ({ checkedPlace }) => {
   // getQueryData로 캐싱한 값 INPUTVALUESPROP키로 불러오기.
   const InputValuesProp = queryClient.getQueryData({queryKey: ['INPUTVALUESPROP']});
   //  checkedPlace값 가져오기
-  const { data: placeData } = useQuery(['places', checkedPlace], () =>
-  fetch(`/mapmidpoint?query=${checkedPlace}`).then((res) => res.json())
-);
-  console.log("checkedPlace",checkedPlace)
-  useEffect(() => {
-    console.log('checkedPlace updated: ', checkedPlace);
-  }, [checkedPlace]);
+//   const { data: placeData } = useQuery(['places', checkedPlace], () =>
+//   fetch(`/mapmidpoint?query=${checkedPlace}`).then((res) => res.json())
+// );
+//   console.log("checkedPlace",checkedPlace)
+//   useEffect(() => {
+//     console.log('checkedPlace updated: ', checkedPlace);
+//   }, [checkedPlace]);
+  // useContext Hook을 사용하여 MidPointContext 컨텍스트 값을 가져옵니다.
+// const checkedPlace = useContext(CheckedPlaceContext);
+// midPoint 값을 사용합니다.
+console.log("checkedPlace",checkedPlace);
   useEffect(() => {
     const token = cookies.get('access_token');
     setIsLoginMode(token);
@@ -70,105 +75,86 @@ const MapAppointment = ({ checkedPlace }) => {
     typeof window !== 'undefined'
       ? localStorage.getItem('nick_name') ?? ''
       : '';
-
+      console.log("@@@@checkedPlace",checkedPlace)
   return (
-    <>
-      {!isLoginMode ? (
-        <div>
-          <StWebBg
-            onClick={() => {
-              router.push('/map');
-            }}
-          ></StWebBg>
-          <LoginNotice>
-            로그인 시 이용 가능합니다.
-            <Link
-              className="Go"
-              onClick={scrollToTop}
-              to="top"
-              smooth={true}
-              duration={500}
-            >
-              로그인 하러가기
-            </Link>
-          </LoginNotice>
-        </div>
-      ) : (
-        <div>
-          <WebWrapper
-            style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}
-          >
-            <Div className="calendar-container">
-              <Calendar
-                //196 줄의 핸들러 함수 -> 날짜 얼럿이 뜹니다.
-                //onChange={clickDayHandler}
-                //유즈스테이트로 달력에서 누른 날의 밸류 값이 밑에 글씨로 떠오릅니다.
-                onChange={onChange}
-                value={value}
-                //일에서 토요일로 요일을 정렬해줍니다.
-                calendarType="US"
-                //1일 2일 의 일자를 화면상에서 뺴줍니다.
-                formatDay={(locale, date) => moment(date).format('DD')}
-                className="mx-auto w-full text-sm border-b"
-              />
-              <p className="textGray">
-                <span className="textRed">{nickName}</span>님이 선택하신 약속
-                날짜는
-                <span className="textRed">
-                  {moment(value).format('YYYY년 MM월 DD일')}
-                </span>
-                입니다.
-              </p>
-              <ButtonText
-                size="lg"
-                variant="primary"
-                label="약속잡기"
-                onClick={selectAppointmentHandler}
-              />
-            </Div>
-            <Region>
-              <div>출발 장소</div>
-                <DeparturesWrapper>
-                  {InputValuesProp?.filter(value => value !== "")?.map((value, index) => ( 
-                    <div key={index} style={{ display: 'flex', alignItems: 'center'}}>
-                    <InputArea       //출발지 받아온 값 Map으로 돌려 그 갯수만큼 input 만들기            
-                        key={index}  //(""값도 카운트가 되는데 그 경우 filter로 제외하고 map으로 돌리기)                
-                        value={value} 
-                        type="text"
-                        variant="default"
-                        size="lg"
-                        readOnly={true}
-                        style={{
-                            width: '100%',
-                            margin: '3px 0 3px 10px',
-                            padding: '2%',
-                            border: '1px solid white',
-                            backgroundColor: `${LightTheme.GRAY_50}`,
-                            fontFamily: `${'var(--label1-regular)'} Pretendard sans-serif`,
-                            fontSize: '14px',
-                            lineHeight: '18px',
-                            zIndex: '1000'
-                        }}
-                        />
-                    </div>
-                  ))}
-                </DeparturesWrapper>
-              <p className="depart">
-                중간위치 술집장소:
-                <span className="departChild">{checkedPlace?.place_name}</span>
-              </p>
-            </Region>
+    <WebWrapper>
+      <WebWrapperHeight>
+        <FlexRow>
+          {!isLoginMode ? (
             <div>
-              {showModal &&
-                createPortal(
-                  <ApporintmentModal onClose={() => setShowModal(false)} />,
-                  document.body,
-                )}
+              <StWebBg
+                onClick={() => {
+                  router.push('/map');
+                }}
+              ></StWebBg>
+              <LoginNotice>
+                로그인 시 이용 가능합니다.
+                <Link
+                  className="Go"
+                  onClick={scrollToTop}
+                  to="top"
+                  smooth={true}
+                  duration={500}
+                >
+                  로그인 하러가기
+                </Link>
+              </LoginNotice>
             </div>
-          </WebWrapper>
-        </div>
-      )}
-    </>
+          ) : (
+            <div>
+              <WebWrapper
+                style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}
+              >
+                <Div className="calendar-container">
+                  <Calendar
+                    //196 줄의 핸들러 함수 -> 날짜 얼럿이 뜹니다.
+                    //onChange={clickDayHandler}
+                    //유즈스테이트로 달력에서 누른 날의 밸류 값이 밑에 글씨로 떠오릅니다.
+                    onChange={onChange}
+                    value={value}
+                    //일에서 토요일로 요일을 정렬해줍니다.
+                    calendarType="US"
+                    //1일 2일 의 일자를 화면상에서 뺴줍니다.
+                    formatDay={(locale, date) => moment(date).format('DD')}
+                    className="mx-auto w-full text-sm border-b"
+                  />
+                  <div>
+                    <AppointmentPlaceWrapper>
+                      <div className="AppointmentPlace">중간 위치에 있는 술집을 선택해 주세요.</div>
+                          {checkedPlace ? (
+                            <span className="PlaceChecked">" {checkedPlace?.place_name} "</span>
+                          ) : (
+                            <span className="PlaceUnchecked" style={{ color: `${LightTheme.FONT_SECONDARY}` }}>목록에서 선택해 주세요.</span>
+                          )}
+                    </AppointmentPlaceWrapper>
+                      <p className="ShowDateText">
+                        <span className="textRed">{nickName}</span>님이 선택하신 약속
+                        날짜는
+                        <span className="textRed">
+                          {moment(value).format('YYYY년 MM월 DD일')}
+                        </span>
+                        입니다.
+                      </p>
+                      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                      <ButtonText size="lg" variant="primary" label="약속잡기"
+                        onClick={selectAppointmentHandler}
+                        style={{  marginTop: '5vh' }}/>
+                      </div>
+                  </div>
+                </Div>
+                <div>
+                  {showModal &&
+                    createPortal(
+                      <ApporintmentModal onClose={() => setShowModal(false)} />,
+                      document.body,
+                    )}
+                </div>
+              </WebWrapper>
+            </div>
+          )}
+        </FlexRow>
+      </WebWrapperHeight>
+    </WebWrapper>
   );
 };
 
@@ -212,7 +198,7 @@ const Div = styled.div`
   gap: 70px;
   align-items: center;
   .react-calendar {
-    width: 487px;
+    width: 470px;
     height: 318px;
     background: rgb(255, 255, 255);
     /* border: 1px solid #a0a096; */
@@ -274,7 +260,11 @@ const Div = styled.div`
     justify-content: center;
   }
   .textRed {
-    color: #ff4840;
+    color: ${LightTheme.PRIMARY_NORMAL};
+  }
+  .ShowDateText {
+    color: ${LightTheme.FONT_PRIMARY};
+    font: var(--title1-semibold) Pretendard sans-serif;
   }
 `;
 
@@ -300,25 +290,23 @@ const LoginNotice = styled.p`
     color: #ff4840;
   }
 `;
-
-const Region = styled.div`
-  background-color: aliceblue;
-  width: 100%;
-
-  .depart {
-    display: flex;
-    flex-direction: column;
-    font-size: 22px;
-    align-items: baseline;
-    margin-left: 100px;
-    margin-top: 40px;
-  }
-  .departChild {
-    color: #ff4840;
-  }
-`;
 const DeparturesWrapper = styled.div`
 display: flex;
 flex-direction: column;
 width: 40%;
 `
+const AppointmentPlaceWrapper = styled.div`
+  .AppointmentPlace {
+  color: ${LightTheme.FONT_PRIMARY};
+  font: var(--head3-bold) Pretendard sans-serif;
+  }
+
+  .PlaceChecked {
+    color: ${LightTheme.FONT_PRIMARY};
+    font: var(--head3-medium) Pretendard sans-serif;
+  }
+  .PlaceUnchecked {
+    color: ${LightTheme.FONT_SECONDARY};
+    font: var(--head3-medium) Pretendard sans-serif;
+  }
+`;
