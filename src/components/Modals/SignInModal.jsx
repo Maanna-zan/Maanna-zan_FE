@@ -72,24 +72,14 @@ export default function SignInModal({
       // console.log('decoded', decoded);
       // console.log('로그인data', data.data.data);
       alert(`${decoded.sub}로그인 성공 했습니다❤️`);
+
       cookies.set('access_token', data.headers.access_token, {
         path: '/',
-        httpOnly: true,
       });
       cookies.set('refresh_token', data.headers.refresh_token, {
         path: '/',
-        httpOnly: true,
       });
-      cookies.set('nick_name', data.data.data, { path: '/', httpOnly: true });
-      // cookies.set('access_token', data.headers.access_token, {
-      //   path: '/',
-      //   httpsOnly: true,
-      // });
-      // cookies.set('refresh_token', data.headers.refresh_token, {
-      //   path: '/',
-      //   httpsOnly: true,
-      // });
-      // cookies.set('nick_name', data.data.data, { path: '/', httpsOnly: true });
+      cookies.set('nick_name', data.data.data, { path: '/' });
 
       // console.log('login', data);
       return data;
