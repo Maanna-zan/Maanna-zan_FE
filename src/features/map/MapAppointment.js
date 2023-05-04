@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import Calendar from 'react-calendar';
 import moment from 'moment/moment';
 import { useState } from 'react';
@@ -10,29 +10,57 @@ import { useRouter } from 'next/router';
 import { Link } from 'react-scroll';
 import { WebWrapper, WebWrapperHeight } from '@components/Atoms/Wrapper';
 import { ButtonText } from '@components/Atoms/Button';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { InputArea } from '@components/Atoms/Input';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { LightTheme } from '@components/Themes/theme';
 import ApporintmentModal from '@components/Modals/AppointmentModal';
 import { createPortal } from 'react-dom';
-import MapMidPoint, { CheckedPlaceContext } from './MapMidPoint';
 import { FlexRow } from '@components/Atoms/Flex';
+import { apis } from '@shared/axios';
 
 const MapAppointment = ({checkedPlace}) => {
   const router = useRouter();
   const [isLoginMode, setIsLoginMode] = useState(false);
   const [showModal, setShowModal] = useState(false);
-
   //버튼으로 보내줄 값들
-  const [appointment, setAppointment] = React.useState({
-    selectedDate: '',
-    //필요한 key, value 값 추가해서 사용하세용 !
-    //1번 출발 : '',
+  const [appointment, setAppointment] = React.useState('');
+  const { address_name, category_group_code, category_group_name, category_name, distance, id, phone, place_name, place_url, road_address_name, x, y } = checkedPlace;
+  const mapRequestDto = {
+    address_name,
+    category_group_code,
+    category_group_name,
+    category_name,
+    distance,
+    apiId: id,
+    phone,
+    place_name,
+    place_url,
+    road_address_name,
+    x,
+    y,
+    selectedDate: appointment,
+  };
+
+  //
+  const token = cookies.get('access_token');
+  const { mutate } = useMutation({
+    mutationFn: async (payload) => {
+      const data = await apis.post('/my-page/schedule', payload, {
+        headers: {
+          Access_Token: `${token}`,
+        },
+      }
+      );
+      return data;
+    },
+    onSuccess: (data) => {
+    if (data.data.statusCode == 200) {
+      setShowModal(true);
+    }
+    },
+    onError: (error) => {
+      alert(error.response.data.message);
+    },
   });
-  // queryKey에 캐싱하여 값 불러오기위해 queryClient선언
-  const queryClient = useQueryClient();
-  // getQueryData로 캐싱한 값(출발지들) INPUTVALUESPROP키로 불러오기.
-  const InputValuesProp = queryClient.getQueryData({queryKey: ['INPUTVALUESPROP']});
 
   useEffect(() => {
     const token = cookies.get('access_token');
@@ -42,26 +70,22 @@ const MapAppointment = ({checkedPlace}) => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // 266 으로 가서 글을 확인해주세요 ~
+  // 달력 관련 로직
   const [value, onChange] = useState(new Date());
   const mark = ['2023-04-20', '2023-04-28'];
-
   const clickDayHandler = (value, event) => {
-    // console.log('value', value);
     alert(`Clicked day:  ${moment(value).format('YYYY-MM-DD')}`);
   };
   //value -> 원래 형태 'YYYY년 MM월 DD일' , 'YYYY-MM-DD', 'MM-DD' 이런식으로 변경이 가능합니다
-
   const selectAppointmentHandler = () => {
-    setAppointment({
-      selectedDate: moment(value).format('YYYY-MM-DD'),
-    });
-    setShowModal(true);
+    setAppointment(moment(value).format('YYYY-MM-DD'));
+    mutate(mapRequestDto);
   };
   const nickName =
     typeof window !== 'undefined'
       ? localStorage.getItem('nick_name') ?? ''
       : '';
+
   return (
     <WebWrapper style={{marginTop: '150px'}}>
       <WebWrapperHeight>
@@ -123,7 +147,7 @@ const MapAppointment = ({checkedPlace}) => {
                       </p>
                       <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                       <ButtonText size="lg" variant="primary" label="약속잡기"
-                        onClick={selectAppointmentHandler}
+                        onClick={() => {selectAppointmentHandler()}}
                         style={{  marginTop: '5vh' }}/>
                       </div>
                   </div>
