@@ -88,7 +88,7 @@ export default function SignInModal({
     onSuccess: (data) => {
       // console.log('login', data);
       if (data.data.message == '비밀번호 변경이 필요합니다') {
-        router.push('/OAuth');
+        router.push('/oauth');
       } else {
         setUser({
           email: '',
