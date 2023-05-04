@@ -323,7 +323,7 @@ function SearchedKeywordLandingPage() {
 
           <FlexColumnCenter style={{ margin: '0 200px 250px 25px' ,maxWidth: '470px',maxHeight: '90vh'}}>
             <TitleStyled>친구와 본인의 </TitleStyled>
-            <Highlighting>위치를 입력해주세요</Highlighting>
+            <Highlighting>위치를 입력해 주세요.</Highlighting>
             <div style={{ width: '100%' }}>
               {inputs}
               {renderModal()}

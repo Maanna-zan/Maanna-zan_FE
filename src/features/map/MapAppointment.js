@@ -92,23 +92,56 @@ const MapAppointment = ({checkedPlace}) => {
         <FlexRow style={{maxWidth: '100wh'}}>
           {!isLoginMode ? (
             <div>
-              <StWebBg
-                onClick={() => {
-                  router.push('/map');
-                }}
-              ></StWebBg>
-              <LoginNotice>
-                로그인 시 이용 가능합니다.
-                <Link
-                  className="Go"
-                  onClick={scrollToTop}
-                  to="top"
-                  smooth={true}
-                  duration={500}
-                >
-                  로그인 하러가기
-                </Link>
-              </LoginNotice>
+              <StWebBg onClick={() => {scrollToTop()}}></StWebBg>
+              <div style={{filter: 'blur(6px)', opacity: '0.1'}}>
+                <WebWrapper style={{display: 'flex', flexDirection: 'column', gap: '24px'}}>
+                  <Div className="calendar-container">
+                    <Calendar
+                      onChange={onChange}
+                      value={value}
+                      calendarType="US"
+                      formatDay={(locale, date) => moment(date).format('DD')}
+                      className="mx-auto w-full text-sm border-b"
+                    />
+                    <div>
+                      <AppointmentPlaceWrapper>
+                        <div className="AppointmentPlace">중간 위치에 있는 술집을 선택해 주세요.</div>
+                        {checkedPlace ? (
+                          <span className="PlaceChecked">" {checkedPlace?.place_name} "</span>
+                        ) : (
+                          <span className="PlaceUnchecked" style={{color: `${LightTheme.FONT_SECONDARY}`}}>목록에서 선택해 주세요.</span>
+                        )}
+                      </AppointmentPlaceWrapper>
+                      <p className="ShowDateText">
+                        <span className="textRed">{nickName}</span>님이 선택하신 약속
+                        날짜는
+                        <span className="textRed">
+                          {moment(value).format('YYYY년 MM월 DD일')}
+                        </span>
+                        입니다.
+                      </p>
+                      <div style={{display: 'flex', justifyContent: 'flex-end'}}>
+                        <ButtonText
+                          size="lg"
+                          variant="primary"
+                          label="약속잡기"
+                          onClick={() => {
+                            selectAppointmentHandler();
+                          }}
+                          style={{marginTop: '5vh'}}
+                        />
+                      </div>
+                    </div>
+                  </Div>
+                  <div style={{position: 'relative'}}>
+                    {showModal &&
+                      createPortal(
+                        <ApporintmentModal onClose={() => setShowModal(false)} />,
+                        document.body,
+                      )}
+                  </div>
+                </WebWrapper>
+              </div>
             </div>
           ) : (
             <div>
@@ -279,12 +312,15 @@ const Div = styled.div`
 `;
 
 const StWebBg = styled.div`
-  width: 100vw;
-  height: 400px;
-  background-image: url('/mainFirstBg.png');
+  width: 1003px;
+  height: 318px;
+  left: 360px;
+  top: 1146px;
+  background-image: url('/UnlogedInImg.png');
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
+  background-size: contain;
   cursor: pointer;
 `;
 const LoginNotice = styled.p`
