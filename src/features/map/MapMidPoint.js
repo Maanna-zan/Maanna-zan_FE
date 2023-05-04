@@ -1,17 +1,14 @@
-import React, { createContext, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { apis } from '@shared/axios';
 import { WebWrapper, WebWrapperHeight } from '@components/Atoms/Wrapper'
 import { FlexColumnCenter, FlexRow } from '@components/Atoms/Flex'
-import { Map, MapMarker } from 'react-kakao-maps-sdk';
 import styled from 'styled-components';
-import Pagination from '@components/Modals/Pagenation2';
 import { LightTheme } from '@components/Themes/theme';
 import { ButtonText } from '@components/Atoms/Button';
 import { useRouter } from 'next/router';
 import { InputArea } from '@components/Atoms/Input';
 import MapAppointment from './MapAppointment';
-import { GrideGapCol2, GrideGapCol3, GrideGapCol4, GrideGapRow4 } from '@components/Atoms/Grid';
 
 function MapMidPoint() {
     // queryKey에 캐싱하여 값 불러오기위해 queryClient선언
@@ -482,19 +479,19 @@ function MapMidPoint() {
                     <ButtonText 
                     size='xxsm'
                     variant='hoverRed'
-                    label='<  다시 검색하기'
+                    label={<><span style={{ fontWeight: '500', fontSize: '20px',marginRight: '16px' }}>&lt;</span> 다시 검색하기</>}
                     style={{
                         borderRadius : '2px', 
                         position: 'absolute',
-                        width: '110px',
-                        bottom: '0px',
-                        left: '-19px',
+                        width: '150px',
+                        bottom: '-4px',
+                        left: '-22px',
                         zIndex: '50',
                         backgroundColor: "transparent",
                         border: 'none',
                         fontSize: '12px',
-                        fontWeight: '600'
-                        }}
+                        fontWeight: '700',
+                    }}
                     onClick={moveBackClickButtonHandler}/>
                     </MoveBackButtonWrapper>
                     <MapSection>
@@ -517,14 +514,14 @@ function MapMidPoint() {
                                             <div key={index} style={{ display: 'flex', alignItems: 'center', zIndex: '1000'}}>
                                                 <div 
                                                 style={{ 
-                                                    width: '40px',
-                                                    height: '30px',
+                                                    width: '34px',
+                                                    height: '34px',
                                                     borderRadius: '50%',
                                                     backgroundColor: 'white',
                                                     display: 'flex',
                                                     justifyContent: 'center',
                                                     alignItems: 'center',
-                                                    color: 'red',               //String.fromCharCode(65 + index)는 A, B, C, D와 같은 알파벳을 생성. 
+                                                    color: `${LightTheme.PRIMARY_NORMAL}`, //String.fromCharCode(65 + index)는 A, B, C, D와 같은 알파벳을 생성. 
                                                     margin: '3px 1px 3px 10px'  //index가 0부터 시작하기 때문에 65를 더하여 A의 아스키 코드 65부터 시작하도록 설정
                                                     }}>                     
                                                     {String.fromCharCode(65 + index)} 
@@ -537,11 +534,13 @@ function MapMidPoint() {
                                                 size="lg"
                                                 readOnly={true}
                                                 style={{
-                                                    width: '14vw',
+                                                    width: '273px',
+                                                    height: '34px',
                                                     margin: '3px 0 3px 10px',
                                                     padding: '6px',
                                                     border: '1px solid white',
-                                                    backgroundColor: `${LightTheme.GRAY_50}`,
+                                                    borderRadius: '12px',
+                                                    backgroundColor: `${LightTheme.WHITE}`,
                                                     font: `${'var(--label1-regular)'} Pretendard sans-serif`,
                                                     zIndex: '1000'
                                                 }}
@@ -565,7 +564,7 @@ function MapMidPoint() {
                                                     type="submit"
                                                     size='xxsm'
                                                     label='술집(종합)'
-                                                    variant='primaryBolder'
+                                                    variant='blackHoverRed'
                                                 />
                                             </form>
                                             <form 
@@ -578,7 +577,7 @@ function MapMidPoint() {
                                                     type="submit"
                                                     size='xxsm'
                                                     label='칵테일바'
-                                                    variant='primaryBolder'
+                                                    variant='blackHoverRed'
                                                     />
                                             </form>
                                             <form 
@@ -591,7 +590,7 @@ function MapMidPoint() {
                                                     type="submit"
                                                     size='xxsm'
                                                     label='일본식주점'
-                                                    variant='primaryBolder'
+                                                    variant='blackHoverRed'
                                                     />
                                             </form>
                                             <form 
@@ -604,7 +603,7 @@ function MapMidPoint() {
                                                     type="submit"
                                                     size='xxsm'
                                                     label='실내포장마차'
-                                                    variant='primaryBolder'
+                                                    variant='blackHoverRed'
                                                 />
                                             </form>
                                             <form 
@@ -617,7 +616,7 @@ function MapMidPoint() {
                                                     type="submit"
                                                     size='xxsm'
                                                     label='요리주점'
-                                                    variant='primaryBolder'
+                                                    variant='blackHoverRed'
                                                 />
                                             </form>
                                             <form 
@@ -630,7 +629,7 @@ function MapMidPoint() {
                                                     type="submit"
                                                     size='xxsm'
                                                     label='호프'
-                                                    variant='primaryBolder'
+                                                    variant='blackHoverRed'
                                                 />
                                             </form>
                                             <form 
@@ -643,7 +642,7 @@ function MapMidPoint() {
                                                     type="submit"
                                                     size='xxsm'
                                                     label='와인바'
-                                                    variant='primaryBolder'
+                                                    variant='blackHoverRed'
                                                 />
                                             </form>
                                             {/* <form 
@@ -656,7 +655,7 @@ function MapMidPoint() {
                                                     type="submit"
                                                     size='xxsm'
                                                     label='오뎅바'
-                                                    variant='primaryBolder'
+                                                    variant='blackHoverRed'
                                                 />
                                             </form> */}
                                         </CategoryWrapper>
@@ -710,21 +709,21 @@ function MapMidPoint() {
     display: flex;
     flex-direction: column;
     width: 20%;
-    bottom: 10%;
+    top: 73vh;
     `
     const CategoryWrapper = styled.div`
         display: flex;
-        /* justify-content: flex-end; */
-        /* align-items: flex-end; */
         width: 32rem;
         max-width:622px;
         margin: 2px 0 2px 16px;
         overflow-x: scroll;
-        /* overflow-x: auto; */
         white-space: nowrap;
+        resize: none; 
+        /* justify-content: flex-end; */
+        /* align-items: flex-end; */
+        /* overflow-x: auto; */
         /* overflow: hidden;
         overflow-y: hidden; */
-        resize: none; 
     ::-webkit-scrollbar {
         width: 1px;
         height: 3px;
