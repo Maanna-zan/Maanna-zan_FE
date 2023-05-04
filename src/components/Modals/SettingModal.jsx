@@ -347,7 +347,7 @@ export default function SettingModal({ onClose, data }) {
                   stroke-width="2"
                   stroke-linecap="round"
                   stroke-linejoin="round"
-                  class="feather feather-eye"
+                  className="feather feather-eye"
                   style={{
                     cursor: 'pointer',
                     position: 'absolute',
@@ -374,7 +374,7 @@ export default function SettingModal({ onClose, data }) {
                   stroke-width="2"
                   stroke-linecap="round"
                   stroke-linejoin="round"
-                  class="feather feather-eye-off"
+                  className="feather feather-eye-off"
                   style={{
                     cursor: 'pointer',
                     position: 'absolute',
