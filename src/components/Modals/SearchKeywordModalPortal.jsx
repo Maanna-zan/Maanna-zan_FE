@@ -43,7 +43,7 @@ function SearchedKeywordLandingPage() {
     const { x, y } = place;
     //  x,y값 undefined일 시 조건문
     if (!x || !y) {
-      console.error('Invalid place object:', place);
+      // console.error('Invalid place object:', place);
       return;
     }
     //  place 매개변수 받아 모달창 props의 좌표값 받아서 지도 옮겨줌.
@@ -125,7 +125,7 @@ function SearchedKeywordLandingPage() {
   //Input 박스 추가
   const renderInputArea = (index) => {
     return (
-      <div style={{ display: 'flex', alignItems: 'center' }}>
+      <div style={{ display: 'flex', alignItems: 'center'}}>
         <InputArea
           key={index}
           type="text"
@@ -133,8 +133,9 @@ function SearchedKeywordLandingPage() {
           value={inputValues[index]}
           variant="default"
           size="leftIcon"
-          readOnly={midPoint ? true : false}
-          disabled={midPoint ? true : false}
+          // readOnly={midPoint ? true : false}
+          // disabled={midPoint ? true : false}
+          readOnly={true}
           onClick={() => onInputClickHandler(index)}
           style={{
             width: 'calc(100%)', //X 버튼 너비를 제외한 인풋박스의 너비를 설정위해 calc활용(필요시 연산자를 사용하여 값 계산하기)
@@ -144,7 +145,8 @@ function SearchedKeywordLandingPage() {
             fontFamily: `${'var(--label1-regular)'} Pretendard sans-serif`,
             fontSize: '14px',
             lineHeight: '18px',
-            cursor: midPoint ? 'default' : 'pointer',
+            // cursor: midPoint ? 'default' : 'pointer',
+            cursor: 'pointer',
             //Icon style
             // inputValues에 값 들어가면 돋보기 아이콘 사라지게하기. 반대로 X 버튼 나타나기.
             //  (...spread연산자 쓴 이유는 inputValues 배열의 모든 요소를 새로운 배열에 펼쳐서 복사하기위해)
@@ -168,10 +170,11 @@ function SearchedKeywordLandingPage() {
             onClick={() => onInputClearHandler(index)}
             style={{
               position: 'absolute',
-              marginLeft: '500px',
+              marginLeft: '435px',
               paddingTop: '6px',
-              pointerEvents: midPoint ? 'none' : 'auto', // midPoint가 true이면 pointerEvents를 none으로 지정
-              opacity: midPoint ? 0.3 : 1, // midPoint가 true이면 투명도를 0.3로 지정
+              pointerEvents: 'auto',
+              // pointerEvents: midPoint ? 'none' : 'auto', // midPoint가 true이면 pointerEvents를 none으로 지정
+              // opacity: midPoint ? 0.3 : 1, // midPoint가 true이면 투명도를 0.3로 지정
             }}
           >
             <img src="ModalPortalInputXButton.png" alt="X button" />
@@ -255,6 +258,12 @@ function SearchedKeywordLandingPage() {
       },
     ]);
   };
+  // midPoint값이 있고 inputValues값이 변경 되면 중간위치값 사라지도록 설정.
+  useEffect(() => {
+    if (midPoint && inputValues.some((value) => !value)) {
+      setMidPoint(null);
+    }
+  }, [inputValues]);
   //  mapmidpoint page로 이동 위한 useRouter선언.
   const router = useRouter();
   //  mapmidpoint 페이지로 이동 위한 핸들러.
@@ -270,17 +279,17 @@ function SearchedKeywordLandingPage() {
 
   return (
     <WebWrapper>
-      <WebWrapperHeight style={{}}>
+      <WebWrapperHeight>
         <FlexRow style={{ justifyContent: 'space-between', paddingTop: '5vh' }}>
           <div>
             <Map
               center={center}
               style={{
-                width: '690px',
-                height: '803px',
-                maxWidth: '100%',
-                maxHeight: '100%',
-                backgroundColor: 'aliceblue',
+                width: '50vw',
+                height: '90vh',
+                maxWidth: '690px',
+                maxHeight: '90vh',
+                // backgroundColor: 'aliceblue',
               }}
             >
               {positions?.map((position, index) => (
@@ -312,9 +321,9 @@ function SearchedKeywordLandingPage() {
             </Map>
           </div>
 
-          <FlexColumnCenter style={{ margin: '0 200px 250px 25px' }}>
+          <FlexColumnCenter style={{ margin: '0 200px 250px 25px' ,maxWidth: '470px',maxHeight: '90vh'}}>
             <TitleStyled>친구와 본인의 </TitleStyled>
-            <Highlighting>위치를 입력해주세요</Highlighting>
+            <Highlighting>위치를 입력해 주세요.</Highlighting>
             <div style={{ width: '100%' }}>
               {inputs}
               {renderModal()}
@@ -322,8 +331,8 @@ function SearchedKeywordLandingPage() {
                 <AddInputButtonStyle
                   inputCount={inputCount}
                   onClick={addingInputBoxButtonHandler}
-                  disabled={midPoint}
-                  {...(midPoint ? { style: { cursor: 'default' } } : null)}
+                  // disabled={midPoint}
+                  // {...(midPoint ? { style: { cursor: 'default' } } : null)}
                   /* styled-components로 해당 버튼 꾸며주기에 아래와 같은 조건을 걸기 위해서는 props를 내려준다. */
                 >
                   {inputCount < 4
@@ -394,7 +403,7 @@ const TitleStyled = styled.div`
 `;
 const Highlighting = styled.div`
   //width값있어야 전체 width늘어남..
-  width: 487px;
+  width: 418px;
   font-size: 40px;
   font-weight: 700;
   line-height: 48px;

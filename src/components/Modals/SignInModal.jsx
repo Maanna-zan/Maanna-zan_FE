@@ -9,6 +9,7 @@ import { InputArea } from '@components/Atoms/Input';
 import { ButtonText } from '@components/Atoms/Button';
 import KakaoButton from '@features/kakaoLogin/KakaoButton';
 import { CloseBtn } from '@components/Atoms/CloseBtn';
+import { LightTheme } from '@components/Themes/theme';
 
 export default function SignInModal({
   onClose,
@@ -87,7 +88,7 @@ export default function SignInModal({
     onSuccess: (data) => {
       // console.log('login', data);
       if (data.data.message == '비밀번호 변경이 필요합니다') {
-        router.push('/OAuth');
+        router.push('/oauth');
       } else {
         setUser({
           email: '',
@@ -161,19 +162,20 @@ export default function SignInModal({
       {/* <ModalDiv className="modal"> </ModalDiv> */}
       <Modal className="modal-overlay">
         {/* <Modal className="modal-overlay"> */}
+
         <span
-            style={{
-              position: 'fixed',
-              right: '30px',
-              top: '20px',
-              cursor: 'pointer',
-              width: '12px',
-              height: '12px',
-            }}
-            onClick={onClose}
-          >
-            <CloseBtn />
-          </span>
+          style={{
+            position: 'fixed',
+            right: '30px',
+            top: '20px',
+            cursor: 'pointer',
+            width: '12px',
+            height: '12px',
+          }}
+          onClick={onClose}
+        >
+          <CloseBtn />
+        </span>
 
         {isEditMode === 'login' ? (
           <InnerDiv>
@@ -239,7 +241,6 @@ export default function SignInModal({
 
             <BottomDiv>
               <p className="question"> 아이디가 없으신가요?</p>
-
               <p className="goToSignUp" onClick={openSignUpModal}>
                 {/* <span onClick={onClose}>회원가입</span> */}
                 회원가입
@@ -366,6 +367,17 @@ export default function SignInModal({
                 }}
               />
             )}
+            <BottomDiv style={{ marginTop: '-10px' }}>
+              <p className="question"> 이메일이 기억났어요!</p>
+              <p
+                className="goToSignUp"
+                onClick={() => {
+                  setIsEditMode('login');
+                }}
+              >
+                로그인
+              </p>
+            </BottomDiv>
           </InnerDiv>
         ) : isEditMode === 'findPassword' ? (
           <InnerDiv>
@@ -551,6 +563,7 @@ const FindButton = styled.button`
   background-color: transparent;
   width: fit-content;
   font-size: 12px;
+  cursor: pointer;
 `;
 
 const BottomDiv = styled.div`
@@ -565,6 +578,10 @@ const BottomDiv = styled.div`
   }
   .goToSignUp {
     color: #ff6a64;
+    cursor: pointer;
+    :hover {
+      color: ${LightTheme.PRIMARY_HEAVY};
+    }
   }
 `;
 

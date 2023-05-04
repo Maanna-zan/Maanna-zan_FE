@@ -9,6 +9,9 @@ const EventForm = ({ selectedDate, selectedDateLog, onSubmit }) => {
   const [titleLength, setTitleLength] = useState(0);
   const [contentLength, setContentLength] = useState(0);
 
+  console.log('selectedDateLog', selectedDateLog);
+  console.log('selectedDate', selectedDate);
+  console.log('onSubmit', onSubmit);
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
     setTitleLength(e.target.value.length);

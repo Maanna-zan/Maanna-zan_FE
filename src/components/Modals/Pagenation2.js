@@ -1,14 +1,18 @@
 function Pagination({ pages, activePage, setPage }) {
   return (
     <div
-      style={{ display: 'flex', marginTop: '12px', justifyContent: 'center' }}
+      style={{
+        display: 'flex',
+        marginTop: '12px',
+        justifyContent: 'center',
+      }}
     >
       {pages.map((page) => (
         <div
           key={page}
           style={{
             height: '30px',
-            width: '30px',
+            width: '12px',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',

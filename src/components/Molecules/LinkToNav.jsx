@@ -97,20 +97,6 @@ export const LinkToNav = () => {
   return (
     <>
       <nav style={{ display: 'flex' }}>
-        <Link href="https://docs.google.com/forms/d/1GHw9Do1jnrXyFOnKtbj46YexAJjdh_HCwk7CvVha_Lo/edit">
-          <span>
-            <ButtonText
-              style={{ font: `var(--title2-semibold) Pretendard sans-serif` }}
-              variant={
-                router.pathname ===
-                'https://docs.google.com/forms/d/1GHw9Do1jnrXyFOnKtbj46YexAJjdh_HCwk7CvVha_Lo/edit'
-                  ? 'activeRed'
-                  : 'hoverRed'
-              }
-              label={'만족도 조사'}
-            ></ButtonText>
-          </span>
-        </Link>
         <Link href="/alcohols">
           <span>
             <ButtonText
