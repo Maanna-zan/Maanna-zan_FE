@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import styled from 'styled-components';
 import { apis } from '@shared/axios';
 import { useRouter } from 'next/router';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { WebWrapper } from '@components/Atoms/Wrapper';
 import { InputArea } from '@components/Atoms/Input';
 import { BoxTextReal } from '@components/Atoms/BoxTextReal';
@@ -19,6 +19,7 @@ import {
 } from '@components/Atoms/imgWrapper';
 import { GrideGapCol4, GrideGapCol3 } from '@components/Atoms/Grid';
 import { Ranking1, Ranking2, Ranking3 } from '@components/Atoms/Ranking';
+import { cookies } from '@shared/cookie';
 import { StoreListTabMenu } from '@components/Molecules/StoreListTabMenu';
 import { PageNation } from '@components/Modals/PageNation';
 import { Store } from './alcohol/Store';
@@ -29,16 +30,18 @@ import {
   getBest,
   getView,
   getLike,
+  useAllStore,
 } from '../hook/alcohol/useGetAllStore';
 import { useGetLikeStore } from '../hook/alcohol/useGetStore';
 import { useLikeStore } from '../hook/useLikes';
-
-// const [like, setLike] = useState(like);
+import { Loading } from '@components/Atoms/Loading';
+import { LoadingArea } from '@components/Modals/LoadingArea';
 const AlcoholList = () => {
   const { go } = useRouter();
   const router = useRouter();
 
   //탭
+  //  const { alkolsLike, alkolsIsLikeLoading } = useGetLikeStore();
   const [storeListPage, setStoreListPage] = useState('all');
   const [activeTab, setActiveTab] = useState('all');
   const pages = [1, 2, 3, 4, 5];
@@ -134,13 +137,16 @@ const AlcoholList = () => {
     }
   }, [page]);
 
+  const { alkolsLike } = useGetLikeStore();
   const {
     data: storeData,
     isLoading,
+    storeIsLoading,
     isError,
     isFetching,
+    // alkolsIsLikeLoading,
   } = useQuery(
-    ['storeData', storeListPage, activeTab, pageNum, keyword],
+    ['storeData', storeListPage, pageNum, keyword],
     () => {
       switch (storeListPage) {
         case 'all':
@@ -156,12 +162,12 @@ const AlcoholList = () => {
       }
     },
     {
-      onMutate: () => {
-        window.scrollTo(0, 0);
-      },
+      // onMutate: () => {
+      //   window.scrollTo(0, 0);
+      // },
     },
   );
-  // console.log('storedata', storeData);
+  const access_token = cookies.get('access_token');
   const [getView2, seGetView2] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
@@ -170,14 +176,25 @@ const AlcoholList = () => {
     };
 
     fetchData();
-  }, []);
+  }, [useGetLikeStore]);
 
-  const { alkolsLike, alkolsIsLikeLoading } = useGetLikeStore();
-  const [likes, setLikes] = useState([]);
-
+  const [likesFetch, setLikesFetch] = useState();
+  const [isLikesFetchLoading, setIsLikesFetchLoading] = useState(true);
+  const { likeStore } = useLikeStore();
   useEffect(() => {
-    setLikes(alkolsLike);
-  }, [alkolsLike]);
+    const fetchDatalike = async () => {
+      setIsLikesFetchLoading(true); // 데이터 로딩 상태 시작
+      const dataLikeFetch = await apis.get('/my-page/likeAlkol', {
+        headers: {
+          access_token: `${access_token}`,
+        },
+      });
+      setLikesFetch(dataLikeFetch.data);
+      setIsLikesFetchLoading(false); // 데이터 로딩 상태 종료
+    };
+
+    fetchDatalike();
+  }, [useLikeStore]);
 
   let ranking = 1;
   let rankingFn = () => {
@@ -194,252 +211,233 @@ const AlcoholList = () => {
     }
   };
 
-  // const [roomLikeMark, setRoomLikeMark] = useState(storeLikeMine?.roomLike);
-  // let alkolLikeMatch = [];
-  // const storeLikeMine =
-  //   alkolsLike
-  //     .flat()
-  //     .find((obj) => obj.apiId === storeData?.alkolResponseDtoList?.apiId) ||
-  //   {};
-  // console.log(storeLikeMine, '흠................');
-  // if (alkolsLike && alkolsLike.data) {
-  //   alkolLikeMatch = alkolsLike.data;
-  // }
-  // const likeStoreHandler = async (apiId) => {
-  //   try {
-  //     await likeStore(apiId);
-  //     setRoomLike(!roomLike);
+  const storeLikeMine =
+    likesFetch?.find(
+      (obj) => obj.apiId === Number(storeData?.alkolResponseDtoList?.apiId),
+    ) || {};
 
-  //     // 해당 store의 캐시된 데이터 무효화
-  //     queryClient.invalidateQueries(['store', apiId]);
-  //   } catch (error) {
-  //     alert(error);
-  //   }
-  // };
-
-  // console.log('술집', storeData?.alkolResponseDtoList?.apiId);
-  // console.log('술집라이크', alkolsLike);
-  if (isLoading || alkolsIsLikeLoading) {
-    return <WebWrapper>로딩중...</WebWrapper>;
+  if (isLoading || (access_token && isLikesFetchLoading)) {
+    return <LoadingArea>로딩중...</LoadingArea>;
   }
+  console.log(storeData);
   return (
     <>
-      <StWebBg />
-      <div
-        style={{
-          position: 'absolute',
-          width: '806px',
-          height: '50px',
-          top: '355px',
-          left: 'calc(50% - 404px)',
-          boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
-          borderRadius: '10px',
-          backgroundColor: 'white',
-        }}
-      >
-        <div style={{ position: 'relative' }}>
-          <div
-            style={{ position: 'absolute', top: '13px', left: '20px' }}
-            onClick={handleSearch}
-          >
-            <SearchIcon />
-          </div>
-
-          <InputArea
-            style={{
-              width: '762px',
-              padding: '16px 32px 16px 64px',
-              border: 'none',
-            }}
-            type="text"
-            variant="default"
-            value={query}
-            onChange={handleQueryChange}
-            placeholder="술집을 검색해보세요"
-            onKeyDown={(event) => {
-              if (event.key === 'Enter') {
-                handleSearch();
-              }
-            }}
-          />
-
-          <div
-            style={{ position: 'absolute', top: '11px', right: '20px' }}
-            onClick={handleSearch}
-          >
-            <BoxTextReal
-              variant="redBox"
-              style={{
-                padding: '4px 16px',
-                marginBottom: '28px',
-                border: 'none',
-                color: 'white',
-                borderRadius: '10px',
-                font: `var(--body2-medium) Pretendard sans-serif`,
-              }}
-            >
-              검색
-            </BoxTextReal>
-          </div>
-        </div>
-      </div>
-      <WebWrapper>
-        <FlexRow style={{ alignItems: 'flex-end', marginBottom: '40px' }}>
-          <StHeade3_name style={{ marginRight: '12px' }}>
-            베스트 장소
-          </StHeade3_name>
-          <span
-            style={{
-              color: `${LightTheme.PRIMARY_NORMAL}`,
-              font: `var(--title1-semibold) Pretendard sans-serif`,
-            }}
-          >
-            HOT
-          </span>
-        </FlexRow>
-        <GrideGapCol3>
-          {getView2?.alkolResponseDtoList?.map((store) => (
+      {/* {isLikesFetchLoading || isLoading || isFetching ? (
+        <>로딩.</>
+      ) : ( */}
+      <>
+        <StWebBg />
+        <div
+          style={{
+            position: 'absolute',
+            width: '806px',
+            height: '50px',
+            top: '355px',
+            left: 'calc(50% - 404px)',
+            boxShadow: '0px 2px 8px rgba(0, 0, 0, 0.1)',
+            borderRadius: '10px',
+            backgroundColor: 'white',
+          }}
+        >
+          <div style={{ position: 'relative' }}>
             <div
-              key={store.id}
-              style={{ zIndex: '500' }}
-              onClick={() => {
-                router.push(`/alcohols/${store.apiId}`);
+              style={{ position: 'absolute', top: '13px', left: '20px' }}
+              onClick={handleSearch}
+            >
+              <SearchIcon />
+            </div>
+
+            <InputArea
+              style={{
+                width: '762px',
+                padding: '16px 32px 16px 64px',
+                border: 'none',
               }}
+              type="text"
+              variant="default"
+              value={query}
+              onChange={handleQueryChange}
+              placeholder="술집을 검색해보세요"
+              onKeyDown={(event) => {
+                if (event.key === 'Enter') {
+                  handleSearch();
+                }
+              }}
+            />
+
+            <div
+              style={{ position: 'absolute', top: '11px', right: '20px' }}
+              onClick={handleSearch}
             >
               <BoxTextReal
-                style={{ overflow: 'hidden' }}
-                variant="realDefaultBox"
-                size="nonePadding"
+                variant="redBox"
+                style={{
+                  padding: '4px 16px',
+                  marginBottom: '28px',
+                  border: 'none',
+                  color: 'white',
+                  borderRadius: '10px',
+                  font: `var(--body2-medium) Pretendard sans-serif`,
+                }}
               >
-                <ImgWrapper384x360 style={{ position: 'relative' }}>
-                  <ImgCenter
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      overflow: 'hidden',
-                      borderRadius: '8px',
-                    }}
-                    src={
-                      store.postList.length && store.postList[0].s3Url !== null
-                        ? store.postList[0].s3Url
-                        : store.postList.slice(1).find((post) => post?.s3Url)
-                            ?.s3Url || '/noimage_282x248_.png'
-                    }
-                    alt="store"
-                  />
+                검색
+              </BoxTextReal>
+            </div>
+          </div>
+        </div>
+        <WebWrapper>
+          <FlexRow style={{ alignItems: 'flex-end', marginBottom: '40px' }}>
+            <StHeade3_name style={{ marginRight: '12px' }}>
+              베스트 장소
+            </StHeade3_name>
+            <span
+              style={{
+                color: `${LightTheme.PRIMARY_NORMAL}`,
+                font: `var(--title1-semibold) Pretendard sans-serif`,
+              }}
+            >
+              HOT
+            </span>
+          </FlexRow>
+          <GrideGapCol3>
+            {getView2?.alkolResponseDtoList?.map((store) => (
+              <div
+                key={store.apiId}
+                style={{ zIndex: '500' }}
+                onClick={() => {
+                  router.push(`/alcohols/${store.apiId}`);
+                }}
+              >
+                <BoxTextReal
+                  style={{ overflow: 'hidden' }}
+                  variant="realDefaultBox"
+                  size="nonePadding"
+                >
+                  <ImgWrapper384x360 style={{ position: 'relative' }}>
+                    <ImgCenter
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        overflow: 'hidden',
+                        borderRadius: '8px',
+                      }}
+                      src={
+                        store.postList.length &&
+                        store.postList[0].s3Url !== null
+                          ? store.postList[0].s3Url
+                          : store.postList.slice(1).find((post) => post?.s3Url)
+                              ?.s3Url || '/noimage_282x248_.png'
+                      }
+                      alt="store"
+                    />
+                    <div
+                      style={{
+                        position: 'absolute',
+                        bottom: '308px',
+                        left: '20px',
+                      }}
+                    >
+                      {rankingFn()}
+                    </div>
+                  </ImgWrapper384x360>
+                </BoxTextReal>
+                <StPlace_name>{store.place_name}</StPlace_name>
+              </div>
+            ))}
+          </GrideGapCol3>
+
+          <StHeade3_name>술집리스트</StHeade3_name>
+          <StoreListTabMenu
+            setActiveTab={setActiveTab}
+            activeTab={activeTab}
+            handleStoreListTabChange={handleStoreListTabChange}
+          />
+
+          <GrideGapCol4 style={{ margin: '12px auto' }}>
+            {/* {isLikesFetchLoading ||
+              isLoading ||
+              isFetching ||
+              storeIsLoading ? (
+                <>로딩중</>
+              ) : ( */}
+            <>
+              {storeData?.alkolResponseDtoList?.map((store) => (
+                <div
+                  key={store.id}
+                  style={{
+                    gridColumn: 'span 1',
+                    gridRow: 'span 1',
+                    height: '318px',
+                    position: 'relative',
+                  }}
+                >
+                  <div></div>
                   <div
                     style={{
                       position: 'absolute',
-                      bottom: '308px',
-                      left: '20px',
+                      right: '16px',
+                      top: '16px',
+                      zIndex: '1',
+                      padding: '10px',
                     }}
+                    onClick={() => {}}
                   >
-                    {rankingFn()}
+                    <Store
+                      store={store}
+                      alkolsLike={alkolsLike}
+                      likesFetch={likesFetch}
+                      storeLikeMine={storeLikeMine}
+                      isFetching={isFetching}
+                    ></Store>
                   </div>
-                </ImgWrapper384x360>
-              </BoxTextReal>
-              <StPlace_name>{store.place_name}</StPlace_name>
-            </div>
-          ))}
-        </GrideGapCol3>
+                  <Link key={store.id} href={`/alcohols/${store.apiId}`}>
+                    <BoxTextReal variant="realDefaultBox" size="nonePadding">
+                      <BoxTextReal
+                        style={{ overflow: 'hidden' }}
+                        variant="realDefaultBox"
+                        size="nonePadding"
+                      >
+                        <ImgWrapper282x248>
+                          <ImgCenter
+                            style={{
+                              width: '100%',
+                              height: '100%',
+                              overflow: 'hidden',
+                              borderRadius: '8px',
+                            }}
+                            src={
+                              store.postList.length &&
+                              store.postList[0].s3Url !== null
+                                ? store.postList[0].s3Url
+                                : store.postList
+                                    .slice(1)
+                                    .find((post) => post?.s3Url)?.s3Url ||
+                                  '/noimage_282x248_.png'
+                            }
+                            alt="store"
+                          />
+                        </ImgWrapper282x248>
+                      </BoxTextReal>
+                      <StPlace_name>{store.place_name}</StPlace_name>
+                      <StAddress_name>{store.address_name}</StAddress_name>
+                    </BoxTextReal>
+                  </Link>
+                </div>
+              ))}
+            </>
+            {/* )} */}
+          </GrideGapCol4>
 
-        <StHeade3_name>술집리스트</StHeade3_name>
-        <StoreListTabMenu
-          setActiveTab={setActiveTab}
-          activeTab={activeTab}
-          handleStoreListTabChange={handleStoreListTabChange}
-        />
-
-        <GrideGapCol4 style={{ margin: '12px auto' }}>
-          {storeData?.alkolResponseDtoList?.map((store) => (
-            <div
-              key={store.id}
-              style={{
-                gridColumn: 'span 1',
-                gridRow: 'span 1',
-                height: '318px',
-                position: 'relative',
-              }}
-            >
-              <div></div>
-              <div
-                style={{
-                  position: 'absolute',
-                  right: '16px',
-                  top: '16px',
-                  zIndex: '1',
-                  padding: '10px',
-                }}
-              >
-                <Store
-                  store={store}
-                  alkolsLike={alkolsLike}
-                  alkolsIsLikeLoading={alkolsIsLikeLoading}
-                  // storeLikeMine={storeLikeMine}
-                  // roomLikeMark={roomLikeMark}
-                ></Store>
-                {/* <div
-                  className="hearWrap"
-                  onClick={() => likeStoreHandler(store.apiId)}
-                >
-                  {alkolsIsLikeLoading ? (
-                    <div>Loading...</div>
-                  ) : (
-                    <>
-                      {alkolsLike && roomLikeMark ? (
-                        <LikeCircleHeartIcon />
-                      ) : (
-                        <DisLikeCircleHeartIcon />
-                      )}
-                    </>
-                  )}
-                </div> */}
-              </div>
-              <Link key={store.id} href={`/alcohols/${store.apiId}`}>
-                <BoxTextReal variant="realDefaultBox" size="nonePadding">
-                  <BoxTextReal
-                    style={{ overflow: 'hidden' }}
-                    variant="realDefaultBox"
-                    size="nonePadding"
-                  >
-                    <ImgWrapper282x248>
-                      <ImgCenter
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          overflow: 'hidden',
-                          borderRadius: '8px',
-                        }}
-                        src={
-                          store.postList.length &&
-                          store.postList[0].s3Url !== null
-                            ? store.postList[0].s3Url
-                            : store.postList
-                                .slice(1)
-                                .find((post) => post?.s3Url)?.s3Url ||
-                              '/noimage_282x248_.png'
-                        }
-                        alt="store"
-                      />
-                    </ImgWrapper282x248>
-                  </BoxTextReal>
-                  <StPlace_name>{store.place_name}</StPlace_name>
-                  <StAddress_name>{store.address_name}</StAddress_name>
-                </BoxTextReal>
-              </Link>
-            </div>
-          ))}
-        </GrideGapCol4>
-
-        <PageNation
-          pages={pages}
-          handlePageNumChange={handlePageNumChange}
-          activeTab={activeTab}
-          router={router}
-          storeListPage={storeListPage}
-        />
-        {isFetching && <div>Loading more...</div>}
-      </WebWrapper>
+          <PageNation
+            pages={pages}
+            handlePageNumChange={handlePageNumChange}
+            activeTab={activeTab}
+            router={router}
+            storeListPage={storeListPage}
+          />
+        </WebWrapper>
+      </>
+      {/* )} */}
     </>
   );
 };

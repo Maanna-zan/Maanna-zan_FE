@@ -17,9 +17,9 @@ export const useUpdatePost = (postId) => {
         // refresh_token: `${refresh_token}`,
       },
     });
-    console.log('formData[useUp]', formData);
+
     queryClient.invalidateQueries(keys.GET_POSTS_UPDATE);
-    console.log('response.data', response.data);
+
     return response.data;
   });
   return {

@@ -17,7 +17,7 @@ import { createPortal } from 'react-dom';
 import { FlexRow } from '@components/Atoms/Flex';
 import { apis } from '@shared/axios';
 
-const MapAppointment = ({checkedPlace}) => {
+const MapAppointment = ({ checkedPlace }) => {
   const router = useRouter();
   const [isLoginMode, setIsLoginMode] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -151,7 +151,11 @@ const MapAppointment = ({checkedPlace}) => {
           ) : (
             <div>
               <WebWrapper
-                style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '24px',
+                }}
               >
                 <Div className="calendar-container">
                   <Calendar
@@ -168,6 +172,7 @@ const MapAppointment = ({checkedPlace}) => {
                   />
                   <div>
                     <AppointmentPlaceWrapper>
+
                       <div className="AppointmentPlace">중간 위치에 있는 술집을 선택해 주세요.</div>
                           {checkedPlace ? (
                             <span className="PlaceChecked">&quot; {checkedPlace?.place_name} &quot;</span>
@@ -181,13 +186,27 @@ const MapAppointment = ({checkedPlace}) => {
                         <span className="textRed">
                           {moment(value).format('YYYY년 MM월 DD일')}
                         </span>
-                        입니다.
-                      </p>
-                      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                      <ButtonText size="lg" variant="primary" label="약속잡기"
+                      )}
+                    </AppointmentPlaceWrapper>
+                    <p className="ShowDateText">
+                      <span className="textRed">{nickName}</span>님이 선택하신
+                      약속 날짜는
+                      <span className="textRed">
+                        {moment(value).format('YYYY년 MM월 DD일')}
+                      </span>
+                      입니다.
+                    </p>
+                    <div
+                      style={{ display: 'flex', justifyContent: 'flex-end' }}
+                    >
+                      <ButtonText
+                        size="lg"
+                        variant="primary"
+                        label="약속잡기"
                         onClick={selectAppointmentHandler}
-                        style={{  marginTop: '5vh' }}/>
-                      </div>
+                        style={{ marginTop: '5vh' }}
+                      />
+                    </div>
                   </div>
                 </Div>
                 <div>
@@ -342,14 +361,14 @@ const LoginNotice = styled.p`
   }
 `;
 const DeparturesWrapper = styled.div`
-display: flex;
-flex-direction: column;
-width: 40%;
-`
+  display: flex;
+  flex-direction: column;
+  width: 40%;
+`;
 const AppointmentPlaceWrapper = styled.div`
   .AppointmentPlace {
-  color: ${LightTheme.FONT_PRIMARY};
-  font: var(--head3-bold) Pretendard sans-serif;
+    color: ${LightTheme.FONT_PRIMARY};
+    font: var(--head3-bold) Pretendard sans-serif;
   }
 
   .PlaceChecked {

@@ -83,13 +83,15 @@ const StoreDetail = () => {
   const indexAllName = categoryNames?.lastIndexOf('>');
   const resultcategoryNames = categoryNames?.slice(indexAllName + 2);
   // console.log('알콜카테고리', resultcategoryNames);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
-  if (storeIsLoading || alkolsIsLikeLoading) {
-    return <div>Loading...</div>;
-  }
+  const handleImageClick = (index) => {
+    setSelectedImageIndex(index);
+  };
   if (!data) {
     return <div>Store not found.</div>;
   }
+
   const handleShareClick = async ({ title, text, url }) => {
     try {
       await navigator.share({
@@ -106,6 +108,9 @@ const StoreDetail = () => {
     console.log('text:', text);
   };
   const storeId = data.apiId;
+  // if (storeIsLoading || alkolsIsLikeLoading || <Map></Map>) {
+  //   return <div>맵이..</div>;
+  // }
 
   return (
     <>
@@ -157,8 +162,8 @@ const StoreDetail = () => {
               <ImgWrapper792>
                 <ImgCenter
                   src={
-                    data?.postList[0]
-                      ? data?.postList[0].s3Url
+                    data?.postList[selectedImageIndex]
+                      ? data?.postList[selectedImageIndex].s3Url
                       : '/noimage_282x248_.png'
                   }
                 ></ImgCenter>
@@ -171,7 +176,7 @@ const StoreDetail = () => {
                   size="nonePadding"
                   variant="realDefaultBox"
                 >
-                  <ImgWrapper180X120>
+                  <ImgWrapper180X120 onClick={() => handleImageClick(index)}>
                     <ImgCenter src={post?.s3Url || '/noimage_282x248_.png'} />
                   </ImgWrapper180X120>
                 </BoxTextReal>

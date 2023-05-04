@@ -29,6 +29,8 @@ import { PostWrtingIcon } from '@components/Atoms/PostWrtingIcon';
 import { PostArrow } from '@components/Atoms/PostArrow';
 import { ReviewForm } from '@features/post/ReviewForm';
 import { useGetStoredetail } from '../../hook/alcohol/useGetStore';
+import Link from 'next/link';
+import { LoadingArea } from '@components/Modals/LoadingArea';
 const Community = () => {
   const { query } = useRouter();
   const router = useRouter();
@@ -44,6 +46,7 @@ const Community = () => {
       alert('공유중에 에러가 났습니다. 다시 시도해주십시오', err);
     }
   };
+  const queryClient = useQueryClient();
   const { id } = router.query;
   const { data, isLoading, isError, isSuccess } = useQuery({
     queryKey: ['GET_COMMUNITYDETAIL'],
@@ -54,26 +57,11 @@ const Community = () => {
     },
     //enabled: -> 참일 때 실행시켜준다.
     enabled: Boolean(query.id),
-    onSuccess: () => {},
+    // onSuccess: () => {
+    //   queryClient.invalidateQueries(['GET_COMMUNITYDETAIL']);
+    // },
   });
 
-  // const [isUpdated, setIsUpdated] = useState(false);
-
-  // const { posts, postIsLoading } = useGetPost();
-  // const { postsLike, postIsLikeLoading } = useGetLikePost();
-
-  // let potLikeMatch = [];
-  // if (postsLike && postsLike.data && postsLike.data.posts) {
-  //   potLikeMatch = postsLike.data.posts;
-  // }
-
-  // const postId = query.id;
-  // const post = posts.find((p) => p.id === Number(postId)) || {};
-  // const postLikeMine = potLikeMatch.find((p) => p.id === Number(postId)) || {};
-  // // console.log('카테고리 찾아 삼만리', postLikeMine);
-  // const { store, storeIsLoading } = useGetStoredetail({
-  //   apiId: post.apiId,
-  // });
   const postId = data?.id;
   const [newPost, setNewPost] = useState({
     title: '',
@@ -98,8 +86,16 @@ const Community = () => {
     }
   };
 
-  const [like, setLike] = useState(data?.like);
-  console.log('좋아요 값', data);
+  const { postsLike, postIsLikeLoading } = useGetLikePost();
+  let potLikeMatch = [];
+  if (postsLike && postsLike.data && postsLike.data.posts) {
+    potLikeMatch = postsLike.data.posts;
+  }
+  const postLikeMine =
+    potLikeMatch.find((p) => p.id === Number(query.id)) || {};
+  const [like, setLike] = useState(postLikeMine.like);
+
+  // console.log('좋아요찾기', postLikeMine);
   const likePostHandler = async (postId) => {
     try {
       await likePost(postId);
@@ -198,13 +194,6 @@ const Community = () => {
   };
   // const [showReviewForm, setShowReviewForm] = useState(false);
 
-  //카테고리
-  const categoryNames = data?.category_name;
-  // console.log('categoryNames', categoryNames);
-  const indexAllName = categoryNames?.lastIndexOf('>');
-  const resultcategoryNames = categoryNames?.slice(indexAllName + 2);
-  // console.log('테스트카테고리', resultcategoryNames);
-
   // useEffect(() => {
   //   if (isUpdated) {
   //     setNewPost({
@@ -216,7 +205,15 @@ const Community = () => {
   //   }
   // }, [isUpdated]);
 
-  if (isLoading) return <div>로딩중...</div>;
+  if (isLoading) return <LoadingArea />;
+  //카테고리
+  const categoryNames = data?.categoryName;
+  //console.log('categoryNames', categoryNames);
+  //console.log('ㅇㅁㅅㅁ', data);
+  const indexAllName = categoryNames?.lastIndexOf('>');
+  const resultcategoryNames = categoryNames?.slice(indexAllName + 2);
+  // console.log('테스트카테고리', resultcategoryNames);
+
   return (
     <div>
       {isEditMode ? (
@@ -532,7 +529,7 @@ const Community = () => {
                     <div>{data?.nickname}</div>
                   </FlexRow>
 
-                  {/* <div>{post?.createAt.substr(0, 10)}</div> */}
+                  <div>{data?.createAt.substr(0, 10)}</div>
                 </FlexRow>
                 <FlexRow
                   style={{
@@ -540,16 +537,18 @@ const Community = () => {
                     marginBottom: '10px',
                   }}
                 >
-                  <FlexRow style={{ gap: '24px' }}>
-                    <FlexRow style={{ gap: '10px' }}>
-                      <div>
-                        <AderessMarker />
-                      </div>
-                      <div>장소</div>
-                    </FlexRow>
+                  <Link href={`/alcohols/${data?.apiId}`}>
+                    <FlexRow style={{ gap: '24px' }}>
+                      <FlexRow style={{ gap: '10px' }}>
+                        <div>
+                          <AderessMarker />
+                        </div>
+                        <div>장소</div>
+                      </FlexRow>
 
-                    <div>{data?.storename}</div>
-                  </FlexRow>
+                      <div>{data?.storename}</div>
+                    </FlexRow>
+                  </Link>
                   <FlexRow
                     style={{
                       gap: '20px',

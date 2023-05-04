@@ -66,6 +66,9 @@ export const useLikeStore = () => {
         },
       }),
     {
+      onSuccess: (response) => {
+        alert(JSON.stringify(response.data.data));
+      },
       onError: (error, apiId, previousPost) => {
         const response = error?.response;
         if (
@@ -79,26 +82,21 @@ export const useLikeStore = () => {
         }
       },
       onMutate: (apiId) => {
-        const previousPost = queryClient.getQueryData(['store', apiId]);
+        const previousStore = queryClient.getQueryData(['store', apiId]);
         queryClient.setQueryData(['store', apiId], (old) => ({
           ...old,
           roomLike: !old?.roomLike,
-          roomLikecnt: old?.roomLike
-            ? old?.roomLikecnt - 1
-            : old?.roomLikecnt + 1,
+          roomLikecnt: old?.like ? old?.roomLikecnt - 1 : old?.roomLikecnt + 1,
         }));
-        return previousPost;
-      },
 
+        return previousStore;
+      },
       onSettled: (data, error, apiId, previousPost) => {
         if (error) {
           queryClient.setQueryData(['store', apiId], previousPost);
         } else {
           queryClient.invalidateQueries(['store', apiId]);
         }
-      },
-      onSuccess: (response) => {
-        alert(JSON.stringify(response.data.data));
       },
     },
   );
