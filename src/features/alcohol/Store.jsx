@@ -14,6 +14,7 @@ export const Store = ({
   store,
   alkolsIsLikeLoading,
   alkolsLike,
+  likesFetch,
   // storeLikeMine,
   // roomLikeMark,
 }) => {
@@ -21,24 +22,16 @@ export const Store = ({
   const { likeStore } = useLikeStore();
 
   const apiId = store.apiId;
-  // console.log('apiId', apiId);
-  //게시글 좋아요한 가게와 현재가게 매칭
-  const storeLikeMine =
-    (alkolsLike && alkolsLike.flat().find((obj) => obj.apiId === apiId)) || {};
-  console.log();
-  let alkolLikeMatch = [];
-  if (alkolsLike && alkolsLike.data) {
-    alkolLikeMatch = alkolsLike.data;
-  }
+  const storeLikeMine = likesFetch?.find((obj) => obj.apiId === apiId) || {};
+
+  // console.log('storeLikeMine', storeLikeMine);
+
   const [roomLike, setRoomLike] = useState(storeLikeMine?.roomLike);
   // console.log('storeLikeMine', storeLikeMine, 'storeLikeMine');
-  const pushLike = storeLikeMine.apiId;
   const likeStoreHandler = async (apiId) => {
     try {
       await likeStore(apiId);
       setRoomLike(!roomLike);
-
-      // 해당 store의 캐시된 데이터 무효화
       queryClient.invalidateQueries(['store', apiId]);
     } catch (error) {
       alert(error);
@@ -55,13 +48,7 @@ export const Store = ({
         {alkolsIsLikeLoading ? (
           <div>Loading...</div>
         ) : (
-          <>
-            {alkolsLike && roomLike ? (
-              <LikeCircleHeartIcon />
-            ) : (
-              <DisLikeCircleHeartIcon />
-            )}
-          </>
+          <>{roomLike ? <LikeCircleHeartIcon /> : <DisLikeCircleHeartIcon />}</>
         )}
       </div>
     </>
