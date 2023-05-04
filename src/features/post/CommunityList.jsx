@@ -26,22 +26,23 @@ import {
 import { useGetBestPost } from '../../hook/post/useGetBestPost';
 import { useLikePost } from '../../hook/useLikes';
 import { Ranking1, Ranking2, Ranking3 } from '@components/Atoms/Ranking';
+import { LoadingArea } from '@components/Modals/LoadingArea';
 
 const CommunityList = () => {
   const router = useRouter();
   const { query } = useRouter();
 
   const { postsBest, postIsBestLoading } = useGetBestPost();
-  const { likePost } = useLikePost();
+  // const { likePost } = useLikePost();
   const { posts, postIsLoading } = useGetPost();
   const { postsLike, postIsLikeLoading } = useGetLikePost();
-  let potLikeMatch = [];
-  if (postsLike && postsLike.data && postsLike.data.posts) {
-    potLikeMatch = postsLike.data.posts;
-  }
-  const postLikeMine =
-    potLikeMatch.find((p) => p.id === Number(query.id)) || {};
-  const [like, setLike] = useState(postLikeMine.like);
+  // let potLikeMatch = [];
+  // if (postsLike && postsLike.data && postsLike.data.posts) {
+  //   potLikeMatch = postsLike.data.posts;
+  // }
+  // const postLikeMine =
+  //   potLikeMatch.find((p) => p.id === Number(query.id)) || {};
+  // const [like, setLike] = useState(postLikeMine.like);
 
   const likePostHandler = async () => {
     try {
@@ -67,9 +68,9 @@ const CommunityList = () => {
   };
 
   const [userNickName, setUserNickName] = useState('');
-
+  //postIsLikeLoading 없으니깐 다른곳에 갔다와야함
   if (postIsLikeLoading || postIsLoading || postIsBestLoading)
-    return <div>로딩중...</div>;
+    return <LoadingArea>로딩중...</LoadingArea>;
 
   return (
     <>
@@ -96,7 +97,7 @@ const CommunityList = () => {
                 }}
                 onClick={() => likePostHandler(store?.id)}
               >
-                {like ? <LikeCircleHeartIcon /> : <LikeCircleHeartIcon />}
+                {/* {like ? <LikeCircleHeartIcon /> : <LikeCircleHeartIcon />} */}
               </div>
               <div
                 onClick={() => {

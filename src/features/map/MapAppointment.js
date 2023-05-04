@@ -17,7 +17,7 @@ import { createPortal } from 'react-dom';
 import { FlexRow } from '@components/Atoms/Flex';
 import { apis } from '@shared/axios';
 
-const MapAppointment = ({checkedPlace}) => {
+const MapAppointment = ({ checkedPlace }) => {
   const router = useRouter();
   const [isLoginMode, setIsLoginMode] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -61,7 +61,24 @@ const MapAppointment = ({checkedPlace}) => {
       alert(error.response.data.message);
     },
   });
-
+  // queryKey에 캐싱하여 값 불러오기위해 queryClient선언
+  const queryClient = useQueryClient();
+  // getQueryData로 캐싱한 값 INPUTVALUESPROP키로 불러오기.
+  const InputValuesProp = queryClient.getQueryData({
+    queryKey: ['INPUTVALUESPROP'],
+  });
+  //  checkedPlace값 가져오기
+  //   const { data: placeData } = useQuery(['places', checkedPlace], () =>
+  //   fetch(`/mapmidpoint?query=${checkedPlace}`).then((res) => res.json())
+  // );
+  //   console.log("checkedPlace",checkedPlace)
+  //   useEffect(() => {
+  //     console.log('checkedPlace updated: ', checkedPlace);
+  //   }, [checkedPlace]);
+  // useContext Hook을 사용하여 MidPointContext 컨텍스트 값을 가져옵니다.
+  // const checkedPlace = useContext(CheckedPlaceContext);
+  // midPoint 값을 사용합니다.
+  console.log('checkedPlace', checkedPlace);
   useEffect(() => {
     const token = cookies.get('access_token');
     setIsLoginMode(token);
@@ -85,7 +102,6 @@ const MapAppointment = ({checkedPlace}) => {
     typeof window !== 'undefined'
       ? localStorage.getItem('nick_name') ?? ''
       : '';
-
   return (
     <WebWrapper style={{marginTop: '150px'}}>
       <WebWrapperHeight>
@@ -146,7 +162,11 @@ const MapAppointment = ({checkedPlace}) => {
           ) : (
             <div>
               <WebWrapper
-                style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '24px',
+                }}
               >
                 <Div className="calendar-container">
                   <Calendar
@@ -163,6 +183,7 @@ const MapAppointment = ({checkedPlace}) => {
                   />
                   <div>
                     <AppointmentPlaceWrapper>
+<<<<<<< HEAD
                       <div className="AppointmentPlace">중간 위치에 있는 술집을 선택해 주세요.</div>
                           {checkedPlace ? (
                             <span className="PlaceChecked">" {checkedPlace?.place_name} "</span>
@@ -182,7 +203,43 @@ const MapAppointment = ({checkedPlace}) => {
                       <ButtonText size="lg" variant="primary" label="약속잡기"
                         onClick={() => {selectAppointmentHandler()}}
                         style={{  marginTop: '5vh' }}/>
+=======
+                      <div className="AppointmentPlace">
+                        중간 위치에 있는 술집을 선택해 주세요.
+>>>>>>> 984eed0 ([style][fix]화면로딩, 즐겨찾기 오류수정)
                       </div>
+                      {checkedPlace ? (
+                        <span className="PlaceChecked">
+                          " {checkedPlace?.place_name} "
+                        </span>
+                      ) : (
+                        <span
+                          className="PlaceUnchecked"
+                          style={{ color: `${LightTheme.FONT_SECONDARY}` }}
+                        >
+                          목록에서 선택해 주세요.
+                        </span>
+                      )}
+                    </AppointmentPlaceWrapper>
+                    <p className="ShowDateText">
+                      <span className="textRed">{nickName}</span>님이 선택하신
+                      약속 날짜는
+                      <span className="textRed">
+                        {moment(value).format('YYYY년 MM월 DD일')}
+                      </span>
+                      입니다.
+                    </p>
+                    <div
+                      style={{ display: 'flex', justifyContent: 'flex-end' }}
+                    >
+                      <ButtonText
+                        size="lg"
+                        variant="primary"
+                        label="약속잡기"
+                        onClick={selectAppointmentHandler}
+                        style={{ marginTop: '5vh' }}
+                      />
+                    </div>
                   </div>
                 </Div>
                 <div>
@@ -337,14 +394,14 @@ const LoginNotice = styled.p`
   }
 `;
 const DeparturesWrapper = styled.div`
-display: flex;
-flex-direction: column;
-width: 40%;
-`
+  display: flex;
+  flex-direction: column;
+  width: 40%;
+`;
 const AppointmentPlaceWrapper = styled.div`
   .AppointmentPlace {
-  color: ${LightTheme.FONT_PRIMARY};
-  font: var(--head3-bold) Pretendard sans-serif;
+    color: ${LightTheme.FONT_PRIMARY};
+    font: var(--head3-bold) Pretendard sans-serif;
   }
 
   .PlaceChecked {

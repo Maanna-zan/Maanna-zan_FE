@@ -6,7 +6,7 @@ import { cookies } from '@shared/cookie';
 
 export const useGetPost = () => {
   const access_token = cookies.get('access_token');
-
+  const queryClient = useQueryClient();
   const { data, isLoading, isError } = useQuery({
     queryKey: keys.GET_POSTS,
     queryFn: async () => {
@@ -29,6 +29,7 @@ export const useGetPost = () => {
   return { posts: data, postIsLoading: isLoading };
 };
 
+// 리뷰포스팅 리스트 조회용  좋아요
 export const useGetLikePost = () => {
   const access_token = cookies.get('access_token');
   const queryClient = useQueryClient();
@@ -42,9 +43,9 @@ export const useGetLikePost = () => {
       });
       return data.data;
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries(['GET_LIKE_POSTS']);
-    },
+    // onSuccess: () => {
+    //   queryClient.invalidateQueries(['GET_LIKE_POSTS']);
+    // },
   });
 
   if (isLoading) {

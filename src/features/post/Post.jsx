@@ -48,7 +48,7 @@ export const Post = ({ post, onSubmit, apiId, postId }) => {
       await likePost(postId);
       setLike(!like);
     } catch (error) {
-      console.error(error);
+      // console.error(error);
     }
   };
 
