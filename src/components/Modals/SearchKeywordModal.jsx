@@ -194,24 +194,20 @@ export default function KeywordSearchModal({ onClose, onUpdate}) {
         function getListItem(index, places) {
             const el = document.createElement('li');
             let itemStr =
-            '<span class="markerbg marker_' + (index + 1) +'"></span>' + '<div class="info">' + "<h5>" + places.place_name + "</h5>";
+            '<span class="markerbg marker_' + (index + 1) +'"></span>' + '<div class="info">' + '<div class="listTitle">' + places.place_name + "</div>";
                     if (places.road_address_name) {
                         itemStr +=
                             "    <span>" +
                             places.road_address_name +
                             "</span>" +
                             '   <span class="jibun gray">' +
-                            `<img src="https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/places_jibun.png">
-                            </img>` +
+                            "(지번) " + "&nbsp;"+ "&nbsp;" +
                             places.address_name +
                             "</span>";
                     } else {
                         itemStr += "<span>" + places.address_name + "</span>";
                     }
-            
-                        // itemStr +=
-                        // '  <span class="tel">' + places/*.phone*/ + "</span>" + "</div>";
-                
+
                         el.innerHTML = itemStr;
                         el.className = "item";
             
@@ -322,7 +318,7 @@ export default function KeywordSearchModal({ onClose, onUpdate}) {
         <MapSection>
             <div style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between",margin: '-13px 0 10px 0' }}>
                 <H1Styled>위치검색</H1Styled>
-                    <button style={{ backgroundColor: "transparent", border: "none", outline: "none", margin: '0 3% 4% 0', position: "relative" }}>
+                    <button style={{ backgroundColor: "transparent", border: "none", outline: "none", margin: '0 3% 3% 0', position: "relative" }}>
                         {/* 이모티콘 이미지 추가 */}
                         <img src="Group 1972.png" alt="닫기" onClick={closeModalClickHandler} style={{ position: "absolute", right: 0 }} />
                     </button>
@@ -540,58 +536,74 @@ const MapSection = styled.div`
     }
 }
 
-    #placesList h5 {
+    #placesList .listTitle {
         color: black;
-        font-size: 7px;
-        font-weight: 800;
-        line-height: 1px;
+        /* font-size: 14px;
+        font-weight: 700;
+        line-height: 20px; */
+        font: var(--body2-bold) Pretendard sans-serif;
     }
-
+    
     #placesList li {
         /* list-style: square; */
         border : 1px solid ${LightTheme.GRAY_100};
-        border-radius: 12px
+        border-radius: 8px;
     }
     #placesList .item {
-        /* border-bottom: 0 solid #888; */
         overflow: hidden;
         cursor: pointer;
-        margin-bottom: 5px;
-        padding-right: 3px;
+        margin: 0 8px 4px -20px;
+        border: none
     }
 
     #placesList .item .info {
         padding: 3px 0 5px 3px;
+        margin: 6px 12px 6px 12px;
+        /* background-color: rgba(100, 200, 100, 0.5); */
     }
 
     #placesList .item span {
         display: block;
-        margin-top: 1px;
+        /* font-weight: 400;
+        font-size: 11px;
+        line-height: 14px; */
+        font: var(--caption2-regular) Pretendard sans-serif;
     }
     #placesList .info .gray {
-        color: #9EA4AA;
-    }
-
-    #placesList .info .tel {
-        /* color: #009900; */
+        /* font-weight: 400;
+        font-size: 11px;
+        line-height: 14px; */
+        color: ${LightTheme.FONT_SECONDARY};
+        font: var(--caption2-regular) Pretendard sans-serif;
     }
 
     #placesList .clicked{
-        /* background-color: rgba(100, 200, 100, 0.5);
-        border: 1px solid rgba(100, 200, 100, 0.8); */
-        border: 1px solid #3DC060; /* 연하게 테두리(border) 스타일 */
-        position: relative; /* ::after 선택자를 위해 position 속성을 추가합니다. */
-        border-radius: 12px
+        border: 1px solid ${LightTheme.STATUS_POSITIVE};
+        position: relative; /* ::after 선택자를 위해 position 속성을 추가 */
+        border-radius: 10px;
+        
     }
 
     #placesList .clicked ::after{
-        content: "V"; /* ::after 선택자를 이용하여 V표를 추가합니다. */
+        content: ""; /* ::after 선택자를 이용하여 V표를 추가합니다. */
         position: absolute;
-        right: 5px;
-        top: 50%;
+        left: 87.4%;
+        right: 6.87%;
+        top: 42.65%;
+        bottom: 42.65%;
         transform: translateY(-50%);
-        color: #3DC060;
         font-weight: bold;
+        background-image: url('/Group 2066.png');
+        background-repeat: no-repeat;
+        background-size: contain;
+        width: 20px;
+        height: 15px;
+    }
+    
+    #placesList li:hover:not(.clicked) {
+    /* 호버 상태의 스타일 */
+    //:not() 선택자는 clicked 클래스가 있는 요소를 제외한 나머지 li 요소를 선택. 따라서 clicked 클래스가 있는 요소는 호버 상태에서 스타일이 적용되지 않게 된다.
+    background-color: ${LightTheme.GRAY_50};
     }
 
     #btnDiv {
@@ -607,12 +619,12 @@ const MapSection = styled.div`
     #pagination a {
         display: inline-block;
         margin-right: 10px;
-        color: #7b7b7b;
+        color: ${LightTheme.FONT_PRIMARY};
     }
     #pagination .on {
         font-weight: bold;
         cursor: default;
-        color: #ff6e30;
+        color: ${LightTheme.PRIMARY_NORMAL};
     }
     #btnOn {
         height: 600px;
