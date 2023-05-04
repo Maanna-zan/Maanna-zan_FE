@@ -10,13 +10,13 @@ import chunk from '@components/Modals/chunk';
 import { LightTheme } from '@components/Themes/theme';
 import { ShareBtn } from '@components/Atoms/ShareBtn';
 import { ShareButton, TrashButton } from '@components/Atoms/TrashButton';
+import { Map, MapMarker } from 'react-kakao-maps-sdk';
 
 const LogMeet = ({ setDifferMeet, setMarkMeet, response, selectedDate }) => {
   //페이지 네이션 처음 시작이 1번창부터 켜지도록
   const [activePage, setActivePage] = useState(1);
   //캘린더 로그 수정모드
   const [isEditMode, setIsEditMode] = useState({});
-
   //페이지네이션을 위한 구역 data 는 쿼리에서 먼저 undefined되기에 ? 로 있을 때
   //map을 돌릴 데이터를 4개씩 끊어서 라는 뜯 입니다 (9개ㅈ씩 끊고 싶으면 9 적으면 됩니다. )
   const chunkedData = response ? chunk(response, 2) : [];
@@ -113,7 +113,24 @@ const LogMeet = ({ setDifferMeet, setMarkMeet, response, selectedDate }) => {
                     {data.selectedDate?.substr(2).replace(/-/gi, '.')}
                   </p>
                 </div>
-                <div className="map"></div>
+                <div className="map">
+                  <Map
+                  center={{lat: data?.y, lng: data?.x }}
+                  style={{
+                    width: '331px',
+                    height: '222px',
+                    borderRadius: '8px',
+                  }}
+                  >
+                    <MapMarker
+                    position={{lat: data?.y, lng: data?.x }}
+                    image={{
+                      src: 'MaannajanLogo.png',
+                      size: { width: 30, height: 38 },
+                    }}
+                    />
+                  </Map>
+                </div>
                 <div className="calButton">
                   <ShareButton />
                   <TrashButton />
@@ -314,14 +331,11 @@ const CalLogDiv = styled.div`
   .map {
     margin-top: 8px;
     margin-left: 20px;
-    border: 1px solid #c8150d;
-    width: 331px;
-    height: 222px;
-    border-radius: 8px;
+
   }
   .calButton {
     margin-top: 10px;
-    margin-left: 20px;
+    margin-left: 17px;
     display: flex;
     flex-direction: column;
     gap: 20px;
