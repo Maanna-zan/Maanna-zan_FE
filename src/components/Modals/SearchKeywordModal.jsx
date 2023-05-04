@@ -315,8 +315,9 @@ export default function KeywordSearchModal({ onClose, onUpdate}) {
         }
     }
     return (
-        <ModalDiv className="modal">
-        <div className="modal-overlay">
+        <>
+        <ModalDiv className="modal" onClick={onClose}></ModalDiv>
+        <Modal className="modal-overlay">
 
         <MapSection>
             <div style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between",margin: '-13px 0 10px 0' }}>
@@ -396,8 +397,8 @@ export default function KeywordSearchModal({ onClose, onUpdate}) {
                     onClick={saveStateHandler}/>
             </div>
 
-        </div>
-        </ModalDiv>
+        </Modal>
+        </>
     )
 }
 const H1Styled = styled.h1`
@@ -405,16 +406,7 @@ const H1Styled = styled.h1`
     font-weight: 700;
     margin-left: 45%;
 `
-const ModalDiv = styled.div`
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100vh;
-    background-color: transparent;
-    z-index: 999;
-
-    .modal-overlay {
+const Modal = styled.div`
         position: absolute;
         top: 50%;
         left: 50%;
@@ -432,7 +424,6 @@ const ModalDiv = styled.div`
         height: 80vh;
         max-height: 704px;
         border: 1px solid #c2ccd6;
-    }
     .labelDiv {
         position: absolute;
         bottom: 16px;
@@ -442,6 +433,17 @@ const ModalDiv = styled.div`
         color: ${LightTheme.FONT_SECONDARY};
         font: var(--caption2-regular) Pretendard sans-serif;
     }
+`
+const ModalDiv = styled.div`
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: transparent;
+    z-index: 999;
+
+
 `;
 const InputWrapper = styled.div`
     display: flex;
