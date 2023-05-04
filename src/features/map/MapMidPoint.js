@@ -33,6 +33,12 @@ function MapMidPoint() {
         //라우터의 이점을 활용하지 못한다는 단점있지만, 새로고침 하며 키값 초기화. 다른 방법 고민해보기
         window.location.href = '/map';
     }
+    // midPoint값 없으면 오류가는데 방지. midPoint값 없으면 뒤로가기(일부러 새로고침하며 뒤로 = queryKey리셋위해)
+    useEffect(() => {
+        if (!midPointProp) {
+            window.location.href = '/map';
+        }
+    }, [midPointProp]);
     //  클릭 선택된 장소를 저장할 state 변수
     const [checkedPlace, setCheckedPlace] = useState('')
     // 중간지점 좌표 받아온 값으로 서버와 통신하여 kakaoAPI값 DB저장 및 목록 불러오기
