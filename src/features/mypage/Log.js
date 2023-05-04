@@ -373,6 +373,7 @@ const ReviewDiv = styled.div`
     block-size: fit-content;
   }
   .title {
+    width: 570px;
     display: flex;
     font-size: 16px;
     font-weight: 600;
@@ -380,12 +381,19 @@ const ReviewDiv = styled.div`
     overflow-y: hidden;
     height: 20px;
   }
+  .title::-webkit-scrollbar {
+    display: none; /* 크롬, 사파리, 오페라, 엣지 */
+  }
   .content {
+    width: 570px;
     font-weight: 400;
     font-size: 14px;
     word-wrap: break-word;
     overflow-y: scroll;
     height: 40px;
+  }
+  .content::-webkit-scrollbar {
+    display: none; /* 크롬, 사파리, 오페라, 엣지 */
   }
 `;
 
@@ -497,7 +505,11 @@ const CalLogDiv = styled.div`
     margin-top: 5px;
     border: none;
     height: 100%;
-    width: 100%;
+    width: 570px;
+    resize: none; /* 크기 조절 못하게 함 */
+  }
+  .textarea::-webkit-scrollbar {
+    display: none; /* 크롬, 사파리, 오페라, 엣지 */
   }
   .del {
     padding: 3px 12px;

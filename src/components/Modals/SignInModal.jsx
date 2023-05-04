@@ -9,6 +9,7 @@ import { InputArea } from '@components/Atoms/Input';
 import { ButtonText } from '@components/Atoms/Button';
 import KakaoButton from '@features/kakaoLogin/KakaoButton';
 import { CloseBtn } from '@components/Atoms/CloseBtn';
+import { LightTheme } from '@components/Themes/theme';
 
 export default function SignInModal({
   onClose,
@@ -240,7 +241,6 @@ export default function SignInModal({
 
             <BottomDiv>
               <p className="question"> 아이디가 없으신가요?</p>
-
               <p className="goToSignUp" onClick={openSignUpModal}>
                 {/* <span onClick={onClose}>회원가입</span> */}
                 회원가입
@@ -367,6 +367,17 @@ export default function SignInModal({
                 }}
               />
             )}
+            <BottomDiv style={{ marginTop: '-10px' }}>
+              <p className="question"> 이메일이 기억났어요!</p>
+              <p
+                className="goToSignUp"
+                onClick={() => {
+                  setIsEditMode('login');
+                }}
+              >
+                로그인
+              </p>
+            </BottomDiv>
           </InnerDiv>
         ) : isEditMode === 'findPassword' ? (
           <InnerDiv>
@@ -552,6 +563,7 @@ const FindButton = styled.button`
   background-color: transparent;
   width: fit-content;
   font-size: 12px;
+  cursor: pointer;
 `;
 
 const BottomDiv = styled.div`
@@ -566,6 +578,10 @@ const BottomDiv = styled.div`
   }
   .goToSignUp {
     color: #ff6a64;
+    cursor: pointer;
+    :hover {
+      color: ${LightTheme.PRIMARY_HEAVY};
+    }
   }
 `;
 

@@ -4,7 +4,7 @@ import { useMutation } from '@tanstack/react-query';
 export const useConfirm = () => {
   const { mutate: confirm, status } = useMutation({
     mutationFn: async ({ type, value }) => {
-      console.log('type', type);
+      // console.log('type', type);
       const data = await apis.post(`users/confirm-${type}`, { [type]: value });
       return data;
     },

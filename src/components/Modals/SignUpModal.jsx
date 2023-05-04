@@ -19,7 +19,9 @@ export default function SignUpModal({ onClose, onOpen }) {
   const [isEmailAvailable, setIsEmailAvailable] = useState(false);
   //input 창 변환
   const [hidePassword, setHidePassword] = useState(true);
-
+  //이메일 이메일인증 버튼 : 중복 확인 버튼
+  const [isConfirmEmail, setIsConfirmEmail] = useState(false);
+  // console.log('isConfirmEmail', isConfirmEmail);
   const toggleHidePassword = () => {
     setHidePassword(!hidePassword);
   };
@@ -34,10 +36,11 @@ export default function SignUpModal({ onClose, onOpen }) {
     setIsNickNameAvailable(true);
     confirm({ type: 'nickName', value: user.nickName });
   };
+
   const confirmEmail = () => {
-    setIsEmailAvailable(true);
-    confirm({ type: 'email', value: user.email });
+    emailCheck({ email: user.email });
   };
+
   //유저 관련 정보들 처리해줄 useState
   const [user, setUser] = React.useState({
     userName: '',
@@ -47,7 +50,13 @@ export default function SignUpModal({ onClose, onOpen }) {
     password: '',
     birth: '',
   });
-
+  const [check, setCheck] = React.useState({
+    str: '',
+  });
+  const changCheckHandler = (event) => {
+    const { name, value } = event.target;
+    setCheck((pre) => ({ ...pre, [name]: value }));
+  };
   //비밀번호 일치 비교해주는 코드
   const changHandler = (event) => {
     const { name, value } = event.target;
@@ -80,8 +89,53 @@ export default function SignUpModal({ onClose, onOpen }) {
     },
   });
 
-  //
+  //이메일 인증 보내기코드
+  const { mutate: emailCheck } = useMutation({
+    mutationFn: async (user) => {
+      // console.log('user', user);
+      const data = await apis.post('/users/check/email', user);
 
+      return data;
+    },
+    onSuccess: (data) => {
+      // console.log('data', data.data.statusCode);
+      const message = data.data.statusCode;
+      if (message == 200) {
+        alert(
+          '이메일로 인증번호를 보내드렸습니다.\n해당이메일로 가서 인증번호 확인 해주세요.',
+        );
+        setIsConfirmEmail(true);
+      }
+    },
+    onError: (e) => {
+      // console.log('e', e);
+      alert(e.response.data.message);
+    },
+  });
+
+  //이메일 인증 번호 확인
+  const { mutate: emailValidate } = useMutation({
+    mutationFn: async (payload) => {
+      // console.log('payload', payload);
+      const data = await apis.post('/users/check/number', payload);
+      // console.log('data', data);
+      return data;
+    },
+    onSuccess: (data) => {
+      // console.log(data.data);
+      const message = data.data.statusCode;
+      if (message == 200) {
+        alert(data.data.message);
+        setIsEmailAvailable(true);
+
+        setIsConfirmEmail(false);
+      }
+    },
+    onError: (e) => {
+      // console.log('e', e);
+      alert(e.response.data.message);
+    },
+  });
   // 유효성 검사 후, 이미지를 띄우기 위한 state 추가
   const [isValidPassword, setIsValidPassword] = useState(false);
 
@@ -456,28 +510,42 @@ export default function SignUpModal({ onClose, onOpen }) {
                   gap: '20px',
                 }}
               >
-                {/* <InputArea
+                <InputArea
                   size="lg"
                   type="text"
-                  name="email"
+                  name="str"
                   style={{ width: '100%' }}
-                  value={user.email}
-                  placeholder="이메일을 입력해주세요."
-                  onChange={changHandler}
+                  value={check.str}
+                  placeholder="이메일을 인증 번호를 입력해주세요."
+                  onChange={changCheckHandler}
                   required
                   onKeyDown={(e) => {
                     if (e.key === ' ') e.preventDefault();
                   }}
-                /> */}
-                <ButtonText
-                  type="button"
-                  size="md"
-                  style={{ width: '140px' }}
-                  variant="primary"
-                  active={true}
-                  onClick={confirmEmail}
-                  label="중복 확인"
                 />
+                {!isConfirmEmail ? (
+                  <ButtonText
+                    type="button"
+                    size="md"
+                    style={{ width: '140px' }}
+                    variant="primary"
+                    active={true}
+                    onClick={confirmEmail}
+                    label="인증 요청"
+                  />
+                ) : (
+                  <ButtonText
+                    type="button"
+                    size="md"
+                    style={{ width: '140px' }}
+                    variant="primary"
+                    active={true}
+                    onClick={() => {
+                      emailValidate({ str: check.str });
+                    }}
+                    label="인증 확인"
+                  />
+                )}
               </div>
 
               <Detaildiv>
