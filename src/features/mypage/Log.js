@@ -13,13 +13,16 @@ import { InputArea } from '@components/Atoms/Input';
 //페이지네이션 임포트
 import Pagination from '@components/Modals/Pagenation2';
 import chunk from '@components/Modals/chunk';
+import LogMyDay from './LogMyDay';
+import LogMeet from './LogMeet';
+import { LightTheme } from '@components/Themes/theme';
 
 function Log() {
   const queryClient = useQueryClient();
 
   const [value, onChange] = useState(new Date());
-  //페이지 네이션 처음 시작이 1번창부터 켜지도록
-  const [activePage, setActivePage] = useState(1);
+  const [differMeet, setDifferMeet] = useState(false);
+  console.log('differMeet', differMeet);
   //캘린더 로그 수정모드
   const [isEditMode, setIsEditMode] = useState({});
 
@@ -61,8 +64,35 @@ function Log() {
   };
 
   const [mark, setMark] = useState([]);
+  const [markMeet, setMarkMeet] = useState([]);
 
   const token = cookies.get('access_token');
+
+  const res = useQuery({
+    queryKey: ['LOG_APPOINTMENTS'],
+    queryFn: async () => {
+      const res = await apis.get('/my-page/scheduleList', {
+        headers: {
+          Access_Token: `${token}`,
+        },
+      });
+      console.log('result~~~', res.data.data);
+      return res.data.data;
+    },
+    onSuccess: (data) => {
+      if (!data || data.length === 0) {
+        return <div>No data available.</div>;
+      }
+      console.log('successdata', data);
+      // setMark([data.data[0].selectedDate]);
+      // // // ["2022-02-02", "2022-02-02", "2022-02-10"] 형태로 가져옴
+      const markMeet = data.map((item) => item.selectedDate);
+      setMarkMeet(markMeet);
+    },
+  });
+
+  const response = res.data;
+  console.log('res', response);
 
   const { data } = useQuery({
     queryKey: ['LOG_DATE'],
@@ -114,11 +144,6 @@ function Log() {
     mutate(event);
   };
 
-  //페이지네이션을 위한 구역 data 는 쿼리에서 먼저 undefined되기에 ? 로 있을 때
-  //map을 돌릴 데이터를 4개씩 끊어서 라는 뜯 입니다 (9개ㅈ씩 끊고 싶으면 9 적으면 됩니다. )
-  const chunkedData = data ? chunk(data, 4) : [];
-  const currentPageData = chunkedData[activePage - 1] ?? [];
-
   //캘린더 로그 수정
   //수정
   const { mutate: calLogUpdate } = useMutation({
@@ -156,19 +181,16 @@ function Log() {
     },
   });
 
-  if (!data || data?.length === 0) {
-    return (
-      <div style={{ display: 'flex', alignItems: 'center', zIndex: '300' }}>
-        <div
-          style={{
-            marginTop: '20px',
-            display: 'flex',
-            gap: '24px',
-            flexDirection: 'row',
-            width: '100%',
-            zIndex: '310',
-          }}
-        >
+  return (
+    <>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          zIndex: '300',
+        }}
+      >
+        <div style={{ marginTop: '28px' }}>
           <Div className="calendar-container">
             <Calendar
               onChange={onChange}
@@ -184,73 +206,10 @@ function Log() {
                 if (mark.find((x) => x === moment(date).format('YYYY-MM-DD'))) {
                   html.push(<div className="dot"></div>);
                 }
-                // 다른 조건을 주어서 html.push 에 추가적인 html 태그를 적용할 수 있음.
-                return (
-                  <React.Fragment key={moment(date).format('YYYY-MM-DD')}>
-                    <div className="flex justify-center items-center absoluteDiv">
-                      {html}
-                    </div>
-                  </React.Fragment>
-                );
-              }}
-            />
-            <EventForm
-              selectedDateLog={moment(value).format('MM월DD일')}
-              selectedDate={moment(value).format('YYYY-MM-DD')}
-              onSubmit={handleEventSubmit}
-            />
-          </Div>
-          <ReviewDiv>
-            <h1 className="title">기록</h1>
-            <div
-              style={{
-                width: '688px',
-                height: '459px',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                zIndex: '310',
-              }}
-            >
-              <img
-                style={{ width: '160px', height: '160px', zIndex: '320' }}
-                src="Group 2041.png"
-                alt="작성한 기록이 없습니다."
-              />
-              <p>작성한 기록이 없습니다.</p>
-            </div>
-          </ReviewDiv>
-        </div>
-      </div>
-    );
-  } else {
-    return (
-      <div style={{ display: 'flex', alignItems: 'center', zIndex: '300' }}>
-        <div
-          style={{
-            marginTop: '20px',
-            display: 'flex',
-            gap: '24px',
-            flexDirection: 'row',
-            width: '100%',
-            zIndex: '310',
-          }}
-        >
-          <Div className="calendar-container">
-            <Calendar
-              onChange={onChange}
-              value={value}
-              calendarType="US"
-              formatDay={(locale, date) => moment(date).format('DD')}
-              className="mx-auto w-full text-sm border-b"
-              tileContent={({ date, view }) => {
-                // 날짜 타일에 컨텐츠 추가하기 (html 태그)
-                // 추가할 html 태그를 변수 초기화
-                let html = [];
-                // 현재 날짜가 post 작성한 날짜 배열(mark)에 있다면, dot div 추가
-                if (mark.find((x) => x === moment(date).format('YYYY-MM-DD'))) {
-                  html.push(<div className="dot"></div>);
+                if (
+                  markMeet.find((x) => x === moment(date).format('YYYY-MM-DD'))
+                ) {
+                  html.push(<div className="dotMeet"></div>);
                 }
                 // 다른 조건을 주어서 html.push 에 추가적인 html 태그를 적용할 수 있음.
                 return (
@@ -262,140 +221,30 @@ function Log() {
                 );
               }}
             />
-            <EventForm
+          </Div>
+          {!differMeet ? (
+            <LogMeet
+              response={response}
+              setMarkMeet={setMarkMeet}
+              setDifferMeet={setDifferMeet}
+              selectedDate={moment(value).format('YYYY-MM-DD')}
+            />
+          ) : (
+            <LogMyDay
+              data={data}
+              setDifferMeet={setDifferMeet}
               selectedDateLog={moment(value).format('MM월DD일')}
               selectedDate={moment(value).format('YYYY-MM-DD')}
               onSubmit={handleEventSubmit}
             />
-          </Div>
-          <ReviewDiv>
-            <h1 className="title">기록</h1>
-            <LogBox>
-              {currentPageData.map((calLog) => (
-                <CalLogDiv key={calLog.id}>
-                  {isEditMode[calLog.id] ? (
-                    <>
-                      <div className="editmode">
-                        <div className="twoEdit">
-                          <InputArea
-                            className="editInput"
-                            variant="default"
-                            size="md"
-                            type="text"
-                            name="title"
-                            maxLength="50"
-                            value={callederTitle}
-                            onChange={(e) => setCallenderTitle(e.target.value)}
-                          />
-                          <InputArea
-                            className="editInput"
-                            variant="default"
-                            size="md"
-                            type="date"
-                            name="content"
-                            maxLength="1500"
-                            value={callederSetDated}
-                            onChange={(e) =>
-                              setCallenderSetDated(e.target.value)
-                            }
-                          />
-                        </div>
-                        <textarea
-                          className="textarea"
-                          name="content"
-                          value={callederContent}
-                          onChange={(e) => setCallenderContent(e.target.value)}
-                        />
-                      </div>
-                      <div className="twoButton">
-                        <button className="done" onClick={handleUpdate}>
-                          수정
-                        </button>
-                        <button
-                          className="del"
-                          onClick={() => handleDelete(calLog.id)}
-                        >
-                          삭제
-                        </button>
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <img
-                        src="Group 2248.png"
-                        alt="글쓰기 수정 버튼"
-                        className="editImg"
-                        onClick={() => handleEdit(calLog)}
-                        // onClick={() => {
-                        //   setIsEditMode((prev) => ({
-                        //     ...prev,
-                        //     [calLog.id]: !prev[calLog.id],
-                        //   }));
-                        // }}
-                      />
-                      <div className="log">
-                        <p className="title">{calLog.title}</p>
-                        <p className="content">{calLog.content}</p>
-                        <p>
-                          {calLog.selectedDate.substr(2).replace(/-/gi, '.')}
-                        </p>
-                      </div>
-                    </>
-                  )}
-                </CalLogDiv>
-              ))}
-            </LogBox>
-            <Pagination
-              pages={chunkedData.map((_, i) => i + 1)}
-              activePage={activePage}
-              setPage={setActivePage}
-            />
-          </ReviewDiv>
+          )}
         </div>
       </div>
-    );
-  }
+    </>
+  );
 }
 
 export default Log;
-const LogBox = styled.div`
-  /* border: 1px solid black; */
-  width: fit-content;
-  height: 560px;
-`;
-
-const ReviewDiv = styled.div`
-  width: 688px;
-  display: flex;
-  flex-direction: column;
-  .log {
-    margin-top: -18px;
-    block-size: fit-content;
-  }
-  .title {
-    width: 570px;
-    display: flex;
-    font-size: 16px;
-    font-weight: 600;
-    word-wrap: break-word;
-    overflow-y: hidden;
-    height: 20px;
-  }
-  .title::-webkit-scrollbar {
-    display: none; /* 크롬, 사파리, 오페라, 엣지 */
-  }
-  .content {
-    width: 570px;
-    font-weight: 400;
-    font-size: 14px;
-    word-wrap: break-word;
-    overflow-y: scroll;
-    height: 40px;
-  }
-  .content::-webkit-scrollbar {
-    display: none; /* 크롬, 사파리, 오페라, 엣지 */
-  }
-`;
 
 const Div = styled.div`
   .react-calendar {
@@ -462,74 +311,17 @@ const Div = styled.div`
   .dot {
     height: 8px;
     width: 8px;
-    background-color: #f87171;
+    background-color: ${LightTheme.PRIMARY_LIGHT};
     border-radius: 50%;
-    margin-left: 19px;
+    margin-left: 24px;
     position: absolute;
   }
-`;
-
-const CalLogDiv = styled.div`
-  width: 672px;
-  height: 125px;
-  background-color: white;
-  border-radius: 8px;
-  border: 1px solid #e8ebed;
-  margin-top: 12px;
-  display: flex;
-  gap: 20px;
-  padding: 12px;
-  .editImg {
-    height: 38px;
-    width: 38px;
-  }
-  .editmode {
-    display: flex;
-    flex-direction: column;
-    width: 570px;
-    /* border: 1px solid #c8150d; */
-  }
-  .twoEdit {
-    display: flex;
-  }
-  .twoButton {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-evenly;
-  }
-  .editInput {
-    border: none;
-    width: 180px;
-  }
-  .textarea {
-    margin-top: 5px;
-    border: none;
-    height: 100%;
-    width: 570px;
-    resize: none; /* 크기 조절 못하게 함 */
-  }
-  .textarea::-webkit-scrollbar {
-    display: none; /* 크롬, 사파리, 오페라, 엣지 */
-  }
-  .del {
-    padding: 3px 12px;
-    color: white;
-    border-radius: 8px;
-    border: 1px solid #ff4840;
-    background-color: #ff4840;
-    :hover {
-      color: #c8150d;
-    }
-  }
-
-  .done {
-    padding: 3px 12px;
-    color: white;
-    border-radius: 8px;
-    border: 1px solid #ff4840;
-    background-color: #ff4840;
-    :hover {
-      color: #c8150d;
-    }
+  .dotMeet {
+    height: 8px;
+    width: 8px;
+    background-color: ${LightTheme.GRAY_200};
+    border-radius: 50%;
+    margin-left: 14px;
+    position: absolute;
   }
 `;
