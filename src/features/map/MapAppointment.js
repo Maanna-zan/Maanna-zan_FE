@@ -39,7 +39,16 @@ const MapAppointment = ({ checkedPlace }) => {
     y,
     selectedDate: appointment,
   };
-
+  // selecetedDate & mutate Handler
+  const selectAppointmentHandler = () => {
+    const formattedDate = moment(value).format('YYYY-MM-DD');
+    setAppointment(formattedDate);
+    const updatedMapRequestDto = {
+      ...mapRequestDto,
+      selectedDate: formattedDate,
+    };
+    mutate(updatedMapRequestDto);
+  };
   //
   const token = cookies.get('access_token');
   const { mutate } = useMutation({
@@ -93,11 +102,7 @@ const MapAppointment = ({ checkedPlace }) => {
   const clickDayHandler = (value, event) => {
     alert(`Clicked day:  ${moment(value).format('YYYY-MM-DD')}`);
   };
-  //value -> 원래 형태 'YYYY년 MM월 DD일' , 'YYYY-MM-DD', 'MM-DD' 이런식으로 변경이 가능합니다
-  const selectAppointmentHandler = () => {
-    setAppointment(moment(value).format('YYYY-MM-DD'));
-    mutate(mapRequestDto);
-  };
+
   const nickName =
     typeof window !== 'undefined'
       ? localStorage.getItem('nick_name') ?? ''
@@ -123,7 +128,7 @@ const MapAppointment = ({ checkedPlace }) => {
                       <AppointmentPlaceWrapper>
                         <div className="AppointmentPlace">중간 위치에 있는 술집을 선택해 주세요.</div>
                         {checkedPlace ? (
-                          <span className="PlaceChecked">" {checkedPlace?.place_name} "</span>
+                          <span className="PlaceChecked"> {checkedPlace?.place_name} </span>
                         ) : (
                           <span className="PlaceUnchecked" style={{color: `${LightTheme.FONT_SECONDARY}`}}>목록에서 선택해 주세요.</span>
                         )}
@@ -186,7 +191,7 @@ const MapAppointment = ({ checkedPlace }) => {
 <<<<<<< HEAD
                       <div className="AppointmentPlace">중간 위치에 있는 술집을 선택해 주세요.</div>
                           {checkedPlace ? (
-                            <span className="PlaceChecked">" {checkedPlace?.place_name} "</span>
+                            <span className="PlaceChecked">&quot; {checkedPlace?.place_name} &quot;</span>
                           ) : (
                             <span className="PlaceUnchecked" style={{ color: `${LightTheme.FONT_SECONDARY}` }}>목록에서 선택해 주세요.</span>
                           )}
@@ -201,7 +206,7 @@ const MapAppointment = ({ checkedPlace }) => {
                       </p>
                       <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                       <ButtonText size="lg" variant="primary" label="약속잡기"
-                        onClick={() => {selectAppointmentHandler()}}
+                        onClick={selectAppointmentHandler}
                         style={{  marginTop: '5vh' }}/>
 =======
                       <div className="AppointmentPlace">
