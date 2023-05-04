@@ -21,54 +21,60 @@ const LogMeet = ({ setDifferMeet, setMarkMeet, response, selectedDate }) => {
   //map을 돌릴 데이터를 4개씩 끊어서 라는 뜯 입니다 (9개ㅈ씩 끊고 싶으면 9 적으면 됩니다. )
   const chunkedData = response ? chunk(response, 2) : [];
   const currentPageData = chunkedData[activePage - 1] ?? [];
+
+  const reversedCurrentPageData = currentPageData.slice().reverse();
   if (!response || response?.length === 0) {
-    return (
-      <div style={{ display: 'flex', alignItems: 'center', zIndex: '300' }}>
-        <div
-          style={{
-            marginTop: '20px',
-            display: 'flex',
-            gap: '24px',
-            flexDirection: 'row',
-            width: '100%',
-            zIndex: '310',
-          }}
-        >
-          <ReviewDiv>
-            <h1 className="title">기록</h1>
-            <div className="changeTab">
-              <ButtonText
-                onClick={() => {
-                  setDifferMeet(false);
-                }}
-                label="약속일정"
-                size="xxxsm"
-                variant="backGray"
-              />
-              <ButtonText label="메모장" size="xxxsm" variant="primary" />
-            </div>
-            <div
-              style={{
-                width: '688px',
-                height: '459px',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                zIndex: '310',
+    <div style={{ display: 'flex', alignItems: 'center', zIndex: '300' }}>
+      <div
+        style={{
+          display: 'flex',
+          gap: '40px',
+          flexDirection: 'row',
+          width: '100%',
+          zIndex: '310',
+        }}
+      >
+        <ReviewDiv>
+          <h1 className="title">기록</h1>
+          <div className="changeTab">
+            <ButtonText
+              onClick={() => {
+                setDifferMeet(false);
               }}
-            >
-              <img
-                style={{ width: '160px', height: '160px', zIndex: '320' }}
-                src="Group 2041.png"
-                alt="작성한 기록이 없습니다."
-              />
-              <p>작성한 기록이 없습니다.</p>
-            </div>
-          </ReviewDiv>
-        </div>
+              label="약속일정"
+              size="xxsm"
+              variant="primary"
+            />
+            <ButtonText
+              onClick={() => {
+                setDifferMeet(true);
+              }}
+              label="메모장"
+              size="xxxsm"
+              variant="backGray"
+            />
+          </div>
+          <div
+            style={{
+              width: '688px',
+              height: '459px',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              zIndex: '310',
+            }}
+          >
+            <img
+              style={{ width: '160px', height: '160px', zIndex: '320' }}
+              src="Group 2041.png"
+              alt="작성한 기록이 없습니다."
+            />
+            <p>작성한 기록이 없습니다.</p>
+          </div>
+        </ReviewDiv>
       </div>
-    );
+    </div>;
   } else {
     return (
       <div>
@@ -81,7 +87,7 @@ const LogMeet = ({ setDifferMeet, setMarkMeet, response, selectedDate }) => {
                 setDifferMeet(false);
               }}
               label="약속일정"
-              size="xxxsm"
+              size="xxsm"
               variant="primary"
             />
             <ButtonText
@@ -89,13 +95,13 @@ const LogMeet = ({ setDifferMeet, setMarkMeet, response, selectedDate }) => {
                 setDifferMeet(true);
               }}
               label="메모장"
-              size="xxxsm"
+              size="xxsm"
               variant="backGray"
             />
           </div>
 
           <LogBox>
-            {currentPageData.map((data) => (
+            {reversedCurrentPageData.map((data) => (
               <CalLogDiv key={data.id}>
                 <div className="contents">
                   <div className="meetTitle">
@@ -115,19 +121,19 @@ const LogMeet = ({ setDifferMeet, setMarkMeet, response, selectedDate }) => {
                 </div>
                 <div className="map">
                   <Map
-                  center={{lat: data?.y, lng: data?.x }}
-                  style={{
-                    width: '331px',
-                    height: '222px',
-                    borderRadius: '8px',
-                  }}
+                    center={{ lat: data?.y, lng: data?.x }}
+                    style={{
+                      width: '331px',
+                      height: '222px',
+                      borderRadius: '8px',
+                    }}
                   >
                     <MapMarker
-                    position={{lat: data?.y, lng: data?.x }}
-                    image={{
-                      src: 'MaannajanLogo.png',
-                      size: { width: 30, height: 38 },
-                    }}
+                      position={{ lat: data?.y, lng: data?.x }}
+                      image={{
+                        src: 'MaannajanLogo.png',
+                        size: { width: 30, height: 38 },
+                      }}
                     />
                   </Map>
                 </div>
@@ -331,7 +337,6 @@ const CalLogDiv = styled.div`
   .map {
     margin-top: 8px;
     margin-left: 20px;
-
   }
   .calButton {
     margin-top: 10px;

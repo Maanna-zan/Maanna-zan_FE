@@ -24,8 +24,6 @@ const LogMyDay = ({
 }) => {
   const queryClient = useQueryClient();
 
-  console.log('selectedDateLog', selectedDateLog);
-  console.log('selectedDate', selectedDate);
   const [value, onChange] = useState(new Date());
   //페이지 네이션 처음 시작이 1번창부터 켜지도록
   const [activePage, setActivePage] = useState(1);
@@ -138,48 +136,24 @@ const LogMyDay = ({
       alert.confirm('일정을 삭제하시겠습니까?');
     },
   });
+  const reversedCurrentPageData = currentPageData.slice().reverse();
 
   if (!data || data?.length === 0) {
     return (
       <div style={{ display: 'flex', alignItems: 'center', zIndex: '300' }}>
         <div
           style={{
-            marginTop: '20px',
             display: 'flex',
-            gap: '24px',
+            gap: '40px',
             flexDirection: 'row',
             width: '100%',
             zIndex: '310',
           }}
         >
           <Div className="calendar-container">
-            <Calendar
-              onChange={onChange}
-              value={value}
-              calendarType="US"
-              formatDay={(locale, date) => moment(date).format('DD')}
-              className="mx-auto w-full text-sm border-b"
-              tileContent={({ date, view }) => {
-                // 날짜 타일에 컨텐츠 추가하기 (html 태그)
-                // 추가할 html 태그를 변수 초기화
-                let html = [];
-                // 현재 날짜가 post 작성한 날짜 배열(mark)에 있다면, dot div 추가
-                if (mark.find((x) => x === moment(date).format('YYYY-MM-DD'))) {
-                  html.push(<div className="dot"></div>);
-                }
-                // 다른 조건을 주어서 html.push 에 추가적인 html 태그를 적용할 수 있음.
-                return (
-                  <React.Fragment key={moment(date).format('YYYY-MM-DD')}>
-                    <div className="flex justify-center items-center absoluteDiv">
-                      {html}
-                    </div>
-                  </React.Fragment>
-                );
-              }}
-            />
             <EventForm
-              selectedDateLog={moment(value).format('MM월DD일')}
-              selectedDate={moment(value).format('YYYY-MM-DD')}
+              selectedDateLog={selectedDateLog}
+              selectedDate={selectedDate}
               onSubmit={handleEventSubmit}
             />
           </Div>
@@ -191,10 +165,10 @@ const LogMyDay = ({
                   setDifferMeet(false);
                 }}
                 label="약속일정"
-                size="xxxsm"
+                size="xxsm"
                 variant="backGray"
               />
-              <ButtonText label="메모장" size="xxxsm" variant="primary" />
+              <ButtonText label="메모장" size="xxsm" variant="primary" />
             </div>
             <div
               style={{
@@ -235,13 +209,13 @@ const LogMyDay = ({
                 setDifferMeet(false);
               }}
               label="약속일정"
-              size="xxxsm"
+              size="xxsm"
               variant="backGray"
             />
-            <ButtonText label="메모장" size="xxxsm" variant="primary" />
+            <ButtonText label="메모장" size="xxsm" variant="primary" />
           </div>
           <LogBox>
-            {currentPageData.map((calLog) => (
+            {reversedCurrentPageData.map((calLog) => (
               <CalLogDiv key={calLog.id}>
                 {isEditMode[calLog.id] ? (
                   <>
