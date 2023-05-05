@@ -180,14 +180,6 @@ const MapAppointment = ({ checkedPlace }) => {
                             <span className="PlaceUnchecked" style={{ color: `${LightTheme.FONT_SECONDARY}` }}>목록에서 선택해 주세요.</span>
                           )}
                     </AppointmentPlaceWrapper>
-                      <p className="ShowDateText">
-                        <span className="textRed">{nickName}</span>님이 선택하신 약속
-                        날짜는
-                        <span className="textRed">
-                          {moment(value).format('YYYY년 MM월 DD일')}
-                        </span>
-                      )}
-                    </AppointmentPlaceWrapper>
                     <p className="ShowDateText">
                       <span className="textRed">{nickName}</span>님이 선택하신
                       약속 날짜는
