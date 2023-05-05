@@ -19,6 +19,12 @@ function MapMidPoint() {
     const InputValuesProp = queryClient.getQueryData({queryKey: ['INPUTVALUESPROP']});
     //  map page로 뒤로가기 위한 useRouter선언.
     const router = useRouter();
+    //  카테고리 버튼 상태 관리
+    const [activeButton, setActiveButton] = useState(null);
+    //  카테고리 버튼 상태 관리 Handler
+    const handleButtonClick = (button) => {
+        setActiveButton(button);
+    };
     //  뒤로가기 버튼 핸들러
     const moveBackClickButtonHandler = () => {
         // 데이터 리셋
@@ -44,9 +50,9 @@ function MapMidPoint() {
         queryFn: async () => {
         const response = await apis.get(
             // 서버 URL
-            `/kakaoApi?y=${midPointProp?.lat}&x=%20${midPointProp?.lng}&query=술집&radius=1500&page=1&size=15&sort=distance`,
+            // `/kakaoApi?y=${midPointProp?.lat}&x=%20${midPointProp?.lng}&query=술집&radius=1500&page=1&size=15&sort=distance`,
             //테스트용 서버 URL
-            // '/kakaoApi?y=37.534485&x=%20126.994369&query=술집&radius=1500&page=1&size=15&sort=distance',
+            '/kakaoApi?y=37.534485&x=%20126.994369&query=술집&radius=1500&page=1&size=15&sort=distance',
             // 중간지점 lat,lng값
             midPointProp
         );
@@ -378,19 +384,31 @@ function MapMidPoint() {
         }
         // 검색결과 항목을 Element로 반환하는 함수
         function getListItem(index, places) {
+            console.log("places",places)
+            // 카테고리 추출 ("음식점 > 술집" 문자열과 "음식점 > 술집 >"문자열 구분.)
+            let category_array = places.category_name.split(" > ");
+            let filtedCategory = "";
+
+            for (let i = 2; i < category_array.length; i++) {
+            if (category_array[i] !== "음식점") {
+                filtedCategory = category_array[i];
+                break;
+            }
+            }
+            if (filtedCategory === "") {
+                filtedCategory = "술집";
+            }
+            console.log('카테고리',filtedCategory);
+            //
             const el = document.createElement('li');
             let itemStr =
-            '<span class="markerbg marker_' + (index + 1) +'"></span>' + '<div class="info">' + "<h5>" + places.place_name + "</h5>";
+            '<span class="markerbg marker_' + (index + 1) +'"></span>' + '<div class="info">' + 
+            '<div class="titleWrapper">'+ '<div class="listTitle">' + places.place_name + "</div>" + '<span class="category">' + filtedCategory + "</span>"+ 
+            '<img class="share"/>' + '<img class="heart"/>' + '</div>';
                     if (places.road_address_name) {
                         itemStr +=
-                            "    <span>" +
-                            places.road_address_name +
-                            "</span>" +
-                            '   <span class="jibun gray">' +
-                            `<img src="https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/places_jibun.png">
-                            </img>` +
-                            places.address_name +
-                            "</span>";
+                            '<div class="roadAddress">' + places.road_address_name + '</div>' +
+                            '<div class="gray">' + "<span>"+ "지번" + "</span>"+ "<span>" + places.address_name +"</span>"+ "</div>";
                     } else {
                         itemStr += "<span>" + places.address_name + "</span>";
                     }
@@ -484,7 +502,7 @@ function MapMidPoint() {
                         borderRadius : '2px', 
                         position: 'absolute',
                         width: '150px',
-                        bottom: '-4px',
+                        bottom: '-30px',
                         left: '-22px',
                         zIndex: '50',
                         backgroundColor: "transparent",
@@ -507,6 +525,7 @@ function MapMidPoint() {
                                     height: '90vh',
                                     maxWidth: '690px',
                                     maxHeight: '90vh',
+                                    marginTop: '40px'
                                 }}
                             />
                                     <DeparturesWrapper>
@@ -548,10 +567,11 @@ function MapMidPoint() {
                                             </div>
                                         ))}
                                     </DeparturesWrapper>
-                            <FlexColumnCenter style={{maxWidth: '518px',maxHeight: '90vh'}}>
+                            <FlexColumnCenter style={{maxWidth: '518px',maxHeight: '100vh', marginTop: '30px',resize: 'none'}}>
                                 <TitleWrapper>
                                     <div style={{font: `${'var(--head1-medium)'} Pretendard sans-serif`,}}>중간 위치에 있는 </div>
                                     <div style={{font: `${'var(--head1-bold)'} Pretendard sans-serif`,}}>술집입니다.</div>
+                                    
                                 </TitleWrapper>
                                         <CategoryWrapper>
                                             <form 
@@ -559,105 +579,98 @@ function MapMidPoint() {
                                             className="inputForm" 
                                             onSubmit={keywordSearchSubmitHandler}
                                             >
-                                                <ButtonText
+                                                <CategoryButton
                                                     id="submit_btn" 
                                                     type="submit"
-                                                    size='xxsm'
                                                     label='술집(종합)'
-                                                    variant='blackHoverRed'
-                                                />
+                                                    isActive={activeButton === 'button1'}
+                                                    onClick={() => handleButtonClick('button1')}>종합</CategoryButton>
                                             </form>
                                             <form 
                                             id="form" 
                                             className="inputForm" 
                                             onSubmit={getCocktailPageSubmitHandler}
                                             >
-                                                <ButtonText
+                                                <CategoryButton
                                                     id="submit_btn2" 
                                                     type="submit"
-                                                    size='xxsm'
                                                     label='칵테일바'
-                                                    variant='blackHoverRed'
-                                                    />
+                                                    isActive={activeButton === 'button2'}
+                                                    onClick={() => handleButtonClick('button2')}>칵테일바</CategoryButton>
                                             </form>
                                             <form 
                                             id="form" 
                                             className="inputForm" 
                                             onSubmit={getIzakayaPageSubmitHandler}
                                             >
-                                                <ButtonText
+                                                <CategoryButton
                                                     id="submit_btn3" 
                                                     type="submit"
-                                                    size='xxsm'
                                                     label='일본식주점'
-                                                    variant='blackHoverRed'
-                                                    />
+                                                    isActive={activeButton === 'button3'}
+                                                    onClick={() => handleButtonClick('button3')}>일본식주점</CategoryButton>
                                             </form>
                                             <form 
                                             id="form" 
                                             className="inputForm" 
                                             onSubmit={getPochaPageSubmitHandler}
                                             >
-                                                <ButtonText
+                                                <CategoryButton
                                                     id="submit_btn4" 
                                                     type="submit"
-                                                    size='xxsm'
                                                     label='실내포장마차'
-                                                    variant='blackHoverRed'
-                                                />
+                                                    isActive={activeButton === 'button4'}
+                                                    onClick={() => handleButtonClick('button4')}>실내포장마차</CategoryButton>
                                             </form>
                                             <form 
                                             id="form" 
                                             className="inputForm" 
                                             onSubmit={getDiningPubPageSubmitHandler}
                                             >
-                                                <ButtonText
+                                                <CategoryButton
                                                     id="submit_btn5" 
                                                     type="submit"
-                                                    size='xxsm'
                                                     label='요리주점'
-                                                    variant='blackHoverRed'
-                                                />
+                                                    isActive={activeButton === 'button5'}
+                                                    onClick={() => handleButtonClick('button5')}>요리주점</CategoryButton>
                                             </form>
                                             <form 
                                             id="form" 
                                             className="inputForm" 
                                             onSubmit={getHofSubmitHandler}
                                             >
-                                                <ButtonText
+                                                <CategoryButton
                                                     id="submit_btn6" 
                                                     type="submit"
-                                                    size='xxsm'
                                                     label='호프'
-                                                    variant='blackHoverRed'
-                                                />
+                                                    isActive={activeButton === 'button6'}
+                                                    onClick={() => handleButtonClick('button6')}>호프</CategoryButton>
                                             </form>
                                             <form 
                                             id="form" 
                                             className="inputForm" 
                                             onSubmit={getWineSubmitHandler}
                                             >
-                                                <ButtonText
+                                                <CategoryButton
                                                     id="submit_btn7" 
                                                     type="submit"
-                                                    size='xxsm'
                                                     label='와인바'
-                                                    variant='blackHoverRed'
-                                                />
+                                                    isActive={activeButton === 'button7'}
+                                                    onClick={() => handleButtonClick('button7')}>와인바</CategoryButton>
                                             </form>
                                             {/* <form 
                                             id="form" 
                                             className="inputForm" 
                                             onSubmit={getFishCakeSubmitHandler}
                                             >
-                                                <ButtonText
+                                                <CategoryButton
                                                     id="submit_btn8" 
                                                     type="submit"
-                                                    size='xxsm'
                                                     label='오뎅바'
-                                                    variant='blackHoverRed'
-                                                />
+                                                    isActive={activeButton === 'button8'}
+                                                    onClick={() => handleButtonClick('button8')}>오뎅바</CategoryButton>
                                             </form> */}
+                                            {/* <SlideDirectIconStyle/> */}
                                         </CategoryWrapper>
                                 
                                 <div>
@@ -671,25 +684,40 @@ function MapMidPoint() {
                                                 <div id="pagination"></div>
                                         </div>
                                     </div>
+                                    <div style={{
+                                    display: 'flex', 
+                                    justifyContent: 'flex-end' 
+                                    }}>
+                                    <LabelInfoDBClick>리스트 더블 클릭 시 가게 정보로 이동합니다.</LabelInfoDBClick>
+                                    <div id="create-appointment"></div>
+                                    <ButtonText
+                                        size="lg"
+                                        variant="activeRed"
+                                        label="약속 잡으러 가기"
+                                        hoverBackgroundColor = {LightTheme.HOVER_BASIC}
+                                        style={{
+                                            position: 'absolute', 
+                                            top:'112.5vh', 
+                                            left:'67vw',
+                                            width: '170px',
+                                            paddingRight: '1px',
+                                            font: `var(--label2-bold) Pretendard sans-serif`,
+                                            backgroundImage: `url(RedBottomDirection.png)`, //Icon 불러오기
+                                            backgroundRepeat: 'no-repeat', //이미지 한번만
+                                            backgroundPosition: '21px center', // 위치
+                                            backgroundSize: '16px', // 이미지 크기
+                                            boxSizing: 'border-box',
+                                        }}
+                                        onClick={() => {
+                                        const element = document.getElementById('create-appointment');
+                                        element.scrollIntoView({ behavior: 'smooth' });
+                                        }}/>
+                                    </div>
                                 </div>
                             </FlexColumnCenter>
                         </div>
                     </MapSection>
-
                 </FlexRow>
-                <div style={{ display: 'flex', justifyContent: 'center' }}>
-                <div id="create-appointment"></div>
-                <ButtonText
-                    size="lg"
-                    variant="borderColorWhite"
-                    label="약속 만들러 가기"
-                    style={{width: '100vw'}}
-                    onClick={() => {
-                    const element = document.getElementById('create-appointment');
-                    element.scrollIntoView({ behavior: 'smooth' });
-                    }}
-                />
-                </div>
             </WebWrapperHeight>
         </WebWrapper>
         <MapAppointment checkedPlace={checkedPlace}/>
@@ -713,12 +741,14 @@ function MapMidPoint() {
     `
     const CategoryWrapper = styled.div`
         display: flex;
-        width: 32rem;
+        justify-content: flex-start;
+        width: 31rem;
         max-width:622px;
-        margin: 2px 0 2px 16px;
+        margin: 2px 0 2px 20px;
         overflow-x: scroll;
         white-space: nowrap;
         resize: none; 
+        /* background-color:gray; */
         /* justify-content: flex-end; */
         /* align-items: flex-end; */
         /* overflow-x: auto; */
@@ -739,21 +769,48 @@ function MapMidPoint() {
     const MoveBackButtonWrapper = styled.div`
     position: absolute;
     z-index: 100;
+    font: var(--label2-regular) Pretendard sans-serif;
     `
+    const CategoryButton = styled.button`
+        padding: 3px 15px;
+        font-size: 14px;
+        border-radius: 16px;
+        font: var(--label2-regular) Pretendard sans-serif;
+        background-color: ${({ isActive }) => (isActive ? `${LightTheme.PRIMARY_NORMAL}` : `${LightTheme.WHITE}`)};
+        color: ${({ isActive }) => (isActive ? `${LightTheme.WHITE}` : `${LightTheme.BLACK}`)};
+        border-style: solid;
+        border-width: 1px;
+        border-color:${({ isActive }) => (isActive ? `${LightTheme.PRIMARY_NORMAL}` : `${LightTheme.BLACK}`)};
+        &:hover {
+            background-color: ${LightTheme.PRIMARY_NORMAL};
+            border-color: ${LightTheme.PRIMARY_NORMAL};
+            color: ${LightTheme.WHITE};
+    }
+    `
+    const SlideDirectIconStyle = styled.div`
+        position: absolute;
+        left: 83.5%;
+        right: 17.14%;
+        top: 28.7%;
+        bottom: 83.07%;
+        background-image: url('/CategorySlideDirection.png');
+        background-repeat: no-repeat;
+        width: 20px;
+        height: 15px;
+        `;
     const MapSection = styled.div`
     #map {
-        overflow: hidden;
-        border-radius: 8px;
-        z-index: 3;
         width: 50vh;
         height: 90vh;
         position: relative;
         overflow: hidden;
+        border-radius: 8px;
+        z-index: 3;
     }
     #menuDiv {
         display: flex;
         position: relative;
-        height: 65vh;
+        height: 66vh;
         max-width:622px;
         max-height:782px;
         z-index: 2;
@@ -794,56 +851,114 @@ function MapMidPoint() {
         justify-content: space-between;
         padding: 0px 15px 10px 0;
     }
-    
-    #placesList h5 {
-        color: black;
-        font-size: 7px;
+    #placesList .titleWrapper {
+        display: flex;
+        align-items: center;
+        color: ${LightTheme.FONT_PRIMARY};
+        font: var(--title2-semibold) Pretendard sans-serif;
+    }
+
+    #placesList .listTitle {
+        /* font-size: 7px;
         font-weight: 800;
-        line-height: 1px;
+        line-height: 1px; */
+        display: flex;
+        justify-content: space-between;
+        color: ${LightTheme.FONT_PRIMARY};
+        font: var(--title2-semibold) Pretendard sans-serif;
     }
     
+    #placesList .category {
+        margin-left: 20px;
+        color: ${LightTheme.FONT_SECONDARY};
+        font: var(--caption2-regular) Pretendard sans-serif;
+        font-size: 11px;
+    }
+
+    /* #placesList .share {
+        margin-left: 200px;
+        border: none;
+        background-image: url('/shareButton.png');
+        background-repeat: no-repeat;
+        background-size: contain;
+        width: 20px;
+        height: 15px;
+    } */
+        /* #placesList .share {
+        margin-left: 189px;
+        border: none;
+        background-image: url('/heartButton.png');
+        background-repeat: no-repeat;
+        background-size: contain;
+        width: 20px;
+        height: 15px;
+    } */
+
     #placesList li {
-        border : 1px solid ${LightTheme.GRAY_100};
-        border-radius: 12px
+        
     }
     #placesList .item {
-        /* border-bottom: 1px solid #888; */
         overflow: hidden;
         cursor: pointer;
-        margin-bottom: 5px
+        margin: 0 8px 4px -20px;
+        border : 1px solid ${LightTheme.GRAY_100};
+        border-radius: 8px;
+
     }
     
     #placesList .item .info {
         padding: 3px 0 5px 3px;
+        margin: 6px 12px 6px 12px;
     }
     
     #placesList .item span {
         display: block;
         margin-top: 1px;
+        font: var(--caption2-regular) Pretendard sans-serif;
+    }
+    #placesList .info .roadAddress {
+        marginTop: 4px;
+        color: ${LightTheme.FONT_PRIMARY};
+        font: var(--label2-regular) Pretendard sans-serif;
     }
     #placesList .info .gray {
-        color: #9EA4AA;
-    }
-    
-    #placesList .info .tel {
-        /* color: #009900; */
+        display: flex;
+        gap: 16px;
+        margin-top: 25px;
+        color: ${LightTheme.FONT_SECONDARY};
+        font: var(--caption2-regular) Pretendard sans-serif;
     }
     
     #placesList .clicked{
-        /* background-color: rgba(100, 200, 100, 0.5);
-        border: 1px solid rgba(100, 200, 100, 0.8); */
-        border: 1px solid #3DC060; /* 연하게 테두리(border) 스타일 */
+        border: 1px solid ${LightTheme.STATUS_POSITIVE};
         position: relative; /* ::after 선택자를 위해 position 속성을 추가합니다. */
-        border-radius: 12px
+        border-radius: 10px
     }
     
     #placesList .clicked ::after{
-        content: "더블클릭"; /* ::after 선택자를 이용하여 V표를 추가합니다. */
+        content: ""; /* ::after 선택자를 이용하여 V표를 추가합니다. */
         position: absolute;
-        right: 5px;
-        top: 50%;
+        left: 90%;
+        right: 21.11%;
+        top: 48%;
+        /* bottom: 68.81%; */
         transform: translateY(-50%);
-        color: #3DC060;
         font-weight: bold;
+        background-image: url('/Group 2066.png');
+        background-repeat: no-repeat;
+        background-size: contain;
+        width: 20px;
+        height: 15px;
     }
     `;
+    const LabelInfoDBClick = styled.div`
+    /* position: absolute;  */
+    /* left: 60rem;
+    top:110vh; */
+    /* margin: 10px 0 0 20px */
+    display: flex;
+    justify-content: flex-end; 
+    padding: 5px 0 0 0;
+    color: ${LightTheme.FONT_SECONDARY};
+    font: var(--label2-regular) Pretendard sans-serif;
+    `

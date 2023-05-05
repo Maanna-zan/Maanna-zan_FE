@@ -396,18 +396,12 @@ function SearchedKeywordLandingPage() {
 
 export default SearchedKeywordLandingPage;
 const TitleStyled = styled.div`
-  font-size: 40px;
-  font-weight: 500;
-  line-height: 48px;
-  font-family: var(--display2-medium) Pretendard sans-serif;
+  font: var(--display2-medium) Pretendard sans-serif;
 `;
 const Highlighting = styled.div`
   //width값있어야 전체 width늘어남..
   width: 418px;
-  font-size: 40px;
-  font-weight: 700;
-  line-height: 48px;
-  font-family: var(--display2-bold) Pretendard sans-serif;
+  font: var(--display2-bold) Pretendard sans-serif;
 `;
 const AddInputButtonStyle = styled.button`
   font-size: 14px;
