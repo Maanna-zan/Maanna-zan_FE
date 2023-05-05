@@ -7,7 +7,6 @@ const Test = () => {
   return (
     <>
       <SectionMain />
-      <MapAppointment />
     </>
   );
 };

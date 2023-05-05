@@ -9,6 +9,9 @@ import React from 'react';
 
 export const MainLastSectionMovie = () => {
   return (
+    <WebWrapper>
+    <WebWrapperHeight>
+      <FlexRow>
     <WebWrapperFull>
       <video
         autoPlay
@@ -23,5 +26,8 @@ export const MainLastSectionMovie = () => {
         <source src="mainLastSectionVideo.mp4" type="video/mp4" />
       </video>
     </WebWrapperFull>
+    </FlexRow>
+      </WebWrapperHeight>
+    </WebWrapper>
   );
 };

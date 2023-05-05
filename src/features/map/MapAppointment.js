@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import Calendar from 'react-calendar';
 import moment from 'moment/moment';
 import { useState } from 'react';
@@ -10,43 +10,67 @@ import { useRouter } from 'next/router';
 import { Link } from 'react-scroll';
 import { WebWrapper, WebWrapperHeight } from '@components/Atoms/Wrapper';
 import { ButtonText } from '@components/Atoms/Button';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { InputArea } from '@components/Atoms/Input';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { LightTheme } from '@components/Themes/theme';
 import ApporintmentModal from '@components/Modals/AppointmentModal';
 import { createPortal } from 'react-dom';
-import MapMidPoint, { CheckedPlaceContext } from './MapMidPoint';
 import { FlexRow } from '@components/Atoms/Flex';
+import { apis } from '@shared/axios';
 
 const MapAppointment = ({ checkedPlace }) => {
   const router = useRouter();
   const [isLoginMode, setIsLoginMode] = useState(false);
   const [showModal, setShowModal] = useState(false);
-
   //버튼으로 보내줄 값들
-  const [appointment, setAppointment] = React.useState({
-    selectedDate: '',
-    //필요한 key, value 값 추가해서 사용하세용 !
-    //1번 출발 : '',
+  const [appointment, setAppointment] = React.useState('');
+  const { address_name, category_group_code, category_group_name, category_name, distance, id, phone, place_name, place_url, road_address_name, x, y } = checkedPlace;
+  const mapRequestDto = {
+    address_name,
+    category_group_code,
+    category_group_name,
+    category_name,
+    distance,
+    apiId: id,
+    phone,
+    place_name,
+    place_url,
+    road_address_name,
+    x,
+    y,
+    selectedDate: appointment,
+  };
+  // selecetedDate & mutate Handler
+  const selectAppointmentHandler = () => {
+    const formattedDate = moment(value).format('YYYY-MM-DD');
+    setAppointment(formattedDate);
+    const updatedMapRequestDto = {
+      ...mapRequestDto,
+      selectedDate: formattedDate,
+    };
+    mutate(updatedMapRequestDto);
+  };
+  //
+  const token = cookies.get('access_token');
+  const { mutate } = useMutation({
+    mutationFn: async (payload) => {
+      const data = await apis.post('/my-page/schedule', payload, {
+        headers: {
+          Access_Token: `${token}`,
+        },
+      }
+      );
+      return data;
+    },
+    onSuccess: (data) => {
+    if (data.data.statusCode == 200) {
+      setShowModal(true);
+    }
+    },
+    onError: (error) => {
+      alert(error.response.data.message);
+    },
   });
-  // queryKey에 캐싱하여 값 불러오기위해 queryClient선언
-  const queryClient = useQueryClient();
-  // getQueryData로 캐싱한 값 INPUTVALUESPROP키로 불러오기.
-  const InputValuesProp = queryClient.getQueryData({
-    queryKey: ['INPUTVALUESPROP'],
-  });
-  //  checkedPlace값 가져오기
-  //   const { data: placeData } = useQuery(['places', checkedPlace], () =>
-  //   fetch(`/mapmidpoint?query=${checkedPlace}`).then((res) => res.json())
-  // );
-  //   console.log("checkedPlace",checkedPlace)
-  //   useEffect(() => {
-  //     console.log('checkedPlace updated: ', checkedPlace);
-  //   }, [checkedPlace]);
-  // useContext Hook을 사용하여 MidPointContext 컨텍스트 값을 가져옵니다.
-  // const checkedPlace = useContext(CheckedPlaceContext);
-  // midPoint 값을 사용합니다.
-  console.log('checkedPlace', checkedPlace);
+
   useEffect(() => {
     const token = cookies.get('access_token');
     setIsLoginMode(token);
@@ -55,52 +79,74 @@ const MapAppointment = ({ checkedPlace }) => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // 266 으로 가서 글을 확인해주세요 ~
+  // 달력 관련 로직
   const [value, onChange] = useState(new Date());
-  console.log('onChange', Calendar);
   const mark = ['2023-04-20', '2023-04-28'];
-
   const clickDayHandler = (value, event) => {
-    console.log('value', value);
     alert(`Clicked day:  ${moment(value).format('YYYY-MM-DD')}`);
   };
-  //value -> 원래 형태 'YYYY년 MM월 DD일' , 'YYYY-MM-DD', 'MM-DD' 이런식으로 변경이 가능합니다
 
-  const selectAppointmentHandler = () => {
-    setAppointment({
-      selectedDate: moment(value).format('YYYY-MM-DD'),
-    });
-    setShowModal(true);
-  };
-  console.log('약속잡기버튼', appointment);
   const nickName =
     typeof window !== 'undefined'
       ? localStorage.getItem('nick_name') ?? ''
       : '';
-  console.log('@@@@checkedPlace', checkedPlace);
+
   return (
-    <WebWrapper>
+    <WebWrapper style={{marginTop: '150px'}}>
       <WebWrapperHeight>
-        <FlexRow>
+        <FlexRow style={{maxWidth: '100wh'}}>
           {!isLoginMode ? (
             <div>
-              <StWebBg
-                onClick={() => {
-                  router.push('/map');
-                }}
-              ></StWebBg>
-              <LoginNotice>
-                로그인 시 이용 가능합니다.
-                <Link
-                  className="Go"
-                  onClick={scrollToTop}
-                  to="top"
-                  smooth={true}
-                  duration={500}
-                >
-                  로그인 하러가기
-                </Link>
-              </LoginNotice>
+              <StWebBg onClick={() => {scrollToTop()}}></StWebBg>
+              <div style={{filter: 'blur(6px)', opacity: '0.1'}}>
+                <WebWrapper style={{display: 'flex', flexDirection: 'column', gap: '24px'}}>
+                  <Div className="calendar-container">
+                    <Calendar
+                      onChange={onChange}
+                      value={value}
+                      calendarType="US"
+                      formatDay={(locale, date) => moment(date).format('DD')}
+                      className="mx-auto w-full text-sm border-b"
+                    />
+                    <div>
+                      <AppointmentPlaceWrapper>
+                        <div className="AppointmentPlace">중간 위치에 있는 술집을 선택해 주세요.</div>
+                        {checkedPlace ? (
+                          <span className="PlaceChecked"> {checkedPlace?.place_name} </span>
+                        ) : (
+                          <span className="PlaceUnchecked" style={{color: `${LightTheme.FONT_SECONDARY}`}}>목록에서 선택해 주세요.</span>
+                        )}
+                      </AppointmentPlaceWrapper>
+                      <p className="ShowDateText">
+                        <span className="textRed">{nickName}</span>님이 선택하신 약속
+                        날짜는
+                        <span className="textRed">
+                          {moment(value).format('YYYY년 MM월 DD일')}
+                        </span>
+                        입니다.
+                      </p>
+                      <div style={{display: 'flex', justifyContent: 'flex-end'}}>
+                        <ButtonText
+                          size="lg"
+                          variant="primary"
+                          label="약속잡기"
+                          onClick={() => {
+                            selectAppointmentHandler();
+                          }}
+                          style={{marginTop: '5vh'}}
+                        />
+                      </div>
+                    </div>
+                  </Div>
+                  <div style={{position: 'relative'}}>
+                    {showModal &&
+                      createPortal(
+                        <ApporintmentModal onClose={() => setShowModal(false)} />,
+                        document.body,
+                      )}
+                  </div>
+                </WebWrapper>
+              </div>
             </div>
           ) : (
             <div>
@@ -126,19 +172,19 @@ const MapAppointment = ({ checkedPlace }) => {
                   />
                   <div>
                     <AppointmentPlaceWrapper>
-                      <div className="AppointmentPlace">
-                        중간 위치에 있는 술집을 선택해 주세요.
-                      </div>
-                      {checkedPlace ? (
-                        <span className="PlaceChecked">
-                          " {checkedPlace?.place_name} "
-                        </span>
-                      ) : (
-                        <span
-                          className="PlaceUnchecked"
-                          style={{ color: `${LightTheme.FONT_SECONDARY}` }}
-                        >
-                          목록에서 선택해 주세요.
+
+                      <div className="AppointmentPlace">중간 위치에 있는 술집을 선택해 주세요.</div>
+                          {checkedPlace ? (
+                            <span className="PlaceChecked">&quot; {checkedPlace?.place_name} &quot;</span>
+                          ) : (
+                            <span className="PlaceUnchecked" style={{ color: `${LightTheme.FONT_SECONDARY}` }}>목록에서 선택해 주세요.</span>
+                          )}
+                    </AppointmentPlaceWrapper>
+                      <p className="ShowDateText">
+                        <span className="textRed">{nickName}</span>님이 선택하신 약속
+                        날짜는
+                        <span className="textRed">
+                          {moment(value).format('YYYY년 MM월 DD일')}
                         </span>
                       )}
                     </AppointmentPlaceWrapper>
@@ -290,12 +336,15 @@ const Div = styled.div`
 `;
 
 const StWebBg = styled.div`
-  width: 100vw;
-  height: 400px;
-  background-image: url('/mainFirstBg.png');
+  width: 1003px;
+  height: 318px;
+  left: 360px;
+  top: 1146px;
+  background-image: url('/UnlogedInImg.png');
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
+  background-size: contain;
   cursor: pointer;
 `;
 const LoginNotice = styled.p`

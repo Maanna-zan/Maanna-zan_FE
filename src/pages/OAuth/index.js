@@ -10,7 +10,7 @@ import { ButtonText } from '@components/Atoms/Button';
 import { LightTheme } from '@components/Themes/theme';
 
 import { toast } from 'react-toastify';
-const OAuth = (Toast) => {
+const oauth = (Toast) => {
   const router = useRouter();
 
   const [password, setPassword] = useState('');
@@ -267,7 +267,7 @@ const OAuth = (Toast) => {
   );
 };
 
-export default OAuth;
+export default oauth;
 
 const Container = styled.div`
   background-color: white;

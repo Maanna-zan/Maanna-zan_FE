@@ -31,7 +31,9 @@ instance.interceptors.response.use(
         const accessToken = response.data.access_token;
         cookies.set('access_token', accessToken);
         originalRequest.headers.cookies = `${accessToken}`;
-        return axios(originalRequest);
+        const result = await axios(originalRequest);
+        // window.location.reload(); // 새로고침 추가
+        return result;
       }
     }
     if (error.response.data.statusCode === 400 && !originalRequest._retry) {
