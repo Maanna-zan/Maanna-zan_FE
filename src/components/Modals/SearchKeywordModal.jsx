@@ -537,15 +537,16 @@ const MapSection = styled.div`
 }
 
     #placesList .listTitle {
-        color: black;
+
         /* font-size: 14px;
         font-weight: 700;
         line-height: 20px; */
+        color: black;
+
         font: var(--body2-bold) Pretendard sans-serif;
     }
     
     #placesList li {
-        /* list-style: square; */
         border : 1px solid ${LightTheme.GRAY_100};
         border-radius: 8px;
     }

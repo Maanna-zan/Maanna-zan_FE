@@ -119,6 +119,7 @@ const LogMyDay = ({
           }}
         >
           <Div>
+
             <EventForm
               selectedDateLog={selectedDateLog}
               selectedDate={selectedDate}

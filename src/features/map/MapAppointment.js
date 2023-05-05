@@ -188,7 +188,6 @@ const MapAppointment = ({ checkedPlace }) => {
                   />
                   <div>
                     <AppointmentPlaceWrapper>
-<<<<<<< HEAD
                       <div className="AppointmentPlace">중간 위치에 있는 술집을 선택해 주세요.</div>
                           {checkedPlace ? (
                             <span className="PlaceChecked">&quot; {checkedPlace?.place_name} &quot;</span>
@@ -208,10 +207,6 @@ const MapAppointment = ({ checkedPlace }) => {
                       <ButtonText size="lg" variant="primary" label="약속잡기"
                         onClick={selectAppointmentHandler}
                         style={{  marginTop: '5vh' }}/>
-=======
-                      <div className="AppointmentPlace">
-                        중간 위치에 있는 술집을 선택해 주세요.
->>>>>>> 984eed0 ([style][fix]화면로딩, 즐겨찾기 오류수정)
                       </div>
                       {checkedPlace ? (
                         <span className="PlaceChecked">

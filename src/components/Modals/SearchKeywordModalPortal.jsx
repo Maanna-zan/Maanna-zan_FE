@@ -223,8 +223,14 @@ function SearchedKeywordLandingPage() {
     },
     //  완료 되었을 때 콜백 함수
     onSuccess: (data) => {
-      const response = data.data.message;
-      alert(response);
+      const response = data.data.data.message;
+      const stationName = data.data.data.stationName;
+      //  중간지점으로 지하철역 검색되면 첫번째 alert창. 
+      if (stationName) {
+        alert(`중간지점과 가까운 지하철역 '${stationName}역'이 검색되었습니다.`);
+      } else {
+        alert("중간지점을 찾기 성공하였습니다.");
+      }
       const lat = data.data.data.lat;
       const lng = data.data.data.lng;
       const newMidPoint = { lat, lng };
@@ -387,6 +393,7 @@ function SearchedKeywordLandingPage() {
                 />
               )}
             </div>
+            <AdditionalInfoStyle>최대 4명까지 검색이 가능합니다.</AdditionalInfoStyle>
           </FlexColumnCenter>
         </FlexRow>
       </WebWrapperHeight>
@@ -396,18 +403,12 @@ function SearchedKeywordLandingPage() {
 
 export default SearchedKeywordLandingPage;
 const TitleStyled = styled.div`
-  font-size: 40px;
-  font-weight: 500;
-  line-height: 48px;
-  font-family: var(--display2-medium) Pretendard sans-serif;
+  font: var(--display2-medium) Pretendard sans-serif;
 `;
 const Highlighting = styled.div`
   //width값있어야 전체 width늘어남..
   width: 418px;
-  font-size: 40px;
-  font-weight: 700;
-  line-height: 48px;
-  font-family: var(--display2-bold) Pretendard sans-serif;
+  font: var(--display2-bold) Pretendard sans-serif;
 `;
 const AddInputButtonStyle = styled.button`
   font-size: 14px;
@@ -429,3 +430,9 @@ const AddInputButtonStyle = styled.button`
   background-size: 22px; // 이미지 크기
   box-sizing: border-box; //   input의 넓이가 부모 넓이보다 넘는 현상방지 */
 `;
+  const AdditionalInfoStyle = styled.div`
+    margin: 8px 0 0 0;
+    color: ${LightTheme.FONT_SECONDARY};
+    font: var(--caption1-regular) Pretendard sans-serif;
+    text-align: right;
+  `
