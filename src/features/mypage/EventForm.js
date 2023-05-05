@@ -9,9 +9,9 @@ const EventForm = ({ selectedDate, selectedDateLog, onSubmit }) => {
   const [titleLength, setTitleLength] = useState(0);
   const [contentLength, setContentLength] = useState(0);
 
-  console.log('selectedDateLog', selectedDateLog);
-  console.log('selectedDate', selectedDate);
-  console.log('onSubmit', onSubmit);
+  // console.log('selectedDateLog', selectedDateLog);
+  // console.log('selectedDate', selectedDate);
+  // console.log('onSubmit', onSubmit);
   const handleTitleChange = (e) => {
     setTitle(e.target.value);
     setTitleLength(e.target.value.length);
@@ -43,9 +43,7 @@ const EventForm = ({ selectedDate, selectedDateLog, onSubmit }) => {
         />
         <CharCount>{titleLength} / 50</CharCount>
       </div>
-
       <Hr />
-
       <Textarea
         value={content}
         placeholder="내용을 입력해주세요."
@@ -53,13 +51,11 @@ const EventForm = ({ selectedDate, selectedDateLog, onSubmit }) => {
         onChange={handleContentChange}
         required
       />
-
       <div className="bottomContent">
         <div className="bottomContent2">
           <p className="date">{selectedDateLog}</p>
           <CharCount>{contentLength} / 1500</CharCount>
         </div>
-
         <Button type="submit">작성</Button>
       </div>
     </Form>
@@ -73,17 +69,19 @@ const Form = styled.form`
   background-color: white;
   width: 487px;
   height: 322px;
+  border: 1px solid ${LightTheme.GRAY_100};
   border-radius: 8px;
-  padding: 15px;
+  padding: 13px;
   .bottomContent {
-    width: 100%;
+    margin-left: 10px;
+    width: 95%;
     display: flex;
     justify-content: space-between;
   }
   .bottomContent2 {
     display: flex;
     align-items: center;
-    gap: 270px;
+    gap: 250px;
   }
   .date {
     color: ${LightTheme.FONT_SECONDARY};
@@ -94,12 +92,8 @@ const Hr = styled.hr`
   width: 447px;
   height: 0px;
 `;
-const Label = styled.label`
-  margin-top: 10px;
-`;
 
 const Input = styled.input`
-  padding: 8px;
   border: none;
   ::placeholder {
     color: ${LightTheme.FONT_SECONDARY};
