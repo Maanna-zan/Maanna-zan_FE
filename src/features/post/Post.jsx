@@ -28,6 +28,7 @@ import {
 } from '@components/Atoms/imgWrapper';
 import { apis } from '@shared/axios';
 import { useGetLikePost } from '../../hook/post/useGetPost';
+import Link from 'next/link';
 export const Post = ({ post, onSubmit, apiId, postId }) => {
   const router = useRouter();
   const { id } = router.query;
@@ -72,11 +73,8 @@ export const Post = ({ post, onSubmit, apiId, postId }) => {
       >
         {like ? <LikeCircleHeartIcon /> : <DisLikeCircleHeartIcon />}
       </div>
-      <div
-        onClick={() => {
-          router.push(`/community/${post?.id}`);
-        }}
-      >
+
+      <Link href={`/community/${post?.id}`}>
         <BoxTextReal
           style={{
             gridColumn: 'span 1',
@@ -132,7 +130,7 @@ export const Post = ({ post, onSubmit, apiId, postId }) => {
             </FlexRow>
           </FlexColumn>
         </BoxTextReal>
-      </div>
+      </Link>
     </div>
   );
 };

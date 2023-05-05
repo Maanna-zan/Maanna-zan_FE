@@ -42,11 +42,10 @@ export const useLikePost = () => {
       onSettled: (data, error, postId, previousPost) => {
         if (error) {
           queryClient.setQueryData(['post', postId], previousPost);
-        } else {
-          queryClient.invalidateQueries(['post', postId]);
         }
       },
-      onSuccess: (response) => {
+      onSuccess: (response, postId) => {
+        queryClient.invalidateQueries(['post', postId]);
         alert(JSON.stringify(response.data.data));
       },
     },

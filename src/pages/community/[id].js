@@ -34,6 +34,7 @@ import { LoadingArea } from '@components/Modals/LoadingArea';
 const Community = () => {
   const { query } = useRouter();
   const router = useRouter();
+  const { id } = router.query;
   const handleShareClick = async () => {
     try {
       await navigator.share({
@@ -46,21 +47,17 @@ const Community = () => {
       alert('공유중에 에러가 났습니다. 다시 시도해주십시오', err);
     }
   };
-  const queryClient = useQueryClient();
-  const { id } = router.query;
-  const { data, isLoading, isError, isSuccess } = useQuery({
-    queryKey: ['GET_COMMUNITYDETAIL'],
-    queryFn: async () => {
-      const { data } = await apis.get(`/posts/${query.id}`, {});
+  const { data, isLoading, isError, isSuccess } = useQuery(
+    // queryKey에 id 값을 포함하여 고유한 값을 만들어줍니다.
+    ['GET_COMMUNITYDETAIL', id],
+    // queryFn에서는 위에서 생성한 id 값을 사용합니다.
+    async () => {
+      const { data } = await apis.get(`/posts/${id}`, {});
 
       return data.data;
     },
-    //enabled: -> 참일 때 실행시켜준다.
-    enabled: Boolean(query.id),
-    // onSuccess: () => {
-    //   queryClient.invalidateQueries(['GET_COMMUNITYDETAIL']);
-    // },
-  });
+    // staleTime을 10초로 설정하여 데이터를 일정 시간 동안 캐시하도록 합니다.
+  );
 
   const postId = data?.id;
   const [newPost, setNewPost] = useState({
@@ -88,16 +85,14 @@ const Community = () => {
 
   const { postsLike, postIsLikeLoading } = useGetLikePost();
   let potLikeMatch = [];
-  if (postsLike && postsLike.data && postsLike.data.posts) {
-    potLikeMatch = postsLike.data.posts;
-  }
-
-  const postLikeMine =
-    potLikeMatch.find((p) => p.id === Number(query.id)) || {};
+  // if (postsLike && postsLike.data && postsLike.data.posts) {
+  //   potLikeMatch = postsLike.data.posts;
+  // }
+  const postLikeMine = potLikeMatch.find((p) => p.id === Number(data.id)) || {};
   const [like, setLike] = useState(postLikeMine.like);
-  const postId2 = query.id;
+
   // console.log('좋아요찾기', postLikeMine);
-  const likePostHandler = async (postId2) => {
+  const likePostHandler = async (postId) => {
     try {
       await likePost(postId);
       setLike(!like);
@@ -140,7 +135,7 @@ const Community = () => {
   useEffect(() => {
     const nick_name = cookies.get('nick_name');
     setUserNickName(nick_name);
-  }, []);
+  }, [id]);
 
   const handleStarHover = (hoveredStar) => {
     setHoveredStar(hoveredStar);
@@ -207,13 +202,14 @@ const Community = () => {
   // }, [isUpdated]);
 
   if (isLoading) return <LoadingArea />;
+  console.log('data', data);
+
   //카테고리
   const categoryNames = data?.categoryName;
   //console.log('categoryNames', categoryNames);
-  //console.log('ㅇㅁㅅㅁ', data);
+
   const indexAllName = categoryNames?.lastIndexOf('>');
   const resultcategoryNames = categoryNames?.slice(indexAllName + 2);
-  console.log('테스트카테고리', data.like);
 
   return (
     <div>
@@ -375,7 +371,7 @@ const Community = () => {
                   }}
                 >
                   <span
-                    onClick={() => likePostHandler(data.id)}
+                    onClick={() => likePostHandler(postId)}
                     style={{ cursor: 'pointer' }}
                   >
                     {like ? <LikeHeartIcon /> : <DisLikeHeartIcon />}
