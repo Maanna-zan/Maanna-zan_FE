@@ -53,7 +53,6 @@ const LogMeet = ({ setDifferMeet, setMarkMeet, response, selectedDate }) => {
 
   const reversedCurrentPageData = currentPageData.slice().reverse();
   if (!response || response?.length === 0) {
-
     return (
       <div style={{ display: 'flex', alignItems: 'center', zIndex: '300' }}>
         <div
@@ -105,9 +104,8 @@ const LogMeet = ({ setDifferMeet, setMarkMeet, response, selectedDate }) => {
             </div>
           </ReviewDiv>
         </div>
-
       </div>
-    </div>;
+    );
   } else {
     return (
       <div>
@@ -136,7 +134,6 @@ const LogMeet = ({ setDifferMeet, setMarkMeet, response, selectedDate }) => {
           <LogBox>
             {reversedCurrentPageData.map((list) => (
               <CalLogDiv key={list.id}>
-
                 <div className="contents">
                   <div className="meetTitle">
                     <h1 className="place_name">{list.place_name}</h1>
@@ -156,7 +153,6 @@ const LogMeet = ({ setDifferMeet, setMarkMeet, response, selectedDate }) => {
                 <div className="map">
                   <Map
                     center={{ lat: list?.y, lng: list?.x }}
-
                     style={{
                       width: '331px',
                       height: '222px',
@@ -165,7 +161,6 @@ const LogMeet = ({ setDifferMeet, setMarkMeet, response, selectedDate }) => {
                   >
                     <MapMarker
                       position={{ lat: list?.y, lng: list?.x }}
-
                       image={{
                         src: 'MaannajanLogo.png',
                         size: { width: 30, height: 38 },
