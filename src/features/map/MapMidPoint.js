@@ -50,9 +50,9 @@ function MapMidPoint() {
         queryFn: async () => {
         const response = await apis.get(
             // 서버 URL
-            // `/kakaoApi?y=${midPointProp?.lat}&x=%20${midPointProp?.lng}&query=술집&radius=1500&page=1&size=15&sort=distance`,
+            `/kakaoApi?y=${midPointProp?.lat}&x=%20${midPointProp?.lng}&query=술집&radius=1500&page=1&size=15&sort=distance`,
             //테스트용 서버 URL
-            '/kakaoApi?y=37.534485&x=%20126.994369&query=술집&radius=1500&page=1&size=15&sort=distance',
+            // '/kakaoApi?y=37.534485&x=%20126.994369&query=술집&radius=1500&page=1&size=15&sort=distance',
             // 중간지점 lat,lng값
             midPointProp
         );
@@ -688,7 +688,7 @@ function MapMidPoint() {
                                     display: 'flex', 
                                     justifyContent: 'flex-end' 
                                     }}>
-                                    <LabelInfoDBClick>리스트 더블 클릭 시 가게 정보로 이동합니다.</LabelInfoDBClick>
+                                    <LabelInfoDBClick>리스트  더블  클릭  시  가게  정보로  이동합니다.</LabelInfoDBClick>
                                     <div id="create-appointment"></div>
                                     <ButtonText
                                         size="lg"
@@ -953,12 +953,13 @@ function MapMidPoint() {
     `;
     const LabelInfoDBClick = styled.div`
     /* position: absolute;  */
-    /* left: 60rem;
-    top:110vh; */
+    /* left: 60rem; */
+    /* top:110vh; */
     /* margin: 10px 0 0 20px */
     display: flex;
     justify-content: flex-end; 
     padding: 5px 0 0 0;
     color: ${LightTheme.FONT_SECONDARY};
     font: var(--label2-regular) Pretendard sans-serif;
+    letter-spacing: 1px; /* 글자 간격을 1px로 설정 */
     `
