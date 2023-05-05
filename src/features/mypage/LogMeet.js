@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { ButtonText } from '@components/Atoms/Button';
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { apis } from '@shared/axios';
 import { cookies } from '@shared/cookie';
 //페이지네이션 임포트
@@ -13,10 +13,39 @@ import { ShareButton, TrashButton } from '@components/Atoms/TrashButton';
 import { Map, MapMarker } from 'react-kakao-maps-sdk';
 
 const LogMeet = ({ setDifferMeet, setMarkMeet, response, selectedDate }) => {
+  const queryClient = useQueryClient();
+
   //페이지 네이션 처음 시작이 1번창부터 켜지도록
   const [activePage, setActivePage] = useState(1);
   //캘린더 로그 수정모드
-  const [isEditMode, setIsEditMode] = useState({});
+
+  const token = cookies.get('access_token');
+  //삭제
+  const { mutate } = useMutation({
+    mutationFn: async (payload) => {
+      console.log('payload', payload);
+      const { data } = await apis.delete(`/my-page/schedule/${payload.id}`, {
+        headers: {
+          Access_Token: `${token}`,
+        },
+      });
+      return data;
+    },
+    onSuccess: (data) => {
+      console.log('data', data);
+      if (data.statusCode == 200) {
+        queryClient.invalidateQueries(['LOG_APPOINTMENTS']);
+        alert('일정 삭제를 완료하였습니다.');
+      }
+    },
+  });
+
+  const deleteHandler = (list) => {
+    const confirmDelete = window.confirm('일정을 삭제하시겠습니까?');
+    if (confirmDelete) {
+      mutate({ id: list.id });
+    }
+  };
   //페이지네이션을 위한 구역 data 는 쿼리에서 먼저 undefined되기에 ? 로 있을 때
   //map을 돌릴 데이터를 4개씩 끊어서 라는 뜯 입니다 (9개ㅈ씩 끊고 싶으면 9 적으면 됩니다. )
   const chunkedData = response ? chunk(response, 2) : [];
@@ -24,55 +53,59 @@ const LogMeet = ({ setDifferMeet, setMarkMeet, response, selectedDate }) => {
 
   const reversedCurrentPageData = currentPageData.slice().reverse();
   if (!response || response?.length === 0) {
-    <div style={{ display: 'flex', alignItems: 'center', zIndex: '300' }}>
-      <div
-        style={{
-          display: 'flex',
-          gap: '40px',
-          flexDirection: 'row',
-          width: '100%',
-          zIndex: '310',
-        }}
-      >
-        <ReviewDiv>
-          <h1 className="title">기록</h1>
-          <div className="changeTab">
-            <ButtonText
-              onClick={() => {
-                setDifferMeet(false);
+
+    return (
+      <div style={{ display: 'flex', alignItems: 'center', zIndex: '300' }}>
+        <div
+          style={{
+            display: 'flex',
+            gap: '40px',
+            flexDirection: 'row',
+            width: '100%',
+            zIndex: '310',
+          }}
+        >
+          <ReviewDiv>
+            <h1 className="title">기록</h1>
+            <div className="changeTab">
+              <ButtonText
+                onClick={() => {
+                  setDifferMeet(false);
+                }}
+                label="약속일정"
+                size="xxsm"
+                variant="primary"
+              />
+              <ButtonText
+                onClick={() => {
+                  setDifferMeet(true);
+                }}
+                label="메모장"
+                size="xxxsm"
+                variant="backGray"
+              />
+            </div>
+            <div
+              style={{
+                width: '688px',
+                height: '459px',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                zIndex: '310',
               }}
-              label="약속일정"
-              size="xxsm"
-              variant="primary"
-            />
-            <ButtonText
-              onClick={() => {
-                setDifferMeet(true);
-              }}
-              label="메모장"
-              size="xxxsm"
-              variant="backGray"
-            />
-          </div>
-          <div
-            style={{
-              width: '688px',
-              height: '459px',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              zIndex: '310',
-            }}
-          >
-            <img
-              style={{ width: '160px', height: '160px', zIndex: '320' }}
-              src="Group 2041.png"
-              alt="작성한 기록이 없습니다."
-            />
-            <p>작성한 기록이 없습니다.</p>
-          </div>
-        </ReviewDiv>
+            >
+              <img
+                style={{ width: '160px', height: '160px', zIndex: '320' }}
+                src="Group 2041.png"
+                alt="약속 일정이 없어요!"
+              />
+              <p>약속 일정이 없어요!</p>
+            </div>
+          </ReviewDiv>
+        </div>
+
       </div>
     </div>;
   } else {
@@ -101,27 +134,29 @@ const LogMeet = ({ setDifferMeet, setMarkMeet, response, selectedDate }) => {
           </div>
 
           <LogBox>
-            {reversedCurrentPageData.map((data) => (
-              <CalLogDiv key={data.id}>
+            {reversedCurrentPageData.map((list) => (
+              <CalLogDiv key={list.id}>
+
                 <div className="contents">
                   <div className="meetTitle">
-                    <h1 className="place_name">{data.place_name}</h1>
-                    <p className="category_name">{data.category_name}</p>
+                    <h1 className="place_name">{list.place_name}</h1>
+                    <p className="category_name">{list.category_name}</p>
                   </div>
 
-                  <p className="road_address_name">{data.road_address_name}</p>
+                  <p className="road_address_name">{list.road_address_name}</p>
                   <div className="telnumber">
-                    <p className="phone">지번</p>
-                    <p className="phone">{data.phone}</p>
+                    <p className="phone">전화 번호</p>
+                    <p className="phone">{list.phone}</p>
                   </div>
 
                   <p className="selectedDate">
-                    {data.selectedDate?.substr(2).replace(/-/gi, '.')}
+                    {list.selectedDate?.substr(2).replace(/-/gi, '.')}
                   </p>
                 </div>
                 <div className="map">
                   <Map
-                    center={{ lat: data?.y, lng: data?.x }}
+                    center={{ lat: list?.y, lng: list?.x }}
+
                     style={{
                       width: '331px',
                       height: '222px',
@@ -129,7 +164,8 @@ const LogMeet = ({ setDifferMeet, setMarkMeet, response, selectedDate }) => {
                     }}
                   >
                     <MapMarker
-                      position={{ lat: data?.y, lng: data?.x }}
+                      position={{ lat: list?.y, lng: list?.x }}
+
                       image={{
                         src: 'MaannajanLogo.png',
                         size: { width: 30, height: 38 },
@@ -139,7 +175,12 @@ const LogMeet = ({ setDifferMeet, setMarkMeet, response, selectedDate }) => {
                 </div>
                 <div className="calButton">
                   <ShareButton />
-                  <TrashButton />
+                  <TrashButton
+                    style={{ cursor: 'pointer' }}
+                    onClick={() => {
+                      deleteHandler(list);
+                    }}
+                  />
                 </div>
               </CalLogDiv>
             ))}
@@ -170,7 +211,7 @@ const ReviewDiv = styled.div`
 
   flex-direction: column;
   margin-left: 527px;
-  margin-top: -328px;
+  margin-top: -495px;
   .changeTab {
     display: flex;
     gap: 10px;

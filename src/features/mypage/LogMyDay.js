@@ -9,6 +9,8 @@ import { cookies } from '@shared/cookie';
 import { apis } from '@shared/axios';
 import EventForm from './EventForm';
 import { InputArea } from '@components/Atoms/Input';
+import LogMyDayDetailModal from '@components/Modals/LogMyDayDetailModal';
+import { createPortal } from 'react-dom';
 
 //페이지네이션 임포트
 import Pagination from '@components/Modals/Pagenation2';
@@ -29,7 +31,9 @@ const LogMyDay = ({
   const [activePage, setActivePage] = useState(1);
   //캘린더 로그 수정모드
   const [isEditMode, setIsEditMode] = useState({});
-
+  //캘린더 로그 상세조회
+  const [showModal, setShowModal] = useState(false);
+  // console.log('showModal', showModal);
   const [callenderId, setCallenderId] = useState(null);
   const [callederTitle, setCallenderTitle] = useState('');
   const [callederContent, setCallenderContent] = useState('');
@@ -100,42 +104,6 @@ const LogMyDay = ({
   const chunkedData = data ? chunk(data, 4) : [];
   const currentPageData = chunkedData[activePage - 1] ?? [];
 
-  //캘린더 로그 수정
-  //수정
-  const { mutate: calLogUpdate } = useMutation({
-    mutationFn: async ({ id, payload }) => {
-      // console.log('patloadEdit', payload);
-      const { data } = await apis.patch(`/my-page/calendar/${id}`, payload, {
-        headers: {
-          Access_Token: `${token}`,
-        },
-      });
-      // console.log('editdata', data);
-      return data;
-    },
-    onSuccess: () => {
-      setIsEditMode(false);
-      queryClient.invalidateQueries(['LOG_DATE']);
-      window.alert('수정 완료!');
-    },
-    onError: (e) => {
-      window.alert('수정 오류!');
-    },
-  });
-  //삭제
-  const { mutate: calLogDelete } = useMutation({
-    mutationFn: async (id) => {
-      await apis.delete(`/my-page/calendar/${id}`, {
-        headers: {
-          Access_Token: `${token}`,
-        },
-      });
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries(['LOG_DATE']);
-      alert.confirm('일정을 삭제하시겠습니까?');
-    },
-  });
   const reversedCurrentPageData = currentPageData.slice().reverse();
 
   if (!data || data?.length === 0) {
@@ -150,7 +118,8 @@ const LogMyDay = ({
             zIndex: '310',
           }}
         >
-          <Div className="calendar-container">
+          <Div>
+
             <EventForm
               selectedDateLog={selectedDateLog}
               selectedDate={selectedDate}
@@ -184,9 +153,9 @@ const LogMyDay = ({
               <img
                 style={{ width: '160px', height: '160px', zIndex: '320' }}
                 src="Group 2041.png"
-                alt="작성한 기록이 없습니다."
+                alt="작성한 메모가 없어요!"
               />
-              <p>작성한 기록이 없습니다.</p>
+              <p>작성한 메모가 없어요!</p>
             </div>
           </ReviewDiv>
         </div>
@@ -195,12 +164,13 @@ const LogMyDay = ({
   } else {
     return (
       <div style={{ display: 'flex', gap: '40px' }}>
-        <EventForm
-          selectedDateLog={selectedDateLog}
-          selectedDate={selectedDate}
-          onSubmit={handleEventSubmit}
-        />
-
+        <Div>
+          <EventForm
+            selectedDateLog={selectedDateLog}
+            selectedDate={selectedDate}
+            onSubmit={handleEventSubmit}
+          />
+        </Div>
         <ReviewDiv>
           <h1 className="title">기록</h1>
           <div className="changeTab">
@@ -217,65 +187,28 @@ const LogMyDay = ({
           <LogBox>
             {reversedCurrentPageData.map((calLog) => (
               <CalLogDiv key={calLog.id}>
-                {isEditMode[calLog.id] ? (
-                  <>
-                    <div className="editmode">
-                      <div className="twoEdit">
-                        <InputArea
-                          className="editInput"
-                          variant="default"
-                          size="md"
-                          type="text"
-                          name="title"
-                          maxLength="50"
-                          value={callederTitle}
-                          onChange={(e) => setCallenderTitle(e.target.value)}
-                        />
-                        <InputArea
-                          className="editInput"
-                          variant="default"
-                          size="md"
-                          type="date"
-                          name="content"
-                          maxLength="1500"
-                          value={callederSetDated}
-                          onChange={(e) => setCallenderSetDated(e.target.value)}
-                        />
-                      </div>
-                      <textarea
-                        className="textarea"
-                        name="content"
-                        value={callederContent}
-                        onChange={(e) => setCallenderContent(e.target.value)}
-                      />
-                    </div>
-                    <div className="twoButton">
-                      <button className="done" onClick={handleUpdate}>
-                        수정
-                      </button>
-                      <button
-                        className="del"
-                        onClick={() => handleDelete(calLog.id)}
-                      >
-                        삭제
-                      </button>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <img
-                      src="Group 2248.png"
-                      alt="글쓰기 수정 버튼"
-                      className="editImg"
-                      onClick={() => handleEdit(calLog)}
-                    />
-                    <div className="log">
-                      <p className="title">{calLog.title}</p>
-                      <p className="content">{calLog.content}</p>
-                      <p>{calLog.selectedDate.substr(2).replace(/-/gi, '.')}</p>
-                    </div>
-                  </>
-                )}
+                <img
+                  src="Group 2248.png"
+                  alt="글쓰기 수정 버튼"
+                  className="editImg"
+                  onClick={() => setShowModal(calLog.id)} // calLog.id를 사용하여 해당 id를 setShowModal에 전달
+                />
+                <>
+                  {showModal === calLog.id &&
+                    createPortal(
+                      <LogMyDayDetailModal
+                        id={calLog.id}
+                        data={calLog}
+                        onClose={() => setShowModal(false)}
+                      />,
+                      document.body,
+                    )}
+                </>
+                <div className="log">
+                  <p className="title">{calLog.title}</p>
+                  <p className="content">{calLog.content}</p>
+                  <p>{calLog.selectedDate.substr(2).replace(/-/gi, '.')}</p>
+                </div>
               </CalLogDiv>
             ))}
           </LogBox>
@@ -302,7 +235,7 @@ const ReviewDiv = styled.div`
   width: 688px;
   display: flex;
   flex-direction: column;
-  margin-top: -328px;
+  margin-top: -495px;
   .changeTab {
     display: flex;
     gap: 10px;
@@ -337,67 +270,7 @@ const ReviewDiv = styled.div`
 `;
 
 const Div = styled.div`
-  .react-calendar {
-    width: 487px;
-    height: 318px;
-    background: rgb(255, 255, 255);
-    /* border: 1px solid #a0a096; */
-    border-radius: 8px;
-    border: 1px solid #e8ebed;
-    font-family: Arial, Helvetica, sans-serif;
-    line-height: 1.125em;
-    padding: 10px;
-  }
-  .react-calendar__viewContainer {
-    /* margin-top: -20px; */
-  }
-  .react-calendar__tile {
-    padding: 8px 10px;
-  }
-  .react-calendar__tile--now:enabled:hover,
-  .react-calendar__tile--now:enabled:focus {
-    color: #ff4840;
-    background: white;
-  }
-  .react-calendar__tile--now {
-    background: #ff4840;
-    border-radius: 12px;
-    width: fit-content;
-    block-size: fit-content;
-  }
-  .react-calendar__navigation__label > span {
-    font-weight: 600;
-    font-size: 16px;
-    line-height: 24px;
-  }
-  .react-calendar__tile:enabled:hover,
-  .react-calendar__tile:enabled:focus {
-    border-radius: 12px;
-    /* Primary Color/active */
-
-    background: #ffe0df;
-  }
-  .react-calendar__month-view__days__day--weekend {
-    color: black;
-  }
-  /* react-calendar__tile react-calendar__month-view__days__day react-calendar__month-view__days__day--weekend default_pointer_cs */
-  .react-calendar__tile--active {
-    background: #ff6a64;
-    border-radius: 12px;
-  }
-  .react-calendar__month-view__days__day—weekend {
-    color: #000000;
-  }
-  /* react-calendar__navigation__arrow react-calendar__navigation__next2-button default_pointer_cs */
-  .react-calendar__navigation :hover {
-    border-radius: 50%;
-    color: red;
-  }
-  .react-calendar__month-view__weekdays {
-    font-weight: 600;
-    font-size: 16px;
-    line-height: 24px;
-  }
+  margin-top: -8px;
 `;
 
 const CalLogDiv = styled.div`
@@ -452,7 +325,6 @@ const CalLogDiv = styled.div`
       color: #c8150d;
     }
   }
-
   .done {
     padding: 3px 12px;
     color: white;

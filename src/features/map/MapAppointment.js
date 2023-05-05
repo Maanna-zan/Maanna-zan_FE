@@ -70,7 +70,24 @@ const MapAppointment = ({ checkedPlace }) => {
       alert(error.response.data.message);
     },
   });
-
+  // queryKey에 캐싱하여 값 불러오기위해 queryClient선언
+  const queryClient = useQueryClient();
+  // getQueryData로 캐싱한 값 INPUTVALUESPROP키로 불러오기.
+  const InputValuesProp = queryClient.getQueryData({
+    queryKey: ['INPUTVALUESPROP'],
+  });
+  //  checkedPlace값 가져오기
+  //   const { data: placeData } = useQuery(['places', checkedPlace], () =>
+  //   fetch(`/mapmidpoint?query=${checkedPlace}`).then((res) => res.json())
+  // );
+  //   console.log("checkedPlace",checkedPlace)
+  //   useEffect(() => {
+  //     console.log('checkedPlace updated: ', checkedPlace);
+  //   }, [checkedPlace]);
+  // useContext Hook을 사용하여 MidPointContext 컨텍스트 값을 가져옵니다.
+  // const checkedPlace = useContext(CheckedPlaceContext);
+  // midPoint 값을 사용합니다.
+  console.log('checkedPlace', checkedPlace);
   useEffect(() => {
     const token = cookies.get('access_token');
     setIsLoginMode(token);
@@ -90,7 +107,6 @@ const MapAppointment = ({ checkedPlace }) => {
     typeof window !== 'undefined'
       ? localStorage.getItem('nick_name') ?? ''
       : '';
-
   return (
     <WebWrapper style={{marginTop: '150px'}}>
       <WebWrapperHeight>
@@ -172,13 +188,38 @@ const MapAppointment = ({ checkedPlace }) => {
                   />
                   <div>
                     <AppointmentPlaceWrapper>
-
                       <div className="AppointmentPlace">중간 위치에 있는 술집을 선택해 주세요.</div>
                           {checkedPlace ? (
                             <span className="PlaceChecked">&quot; {checkedPlace?.place_name} &quot;</span>
                           ) : (
                             <span className="PlaceUnchecked" style={{ color: `${LightTheme.FONT_SECONDARY}` }}>목록에서 선택해 주세요.</span>
                           )}
+                    </AppointmentPlaceWrapper>
+                      <p className="ShowDateText">
+                        <span className="textRed">{nickName}</span>님이 선택하신 약속
+                        날짜는
+                        <span className="textRed">
+                          {moment(value).format('YYYY년 MM월 DD일')}
+                        </span>
+                        입니다.
+                      </p>
+                      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                      <ButtonText size="lg" variant="primary" label="약속잡기"
+                        onClick={selectAppointmentHandler}
+                        style={{  marginTop: '5vh' }}/>
+                      </div>
+                      {checkedPlace ? (
+                        <span className="PlaceChecked">
+                          " {checkedPlace?.place_name} "
+                        </span>
+                      ) : (
+                        <span
+                          className="PlaceUnchecked"
+                          style={{ color: `${LightTheme.FONT_SECONDARY}` }}
+                        >
+                          목록에서 선택해 주세요.
+                        </span>
+                      )}
                     </AppointmentPlaceWrapper>
                     <p className="ShowDateText">
                       <span className="textRed">{nickName}</span>님이 선택하신

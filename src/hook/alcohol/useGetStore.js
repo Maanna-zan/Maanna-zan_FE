@@ -44,10 +44,11 @@ export const useGetLikeStore = () => {
       });
       return data.data;
     },
-
-    // onSuccess: () => {
-    //   queryClient.invalidateQueries(['GET_LIKE_STORE']);
-    // },
+    //     onSuccess: () => {
+    //       queryClient.invalidateQueries(['GET_LIKE_STORE']);
+    //     },
+    // 1분마다 데이터를 무효화합니다.
+    // 이렇게 함으로써 1분마다 최신 데이터를 가져올 수 있습니다.
 
   });
 
