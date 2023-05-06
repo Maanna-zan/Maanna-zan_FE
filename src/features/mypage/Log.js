@@ -16,15 +16,14 @@ import chunk from '@components/Modals/chunk';
 import LogMyDay from './LogMyDay';
 import LogMeet from './LogMeet';
 import { LightTheme } from '@components/Themes/theme';
+import { CalenderRed, CalenderYellow } from '@components/Atoms/CalenderLogIcon';
 
 function Log() {
   const queryClient = useQueryClient();
 
   const [value, onChange] = useState(new Date());
   const [differMeet, setDifferMeet] = useState(false);
-  console.log('differMeet', differMeet);
-  //캘린더 로그 수정모드
-  const [isEditMode, setIsEditMode] = useState({});
+  // console.log('differMeet', differMeet);
 
   const [callenderId, setCallenderId] = useState(null);
   const [callederTitle, setCallenderTitle] = useState('');
@@ -38,6 +37,7 @@ function Log() {
     setCallenderSetDated(calLog.selectedDate);
     setCallenderContent(calLog.content);
   };
+  const [logNone, setLogNone] = useState(false);
 
   const handleUpdate = () => {
     const payload = {
@@ -76,14 +76,14 @@ function Log() {
           Access_Token: `${token}`,
         },
       });
-      console.log('result~~~', res.data.data);
+      //console.log('result~~~', res.data.data);
       return res.data.data;
     },
     onSuccess: (data) => {
       if (!data || data.length === 0) {
         return <div>No data available.</div>;
       }
-      console.log('successdata', data);
+      // console.log('successdata', data);
       // setMark([data.data[0].selectedDate]);
       // // // ["2022-02-02", "2022-02-02", "2022-02-10"] 형태로 가져옴
       const markMeet = data.map((item) => item.selectedDate);
@@ -92,7 +92,7 @@ function Log() {
   });
 
   const response = res.data;
-  console.log('res', response);
+  console.log('response', response);
 
   const { data } = useQuery({
     queryKey: ['LOG_DATE'],
@@ -116,7 +116,7 @@ function Log() {
       setMark(mark);
     },
   });
-  // console.log('res', data);
+  console.log('data', data);
 
   // 츄가
   const { mutate } = useMutation({
@@ -222,6 +222,58 @@ function Log() {
               }}
             />
           </Div>
+          <TwoLogs>
+            <p className="moment"> {moment(value).format('MM월DD일')} </p>
+            {response?.filter(
+              (appointment) =>
+                appointment.selectedDate === moment(value).format('YYYY-MM-DD'),
+            ).length === 0 &&
+            data?.filter(
+              (myLog) =>
+                myLog.selectedDate === moment(value).format('YYYY-MM-DD'),
+            ).length === 0 ? (
+              <p className="none">기록 없음</p>
+            ) : (
+              <div className="twoRow">
+                <div className="row">
+                  <CalenderRed />
+                  <div className="BoldLog">
+                    {response?.map((appointment) => {
+                      console.log('event', appointment);
+                      if (
+                        appointment.selectedDate ===
+                        moment(value).format('YYYY-MM-DD')
+                      ) {
+                        return (
+                          <div key={appointment.id}>
+                            {appointment.place_name}
+                          </div>
+                        );
+                      } else {
+                        return null;
+                      }
+                    })}
+                  </div>
+                </div>
+                <div className="row">
+                  <CalenderYellow />
+                  <div className="BoldLog">
+                    {data?.map((myLog) => {
+                      console.log('myLog', myLog);
+                      if (
+                        myLog.selectedDate ===
+                        moment(value).format('YYYY-MM-DD')
+                      ) {
+                        return <div key={myLog.id}>{myLog.title}</div>;
+                      } else {
+                        return null;
+                      }
+                    })}
+                  </div>
+                </div>
+              </div>
+            )}
+          </TwoLogs>
           {!differMeet ? (
             <LogMeet
               response={response}
@@ -263,6 +315,7 @@ const Div = styled.div`
   }
   .react-calendar__tile {
     padding: 8px 10px;
+    width: 20px;
   }
   .react-calendar__tile--now:enabled:hover,
   .react-calendar__tile--now:enabled:focus {
@@ -272,7 +325,7 @@ const Div = styled.div`
   .react-calendar__tile--now {
     background: #ff4840;
     border-radius: 12px;
-    width: fit-content;
+
     block-size: fit-content;
   }
   .react-calendar__navigation__label > span {
@@ -311,7 +364,7 @@ const Div = styled.div`
   .dot {
     height: 8px;
     width: 8px;
-    background-color: ${LightTheme.PRIMARY_LIGHT};
+    background-color: #f9bd1a;
     border-radius: 50%;
     margin-left: 24px;
     position: absolute;
@@ -319,9 +372,53 @@ const Div = styled.div`
   .dotMeet {
     height: 8px;
     width: 8px;
-    background-color: ${LightTheme.GRAY_200};
+    background-color: ${LightTheme.PRIMARY_LIGHT};
     border-radius: 50%;
     margin-left: 14px;
     position: absolute;
+  }
+`;
+const TwoLogs = styled.div`
+  margin-top: 12px;
+  padding: 20px;
+  background-color: white;
+  height: 152px;
+  width: 487px;
+  border-radius: 8px;
+  border: 1px solid ${LightTheme.GRAY_100};
+
+  .none {
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+    color: ${LightTheme.GRAY_400};
+  }
+  .moment {
+    margin-top: -10px;
+    width: fit-content;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+  }
+  .twoRow {
+    margin-top: -10px;
+    width: 447px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .row {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+  }
+  .BoldLog {
+    /* margin-top: 3px; */
+    height: 23px;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 20px;
+    word-wrap: break-word;
+    overflow-y: hidden;
   }
 `;

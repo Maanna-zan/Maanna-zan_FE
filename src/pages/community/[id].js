@@ -110,12 +110,14 @@ const Community = () => {
     potLikeMatch = postsLike.data.posts;
   }
 
+
   const postLikeMine =
     potLikeMatch.find((p) => p.id === Number(query.id)) || {};
   const [like, setLike] = useState(postLikeMine.like);
   const postId2 = query.id;
   // console.log('좋아요찾기', postLikeMine);
   const likePostHandler = async (postId2) => {
+
     try {
       await likePost(postId);
       setLike(!like);

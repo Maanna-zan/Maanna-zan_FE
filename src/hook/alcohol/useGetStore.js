@@ -45,9 +45,11 @@ export const useGetLikeStore = () => {
       return data.data;
     },
 
+
     // onSuccess: () => {
     //   queryClient.invalidateQueries(['GET_LIKE_STORE']);
     // },
+
   });
 
   if (isLoading) {

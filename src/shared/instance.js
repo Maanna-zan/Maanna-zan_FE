@@ -17,6 +17,7 @@ instance.interceptors.response.use(
     const originalRequest = error.config;
 
     const refreshToken = cookies.get('refresh_token');
+    console.log('error', error);
 
     // 토큰이 없으면 인터셉터 실행 안함
     if (!refreshToken) {
@@ -42,6 +43,7 @@ instance.interceptors.response.use(
       cookies.remove('refresh_token');
       cookies.remove('nick_name');
       alert('로그인 유효 시간이 지났습니다. 다시 로그인 해주십시오');
+      window.location.reload(); // 새로고침 추가
     }
 
     return Promise.reject(error);

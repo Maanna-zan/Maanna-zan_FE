@@ -172,7 +172,6 @@ const MapAppointment = ({ checkedPlace }) => {
                   />
                   <div>
                     <AppointmentPlaceWrapper>
-
                       <div className="AppointmentPlace">중간 위치에 있는 술집을 선택해 주세요.</div>
                           {checkedPlace ? (
                             <span className="PlaceChecked">&quot; {checkedPlace?.place_name} &quot;</span>

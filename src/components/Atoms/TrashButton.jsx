@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { LightTheme } from '@components/Themes/theme';
 
-export const TrashButton = () => {
+export const TrashButton = ({ onClick }) => {
   return (
     <svg
       width="20"
@@ -10,6 +10,7 @@ export const TrashButton = () => {
       viewBox="0 0 20 20"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      onClick={onClick}
     >
       <path
         d="M2 4.60059H3.77778H18"
@@ -43,7 +44,7 @@ export const TrashButton = () => {
   );
 };
 
-export const ShareButton = () => {
+export const ShareButton = ({ onClick }) => {
   return (
     <svg
       width="20"
@@ -51,6 +52,7 @@ export const ShareButton = () => {
       viewBox="0 0 20 20"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      onClick={onClick}
     >
       <path
         d="M15.3337 6.4C16.8064 6.4 18.0003 5.19117 18.0003 3.7C18.0003 2.20883 16.8064 1 15.3337 1C13.8609 1 12.667 2.20883 12.667 3.7C12.667 5.19117 13.8609 6.4 15.3337 6.4Z"

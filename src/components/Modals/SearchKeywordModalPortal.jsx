@@ -286,51 +286,27 @@ function SearchedKeywordLandingPage() {
   return (
     <WebWrapper>
       <WebWrapperHeight>
-        <FlexRow style={{ justifyContent: 'space-between', paddingTop: '5vh' }}>
+        <FlexRow style={{ justifyContent: 'space-between', paddingTop: '30px' }}>
           <div>
-            <Map
-              center={center}
-              style={{
-                width: '50vw',
-                height: '90vh',
-                maxWidth: '690px',
-                maxHeight: '90vh',
-                // backgroundColor: 'aliceblue',
-              }}
-            >
+            <Map center={center} style={{ width: '690px', height: '90vh',maxWidth: '690px',maxHeight: '803px' }}>
               {positions?.map((position, index) => (
                 inputValues[index] && (
-                  <MapMarker
-                    key={index}
-                    position={position?.latlng}
-                    image={{
-                      src: 'MarkerIMG.png',
-                      size: {
-                        width: 38,
-                        height: 50,
-                      },
-                    }}
-                    title={position?.title}
-                  />
+                  <MapMarker key={index} position={position?.latlng}
+                    image={{ src: 'MarkerIMG.png', size: { width: 38, height: 50 }}}
+                    title={position?.title}/>
                 )
               ))}
               {midPoint && (
-                <MapMarker
-                  position={midPoint}
-                  image={{
-                    src: 'MaannajanLogo.png',
-                    size: { width: 30, height: 38 },
-                  }}
-                  title="중간지점"
-                />
+                <MapMarker position={midPoint} 
+                image={{ src: 'MaannajanLogo.png', size: { width: 30, height: 38 }}} title="중간지점"/>
               )}
             </Map>
           </div>
 
-          <FlexColumnCenter style={{ margin: '0 200px 250px 25px' ,maxWidth: '470px',maxHeight: '90vh'}}>
+          <FlexColumnCenter style={{ margin: '0 200px 250px 25px' ,maxWidth: '470px',maxHeight: '803px'}}>
             <TitleStyled>친구와 본인의 </TitleStyled>
             <Highlighting>위치를 입력해 주세요.</Highlighting>
-            <div style={{ width: '100%' }}>
+            <div style={{ width: '100%', maxWidth: '418px' }}>
               {inputs}
               {renderModal()}
               <ArrangeCenterWrapper>
@@ -349,33 +325,26 @@ function SearchedKeywordLandingPage() {
             </div>
             <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
               {!midPoint && inputValues.filter(Boolean).length < 2 && (
-                <ButtonText
-                  size="lg"
-                  variant="basic"
-                  label="중간 위치 찾기"
-                  fontSize="14px"
+                <ButtonText size="lg" variant="basic" label="중간 위치 찾기" 
                   fontColor={LightTheme.GRAY_400}
-                  borderStyle="none"
                   borderWidth="0px"
                   backgroundColor={LightTheme.GRAY_100}
                   hoverBackgroundColor="null"
                   hoverBorderColor="null"
                   hoverFontColor="null"
-                  style={{ cursor: 'default' }}
+                  style={{ cursor: 'default', font: `${'var(--label2-regular)'} Pretendard sans-serif` }}
                   disabled={true}
                 />
               )}
               {!midPoint &&
                 inputValues.filter(Boolean).length >= 2 && ( //filter(Boolean)은 inputValues 배열에서 falsy 값
                   <ButtonText //(즉, undefined, null, false, "", 0, NaN)를 필터링한다.
-                    size="lg"
-                    variant="primaryBolder"
-                    label="중간 위치 찾기"
-                    fontSize="14px"
+                    size="lg" variant="primaryBolder" label="중간 위치 찾기"
                     fontColor={`${LightTheme.PRIMARY_NORMAL}`}
                     hoverBackgroundColor={`${LightTheme.HOVER_BASIC}`}
                     hoverFontColor={`${LightTheme.PRIMARY_NORMAL}`}
                     active={`${LightTheme.ACTIVE_BASIC}`}
+                    style={{font: `${'var(--label2-regular)'} Pretendard sans-serif`}}
                     onClick={() => {
                       //그러므로 inputValues 배열에서 값이 있는 요소만을 가지고 있는 새로운 배열을 반환한다.
                       mutate(checkedPlace);
@@ -383,12 +352,9 @@ function SearchedKeywordLandingPage() {
                   />
                 )}
               {midPoint && (
-                <ButtonText
-                  size="lg"
-                  variant="primary"
-                  label="중간 술집 검색"
-                  fontSize="14px"
+                <ButtonText size="lg" variant="primary" label="중간 술집 검색"
                   hoverBackgroundColor={LightTheme.PRIMARY_LIGHT}
+                  style={{font: `${'var(--label2-regular)'} Pretendard sans-serif`}}
                   onClick={moveToMapMidPointButtonClickHandler}
                 />
               )}
