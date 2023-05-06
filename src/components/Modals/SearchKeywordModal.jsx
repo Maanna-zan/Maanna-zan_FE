@@ -314,85 +314,46 @@ export default function KeywordSearchModal({ onClose, onUpdate}) {
         <>
         <ModalDiv className="modal" onClick={onClose}></ModalDiv>
         <Modal className="modal-overlay">
-
-        <MapSection>
-            <div style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between",margin: '-13px 0 10px 0' }}>
-                <H1Styled>위치검색</H1Styled>
-                    <button style={{ backgroundColor: "transparent", border: "none", outline: "none", margin: '0 3% 3% 0', position: "relative" }}>
-                        {/* 이모티콘 이미지 추가 */}
-                        <img src="Group 1972.png" alt="닫기" onClick={closeModalClickHandler} style={{ position: "absolute", right: 0 }} />
-                    </button>
-            </div>
-
-            <form id="form" className="inputForm" onSubmit={keywordSearchSubmitHandler}>
-                <InputWrapper style={{ width: "100%", position: "relative" }}>
-                    <label style={{width : "90%"}}>
-                        {inputText.length === 0 && (
-                        <span style={{ color: "red", fontSize: "12px", position: "absolute", top: "-50%"}}>출발할 위치를 입력해 주세요.</span>
-                        )}
-                    <input 
-                        id="keyword"
-                        type="text" 
-                        placeholder="위치를 입력해주세요."
-                        onChange={inputTextHandler} 
-                        value={inputText}
-                    />
-                        <button type="submit" id="submit_btn">
-                            <img src="ModalPortalSearchBarIcon.png" alt="검색" />
+            <MapSection>
+                <div style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between",margin: '-13px 0 10px 0' }}>
+                    <H1Styled>위치검색</H1Styled>
+                        <button style={{ backgroundColor: "transparent", border: "none", outline: "none", margin: '0 3% 3% 0', position: "relative" }}>
+                            {/* 이모티콘 이미지 추가 */}
+                            <img src="Group 1972.png" alt="닫기" onClick={closeModalClickHandler} style={{ position: "absolute", right: 0 }} />
                         </button>
-                    </label>
-                </InputWrapper>
-            </form>
-
-            <div style={{ width: '100%', height: 'calc(100% - 80px)', display: 'flex' }}>
-                
+                </div>
+                <form id="form" className="inputForm" onSubmit={keywordSearchSubmitHandler}>
+                    <InputWrapper style={{ width: "560px", position: "relative" }}>
+                        <label style={{width : "90%"}}>
+                            {inputText.length === 0 && (
+                            <span style={{ color: "red", fontSize: "12px", position: "absolute", top: "-50%"}}>출발할 위치를 입력해 주세요.</span>
+                            )}
+                            <input id="keyword" type="text" placeholder="위치를 입력해주세요." onChange={inputTextHandler} value={inputText}/>
+                            <button type="submit" id="submit_btn">
+                                <img src="ModalPortalSearchBarIcon.png" alt="검색" />
+                            </button>
+                        </label>
+                    </InputWrapper>
+                </form>
+                <div style={{ width: '572px', height: 'calc(100% - 80px)', display: 'flex' }}>
                     <div id='myMap'>
                     </div>
                     <div style={{width: '50%'}}>
-                        
                         <div id="menuDiv">
                             <div id="menu_wrap">
-                                <div>
-                                    <div id="map_title">
-                                    </div>
-                                </div>
-                                    <ul id="placesList"></ul>
-                                    <div id="pagination"></div>
+                                <ul id="placesList"></ul>
+                                <div id="pagination"></div>
                             </div>
                         </div>
                     </div>
-                
+                </div>
+            </MapSection>
+            <div>
+                <div className='labelDiv'>정확한 검색 결과를 위해 정확하게 입력해주세요.</div>
+                    <ButtonText label='확인' size="xxsm" variant="primary" onClick={saveStateHandler}
+                        style={{ position: "absolute", bottom: "12px", right: "28px", fontSize: "13px", padding: "6px 20px 6px 20px", zIndex: '1000'}}
+                    />
             </div>
-        </MapSection>
-
-        <div>
-            <div className='labelDiv'
-            style={{
-                position: "absolute",
-                bottom: "12px",
-                left: "3px", 
-                color: "#9EA4AA",
-                fontSize: "13px",
-                padding: "6px 20px 6px 20px",
-                zIndex: '1000'
-            }}
-            >정확한 검색 결과를 위해 정확하게 입력해주세요.
-            </div>
-                <ButtonText
-                label='확인'
-                size="xxsm"
-                variant="primary"
-                    style={{
-                        position: "absolute",
-                        bottom: "12px",
-                        right: "28px", 
-                        fontSize: "13px",
-                        padding: "6px 20px 6px 20px",
-                        zIndex: '1000'
-                    }}
-                    onClick={saveStateHandler}/>
-            </div>
-
         </Modal>
         </>
     )
@@ -404,7 +365,7 @@ const H1Styled = styled.h1`
 `
 const Modal = styled.div`
         position: absolute;
-        top: 50%;
+        top: 61%;
         left: 50%;
         transform: translate(-50%, -50%);
         display: flex;
@@ -415,14 +376,14 @@ const Modal = styled.div`
         border-radius: 20px;
         background-color: rgba(255, 255, 255);
         z-index: 1000;
-        width: 80%;
-        max-width: 620px;
-        height: 80vh;
+        width: 625px;
+        max-width: 630px;
+        height: 600px;
         max-height: 704px;
         border: 1px solid #c2ccd6;
     .labelDiv {
         position: absolute;
-        bottom: 16px;
+        bottom: 12px;
         left: 3px;
         padding: 6px 20px 6px 20px;
         z-index: 1000;
@@ -450,10 +411,10 @@ const InputWrapper = styled.div`
 const MapSection = styled.div`
     #myMap {
         width: 50%;
-        height: 50%,
-        max-width: 270px;
-        max-height: 486px;
-        position: relative,
+        height: 445px;
+        max-width: 285px;
+        max-height: 445px;
+        position: relative;
         overflow: hidden;
         border-radius: 8px;
         z-index: 3;
@@ -472,9 +433,9 @@ const MapSection = styled.div`
     #menu_wrap {
         position: relative;
         width: 570px;
-        height: 52vh;
+        height: 445px;
         max-width: 570px;
-        max-height: 52vh;
+        max-height: 445px;
         border-radius: 5px;
         overflow-y: auto;
     ::-webkit-scrollbar {
@@ -490,13 +451,6 @@ const MapSection = styled.div`
     }
     }
 
-    /* #map_title {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-    } */
-
     #form {
         display: flex;
         justify-content: space-between;
@@ -504,7 +458,7 @@ const MapSection = styled.div`
     }
 
     #keyword {
-    width: 100%;
+    width: 504px;
     height: 34px;
     padding: 0 40px 0 16px;
     border: 1px solid ${LightTheme.GRAY_400};
@@ -560,20 +514,13 @@ const MapSection = styled.div`
     #placesList .item .info {
         padding: 3px 0 5px 3px;
         margin: 6px 12px 6px 12px;
-        /* background-color: rgba(100, 200, 100, 0.5); */
     }
 
     #placesList .item span {
         display: block;
-        /* font-weight: 400;
-        font-size: 11px;
-        line-height: 14px; */
         font: var(--caption2-regular) Pretendard sans-serif;
     }
     #placesList .info .gray {
-        /* font-weight: 400;
-        font-size: 11px;
-        line-height: 14px; */
         color: ${LightTheme.FONT_SECONDARY};
         font: var(--caption2-regular) Pretendard sans-serif;
     }
