@@ -355,18 +355,18 @@ const AlcoholList = () => {
                 검색
               </BoxTextReal>
             </div>{' '}
-            {searchResults.length > 0 && (
-              <ul>
-                {searchResults?.alkolResponseDtoList?.map((result) => (
-                  <li
-                    key={result.id}
-                    onClick={() => handleSelectResult(result)}
-                  >
-                    {result.placeName}
-                  </li>
-                ))}
-              </ul>
-            )}
+//             {searchResults.length > 0 && (
+//               <ul>
+//                 {searchResults?.alkolResponseDtoList?.map((result) => (
+//                   <li
+//                     key={result.id}
+//                     onClick={() => handleSelectResult(result)}
+//                   >
+//                     {result.placeName}
+//                   </li>
+//                 ))}
+//               </ul>
+//             )}
           </div>
         </div>
         <WebWrapper>
