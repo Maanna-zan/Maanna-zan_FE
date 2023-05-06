@@ -8,6 +8,7 @@ export const PageNation = ({
   activeTab,
   router,
   storeListPage,
+  setPageNum,
 }) => {
   return (
     <WebWrapper>

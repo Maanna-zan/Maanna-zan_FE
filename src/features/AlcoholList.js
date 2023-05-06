@@ -36,6 +36,9 @@ import { useGetLikeStore } from '../hook/alcohol/useGetStore';
 import { useLikeStore } from '../hook/useLikes';
 import { Loading } from '@components/Atoms/Loading';
 import { LoadingArea } from '@components/Modals/LoadingArea';
+import { routeChangeCompleteHandler } from '@utils/routeChangeCompleteHandler';
+import chunk from '@components/Modals/chunk';
+import { useGetAutoKeyword } from '../hook/alcohol/useGetAllStore';
 const AlcoholList = () => {
   const { go } = useRouter();
   const router = useRouter();
@@ -44,7 +47,7 @@ const AlcoholList = () => {
   //  const { alkolsLike, alkolsIsLikeLoading } = useGetLikeStore();
   const [storeListPage, setStoreListPage] = useState('all');
   const [activeTab, setActiveTab] = useState('all');
-  const pages = [1, 2, 3, 4, 5];
+  // const pages = [1, 2, 3, 4, 5];
   // for (let i = 1; i <= totalPage; i++) {
   //   pages.push(i);
   // }
@@ -56,12 +59,7 @@ const AlcoholList = () => {
     view: 1,
     like: 1,
   });
-  const keywordKey = [
-    'placeName',
-    'categoryName',
-    'addressName',
-    'roadAddressName',
-  ];
+
   const [keyword, setKeyword] = useState('');
   const [query, setQuery] = useState('');
   // 검색어가 변경될 때마다, 검색 결과를 새로 불러옵니다.
@@ -94,7 +92,48 @@ const AlcoholList = () => {
     [storeListPage, setPageNum, keyword],
   );
   // console.log('storedata', keyword);
+  //자동완성
+  const [aoutoKeyword, isKeywordLoading] = useGetAutoKeyword(keyword, 1);
 
+  // useEffect(() => {
+  //   if (keyword !== '') {
+  //     setQuery(keyword);
+  //   }
+  // }, [aoutoKeyword, keyword]);
+  // const [candidates, setCandidates] = useState();
+
+  // console.log('자동완성', aoutoKeyword);
+  // useEffect(() => {
+  //   if (keyword !== '') {
+  //     // likeStoreList에서 keyword를 포함하는 후보군 찾기
+  //     const newCandidates = aoutoKeyword.filter((store) =>
+  //       store.place_name.includes(keyword),
+  //     );
+  //     setCandidates(newCandidates);
+  //   } else {
+  //     setCandidates([]);
+  //   }
+  // }, [keyword, aoutoKeyword]);
+  const [searchResults, setSearchResults] = useState([]);
+  console.log('자동완성', searchResults);
+  // 검색어가 변경될 때마다, 검색 결과를 새로 불러옵니다.
+  useEffect(() => {
+    if (keyword === '') {
+      setPageNum(1);
+    } else {
+      setPageNum(1);
+      const results = aoutoKeyword?.alkolResponseDtoList?.filter((store) => {
+        const fullName =
+          store.placeName +
+          store.categoryName +
+          store.addressName +
+          store.roadAddressName;
+        return fullName.toLowerCase().includes(keyword.toLowerCase());
+      });
+      setSearchResults(results);
+    }
+  }, [keyword]);
+  //탭메뉴
   const handleStoreListTabChange = useCallback(
     (newTab) => {
       setActiveTab(newTab);
@@ -216,10 +255,45 @@ const AlcoholList = () => {
       (obj) => obj.apiId === Number(storeData?.alkolResponseDtoList?.apiId),
     ) || {};
 
+  if (typeof window !== 'undefined') {
+    sessionStorage.setItem(
+      `__next_scroll_${window.history.state.idx}`,
+      JSON.stringify({
+        x: window.pageXOffset,
+        y: window.pageYOffset,
+      }),
+    );
+  }
+
+  useEffect(() => {
+    window.history.scrollRestoration = 'manual';
+
+    const _scroll = sessionStorage.getItem(
+      `__next_scroll_${window.history.state.idx}`,
+    );
+    if (_scroll) {
+      const { x, y } = JSON.parse(_scroll);
+      window.scrollTo(x, y);
+      sessionStorage.removeItem(`__next_scroll_${window.history.state.idx}`);
+    }
+
+    router.events.on('routeChangeComplete', routeChangeCompleteHandler);
+    return () => {
+      router.events.off('routeChangeComplete', routeChangeCompleteHandler);
+    };
+  }, []);
+
+  //페이지 네이션 처음 시작이 1번창부터 켜지도록
   if (isLoading || (access_token && isLikesFetchLoading)) {
     return <LoadingArea>로딩중...</LoadingArea>;
   }
-  console.log(storeData);
+
+  //데이터 페이지네이션
+
+  const data2 = storeData?.alkolResponseDtoList;
+  const chunkedData = data2 ? chunk(data2, 16) : [];
+  const currentPageData = chunkedData[pageNum - 1] ?? [];
+  // console.log(' 청크를 술집리스트에 적용', data2);
   return (
     <>
       {/* {isLikesFetchLoading || isLoading || isFetching ? (
@@ -246,7 +320,6 @@ const AlcoholList = () => {
             >
               <SearchIcon />
             </div>
-
             <InputArea
               style={{
                 width: '762px',
@@ -264,7 +337,6 @@ const AlcoholList = () => {
                 }
               }}
             />
-
             <div
               style={{ position: 'absolute', top: '11px', right: '20px' }}
               onClick={handleSearch}
@@ -282,7 +354,19 @@ const AlcoholList = () => {
               >
                 검색
               </BoxTextReal>
-            </div>
+            </div>{' '}
+            {searchResults.length > 0 && (
+              <ul>
+                {searchResults?.alkolResponseDtoList?.map((result) => (
+                  <li
+                    key={result.id}
+                    onClick={() => handleSelectResult(result)}
+                  >
+                    {result.placeName}
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
         </div>
         <WebWrapper>
@@ -361,9 +445,9 @@ const AlcoholList = () => {
                 <>로딩중</>
               ) : ( */}
             <>
-              {storeData?.alkolResponseDtoList?.map((store) => (
+              {currentPageData?.map((store) => (
                 <div
-                  key={store.id}
+                  key={store.apiId}
                   style={{
                     gridColumn: 'span 1',
                     gridRow: 'span 1',
@@ -429,11 +513,13 @@ const AlcoholList = () => {
           </GrideGapCol4>
 
           <PageNation
-            pages={pages}
+            pages={chunkedData.map((_, i) => i + 1)}
+            // pages={pages}
             handlePageNumChange={handlePageNumChange}
             activeTab={activeTab}
             router={router}
             storeListPage={storeListPage}
+            setPageNum={setPageNum}
           />
         </WebWrapper>
       </>

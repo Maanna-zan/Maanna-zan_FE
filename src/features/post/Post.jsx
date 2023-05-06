@@ -53,7 +53,25 @@ export const Post = ({ post, onSubmit, apiId, postId }) => {
     }
   };
 
-  console.log();
+  //스크롤값
+  useEffect(() => {
+    // 스크롤 위치를 sessionStorage에서 읽어옵니다.
+    const scrollPos = JSON.parse(sessionStorage.getItem('scrollPos'));
+
+    // sessionStorage에 스크롤 위치 값이 있다면 해당 위치로 스크롤합니다.
+    if (scrollPos) {
+      window.scrollTo(scrollPos.x, scrollPos.y);
+    }
+
+    // 페이지 컴포넌트가 언마운트될 때 sessionStorage에 스크롤 위치를 저장합니다.
+    return () => {
+      sessionStorage.setItem(
+        'scrollPos',
+        JSON.stringify({ x: window.scrollX, y: window.scrollY }),
+      );
+    };
+  }, []);
+
   return (
     <div
       style={{
@@ -74,7 +92,11 @@ export const Post = ({ post, onSubmit, apiId, postId }) => {
         {like ? <LikeCircleHeartIcon /> : <DisLikeCircleHeartIcon />}
       </div>
 
-      <Link href={`/community/${post?.id}`}>
+      <div
+        onClick={() => {
+          router.push(`/community/${post?.id}`);
+        }}
+      >
         <BoxTextReal
           style={{
             gridColumn: 'span 1',
@@ -130,7 +152,7 @@ export const Post = ({ post, onSubmit, apiId, postId }) => {
             </FlexRow>
           </FlexColumn>
         </BoxTextReal>
-      </Link>
+      </div>
     </div>
   );
 };

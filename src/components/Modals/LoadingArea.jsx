@@ -27,6 +27,7 @@ export const LoadingArea = () => {
         style={{
           color: `${LightTheme.FONT_PRIMARY}`,
           font: `var(--title2-semibold) Pretendard sans-serif`,
+          marginBottom: '20px',
         }}
       >
         로딩중이에요.

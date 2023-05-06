@@ -25,7 +25,7 @@ export const MainFirstSection = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await apis.get(`/alkol/view?page=${1}&size=3`);
+      const response = await apis.get(`/alkol/view?page=${1}&size=`);
       seGetBest(response.data);
     };
     fetchData();

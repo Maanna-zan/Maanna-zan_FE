@@ -28,7 +28,7 @@ import { useLikePost } from '../../hook/useLikes';
 import { Ranking1, Ranking2, Ranking3 } from '@components/Atoms/Ranking';
 import { LoadingArea } from '@components/Modals/LoadingArea';
 import Link from 'next/link';
-const CommunityList = () => {
+const CommunityList = ({ routeChangeCompleteHandler }) => {
   const router = useRouter();
   const { query } = useRouter();
 
@@ -99,12 +99,12 @@ const CommunityList = () => {
               >
                 {/* {like ? <LikeCircleHeartIcon /> : <LikeCircleHeartIcon />} */}
               </div>
-              {/* <div
+              <div
                 onClick={() => {
                   router.push(`/community/${store?.id}`);
                 }}
-              > */}
-              <Link href={`/community/${store?.id}`}>
+              >
+                {/* <Link href={`/community/${store?.id}`}> */}
                 <span
                   style={{
                     width: '384px',
@@ -191,8 +191,8 @@ const CommunityList = () => {
                     </ImgWrapper384x360>
                   </BoxTextReal>
                 </span>
-                {/* </div> */}
-              </Link>
+              </div>
+              {/* </Link> */}
               <StPlace_name>{store?.place_name}</StPlace_name>
             </div>
           ))}
@@ -201,6 +201,7 @@ const CommunityList = () => {
         <GrideGapCol4 style={{ margin: '12px auto' }}>
           {posts.map((post) => (
             <Post
+              routeChangeCompleteHandler={routeChangeCompleteHandler}
               post={post}
               key={post.id}
               postId={post.id}

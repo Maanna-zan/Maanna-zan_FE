@@ -3,6 +3,7 @@ import { apis } from '@shared/axios';
 import { keys } from '@utils/createQueryKey';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { cookies } from '@shared/cookie';
+import { useRouter } from 'next/router';
 
 export const useGetPost = () => {
   const access_token = cookies.get('access_token');
@@ -29,7 +30,8 @@ export const useGetPost = () => {
   return { posts: data, postIsLoading: isLoading };
 };
 
-export const useGetPostdetail = ({ postId }) => {
+export const useGetPostdetail = (postId) => {
+  const { query } = useRouter();
   const access_token = cookies.get('access_token');
   ('refresh_token');
 
@@ -37,7 +39,7 @@ export const useGetPostdetail = ({ postId }) => {
     queryKey: [keys.GET_POSTS_DETAIL, postId],
 
     queryFn: async () => {
-      const data = await apis.get(`/community/${postId}`, {});
+      const data = await apis.get(`/posts/${query.id}`, {});
       return data.data;
     },
   });
@@ -48,7 +50,7 @@ export const useGetPostdetail = ({ postId }) => {
   if (isError) {
     return { postDetailData: [], postDetailIsLoading: false };
   }
-  return { postDetailData: data, postDetailIsLoading: isLoading };
+  return { postDetailData: data.data, postDetailIsLoading: isLoading };
 };
 
 // 리뷰포스팅 리스트 조회용  좋아요

@@ -11,7 +11,7 @@ import AddReComment from './AddReComment';
 import ReCommentList from './ReCommentList';
 import { LightTheme } from '@components/Themes/theme';
 
-const CommentsList = () => {
+const CommentsList = (data) => {
   const queryClient = useQueryClient();
 
   const { query } = useRouter();
@@ -19,7 +19,7 @@ const CommentsList = () => {
   const [commentId, setCommentId] = useState(null);
   const [commentContent, setCommentContent] = useState('');
   const [userNickName, setUserNickName] = useState('');
-  // console.log('setIsEditMode', isEditMode);
+
   useEffect(() => {
     const nick_name = cookies.get('nick_name');
     setUserNickName(nick_name);
@@ -43,22 +43,21 @@ const CommentsList = () => {
     deleteComment(id);
   };
 
-  const token = cookies.get('access_token');
-  const { data, isLoading, isError, isSuccess } = useQuery({
-    queryKey: ['GET_COMMENTS'],
-    queryFn: async () => {
-      const { data } = await apis.get(`/posts/${query.id}`, {
-        headers: {
-          Access_Token: `${token}`,
-        },
-      });
-      // console.log('data', data);
-      return data.data.commentList;
-    },
-    //enabled: -> 참일 때 실행시켜준다.
-    enabled: Boolean(query.id),
-    onSuccess: () => {},
-  });
+  // const token = cookies.get('access_token');
+  // const { data, isLoading, isError, isSuccess } = useQuery({
+  //   queryKey: ['GET_COMMENTS'],
+  //   queryFn: async () => {
+  //     const { data } = await apis.get(`/posts/${query.id}`, {
+  //       headers: {
+  //         Access_Token: `${token}`,
+  //       },
+  //     });
+  //     return data.data.commentList;
+  //   },
+  //   //enabled: -> 참일 때 실행시켜준다.
+  //   enabled: Boolean(query.id),
+  //   onSuccess: () => {},
+  // });
   //삭제
   const { mutate: deleteComment } = useMutation({
     mutationFn: async (id) => {
@@ -98,7 +97,7 @@ const CommentsList = () => {
     <div>
       <CommentDiv>
         <>
-          {data?.map((comment) => (
+          {data?.data?.commentList?.map((comment) => (
             <div key={comment.id}>
               {isEditMode && comment.id === commentId ? (
                 <>
