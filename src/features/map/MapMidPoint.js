@@ -484,62 +484,32 @@ function MapMidPoint() {
                 const moveLatLon = new window.kakao.maps.LatLng(place.y, place.x);
                 map.panTo(moveLatLon);
             });
-            
         }
     }
     }
     return (
     <> 
-        <WebWrapper /*style={{borderBottom : '1px solid black'}}*/>
+        <WebWrapper>
             <WebWrapperHeight>
                 <FlexRow style={{ justifyContent: 'space-between' }}>
                     <MoveBackButtonWrapper>
-                    <ButtonText 
-                    size='xxsm'
-                    variant='hoverRed'
-                    label={<><span style={{ fontWeight: '500', fontSize: '20px',marginRight: '16px' }}>&lt;</span> 다시 검색하기</>}
-                    style={{
-                        borderRadius : '2px', 
-                        position: 'absolute',
-                        width: '150px',
-                        bottom: '-30px',
-                        left: '-22px',
-                        zIndex: '50',
-                        backgroundColor: "transparent",
-                        border: 'none',
-                        fontSize: '12px',
-                        fontWeight: '700',
-                    }}
-                    onClick={moveBackClickButtonHandler}/>
+                        <ButtonText size='xxsm'variant='hoverRed'
+                        label={<><span style={{ fontWeight: '500', fontSize: '20px',marginRight: '16px' }}>&lt;</span> 다시 검색하기</>}
+                        style={{ borderRadius : '2px', position: 'absolute', width: '150px', fontSize: '12px',fontWeight: '700',
+                            bottom: '-30px',left: '-22px',zIndex: '50', backgroundColor: "transparent", border: 'none' }}
+                        onClick={moveBackClickButtonHandler}/>
                     </MoveBackButtonWrapper>
                     <MapSection>
-                        <div style={{ width: '100vw', height: '100vh', display: 'flex'}}>
-                            <div id='map'
-                                center={{
-                                    lat: midPointProp?.lat,
-                                    lng: midPointProp?.lng
-                                }}
-                                level={3}
-                                style={{
-                                    width: '50vw',
-                                    height: '90vh',
-                                    maxWidth: '690px',
-                                    maxHeight: '90vh',
-                                    marginTop: '40px'
-                                }}
-                            />
+                        <div style={{  display: 'flex' }}>
+                            <div>
+                                <div id='map' center={{ lat: midPointProp?.lat, lng: midPointProp?.lng}} level={3}
+                                    style={{width: '690px', height: '90vh',maxWidth: '690px',maxHeight: '803px',marginTop: '40px'}}/>
                                     <DeparturesWrapper>
                                         {InputValuesProp?.filter(value => value !== "").map((value, index) => ( 
-                                            <div key={index} style={{ display: 'flex', alignItems: 'center', zIndex: '1000'}}>
+                                            <div key={index} style={{ display: 'flex', alignItems: 'center', zIndex: '100'}}>
                                                 <div 
-                                                style={{ 
-                                                    width: '34px',
-                                                    height: '34px',
-                                                    borderRadius: '50%',
-                                                    backgroundColor: 'white',
-                                                    display: 'flex',
-                                                    justifyContent: 'center',
-                                                    alignItems: 'center',
+                                                style={{ width: '34px', height: '34px', borderRadius: '50%', backgroundColor: 'white',
+                                                    display: 'flex', justifyContent: 'center', alignItems: 'center', 
                                                     color: `${LightTheme.PRIMARY_NORMAL}`, //String.fromCharCode(65 + index)는 A, B, C, D와 같은 알파벳을 생성. 
                                                     margin: '3px 1px 3px 10px'  //index가 0부터 시작하기 때문에 65를 더하여 A의 아스키 코드 65부터 시작하도록 설정
                                                     }}>                     
@@ -547,127 +517,52 @@ function MapMidPoint() {
                                                 </div>
                                             <InputArea       //출발지 받아온 값 Map으로 돌려 그 갯수만큼 input 만들기            
                                                 key={index}  //(""값도 카운트가 되는데 그 경우 filter로 제외하고 map으로 돌리기)                
-                                                value={value} 
-                                                type="text"
-                                                variant="default"
-                                                size="lg"
-                                                readOnly={true}
-                                                style={{
-                                                    width: '273px',
-                                                    height: '34px',
-                                                    margin: '3px 0 3px 10px',
-                                                    padding: '6px',
-                                                    border: '1px solid white',
-                                                    borderRadius: '12px',
+                                                value={value} type="text" variant="default" size="lg" readOnly={true}
+                                                style={{width: '273px', height: '34px', margin: '3px 0 3px 10px', padding: '6px',
+                                                    border: '1px solid white', borderRadius: '12px', zIndex: '1000',
                                                     backgroundColor: `${LightTheme.WHITE}`,
                                                     font: `${'var(--label1-regular)'} Pretendard sans-serif`,
-                                                    zIndex: '1000'
-                                                }}
-                                                />
+                                                }}/>
                                             </div>
                                         ))}
                                     </DeparturesWrapper>
-                            <FlexColumnCenter style={{maxWidth: '518px',maxHeight: '100vh', marginTop: '30px',resize: 'none'}}>
+                                </div>
+                            <FlexColumnCenter style={{maxWidth: '518px',maxHeight: '803px', marginTop: '30px',resize: 'none'}}>
                                 <TitleWrapper>
                                     <div style={{font: `${'var(--head1-medium)'} Pretendard sans-serif`,}}>중간 위치에 있는 </div>
                                     <div style={{font: `${'var(--head1-bold)'} Pretendard sans-serif`,}}>술집입니다.</div>
-                                    
                                 </TitleWrapper>
                                         <CategoryWrapper>
-                                            <form 
-                                            id="form" 
-                                            className="inputForm" 
-                                            onSubmit={keywordSearchSubmitHandler}
-                                            >
-                                                <CategoryButton
-                                                    id="submit_btn" 
-                                                    type="submit"
-                                                    label='술집(종합)'
-                                                    isActive={activeButton === 'button1'}
+                                            <form id="form" className="inputForm" onSubmit={keywordSearchSubmitHandler}>
+                                                <CategoryButton id="submit_btn" type="submit" label='술집(종합)' isActive={activeButton === 'button1'}
                                                     onClick={() => handleButtonClick('button1')}>종합</CategoryButton>
                                             </form>
-                                            <form 
-                                            id="form" 
-                                            className="inputForm" 
-                                            onSubmit={getCocktailPageSubmitHandler}
-                                            >
-                                                <CategoryButton
-                                                    id="submit_btn2" 
-                                                    type="submit"
-                                                    label='칵테일바'
-                                                    isActive={activeButton === 'button2'}
+                                            <form id="form" className="inputForm" onSubmit={getCocktailPageSubmitHandler}>
+                                                <CategoryButton id="submit_btn2" type="submit" label='칵테일바' isActive={activeButton === 'button2'}
                                                     onClick={() => handleButtonClick('button2')}>칵테일바</CategoryButton>
                                             </form>
-                                            <form 
-                                            id="form" 
-                                            className="inputForm" 
-                                            onSubmit={getIzakayaPageSubmitHandler}
-                                            >
-                                                <CategoryButton
-                                                    id="submit_btn3" 
-                                                    type="submit"
-                                                    label='일본식주점'
-                                                    isActive={activeButton === 'button3'}
+                                            <form id="form" className="inputForm" onSubmit={getIzakayaPageSubmitHandler}>
+                                                <CategoryButton id="submit_btn3" type="submit" label='일본식주점' isActive={activeButton === 'button3'}
                                                     onClick={() => handleButtonClick('button3')}>일본식주점</CategoryButton>
                                             </form>
-                                            <form 
-                                            id="form" 
-                                            className="inputForm" 
-                                            onSubmit={getPochaPageSubmitHandler}
-                                            >
-                                                <CategoryButton
-                                                    id="submit_btn4" 
-                                                    type="submit"
-                                                    label='실내포장마차'
-                                                    isActive={activeButton === 'button4'}
+                                            <form id="form" className="inputForm" onSubmit={getPochaPageSubmitHandler}>
+                                                <CategoryButton id="submit_btn4" type="submit" label='실내포장마차' isActive={activeButton === 'button4'}
                                                     onClick={() => handleButtonClick('button4')}>실내포장마차</CategoryButton>
                                             </form>
-                                            <form 
-                                            id="form" 
-                                            className="inputForm" 
-                                            onSubmit={getDiningPubPageSubmitHandler}
-                                            >
-                                                <CategoryButton
-                                                    id="submit_btn5" 
-                                                    type="submit"
-                                                    label='요리주점'
-                                                    isActive={activeButton === 'button5'}
+                                            <form id="form" className="inputForm" onSubmit={getDiningPubPageSubmitHandler}>
+                                                <CategoryButton id="submit_btn5" type="submit" label='요리주점' isActive={activeButton === 'button5'}
                                                     onClick={() => handleButtonClick('button5')}>요리주점</CategoryButton>
                                             </form>
-                                            <form 
-                                            id="form" 
-                                            className="inputForm" 
-                                            onSubmit={getHofSubmitHandler}
-                                            >
-                                                <CategoryButton
-                                                    id="submit_btn6" 
-                                                    type="submit"
-                                                    label='호프'
-                                                    isActive={activeButton === 'button6'}
+                                            <form id="form" className="inputForm" onSubmit={getHofSubmitHandler}>
+                                                <CategoryButton id="submit_btn6" type="submit" label='호프' isActive={activeButton === 'button6'}
                                                     onClick={() => handleButtonClick('button6')}>호프</CategoryButton>
                                             </form>
-                                            <form 
-                                            id="form" 
-                                            className="inputForm" 
-                                            onSubmit={getWineSubmitHandler}
-                                            >
-                                                <CategoryButton
-                                                    id="submit_btn7" 
-                                                    type="submit"
-                                                    label='와인바'
-                                                    isActive={activeButton === 'button7'}
+                                            <form id="form" className="inputForm" onSubmit={getWineSubmitHandler}>
+                                                <CategoryButton id="submit_btn7" type="submit" label='와인바' isActive={activeButton === 'button7'}
                                                     onClick={() => handleButtonClick('button7')}>와인바</CategoryButton>
                                             </form>
-                                            {/* <form 
-                                            id="form" 
-                                            className="inputForm" 
-                                            onSubmit={getFishCakeSubmitHandler}
-                                            >
-                                                <CategoryButton
-                                                    id="submit_btn8" 
-                                                    type="submit"
-                                                    label='오뎅바'
-                                                    isActive={activeButton === 'button8'}
+                                            {/* <form id="form" className="inputForm" onSubmit={getFishCakeSubmitHandler}>
+                                                <CategoryButton id="submit_btn8" type="submit" label='오뎅바' isActive={activeButton === 'button8'}
                                                     onClick={() => handleButtonClick('button8')}>오뎅바</CategoryButton>
                                             </form> */}
                                             {/* <SlideDirectIconStyle/> */}
@@ -690,28 +585,21 @@ function MapMidPoint() {
                                     }}>
                                     <LabelInfoDBClick>리스트  더블  클릭  시  가게  정보로  이동합니다.</LabelInfoDBClick>
                                     <div id="create-appointment"></div>
-                                    <ButtonText
-                                        size="lg"
-                                        variant="activeRed"
-                                        label="약속 잡으러 가기"
-                                        hoverBackgroundColor = {LightTheme.HOVER_BASIC}
-                                        style={{
-                                            position: 'absolute', 
-                                            top:'112.5vh', 
-                                            left:'67vw',
-                                            width: '170px',
-                                            paddingRight: '1px',
-                                            font: `var(--label2-bold) Pretendard sans-serif`,
-                                            backgroundImage: `url(RedBottomDirection.png)`, //Icon 불러오기
-                                            backgroundRepeat: 'no-repeat', //이미지 한번만
-                                            backgroundPosition: '21px center', // 위치
-                                            backgroundSize: '16px', // 이미지 크기
-                                            boxSizing: 'border-box',
-                                        }}
-                                        onClick={() => {
-                                        const element = document.getElementById('create-appointment');
-                                        element.scrollIntoView({ behavior: 'smooth' });
-                                        }}/>
+                                    <div style={{position: 'absolute', top:'106%', left:'70%'}}>
+                                        <ButtonText size="lg" variant="activeRed" label="약속 잡으러 가기" hoverBackgroundColor = {LightTheme.HOVER_BASIC}
+                                            style={{width: '170px',paddingRight: '1px', zIndex: '1',
+                                                font: `var(--label2-bold) Pretendard sans-serif`,
+                                                backgroundImage: `url(RedBottomDirection.png)`, //Icon 불러오기
+                                                backgroundRepeat: 'no-repeat', //이미지 한번만
+                                                backgroundPosition: '21px center', // 위치
+                                                backgroundSize: '16px', // 이미지 크기
+                                                boxSizing: 'border-box',
+                                            }}
+                                            onClick={() => {
+                                            const element = document.getElementById('create-appointment');
+                                            element.scrollIntoView({ behavior: 'smooth' });
+                                            }}/>
+                                    </div>
                                     </div>
                                 </div>
                             </FlexColumnCenter>
@@ -736,14 +624,14 @@ function MapMidPoint() {
     position:absolute;
     display: flex;
     flex-direction: column;
-    width: 20%;
-    top: 73vh;
+    width: 319px;
+    top: 76%;
     `
     const CategoryWrapper = styled.div`
         display: flex;
         justify-content: flex-start;
-        width: 31rem;
-        max-width:622px;
+        width: 450px;
+        max-width: 470px;
         margin: 2px 0 2px 20px;
         overflow-x: scroll;
         white-space: nowrap;
@@ -789,9 +677,9 @@ function MapMidPoint() {
     `
     const SlideDirectIconStyle = styled.div`
         position: absolute;
-        left: 83.5%;
-        right: 17.14%;
-        top: 28.7%;
+        /* left: 83.5%; */
+        right: 295px;
+        top: 205px;
         bottom: 83.07%;
         background-image: url('/CategorySlideDirection.png');
         background-repeat: no-repeat;
@@ -800,8 +688,6 @@ function MapMidPoint() {
         `;
     const MapSection = styled.div`
     #map {
-        width: 50vh;
-        height: 90vh;
         position: relative;
         overflow: hidden;
         border-radius: 8px;
@@ -810,7 +696,7 @@ function MapMidPoint() {
     #menuDiv {
         display: flex;
         position: relative;
-        height: 66vh;
+        height: 97%;
         max-width:622px;
         max-height:782px;
         z-index: 2;
@@ -820,12 +706,12 @@ function MapMidPoint() {
     
     #menu_wrap {
         position: relative;
-        width: 35rem;
+        width: 470px;
         height: 65vh;
-        max-width: 50vw;
+        max-width: 470px;
+        max-height: 647px;
         border-radius: 5px;
         overflow-y: auto;
-        /* background-color: green; */
     ::-webkit-scrollbar {
         width: 4px;
         height: 1px;
@@ -838,13 +724,6 @@ function MapMidPoint() {
         background-color: rgba(0, 0, 0, 0.1);
     }
     }
-    
-    /* #map_title {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-    } */
     
     #form {
         display: flex;
