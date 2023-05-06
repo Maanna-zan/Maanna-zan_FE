@@ -42,11 +42,10 @@ export const useLikePost = () => {
       onSettled: (data, error, postId, previousPost) => {
         if (error) {
           queryClient.setQueryData(['post', postId], previousPost);
-        } else {
-          queryClient.invalidateQueries(['post', postId]);
         }
       },
-      onSuccess: (response) => {
+      onSuccess: (response, postId) => {
+        queryClient.invalidateQueries(['post', postId]);
         alert(JSON.stringify(response.data.data));
       },
     },
@@ -59,8 +58,8 @@ export const useLikeStore = () => {
   const queryClient = useQueryClient();
   const access_token = cookies.get('access_token');
   const { mutate: likeStore } = useMutation(
-    (apiId) =>
-      apis.put(`/bar/like/${apiId}`, null, {
+    (apiid) =>
+      apis.put(`/bar/like/${apiid}`, null, {
         headers: {
           access_token: `${access_token}`,
         },
@@ -69,7 +68,7 @@ export const useLikeStore = () => {
       onSuccess: (response) => {
         alert(JSON.stringify(response.data.data));
       },
-      onError: (error, apiId, previousPost) => {
+      onError: (error, apiid, previousPost) => {
         const response = error?.response;
         if (
           response &&
@@ -78,12 +77,12 @@ export const useLikeStore = () => {
         ) {
           alert('로그인 후 시도해 주세요');
         } else {
-          queryClient.setQueryData(['store', apiId], previousPost);
+          queryClient.setQueryData(['store', apiid], previousPost);
         }
       },
-      onMutate: (apiId) => {
-        const previousStore = queryClient.getQueryData(['store', apiId]);
-        queryClient.setQueryData(['store', apiId], (old) => ({
+      onMutate: (apiid) => {
+        const previousStore = queryClient.getQueryData(['store', apiid]);
+        queryClient.setQueryData(['store', apiid], (old) => ({
           ...old,
           roomLike: !old?.roomLike,
           roomLikecnt: old?.like ? old?.roomLikecnt - 1 : old?.roomLikecnt + 1,
@@ -91,11 +90,11 @@ export const useLikeStore = () => {
 
         return previousStore;
       },
-      onSettled: (data, error, apiId, previousPost) => {
+      onSettled: (data, error, apiid, previousPost) => {
         if (error) {
-          queryClient.setQueryData(['store', apiId], previousPost);
+          queryClient.setQueryData(['store', apiid], previousPost);
         } else {
-          queryClient.invalidateQueries(['store', apiId]);
+          queryClient.invalidateQueries(['store', apiid]);
         }
       },
     },

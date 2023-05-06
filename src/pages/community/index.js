@@ -4,18 +4,56 @@ import CommunityList from '@features/post/CommunityList';
 import Link from 'next/link';
 import React from 'react';
 import AddPostForm from './add';
-import { useEffect } from 'react';
-const Community = () => {
-  useEffect(() => {
-    // 페이지가 마운트될 때 이전 페이지에서 저장한 스크롤 값을 불러옴
-    const scrollY = localStorage.getItem('scrollY');
-    window.scrollTo(0, scrollY);
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+// import { routeChangeCompleteHandler } from '@utils/routeChangeCompleteHandler';
+const routeChangeCompleteHandler = () => {
+  if (typeof window !== 'undefined') {
+    sessionStorage.setItem(
+      `__next_scroll_${window.history.state.idx}`,
+      JSON.stringify({
+        y: window.scrollY,
+      }),
+    );
+  }
+};
 
-    // 페이지가 언마운트될 때 현재 스크롤 값을 저장함
+const Community = () => {
+  const router = useRouter();
+  const routeChangeCompleteHandler = () => {
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem(
+        `__next_scroll_${router.asPath}`,
+        JSON.stringify({
+          x: window.pageXOffset,
+          y: window.pageYOffset,
+        }),
+      );
+    }
+  };
+
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  useEffect(() => {
+    if (isLoaded) {
+      const _scroll = sessionStorage.getItem(
+        `__next_scroll_${window.history.state.idx}`,
+      );
+      if (_scroll) {
+        const { y } = JSON.parse(_scroll);
+        window.scrollTo(0, y);
+        sessionStorage.removeItem(`__next_scroll_${window.history.state.idx}`);
+      }
+    } else {
+      setIsLoaded(true);
+    }
+
+    router.events.on('routeChangeComplete', routeChangeCompleteHandler);
     return () => {
-      localStorage.setItem('scrollY', window.scrollY);
+      router.events.off('routeChangeComplete', routeChangeCompleteHandler);
     };
-  }, []);
+  }, [router.events]);
+
   return (
     <div>
       <HeadInfo title="게시글 작성페이지입니다" />

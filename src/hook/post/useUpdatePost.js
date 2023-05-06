@@ -9,19 +9,26 @@ export const useUpdatePost = (postId) => {
   const access_token = cookies.get('access_token');
   const refresh_token = cookies.get('refresh_token');
   const queryClient = useQueryClient();
-  const { mutate: updatePost } = useMutation(async (formData) => {
-    const response = await apis.patch(`/posts/${postId}`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        access_token: `${access_token}`,
-        // refresh_token: `${refresh_token}`,
+  const { mutate: updatePost } = useMutation(
+    async (formData) => {
+      const response = await apis.patch(`/posts/${postId}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          access_token: `${access_token}`,
+          // refresh_token: `${refresh_token}`,
+        },
+      });
+
+      return response.data;
+    },
+    {
+      onSuccess: (data) => {
+        queryClient.invalidateQueries(keys.GET_POSTS_UPDATE);
+        // TODO: onSuccess 콜백 함수에서 필요한 작업 수행
       },
-    });
+    },
+  );
 
-    queryClient.invalidateQueries(keys.GET_POSTS_UPDATE);
-
-    return response.data;
-  });
   return {
     updatePost: (formData) => updatePost(formData),
   };

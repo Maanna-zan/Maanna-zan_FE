@@ -9,7 +9,11 @@ import AddComment from '@features/AddComment';
 import CommentsList from '@features/CommentsList';
 import { WebWrapper792px } from '@components/Atoms/Wrapper';
 import { keys } from '@utils/createQueryKey';
-import { useGetPost, useGetLikePost } from '../../hook/post/useGetPost';
+import {
+  useGetPost,
+  useGetLikePost,
+  useGetPostdetail,
+} from '../../hook/post/useGetPost';
 import { FlexColumn, FlexRow } from '@components/Atoms/Flex';
 import { BoxTextReal } from '@components/Atoms/BoxTextReal';
 import { LikeHeartIcon, DisLikeHeartIcon } from '@components/Atoms/HeartIcon';
@@ -31,9 +35,12 @@ import { ReviewForm } from '@features/post/ReviewForm';
 import { useGetStoredetail } from '../../hook/alcohol/useGetStore';
 import Link from 'next/link';
 import { LoadingArea } from '@components/Modals/LoadingArea';
+import { routeChangeCompleteHandler } from '@utils/routeChangeCompleteHandler';
+
 const Community = () => {
   const { query } = useRouter();
   const router = useRouter();
+  const { id } = router.query;
   const handleShareClick = async () => {
     try {
       await navigator.share({
@@ -46,23 +53,34 @@ const Community = () => {
       alert('공유중에 에러가 났습니다. 다시 시도해주십시오', err);
     }
   };
-  const queryClient = useQueryClient();
-  const { id } = router.query;
-  const { data, isLoading, isError, isSuccess } = useQuery({
-    queryKey: ['GET_COMMUNITYDETAIL'],
-    queryFn: async () => {
-      const { data } = await apis.get(`/posts/${query.id}`, {});
 
-      return data.data;
-    },
-    //enabled: -> 참일 때 실행시켜준다.
-    enabled: Boolean(query.id),
-    // onSuccess: () => {
-    //   queryClient.invalidateQueries(['GET_COMMUNITYDETAIL']);
-    // },
+  const token = cookies.get('access_token');
+  // const { data, isLoading, isError, isSuccess } = useQuery({
+  //   queryKey: ['GET_COMMENTS'],
+  //   queryFn: async () => {
+  //     const { data } = await apis.get(`/posts/${query.id}`, {
+  //       // headers: {
+  //       //   Access_Token: `${token}`,
+  //       // },
+  //     });
+  //     return data.data;
+  //   },
+  //   //enabled: -> 참일 때 실행시켜준다.
+  //   // enabled: Boolean(query.id),
+  //   onSuccess: () => {},
+  // });
+
+  // const {
+  //   postDetailData: [data],
+  //   postDetailIsLoading,
+  // } = useGetPostdetail({
+  //   postId: router.query.id,
+  // });
+  const postId = query?.id;
+  const { postDetailData: data, postDetailIsLoading } = useGetPostdetail({
+    postId,
   });
 
-  const postId = data?.id;
   const [newPost, setNewPost] = useState({
     title: '',
     description: '',
@@ -107,6 +125,21 @@ const Community = () => {
       // console.error(error);
     }
   };
+  console.log('postLikeMine', postLikeMine);
+  useEffect(() => {
+    if (postLikeMine) {
+      const postLikeMine =
+        potLikeMatch.find((p) => p.id === Number(data.id)) || {};
+      setLike(postLikeMine.like);
+    }
+  }, [like, postId]);
+
+  const handleRatingChange = (name, value) => {
+    setNewPost((prevPost) => ({
+      ...prevPost,
+      [name]: value[name],
+    }));
+  };
 
   const changeFileHandler = (e) => {
     const file = e.target.files[0];
@@ -120,13 +153,6 @@ const Community = () => {
     const imageUrl = URL.createObjectURL(file);
     document.getElementById('image-preview').src = imageUrl;
   };
-  const handleRatingChange = (name, value) => {
-    setNewPost((prevPost) => ({
-      ...prevPost,
-      [name]: value[name],
-    }));
-  };
-
   const [hoveredStar, setHoveredStar] = useState(0);
 
   const handleStarClick = (clickedStar) => {
@@ -142,7 +168,7 @@ const Community = () => {
   useEffect(() => {
     const nick_name = cookies.get('nick_name');
     setUserNickName(nick_name);
-  }, []);
+  }, [id]);
 
   const handleStarHover = (hoveredStar) => {
     setHoveredStar(hoveredStar);
@@ -164,6 +190,7 @@ const Community = () => {
 
     return true;
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!checkFormValidity()) {
@@ -195,29 +222,16 @@ const Community = () => {
       // console.error(error);
     }
   };
-  // const [showReviewForm, setShowReviewForm] = useState(false);
 
-  // useEffect(() => {
-  //   if (isUpdated) {
-  //     setNewPost({
-  //       title: post?.title ?? '',
-  //       description: post?.description ?? '',
-  //       s3Url: post?.s3Url || '',
-  //     });
-  //     setIsUpdated(false);
-  //   }
-  // }, [isUpdated]);
+  if (postDetailIsLoading) return <LoadingArea />;
+  console.log('data', data);
 
-  if (isLoading) return <LoadingArea />;
   //카테고리
   const categoryNames = data?.categoryName;
   //console.log('categoryNames', categoryNames);
-  //console.log('ㅇㅁㅅㅁ', data);
+
   const indexAllName = categoryNames?.lastIndexOf('>');
   const resultcategoryNames = categoryNames?.slice(indexAllName + 2);
-
-  console.log('테스트카테고리', data.like);
-
 
   return (
     <div>
@@ -351,7 +365,7 @@ const Community = () => {
                   <div>{data?.nickname}</div>
                 </FlexRow>
 
-                <div>{data?.createAt.substr(0, 10)}</div>
+                {/* <div>{data?.createAt.substr(0, 10)}</div> */}
               </FlexRow>
               <FlexRow
                 style={{
@@ -379,7 +393,7 @@ const Community = () => {
                   }}
                 >
                   <span
-                    onClick={() => likePostHandler(data.id)}
+                    onClick={() => likePostHandler(postId)}
                     style={{ cursor: 'pointer' }}
                   >
                     {like ? <LikeHeartIcon /> : <DisLikeHeartIcon />}
@@ -534,7 +548,7 @@ const Community = () => {
                     <div>{data?.nickname}</div>
                   </FlexRow>
 
-                  <div>{data?.createAt.substr(0, 10)}</div>
+                  {/* <div>{data?.createAt.substr(0, 10)}</div> */}
                 </FlexRow>
                 <FlexRow
                   style={{
@@ -732,7 +746,10 @@ const Community = () => {
             </WebWrapper792px>
           </form>
           <AddComment />
-          <CommentsList style={{ paddingBottom: '80px' }}></CommentsList>
+          <CommentsList
+            data={data}
+            style={{ paddingBottom: '80px' }}
+          ></CommentsList>
         </div>
       )}
     </div>

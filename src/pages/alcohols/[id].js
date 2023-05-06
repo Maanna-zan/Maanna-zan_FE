@@ -31,6 +31,8 @@ import { PenIcon } from '@components/Atoms/PenIcon';
 import { Map, MapMarker } from 'react-kakao-maps-sdk';
 import { MinStar } from '@components/Atoms/PostStar';
 import Link from 'next/link';
+import { routeChangeCompleteHandler } from '@utils/routeChangeCompleteHandler';
+import { Evaluation } from '@components/Organisms/Evaluation';
 const StoreDetail = () => {
   const router = useRouter();
   const { query } = useRouter();
@@ -78,6 +80,24 @@ const StoreDetail = () => {
     }
   }, [alkolsLike, apiIdFind]);
 
+  useEffect(() => {
+    window.history.scrollRestoration = 'manual';
+
+    const _scroll = sessionStorage.getItem(
+      `__next_scroll_${window.history.state.idx}`,
+    );
+    if (_scroll) {
+      const { x, y } = JSON.parse(_scroll);
+      window.scrollTo(x, y);
+      sessionStorage.removeItem(`__next_scroll_${window.history.state.idx}`);
+    }
+
+    router.events.on('routeChangeComplete', routeChangeCompleteHandler);
+    return () => {
+      router.events.off('routeChangeComplete', routeChangeCompleteHandler);
+    };
+  }, []);
+
   //카테고리네임 추출
   const categoryNames = data?.category_name;
   const indexAllName = categoryNames?.lastIndexOf('>');
@@ -108,9 +128,7 @@ const StoreDetail = () => {
     console.log('text:', text);
   };
   const storeId = data.apiId;
-  // if (storeIsLoading || alkolsIsLikeLoading || <Map></Map>) {
-  //   return <div>맵이..</div>;
-  // }
+  // console.log('술집상세', data);
 
   return (
     <>
@@ -363,182 +381,176 @@ const StoreDetail = () => {
               overflow: 'hidden',
               boxSizing: 'border-box',
               borderRadius: '8px',
-              height: '360px',
+              maxHeight: '360px',
               cursor: 'default',
             }}
           >
-            {/* {setTab === 'storeInfor' ? ( */}
-            <div>
-              <FlexRow
-                style={{
-                  font: `var(--body1-medium) Pretendard sans-serif`,
-                  justifyContent: 'space-around',
-                  paddingTop: '10px',
-                  paddingBottom: '10px',
-                  borderBottom: '1px solid gray',
-                  boxSizing: 'border-box',
-                }}
-              >
-                <span
-                  style={{
-                    color: `${LightTheme.Fon}`,
-                    font: `var(--body1-medium) Pretendard sans-serif`,
-                    marign: '0',
-                  }}
-                  onClick={() => {
-                    setTab('storeInfor');
-                  }}
-                >
-                  가게정보
-                </span>
-                {/* <span
-                  style={{
-                    color: 'red',
-                    color: `${LightTheme.FONT_SECONDARY}`,
-                    font: `var(--body1-medium) Pretendard sans-serif`,
-                    marign: '0',
-                  }}
-                  onClick={() => {
-                    setTab('evaluation');
-                  }}
-                >
-                  평가
-                </span> */}
-              </FlexRow>
+            {tab === 'storeInfor' ? (
               <div>
-                {/* 가게 정보 */}
-                <div
-                  style={{
-                    width: '100%',
-                    justifyContent: ' space-between',
-                    display: 'flex',
-                    cursor: 'default',
-                  }}
-                >
-                  <Map
-                    center={center}
-                    level="5"
-                    style={{
-                      width: '344px',
-                      height: '169px',
-                      marign: '8px 16px 22px 16px',
-                      overflow: 'hidden',
-                      boxSizing: 'border-box',
-                    }}
-                  >
-                    <MapMarker
-                      position={center} // 마커를 표시할 위치
-                      image={{
-                        src: 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png',
-                        size: {
-                          width: 24,
-                          height: 35,
-                        },
-                      }}
-                    >
-                      <div style={{ color: '#000' }}>{data?.place_name}</div>
-                    </MapMarker>
-                  </Map>
-                </div>
                 <FlexRow
                   style={{
-                    justifyContent: 'space-between',
-                    padding: '8px 16px 22px 16px',
+                    font: `var(--body1-medium) Pretendard sans-serif`,
+                    justifyContent: 'space-around',
+                    alignItems: 'center',
+                    // paddingTop: '10px',
+                    // paddingBottom: '10px',
+
+                    boxSizing: 'border-box',
+                    textAlign: 'center',
                   }}
                 >
-                  <FlexColumn style={{ gap: '10px', marginTop: '8px' }}>
-                    <StTab>위치</StTab>
-
-                    <StTab>카카오 링크</StTab>
-                    <StTab>전화번호</StTab>
-                  </FlexColumn>
-                  <FlexColumn
+                  <span
                     style={{
-                      gap: '10px',
-                      justifyContent: 'center',
+                      width: '50%',
+                      // color: `${LightTheme.Fon}`,
+                      textAlign: 'center',
+                      font: `var(--body1-medium) Pretendard sans-serif`,
+                      marign: '0',
                       cursor: 'pointer',
+                      paddingTop: '10px',
+                      paddingBottom: '10px',
+                      borderBottom: `1px solid ${LightTheme.PRIMARY_NORMAL}`,
+                    }}
+                    onClick={() => {
+                      setTab('storeInfor');
                     }}
                   >
-                    <div>{data?.address_name}</div>
-                    <FlexRow style={{ gap: '10px' }}></FlexRow>
-
-                    <Link href={data?.place_url}>
-                      <div>{data?.place_url}</div>
-                    </Link>
-                    <div>{data?.phone}</div>
-                  </FlexColumn>
+                    가게정보
+                  </span>
+                  <span
+                    style={{
+                      width: '50%',
+                      color: 'red',
+                      textAlign: 'center',
+                      color: `${LightTheme.FONT_SECONDARY}`,
+                      font: `var(--body1-medium) Pretendard sans-serif`,
+                      marign: '0',
+                      cursor: 'pointer',
+                      paddingTop: '10px',
+                      paddingBottom: '10px',
+                      borderBottom: `1px solid ${LightTheme.GRAY_400}`,
+                    }}
+                    onClick={() => {
+                      setTab('evaluation');
+                    }}
+                  >
+                    평가
+                  </span>
                 </FlexRow>
+                <div>
+                  {/* 가게 정보 */}
+                  <div
+                    style={{
+                      width: '100%',
+                      justifyContent: ' space-between',
+                      display: 'flex',
+                      cursor: 'default',
+                    }}
+                  >
+                    <Map
+                      center={center}
+                      level="5"
+                      style={{
+                        width: '344px',
+                        height: '200px',
+                        marign: '8px 16px 22px 16px',
+                        overflow: 'hidden',
+                        boxSizing: 'border-box',
+                      }}
+                    >
+                      <MapMarker
+                        position={center} // 마커를 표시할 위치
+                        image={{
+                          src: 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png',
+                          size: {
+                            width: 24,
+                            height: 35,
+                          },
+                        }}
+                      >
+                        <div style={{ color: '#000' }}>{data?.place_name}</div>
+                      </MapMarker>
+                    </Map>
+                  </div>
+                  <FlexRow
+                    style={{
+                      justifyContent: 'space-between',
+                      padding: '8px 16px 22px 16px',
+                    }}
+                  >
+                    <FlexColumn style={{ gap: '10px', marginTop: '8px' }}>
+                      <StTab>위치</StTab>
+
+                      <StTab>카카오 링크</StTab>
+                      <StTab>전화번호</StTab>
+                    </FlexColumn>
+                    <FlexColumn
+                      style={{
+                        gap: '10px',
+                        justifyContent: 'center',
+                        cursor: 'pointer',
+                      }}
+                    >
+                      <div>{data?.address_name}</div>
+                      <FlexRow style={{ gap: '10px' }}></FlexRow>
+
+                      <Link href={data?.place_url}>
+                        <div>{data?.place_url}</div>
+                      </Link>
+                      <div>{data?.phone}</div>
+                    </FlexColumn>
+                  </FlexRow>
+                </div>
               </div>
-            </div>
-            {/* ) : ( */}
-            {/* // <div>
-              /<FlexRow
-              //     style={{
-              //       font: `var(--body1-medium) Pretendard sans-serif`,
-              //       justifyContent: 'space-around',
-              //       paddingTop: '10px',
-              //       paddingBottom: '10px',
-              //       borderBottom: '1px solid gray',
-              //       boxSizing: 'border-box',
-              //     }}
-              //   >
-              //     <span
-              //       style={{
-              //         color: `${LightTheme.FONT_SECONDARY}`,
-              //         font: `var(--body1-medium) Pretendard sans-serif`,
-              //         marign: '0',
-              //       }}
-              //       onClick={() => {
-              //         setTab('storeInfor');
-              //       }}
-              //     >
-              //       가게정보
-              //     </span>
-              //     <span
-              //       style={{
-              //         color: 'red',
-              //         color: `${LightTheme.FONT_PRIMARY}`,
-              //         font: `var(--body1-medium) Pretendard sans-serif`,
-              //         marign: '0',
-              //       }}
-              //       onClick={() => {
-              //         setTab('evaluation');
-              //       }}
-              //     >
-              //       평가
-              //     </span>
-              //   </FlexRow>
-              //   <div style={{ padding: '20px' }}>
-              //     <div style={{ marginBottom: '4px' }}>평균 별점</div>
-              //     <FlexRow style={{ gap: '8px', marginBottom: '28 px' }}>
-              //       <div>별</div>
-              //       <div>별점의 숫자</div>
-              //     </FlexRow>
-              //     <FlexColumn style={{ gap: '20px ' }}>
-              //       <FlexRow style={{ gap: '10px' }}>
-              //         <div style={{ width: '40px' }}>맛</div>
-              //         <div style={{ width: '200px' }}>평가의 그래프길이</div>
-              //         <div style={{ width: '21px' }}>평가의 숫자</div>
-              //       </FlexRow>
-              //       <FlexRow style={{ gap: '10px' }}>
-              //         <div style={{ width: '40px' }}>서비스</div>
-              //         <div style={{ width: '200px' }}>평가의 그래프길이</div>
-              //         <div style={{ width: '21px' }}>평가의 숫자</div>
-              //       </FlexRow>
-              //       <FlexRow style={{ gap: '10px' }}>
-              //         <div style={{ width: '40px' }}>만족도</div>
-              //         <div style={{ width: '200px' }}>평가의 그래프길이</div>
-              //         <div style={{ width: '21px' }}>평가의 숫자</div>
-              //       </FlexRow>
-              //       <FlexRow style={{ gap: '10px' }}>
-              //         <div style={{ width: '40px' }}>분위기</div>
-              //         <div style={{ width: '200px' }}>평가의 그래프길이</div>
-              //         <div style={{ width: '21px' }}>평가의 숫자</div>
-              //       </FlexRow>
-              //     </FlexColumn>
-              //   </div>
-              // </div>
-            // )} */}
+            ) : (
+              <div>
+                <FlexRow
+                  style={{
+                    font: `var(--body1-medium) Pretendard sans-serif`,
+                    justifyContent: 'space-around',
+                    // boxSizing: 'border-box',
+                  }}
+                >
+                  <span
+                    style={{
+                      width: '50%',
+                      // color: `${LightTheme.Fon}`,
+                      textAlign: 'center',
+                      font: `var(--body1-medium) Pretendard sans-serif`,
+                      color: `${LightTheme.FONT_SECONDARY}`,
+                      marign: '0',
+                      cursor: 'pointer',
+                      paddingTop: '10px',
+                      paddingBottom: '10px',
+                      borderBottom: `1px solid ${LightTheme.GRAY_400}`,
+                    }}
+                    onClick={() => {
+                      setTab('storeInfor');
+                    }}
+                  >
+                    가게정보
+                  </span>
+                  <span
+                    style={{
+                      width: '50%',
+                      textAlign: 'center',
+                      font: `var(--body1-medium) Pretendard sans-serif`,
+                      marign: '0',
+                      cursor: 'pointer',
+                      borderBottom: `1px solid ${LightTheme.PRIMARY_NORMAL}`,
+                      paddingTop: '10px',
+                      paddingBottom: '10px',
+                    }}
+                    onClick={() => {
+                      setTab('evaluation');
+                    }}
+                  >
+                    평가
+                  </span>
+                </FlexRow>
+                <Evaluation data={data}></Evaluation>
+              </div>
+            )}
           </BoxTextReal>
         </WebWrapper384px>
       </WebWrapper>

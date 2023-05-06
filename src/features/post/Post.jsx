@@ -28,6 +28,7 @@ import {
 } from '@components/Atoms/imgWrapper';
 import { apis } from '@shared/axios';
 import { useGetLikePost } from '../../hook/post/useGetPost';
+import Link from 'next/link';
 export const Post = ({ post, onSubmit, apiId, postId }) => {
   const router = useRouter();
   const { id } = router.query;
@@ -52,7 +53,25 @@ export const Post = ({ post, onSubmit, apiId, postId }) => {
     }
   };
 
-  console.log();
+  //스크롤값
+  useEffect(() => {
+    // 스크롤 위치를 sessionStorage에서 읽어옵니다.
+    const scrollPos = JSON.parse(sessionStorage.getItem('scrollPos'));
+
+    // sessionStorage에 스크롤 위치 값이 있다면 해당 위치로 스크롤합니다.
+    if (scrollPos) {
+      window.scrollTo(scrollPos.x, scrollPos.y);
+    }
+
+    // 페이지 컴포넌트가 언마운트될 때 sessionStorage에 스크롤 위치를 저장합니다.
+    return () => {
+      sessionStorage.setItem(
+        'scrollPos',
+        JSON.stringify({ x: window.scrollX, y: window.scrollY }),
+      );
+    };
+  }, []);
+
   return (
     <div
       style={{
@@ -72,6 +91,7 @@ export const Post = ({ post, onSubmit, apiId, postId }) => {
       >
         {like ? <LikeCircleHeartIcon /> : <DisLikeCircleHeartIcon />}
       </div>
+
       <div
         onClick={() => {
           router.push(`/community/${post?.id}`);

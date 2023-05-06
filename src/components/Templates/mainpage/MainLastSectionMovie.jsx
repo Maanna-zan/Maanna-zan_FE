@@ -9,25 +9,23 @@ import React from 'react';
 
 export const MainLastSectionMovie = () => {
   return (
-    <WebWrapper>
     <WebWrapperHeight>
       <FlexRow>
-    <WebWrapperFull>
-      <video
-        autoPlay
-        loop
-        muted
-        style={{
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
-        }}
-      >
-        <source src="mainLastSectionVideo.mp4" type="video/mp4" />
-      </video>
-    </WebWrapperFull>
-    </FlexRow>
-      </WebWrapperHeight>
-    </WebWrapper>
+        <WebWrapperFull>
+          <video
+            autoPlay
+            loop
+            muted
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+            }}
+          >
+            <source src="mainLastSectionVideo.mp4" type="video/mp4" />
+          </video>
+        </WebWrapperFull>
+      </FlexRow>
+    </WebWrapperHeight>
   );
 };

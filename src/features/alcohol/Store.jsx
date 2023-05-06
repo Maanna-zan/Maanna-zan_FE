@@ -22,17 +22,18 @@ export const Store = ({
   const { likeStore } = useLikeStore();
 
   const apiId = store.apiId;
+  const apiid = store.apiId;
   const storeLikeMine = likesFetch?.find((obj) => obj.apiId === apiId) || {};
 
   // console.log('storeLikeMine', storeLikeMine);
 
   const [roomLike, setRoomLike] = useState(storeLikeMine?.roomLike);
   // console.log('storeLikeMine', storeLikeMine, 'storeLikeMine');
-  const likeStoreHandler = async (apiId) => {
+  const likeStoreHandler = async (apiid) => {
     try {
-      await likeStore(apiId);
+      await likeStore(apiid);
       setRoomLike(!roomLike);
-      queryClient.invalidateQueries(['store', apiId]);
+      queryClient.invalidateQueries(['store', apiid]);
     } catch (error) {
       alert(error);
     }
@@ -41,9 +42,9 @@ export const Store = ({
   return (
     <>
       <div
-        apiId={apiId}
+        apiid={apiid}
         className="hearWrap"
-        onClick={() => likeStoreHandler(apiId)}
+        onClick={() => likeStoreHandler(apiid)}
       >
         {alkolsIsLikeLoading ? (
           <div>Loading...</div>
