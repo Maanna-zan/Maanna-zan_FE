@@ -354,7 +354,7 @@ const AlcoholList = () => {
               >
                 검색
               </BoxTextReal>
-            </div>{' '}
+            </div>
             {/* {searchResults.length > 0 && (
               <ul>
                 {searchResults?.alkolResponseDtoList?.map((result) => (
@@ -367,6 +367,7 @@ const AlcoholList = () => {
                 ))}
               </ul>
             )} */}
+
           </div>
         </div>
         <WebWrapper>
