@@ -10,9 +10,6 @@ import { apis } from '@shared/axios';
 import EventForm from './EventForm';
 import { InputArea } from '@components/Atoms/Input';
 
-//페이지네이션 임포트
-import Pagination from '@components/Modals/Pagenation2';
-import chunk from '@components/Modals/chunk';
 import LogMyDay from './LogMyDay';
 import LogMeet from './LogMeet';
 import { LightTheme } from '@components/Themes/theme';
@@ -92,7 +89,7 @@ function Log() {
   });
 
   const response = res.data;
-  console.log('response', response);
+  // console.log('response', response);
 
   const { data } = useQuery({
     queryKey: ['LOG_DATE'],
@@ -116,7 +113,7 @@ function Log() {
       setMark(mark);
     },
   });
-  console.log('data', data);
+  // console.log('data', data);
 
   // 츄가
   const { mutate } = useMutation({
@@ -239,7 +236,7 @@ function Log() {
                   <CalenderRed />
                   <div className="BoldLog">
                     {response?.map((appointment) => {
-                      console.log('event', appointment);
+                      // console.log('event', appointment);
                       if (
                         appointment.selectedDate ===
                         moment(value).format('YYYY-MM-DD')
@@ -259,7 +256,7 @@ function Log() {
                   <CalenderYellow />
                   <div className="BoldLog">
                     {data?.map((myLog) => {
-                      console.log('myLog', myLog);
+                      // console.log('myLog', myLog);
                       if (
                         myLog.selectedDate ===
                         moment(value).format('YYYY-MM-DD')
