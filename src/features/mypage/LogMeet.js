@@ -23,7 +23,7 @@ const LogMeet = ({ setDifferMeet, setMarkMeet, response, selectedDate }) => {
   //삭제
   const { mutate } = useMutation({
     mutationFn: async (payload) => {
-      console.log('payload', payload);
+      // console.log('payload', payload);
       const { data } = await apis.delete(`/my-page/schedule/${payload.id}`, {
         headers: {
           Access_Token: `${token}`,
@@ -32,7 +32,7 @@ const LogMeet = ({ setDifferMeet, setMarkMeet, response, selectedDate }) => {
       return data;
     },
     onSuccess: (data) => {
-      console.log('data', data);
+      // console.log('data', data);
       if (data.statusCode == 200) {
         queryClient.invalidateQueries(['LOG_APPOINTMENTS']);
         alert('일정 삭제를 완료하였습니다.');
