@@ -10,7 +10,8 @@ const PAGE_SIZE = 16;
 export const getAllStore = async (pageNum, keyword, activeTab, pageSize) => {
   const params = {
     page: pageNum,
-    // size: response.data.totalElements,
+    size: 16,
+    //parseInt(response.data.totalElements),
   };
   if (keyword !== undefined) {
     params.placeName = keyword;
@@ -20,6 +21,7 @@ export const getAllStore = async (pageNum, keyword, activeTab, pageSize) => {
   }
   const response = await apis.get(`/alkol/all`, { params });
   console.log('데이터size', response.data);
+  console.log('데이터size', parseInt(response.data.totalElements));
   return response.data;
 };
 // export const getAllStore = async ({ pageNum, keyword, activeTab }) => {
