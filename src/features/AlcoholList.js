@@ -133,6 +133,7 @@ const AlcoholList = () => {
   //     setSearchResults(results);
   //   }
   // }, [keyword]);
+
   //탭메뉴
   const handleStoreListTabChange = useCallback(
     (newTab) => {
@@ -354,7 +355,7 @@ const AlcoholList = () => {
               >
                 검색
               </BoxTextReal>
-            </div>{' '}
+            </div>
             {/* {searchResults.length > 0 && (
               <ul>
                 {searchResults?.alkolResponseDtoList?.map((result) => (
