@@ -42,7 +42,19 @@ import { useGetAutoKeyword } from '../hook/alcohol/useGetAllStore';
 const AlcoholList = () => {
   const { go } = useRouter();
   const router = useRouter();
+  const access_token = cookies.get('access_token');
+  const [getView2, seGetView2] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await apis.get(`/alkol/view`);
+      seGetView2(response.data);
+    };
+    console.log('getView2', parseInt(getView2.totalElements));
+    fetchData();
+  }, [useGetLikeStore]);
 
+  console.log('getView4', parseInt(getView2.totalElements));
+  const totalSize = parseInt(getView2.totalElements);
   //탭
   //  const { alkolsLike, alkolsIsLikeLoading } = useGetLikeStore();
   const [storeListPage, setStoreListPage] = useState('all');
@@ -122,7 +134,7 @@ const AlcoholList = () => {
       pathname: router.pathname,
       query: {
         page: pageMap[storeListPage],
-        // size:
+        size: totalSize,
         placeName: keyword,
         categoryName: keyword,
         addressName: keyword,
@@ -149,19 +161,19 @@ const AlcoholList = () => {
     isFetching,
     // alkolsIsLikeLoading,
   } = useQuery(
-    ['storeData', storeListPage, pageNum, keyword],
+    ['storeData', storeListPage, pageNum, keyword, totalSize],
     () => {
       switch (storeListPage) {
         case 'all':
-          return getAllStore(pageNum, keyword);
+          return getAllStore(pageNum, keyword, totalSize);
         case 'best':
-          return getBest(pageNum, keyword);
+          return getBest(pageNum, keyword, totalSize);
         case 'view':
-          return getView(pageNum, keyword);
+          return getView(pageNum, keyword, totalSize);
         case 'like':
-          return getLike(pageNum, keyword);
+          return getLike(pageNum, keyword, totalSize);
         default:
-          return getAllStore(pageNum, keyword);
+          return getAllStore(pageNum, keyword, totalSize);
       }
     },
     {
@@ -170,18 +182,6 @@ const AlcoholList = () => {
       // },
     },
   );
-  const access_token = cookies.get('access_token');
-  const [getView2, seGetView2] = useState([]);
-  useEffect(() => {
-    const fetchData = async () => {
-      const response = await apis.get(`/alkol/view`);
-      seGetView2(response.data);
-    };
-    console.log('getView2', parseInt(getView2.totalElements));
-    fetchData();
-  }, [useGetLikeStore]);
-
-  console.log('getView4', parseInt(getView2.totalElements));
 
   const [likesFetch, setLikesFetch] = useState();
   const [isLikesFetchLoading, setIsLikesFetchLoading] = useState(true);
