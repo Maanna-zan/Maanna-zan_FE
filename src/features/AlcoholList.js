@@ -96,7 +96,6 @@ const AlcoholList = () => {
   const [aoutoKeyword, isKeywordLoading] = useGetAutoKeyword(keyword, 1);
 
   const [searchResults, setSearchResults] = useState([]);
-  console.log('자동완성', searchResults);
 
   const handleStoreListTabChange = useCallback(
     (newTab) => {
@@ -181,7 +180,9 @@ const AlcoholList = () => {
     console.log('getView2', parseInt(getView2.totalElements));
     fetchData();
   }, [useGetLikeStore]);
+
   console.log('getView4', parseInt(getView2.totalElements));
+
   const [likesFetch, setLikesFetch] = useState();
   const [isLikesFetchLoading, setIsLikesFetchLoading] = useState(true);
   const { likeStore } = useLikeStore();
