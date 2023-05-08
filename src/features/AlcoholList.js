@@ -95,46 +95,9 @@ const AlcoholList = () => {
   //자동완성
   const [aoutoKeyword, isKeywordLoading] = useGetAutoKeyword(keyword, 1);
 
-  // useEffect(() => {
-  //   if (keyword !== '') {
-  //     setQuery(keyword);
-  //   }
-  // }, [aoutoKeyword, keyword]);
-  // const [candidates, setCandidates] = useState();
-
-  // console.log('자동완성', aoutoKeyword);
-  // useEffect(() => {
-  //   if (keyword !== '') {
-  //     // likeStoreList에서 keyword를 포함하는 후보군 찾기
-  //     const newCandidates = aoutoKeyword.filter((store) =>
-  //       store.place_name.includes(keyword),
-  //     );
-  //     setCandidates(newCandidates);
-  //   } else {
-  //     setCandidates([]);
-  //   }
-  // }, [keyword, aoutoKeyword]);
   const [searchResults, setSearchResults] = useState([]);
   console.log('자동완성', searchResults);
-  // 검색어가 변경될 때마다, 검색 결과를 새로 불러옵니다.
-  // useEffect(() => {
-  //   if (keyword === '') {
-  //     setPageNum(1);
-  //   } else {
-  //     setPageNum(1);
-  //     const results = aoutoKeyword?.alkolResponseDtoList?.filter((store) => {
-  //       const fullName =
-  //         store.placeName +
-  //         store.categoryName +
-  //         store.addressName +
-  //         store.roadAddressName;
-  //       return fullName.toLowerCase().includes(keyword.toLowerCase());
-  //     });
-  //     setSearchResults(results);
-  //   }
-  // }, [keyword]);
 
-  //탭메뉴
   const handleStoreListTabChange = useCallback(
     (newTab) => {
       setActiveTab(newTab);
