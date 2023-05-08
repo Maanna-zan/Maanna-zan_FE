@@ -10,7 +10,7 @@ const PAGE_SIZE = 16;
 export const getAllStore = async (pageNum, keyword, activeTab, pageSize) => {
   const params = {
     page: pageNum,
-    size: 16,
+    size: parseInt(response.data.totalElements),
     //parseInt(response.data.totalElements),
   };
   if (keyword !== undefined) {
@@ -47,7 +47,9 @@ export const getAllStore = async (pageNum, keyword, activeTab, pageSize) => {
 export const getBest = async (pageNum, keyword, storeListPage) => {
   //  const queryClient = useQueryClient();
   const response = await apis.get(
-    `/alkol/best?page=${pageNum}&size=100&placeName=${keyword}&categoryName=${keyword}&addressName=${keyword}&roadAddressName=${keyword}`,
+    `/alkol/best?page=${pageNum}&size=${parseInt(
+      response.data.totalElements,
+    )}&placeName=${keyword}&categoryName=${keyword}&addressName=${keyword}&roadAddressName=${keyword}`,
     {},
   );
   return response.data;
@@ -55,27 +57,33 @@ export const getBest = async (pageNum, keyword, storeListPage) => {
 
 export const getView = async (pageNum, keyword, activeTab) => {
   //const queryClient = useQueryClient();
-  const response = await apis.get(`/alkol/view?page=${pageNum}&size=205`, {
-    params: {
-      placeName: keyword,
-      categoryName: keyword,
-      addressName: keyword,
-      roadAddressName: keyword,
+  const response = await apis.get(
+    `/alkol/view?page=${pageNum}&size=${parseInt(response.data.totalElements)}`,
+    {
+      params: {
+        placeName: keyword,
+        categoryName: keyword,
+        addressName: keyword,
+        roadAddressName: keyword,
+      },
     },
-  });
+  );
   return response.data;
 };
 
 export const getLike = async (pageNum, keyword) => {
   // const queryClient = useQueryClient();
-  const response = await apis.get(`/alkol/like?page=${pageNum}&size=205`, {
-    params: {
-      placeName: keyword,
-      categoryName: keyword,
-      addressName: keyword,
-      roadAddressName: keyword,
+  const response = await apis.get(
+    `/alkol/like?page=${pageNum}&size=${parseInt(response.data.totalElements)}`,
+    {
+      params: {
+        placeName: keyword,
+        categoryName: keyword,
+        addressName: keyword,
+        roadAddressName: keyword,
+      },
     },
-  });
+  );
   return response.data;
 };
 
