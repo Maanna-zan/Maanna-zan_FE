@@ -46,6 +46,22 @@ const LogMeet = ({ setDifferMeet, setMarkMeet, response, selectedDate }) => {
       mutate({ id: list.id });
     }
   };
+  const shareHandler = async (list) => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: '약속 일정 공유',
+          text: `제가 참석할 약속 일정입니다: ${list.place_name} (${list.road_address_name})`,
+          url: `https://www.example.com/appointments/${list.id}`,
+        });
+      } catch (error) {
+        console.error('Error sharing:', error);
+      }
+    } else {
+      alert('이 브라우저에서는 공유 기능을 지원하지 않습니다.');
+    }
+  };
+
   //페이지네이션을 위한 구역 data 는 쿼리에서 먼저 undefined되기에 ? 로 있을 때
   //map을 돌릴 데이터를 4개씩 끊어서 라는 뜯 입니다 (9개ㅈ씩 끊고 싶으면 9 적으면 됩니다. )
   const chunkedData = response ? chunk(response, 2) : [];
@@ -169,7 +185,7 @@ const LogMeet = ({ setDifferMeet, setMarkMeet, response, selectedDate }) => {
                   </Map>
                 </div>
                 <div className="calButton">
-                  <ShareButton />
+                  <ShareButton onClick={() => shareHandler(list)} />
                   <TrashButton
                     style={{ cursor: 'pointer' }}
                     onClick={() => {
