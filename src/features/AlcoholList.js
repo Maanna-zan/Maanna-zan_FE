@@ -97,12 +97,22 @@ const AlcoholList = () => {
     (newPageNum) => {
       setPageMap((prev) => ({
         ...prev,
-        [storeListPage]: newPagelikesFetchtNum,
+        [storeListPage]: newPageNum,
       }));
       setPageNum(newPageNum);
     },
     [storeListPage, setPageNum, keyword, totalSize],
   );
+  // const handlePageNumChange = useCallback(
+  //   (newPageNum) => {
+  //     setPageMap((prev) => ({
+  //       ...prev,
+  //       [storeListPage]: newPageNum,
+  //     }));
+  //     setPageNum(newPageNum);
+  //   },
+  //   [storeListPage, setPageNum, keyword],
+  // );
   // console.log('storedata', keyword);
   //자동완성
   const [aoutoKeyword, isKeywordLoading] = useGetAutoKeyword(keyword, 1);
