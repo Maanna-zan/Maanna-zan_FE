@@ -10,7 +10,7 @@ import chunk from '@components/Modals/chunk';
 import { LightTheme } from '@components/Themes/theme';
 import { ShareBtn } from '@components/Atoms/ShareBtn';
 import { ShareButton, TrashButton } from '@components/Atoms/TrashButton';
-import { Map, MapMarker } from 'react-kakao-maps-sdk';
+import { Map, MapMarker, KakaoMapLink } from 'react-kakao-maps-sdk';
 
 const LogMeet = ({ setDifferMeet, setMarkMeet, response, selectedDate }) => {
   const queryClient = useQueryClient();
@@ -46,21 +46,54 @@ const LogMeet = ({ setDifferMeet, setMarkMeet, response, selectedDate }) => {
       mutate({ id: list.id });
     }
   };
+
   const shareHandler = async (list) => {
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: '약속 일정 공유',
-          text: `제가 참석할 약속 일정입니다: ${list.place_name} (${list.road_address_name})`,
-          url: `https://maanna-zan-fe-1.vercel.app/alcohols/${list.apiId}`,
-        });
-      } catch (error) {
-        console.error('Error sharing:', error);
+    if (window.kakao) {
+      const kakao = window.kakao;
+      if (!kakao.isInitialized()) {
+        kakao.init(process.env.NEXT_PUBILC_KAKAOMAP_KEY);
       }
-    } else {
-      alert('이 브라우저에서는 공유 기능을 지원하지 않습니다.');
+      kakao.Link.sendDefault({
+        objectType: 'location', // 카카오 링크 공유 여러 type들 중 location 타입 -> 자세한 건 카카오에서 확인
+        address: `${list.road_address_name}`,
+        addressTitle: `${list.place_name}`,
+        content: {
+          title: '약속 일정 공유',
+          description: `친구가 공유한 약속 일정입니다: ${list.place_name} (${list.road_address_name})`,
+          imageUrl: '이미지 url',
+          link: {
+            mobileWebUrl: route, // 인자값으로 받은 route(uri 형태)
+            webUrl: route,
+          },
+        },
+        buttons: [
+          {
+            title: 'title',
+            link: {
+              mobileWebUrl: `https://maanna-zan-fe-1.vercel.app/alcohols/${list.apiId}`,
+              webUrl: `https://maanna-zan-fe-1.vercel.app/alcohols/${list.apiId}`,
+            },
+          },
+        ],
+      });
     }
   };
+  //일반 공유하기
+  // const shareHandler = async (list) => {
+  //   if (navigator.share) {
+  //     try {
+  //       await navigator.share({
+  //         title: '약속 일정 공유',
+  //         text: `제가 참석할 약속 일정입니다: ${list.place_name} (${list.road_address_name})`,
+  //         url: `https://maanna-zan-fe-1.vercel.app/alcohols/${list.apiId}`,
+  //       });
+  //     } catch (error) {
+  //       console.error('Error sharing:', error);
+  //     }
+  //   } else {
+  //     alert('이 브라우저에서는 공유 기능을 지원하지 않습니다.');
+  //   }
+  // };
 
   //페이지네이션을 위한 구역 data 는 쿼리에서 먼저 undefined되기에 ? 로 있을 때
   //map을 돌릴 데이터를 4개씩 끊어서 라는 뜯 입니다 (9개ㅈ씩 끊고 싶으면 9 적으면 됩니다. )
