@@ -7,10 +7,10 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 const access_token = cookies.get('access_token');
 const PAGE_SIZE = 16;
 
-export const getAllStore = async (pageNum, keyword, activeTab, pageSize) => {
+export const getAllStore = async (pageNum, keyword, activeTab, totalSize) => {
   const params = {
     page: pageNum,
-    size: parseInt(response.data.totalElements),
+    size: totalSize,
     //parseInt(response.data.totalElements),
   };
   if (keyword !== undefined) {
@@ -44,21 +44,19 @@ export const getAllStore = async (pageNum, keyword, activeTab, pageSize) => {
 //   return { storeAllData: data, storeIsLoading: isLoading };
 // };
 
-export const getBest = async (pageNum, keyword, storeListPage) => {
+export const getBest = async (pageNum, keyword, totalSize) => {
   //  const queryClient = useQueryClient();
   const response = await apis.get(
-    `/alkol/best?page=${pageNum}&size=${parseInt(
-      response.data.totalElements,
-    )}&placeName=${keyword}&categoryName=${keyword}&addressName=${keyword}&roadAddressName=${keyword}`,
+    `/alkol/best?page=${pageNum}&size=${totalSize}&placeName=${keyword}&categoryName=${keyword}&addressName=${keyword}&roadAddressName=${keyword}`,
     {},
   );
   return response.data;
 };
 
-export const getView = async (pageNum, keyword, activeTab) => {
+export const getView = async (pageNum, keyword, totalSize) => {
   //const queryClient = useQueryClient();
   const response = await apis.get(
-    `/alkol/view?page=${pageNum}&size=${parseInt(response.data.totalElements)}`,
+    `/alkol/view?page=${pageNum}&size=${totalSize}`,
     {
       params: {
         placeName: keyword,
@@ -71,10 +69,10 @@ export const getView = async (pageNum, keyword, activeTab) => {
   return response.data;
 };
 
-export const getLike = async (pageNum, keyword) => {
+export const getLike = async (pageNum, keyword, totalSize) => {
   // const queryClient = useQueryClient();
   const response = await apis.get(
-    `/alkol/like?page=${pageNum}&size=${parseInt(response.data.totalElements)}`,
+    `/alkol/like?page=${pageNum}&size=${totalSize}`,
     {
       params: {
         placeName: keyword,
