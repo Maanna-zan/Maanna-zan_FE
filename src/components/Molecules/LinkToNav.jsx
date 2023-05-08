@@ -144,7 +144,7 @@ export const LinkToNav = () => {
                 document.body,
               )}
 
-            <div>
+            <>
               <ButtonText
                 style={{
                   font: `var( --title2-semibold) Pretendard sans-serif`,
@@ -161,10 +161,10 @@ export const LinkToNav = () => {
                   />,
                   document.body,
                 )}
-            </div>
+            </>
           </>
         ) : (
-          <div
+          <span
             style={{
               font: `var(--title2-semibold) Pretendard sans-serif`,
 
@@ -209,7 +209,7 @@ export const LinkToNav = () => {
                 </li>
               </Ullist>
             )}
-          </div>
+          </span>
         )}
       </nav>
     </>
