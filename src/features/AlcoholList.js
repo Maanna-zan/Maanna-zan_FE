@@ -54,7 +54,8 @@ const AlcoholList = () => {
   }, [useGetLikeStore]);
 
   console.log('getView4', parseInt(getView2.totalElements));
-  const totalSize = Math.ceil(parseInt(getView2.totalElements) / 16);
+  const totalSize = Math.ceil(parseInt(getView2.totalElements) / 1.6);
+  const propTotalSize = Math.ceil(parseInt(getView2.totalElements));
   //탭
   //  const { alkolsLike, alkolsIsLikeLoading } = useGetLikeStore();
   const [storeListPage, setStoreListPage] = useState('all');
@@ -476,7 +477,7 @@ const AlcoholList = () => {
 
           <PageNation
             pages={chunkedData.map((_, i) => i + 1)}
-            // pages={pages}
+            propTotalSize={propTotalSize}
             handlePageNumChange={handlePageNumChange}
             activeTab={activeTab}
             router={router}
