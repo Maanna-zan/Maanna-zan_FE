@@ -52,7 +52,7 @@ const LogMeet = ({ setDifferMeet, setMarkMeet, response, selectedDate }) => {
         await navigator.share({
           title: '약속 일정 공유',
           text: `제가 참석할 약속 일정입니다: ${list.place_name} (${list.road_address_name})`,
-          url: `https://www.example.com/appointments/${list.id}`,
+          url: `https://maanna-zan-fe-1.vercel.app/alcohols/${list.apiId}`,
         });
       } catch (error) {
         console.error('Error sharing:', error);
