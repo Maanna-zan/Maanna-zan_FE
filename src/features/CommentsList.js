@@ -10,13 +10,15 @@ import { InputArea } from '@components/Atoms/Input';
 import AddReComment from './AddReComment';
 import ReCommentList from './ReCommentList';
 import { LightTheme } from '@components/Themes/theme';
+import { useGetPost } from '../hook/post/useGetPost';
 
-const CommentsList = (data) => {
+const CommentsList = ({ data }) => {
   const queryClient = useQueryClient();
 
   const { query } = useRouter();
   const [isEditMode, setIsEditMode] = useState(false);
   const [commentId, setCommentId] = useState(null);
+  console.log('commentId', commentId);
   const [commentContent, setCommentContent] = useState('');
   const [userNickName, setUserNickName] = useState('');
 
@@ -31,9 +33,14 @@ const CommentsList = (data) => {
     setCommentContent(comment.content);
   };
 
+  console.log('data커멘트', data.commentList);
+
   const handleUpdate = () => {
+    console.log('data커멘트22', data.commentList);
+    const comment = data.commentList?.find(
+      (comment) => comment.id === commentId,
+    );
     const payload = { content: commentContent };
-    const comment = data.find((comment) => comment.id === commentId);
     if (comment) {
       updateContent({ id: comment.id, payload });
     }
@@ -43,7 +50,7 @@ const CommentsList = (data) => {
     deleteComment(id);
   };
 
-  // const token = cookies.get('access_token');
+  const token = cookies.get('access_token');
   // const { data, isLoading, isError, isSuccess } = useQuery({
   //   queryKey: ['GET_COMMENTS'],
   //   queryFn: async () => {
@@ -68,7 +75,8 @@ const CommentsList = (data) => {
       });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(['GET_COMMENTS']);
+      queryClient.invalidateQueries(['GET_POSTS_DETAIL']);
+      window.alert('삭제 완료!');
     },
   });
 
@@ -85,7 +93,7 @@ const CommentsList = (data) => {
       setIsEditMode(false);
       setCommentId(null);
       setCommentContent('');
-      queryClient.invalidateQueries(['GET_COMMENTS']);
+      queryClient.invalidateQueries(['GET_POSTS_DETAIL']);
       window.alert('수정 완료!');
     },
     onError: () => {
@@ -97,7 +105,7 @@ const CommentsList = (data) => {
     <div>
       <CommentDiv>
         <>
-          {data?.data?.commentList?.map((comment) => (
+          {data?.commentList?.map((comment) => (
             <div key={comment.id}>
               {isEditMode && comment.id === commentId ? (
                 <>
