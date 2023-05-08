@@ -33,7 +33,7 @@ const GetmyPost = () => {
 
   //페이지네이션을 위한 구역 data 는 쿼리에서 먼저 undefined되기에 ? 로 있을 때
   //map을 돌릴 데이터를 4개씩 끊어서 라는 뜯 입니다 (9개ㅈ씩 끊고 싶으면 9 적으면 됩니다. )
-  console.log('청크를 어떻게 사용해야하는지 ', data);
+  // console.log('청크를 어떻게 사용해야하는지 ', data);
   const chunkedData = data ? chunk(data, 9) : [];
   const currentPageData = chunkedData[activePage - 1] ?? [];
   // console.log('currentPageData', currentPageData);

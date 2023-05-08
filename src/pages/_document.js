@@ -31,7 +31,7 @@ export default class MyDocument extends Document {
 
   render() {
     return (
-      <Html>
+      <Html style={{ fontFamily: 'Pretendard, sans-serif' }}>
         <Head>
           {/* 폰트 CSS CDN */}
 

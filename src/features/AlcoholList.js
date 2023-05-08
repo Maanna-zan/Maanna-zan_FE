@@ -297,9 +297,6 @@ const AlcoholList = () => {
   // console.log(' 청크를 술집리스트에 적용', data2);
   return (
     <>
-      {/* {isLikesFetchLoading || isLoading || isFetching ? (
-        <>로딩.</>
-      ) : ( */}
       <>
         <StWebBg />
         <div
@@ -356,18 +353,6 @@ const AlcoholList = () => {
                 검색
               </BoxTextReal>
             </div>
-            {/* {searchResults.length > 0 && (
-              <ul>
-                {searchResults?.alkolResponseDtoList?.map((result) => (
-                  <li
-                    key={result.id}
-                    onClick={() => handleSelectResult(result)}
-                  >
-                    {result.placeName}
-                  </li>
-                ))}
-              </ul>
-            )} */}
           </div>
         </div>
         <WebWrapper>

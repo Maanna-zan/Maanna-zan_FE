@@ -23,15 +23,15 @@ li {
   cursor: pointer;
 }
 
-/* @font-face {
+@font-face {
   font-family: 'Pretendard';
   font-style: Pretendard;
   font-weight: 400;
-  src: url('https://cdn.jsdelivr.net/npm/pretendard@2.001/fonts/Subset/Pretendard-Regular.woff2')
-      format('woff2'),
-    url('https://cdn.jsdelivr.net/npm/pretendard@2.001/fonts/Subset/Pretendard-Regular.woff')
-      format('woff');
-} */
+  src: url('/font/Pretendard-SemiBold.woff');
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
 :root {
   --display1-bold: 700 3rem/3.5rem;
   --display2-bold: 700 2.5rem/3rem;
