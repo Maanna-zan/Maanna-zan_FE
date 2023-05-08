@@ -117,22 +117,23 @@ const AlcoholList = () => {
   const [searchResults, setSearchResults] = useState([]);
   console.log('자동완성', searchResults);
   // 검색어가 변경될 때마다, 검색 결과를 새로 불러옵니다.
-  useEffect(() => {
-    if (keyword === '') {
-      setPageNum(1);
-    } else {
-      setPageNum(1);
-      const results = aoutoKeyword?.alkolResponseDtoList?.filter((store) => {
-        const fullName =
-          store.placeName +
-          store.categoryName +
-          store.addressName +
-          store.roadAddressName;
-        return fullName.toLowerCase().includes(keyword.toLowerCase());
-      });
-      setSearchResults(results);
-    }
-  }, [keyword]);
+  // useEffect(() => {
+  //   if (keyword === '') {
+  //     setPageNum(1);
+  //   } else {
+  //     setPageNum(1);
+  //     const results = aoutoKeyword?.alkolResponseDtoList?.filter((store) => {
+  //       const fullName =
+  //         store.placeName +
+  //         store.categoryName +
+  //         store.addressName +
+  //         store.roadAddressName;
+  //       return fullName.toLowerCase().includes(keyword.toLowerCase());
+  //     });
+  //     setSearchResults(results);
+  //   }
+  // }, [keyword]);
+
   //탭메뉴
   const handleStoreListTabChange = useCallback(
     (newTab) => {
@@ -296,9 +297,6 @@ const AlcoholList = () => {
   // console.log(' 청크를 술집리스트에 적용', data2);
   return (
     <>
-      {/* {isLikesFetchLoading || isLoading || isFetching ? (
-        <>로딩.</>
-      ) : ( */}
       <>
         <StWebBg />
         <div
@@ -354,7 +352,7 @@ const AlcoholList = () => {
               >
                 검색
               </BoxTextReal>
-            </div>{' '}
+            </div>
           </div>
         </div>
         <WebWrapper>

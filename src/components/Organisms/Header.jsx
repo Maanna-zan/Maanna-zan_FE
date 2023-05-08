@@ -14,6 +14,7 @@ export const Header = () => {
             justifyContent: 'space-between',
             height: '80px',
             alignItems: 'center',
+            fontFamily: 'Pretendard',
           }}
         >
           <MainLogo />

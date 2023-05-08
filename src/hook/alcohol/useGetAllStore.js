@@ -10,7 +10,7 @@ const PAGE_SIZE = 16;
 export const getAllStore = async (pageNum, keyword, activeTab, pageSize) => {
   const params = {
     page: pageNum,
-    size: 205,
+    size: 230,
   };
   if (keyword !== undefined) {
     params.placeName = keyword;
@@ -78,7 +78,7 @@ export const getLike = async (pageNum, keyword) => {
 
 import { useEffect, useState } from 'react';
 
-export const useGetAutoKeyword = (keyword, pageNum) => {
+export const useGetAutoKeyword = (keyword) => {
   const [aoutoKeyword, setStoreListAoutoKeyword] = useState([]);
   const [isKeywordLoading, setIsKeywordLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -87,9 +87,8 @@ export const useGetAutoKeyword = (keyword, pageNum) => {
     const fetchData = async () => {
       setIsKeywordLoading(true);
       try {
-        const data = await getAllStore(pageNum, keyword);
+        const data = await getAllStore(keyword);
         setStoreListAoutoKeyword(data);
-        console.log('제발', data);
       } catch (error) {
         setError(error);
       }
@@ -101,7 +100,7 @@ export const useGetAutoKeyword = (keyword, pageNum) => {
     } else {
       setStoreListAoutoKeyword([]);
     }
-  }, [keyword, pageNum]);
+  }, [keyword]);
 
   return [aoutoKeyword, isKeywordLoading, error];
 };
