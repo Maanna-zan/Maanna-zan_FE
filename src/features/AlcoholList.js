@@ -118,6 +118,7 @@ const AlcoholList = () => {
         pathname: router.pathname,
         query: {
           page: pageMap[newTab],
+          size: totalSize,
           placeName: keyword,
           categoryName: keyword,
           addressName: keyword,
