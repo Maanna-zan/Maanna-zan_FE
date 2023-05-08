@@ -35,6 +35,7 @@ export const LinkToNav = () => {
     cookies.remove('nick_name');
   };
   const handleLogout = () => {
+    alert('로그아웃 되었습니다.');
     deleteTokens();
     setShowsignInModal(false);
     router.push('/');

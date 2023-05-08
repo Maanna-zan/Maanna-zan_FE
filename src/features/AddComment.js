@@ -35,7 +35,11 @@ const AddComment = () => {
     },
     onError: (error) => {
       // console.log('error', error.response.data.message);
-      alert(error.response.data.message);
+      if (error.response.data.message == 'Token Error') {
+        alert('로그인 후 이용가능합니다 ');
+      } else {
+        alert(error.response.data.message);
+      }
     },
   });
 
@@ -44,6 +48,7 @@ const AddComment = () => {
       <BottomHr />
       <AddDiv>
         <Textarea
+          placeholder="100글자 이내로 작성 해주세요"
           value={commentList.content}
           name="content"
           onChange={changeInputHandler}

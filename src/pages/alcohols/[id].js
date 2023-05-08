@@ -32,6 +32,7 @@ import { Map, MapMarker } from 'react-kakao-maps-sdk';
 import { MinStar } from '@components/Atoms/PostStar';
 import Link from 'next/link';
 import { Evaluation } from '@components/Organisms/Evaluation';
+import { cookies } from '@shared/cookie';
 const StoreDetail = () => {
   const router = useRouter();
   const { query } = useRouter();
@@ -41,6 +42,8 @@ const StoreDetail = () => {
   } = useGetStoredetail({
     apiId: router.query.id,
   });
+
+  const token = cookies.get('access_token');
 
   const { likeStore } = useLikeStore();
   const { alkolsLike, alkolsIsLikeLoading } = useGetLikeStore();
@@ -229,39 +232,44 @@ const StoreDetail = () => {
                 포스트 리뷰
               </div>
               {/* /community/add */}
-              <div
-                style={{ cursor: 'pointer' }}
-                onClick={() => {
-                  router.push({
-                    pathname: '/community/add',
-                    query: { storeId },
-                  });
-                }}
-              >
-                <BoxTextReal
-                  variant="redBox"
-                  style={{
-                    padding: '8px 16px',
-                    marginBottom: '19px',
-                    border: 'none',
-                    color: 'white',
-                    borderRadius: '10px',
-                    display: 'flex',
-                    gap: '12px',
-                    alignItems: 'center',
+              {!token ? (
+                <></>
+              ) : (
+                <div
+                  style={{ cursor: 'pointer' }}
+                  onClick={() => {
+                    router.push({
+                      pathname: '/community/add',
+                      query: { storeId },
+                    });
                   }}
                 >
-                  <PenIcon />
-                  <span
+                  <BoxTextReal
+                    variant="redBox"
                     style={{
-                      margin: '0px 0px',
-                      font: `var(--label2-bold) Pretendard sans-serif`,
+                      padding: '8px 16px',
+                      marginBottom: '19px',
+                      border: 'none',
+                      color: 'white',
+                      borderRadius: '10px',
+                      display: 'flex',
+                      gap: '12px',
+                      alignItems: 'center',
                     }}
                   >
-                    글쓰기
-                  </span>
-                </BoxTextReal>
-              </div>
+                    <span
+                      style={{
+                        margin: '0px 0px',
+                        font: `var(--label2-bold) Pretendard sans-serif`,
+                      }}
+                    >
+                      글쓰기
+                    </span>
+
+                    <PenIcon />
+                  </BoxTextReal>
+                </div>
+              )}
             </FlexRow>
             <div style={{ marginBottom: '80px' }}>
               {data?.postList.map((post) => (
