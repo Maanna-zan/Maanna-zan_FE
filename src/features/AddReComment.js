@@ -38,7 +38,11 @@ const AddReComment = (comment) => {
     },
     onError: (error) => {
       // console.log('error', error.response.data.message);
-      alert(error.response.data.message);
+      if (error.response.data.message == 'Token Error') {
+        alert('로그인 후 이용가능합니다 ');
+      } else {
+        alert(error.response.data.message);
+      }
     },
   });
 
@@ -48,8 +52,11 @@ const AddReComment = (comment) => {
         <div className="Editmode">
           <Input
             type="text"
-            placeholder="답글 입력"
+            placeholder="답글 100글자 이내로 입력해주세요"
             name="content"
+            minLength="1"
+            maxLength="100"
+            required
             value={reCommentList.content}
             onChange={changeInputHandler}
           />
