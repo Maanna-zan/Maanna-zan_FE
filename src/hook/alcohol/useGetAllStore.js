@@ -8,22 +8,20 @@ const access_token = cookies.get('access_token');
 const PAGE_SIZE = 16;
 
 export const getAllStore = async (pageNum, keyword, activeTab, totalSize) => {
-  const params = {
-    page: pageNum,
-    size: totalSize,
-    //parseInt(response.data.totalElements),
-  };
-  if (keyword !== undefined) {
-    params.placeName = keyword;
-    params.categoryName = keyword;
-    params.addressName = keyword;
-    params.roadAddressName = keyword;
-  }
-  const response = await apis.get(`/alkol/all`, { params });
-  console.log('데이터size', response.data);
-  console.log('데이터size', parseInt(response.data.totalElements));
+  const response = await apis.get(
+    `/alkol/all?page=${pageNum}&size=${totalSize}`,
+    {
+      params: {
+        placeName: keyword,
+        categoryName: keyword,
+        addressName: keyword,
+        roadAddressName: keyword,
+      },
+    },
+  );
   return response.data;
 };
+// console.log('데이터size', parseInt(response.data.totalElements))
 // export const getAllStore = async ({ pageNum, keyword, activeTab }) => {
 //   const params = {
 //     page: pageNum,

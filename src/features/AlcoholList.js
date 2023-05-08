@@ -54,7 +54,7 @@ const AlcoholList = () => {
   }, [useGetLikeStore]);
 
   console.log('getView4', parseInt(getView2.totalElements));
-  const totalSize = parseInt(getView2.totalElements) / 16;
+  const totalSize = Math.ceil(parseInt(getView2.totalElements) / 16);
   //탭
   //  const { alkolsLike, alkolsIsLikeLoading } = useGetLikeStore();
   const [storeListPage, setStoreListPage] = useState('all');
