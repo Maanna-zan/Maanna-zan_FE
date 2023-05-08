@@ -123,6 +123,7 @@ const AlcoholList = () => {
       pathname: router.pathname,
       query: {
         page: pageMap[storeListPage],
+        // size:
         placeName: keyword,
         categoryName: keyword,
         addressName: keyword,
@@ -177,10 +178,10 @@ const AlcoholList = () => {
       const response = await apis.get(`/alkol/view`);
       seGetView2(response.data);
     };
-
+    console.log('getView2', parseInt(getView2.totalElements));
     fetchData();
   }, [useGetLikeStore]);
-
+  console.log('getView4', parseInt(getView2.totalElements));
   const [likesFetch, setLikesFetch] = useState();
   const [isLikesFetchLoading, setIsLikesFetchLoading] = useState(true);
   const { likeStore } = useLikeStore();
