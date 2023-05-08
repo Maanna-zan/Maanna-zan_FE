@@ -10,7 +10,7 @@ const PAGE_SIZE = 16;
 export const getAllStore = async (pageNum, keyword, activeTab, pageSize) => {
   const params = {
     page: pageNum,
-    size: 230,
+    size: response.data.totalElements,
   };
   if (keyword !== undefined) {
     params.placeName = keyword;
