@@ -97,11 +97,11 @@ const AlcoholList = () => {
     (newPageNum) => {
       setPageMap((prev) => ({
         ...prev,
-        [storeListPage]: newPageNum,
+        [storeListPage]: newPagelikesFetchtNum,
       }));
       setPageNum(newPageNum);
     },
-    [storeListPage, setPageNum, keyword],
+    [storeListPage, setPageNum, keyword, totalSize],
   );
   // console.log('storedata', keyword);
   //자동완성
@@ -200,7 +200,7 @@ const AlcoholList = () => {
     };
 
     fetchDatalike();
-  }, [useLikeStore]);
+  }, [useLikeStore, totalSize]);
 
   let ranking = 1;
   let rankingFn = () => {

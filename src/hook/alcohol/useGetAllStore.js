@@ -1,46 +1,54 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { apis } from '@shared/axios';
 import { cookies } from '@shared/cookie';
 import { keys } from '@utils/createQueryKey';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 const access_token = cookies.get('access_token');
-const PAGE_SIZE = 16;
 
-export const getAllStore = async (pageNum, keyword, activeTab, totalSize) => {
+// const useGetAllStore = () => {
+//   const access_token = cookies.get('access_token');
+
+// const [all, setAll] = useState([]);
+
+// useEffect(() => {
+//   const fetchData = async () => {
+//     const response = await apis.get(`/alkol/all`);
+//     setAll(response.data);
+//   };
+//   console.log('all', parseInt(all.totalElements));
+//   fetchData();
+// }, []);
+
+// console.log('getView4', parseInt(all.totalElements));
+
+//   const getAllStore = async (pageNum, keyword, activeTab, totalSize) => {
+//     const totalSizeAll = Math.ceil(parseInt(all.totalElements) / 16);
+//     const response = await apis.get(
+//       `/alkol/all?page=${pageNum}&size=${totalSizeAll}`,
+//       {
+//         params: {
+//           placeName: keyword,
+//           categoryName: keyword,
+//           addressName: keyword,
+//           roadAddressName: keyword,
+//         },
+//       },
+//       console.log(),
+//     );
+//     return response.data;
+//   };
+// };
+//   return getAllStore;
+// };
+
+export const getAllStore = async (pageNum, keyword, totalSize) => {
   const response = await apis.get(
-    `/alkol/all?page=${pageNum}&size=${totalSize}`,
-    {
-      params: {
-        placeName: keyword,
-        categoryName: keyword,
-        addressName: keyword,
-        roadAddressName: keyword,
-      },
-    },
+    `/alkol/all?page=${pageNum}&size=${totalSize}&placeName=${keyword}&categoryName=${keyword}&addressName=${keyword}&roadAddressName=${keyword}`,
+    {},
   );
   return response.data;
 };
-// console.log('데이터size', parseInt(response.data.totalElements))
-// export const getAllStore = async ({ pageNum, keyword, activeTab }) => {
-//   const params = {
-//     page: pageNum,
-//     size: 16,
-//   };
-//   if (keyword !== undefined) {
-//     params.placeName = keyword;
-//     params.categoryName = keyword;
-//     params.addressName = keyword;
-//     params.roadAddressName = keyword;
-//   }
-//   const { data, isLoading } = await apis.get(`/alkol/all`);
-//   return { storeData: data, storeIsLoading: isLoading };
-// };
-
-// export const useAllStore = ({ pageNum, keyword, activeTab }) => {
-//   const { data, isLoading } = getAllStore({ pageNum, keyword, activeTab });
-//   return { storeAllData: data, storeIsLoading: isLoading };
-// };
 
 export const getBest = async (pageNum, keyword, totalSize) => {
   //  const queryClient = useQueryClient();
@@ -82,8 +90,6 @@ export const getLike = async (pageNum, keyword, totalSize) => {
   );
   return response.data;
 };
-
-import { useEffect, useState } from 'react';
 
 export const useGetAutoKeyword = (keyword) => {
   const [aoutoKeyword, setStoreListAoutoKeyword] = useState([]);
