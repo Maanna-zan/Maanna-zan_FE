@@ -44,7 +44,7 @@ const access_token = cookies.get('access_token');
 
 export const getAllStore = async (pageNum, keyword, totalSize) => {
   const response = await apis.get(
-    `/alkol/all?page=${pageNum}&size=${totalSize}&placeName=${keyword}&categoryName=${keyword}&addressName=${keyword}&roadAddressName=${keyword}`,
+    `/alkol/all?page=${pageNum}&size=${16}&placeName=${keyword}&categoryName=${keyword}&addressName=${keyword}&roadAddressName=${keyword}`,
     {},
   );
   return response.data;
@@ -53,7 +53,7 @@ export const getAllStore = async (pageNum, keyword, totalSize) => {
 export const getBest = async (pageNum, keyword, totalSize) => {
   //  const queryClient = useQueryClient();
   const response = await apis.get(
-    `/alkol/best?page=${pageNum}&size=${totalSize}&placeName=${keyword}&categoryName=${keyword}&addressName=${keyword}&roadAddressName=${keyword}`,
+    `/alkol/best?page=${pageNum}&size=${16}&placeName=${keyword}&categoryName=${keyword}&addressName=${keyword}&roadAddressName=${keyword}`,
     {},
   );
   return response.data;
@@ -61,33 +61,27 @@ export const getBest = async (pageNum, keyword, totalSize) => {
 
 export const getView = async (pageNum, keyword, totalSize) => {
   //const queryClient = useQueryClient();
-  const response = await apis.get(
-    `/alkol/view?page=${pageNum}&size=${totalSize}`,
-    {
-      params: {
-        placeName: keyword,
-        categoryName: keyword,
-        addressName: keyword,
-        roadAddressName: keyword,
-      },
+  const response = await apis.get(`/alkol/view?page=${pageNum}&size=${16}`, {
+    params: {
+      placeName: keyword,
+      categoryName: keyword,
+      addressName: keyword,
+      roadAddressName: keyword,
     },
-  );
+  });
   return response.data;
 };
 
 export const getLike = async (pageNum, keyword, totalSize) => {
   // const queryClient = useQueryClient();
-  const response = await apis.get(
-    `/alkol/like?page=${pageNum}&size=${totalSize}`,
-    {
-      params: {
-        placeName: keyword,
-        categoryName: keyword,
-        addressName: keyword,
-        roadAddressName: keyword,
-      },
+  const response = await apis.get(`/alkol/like?page=${pageNum}&size=${16}`, {
+    params: {
+      placeName: keyword,
+      categoryName: keyword,
+      addressName: keyword,
+      roadAddressName: keyword,
     },
-  );
+  });
   return response.data;
 };
 

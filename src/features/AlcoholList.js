@@ -54,7 +54,7 @@ const AlcoholList = () => {
   }, [useGetLikeStore]);
 
   console.log('getView4', parseInt(getView2.totalElements));
-  const totalSize = Math.ceil(parseInt(getView2.totalElements) / 1.6);
+  const totalSize = Math.ceil(parseInt(getView2.totalElements));
   const propTotalSize = Math.ceil(parseInt(getView2.totalElements));
   //탭
   //  const { alkolsLike, alkolsIsLikeLoading } = useGetLikeStore();
@@ -269,8 +269,9 @@ const AlcoholList = () => {
   //데이터 페이지네이션
 
   const data2 = storeData?.alkolResponseDtoList;
-  const chunkedData = data2 ? chunk(data2, 16) : [];
-  const currentPageData = chunkedData[pageNum - 1] ?? [];
+  const totalPages = Math.ceil(propTotalSize / 16); // 전체 페이지 수 계산
+  const pages = Array.from({ length: totalPages }, (_, i) => i + 1); // 1부터 페이지 번호 생성
+
   // console.log(' 청크를 술집리스트에 적용', data2);
   return (
     <>
@@ -408,7 +409,7 @@ const AlcoholList = () => {
                 <>로딩중</>
               ) : ( */}
             <>
-              {currentPageData?.map((store) => (
+              {data2?.map((store) => (
                 <div
                   key={store.apiId}
                   style={{
@@ -476,7 +477,7 @@ const AlcoholList = () => {
           </GrideGapCol4>
 
           <PageNation
-            pages={chunkedData.map((_, i) => i + 1)}
+            pages={pages}
             propTotalSize={propTotalSize}
             handlePageNumChange={handlePageNumChange}
             activeTab={activeTab}
