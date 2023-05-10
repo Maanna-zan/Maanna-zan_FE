@@ -7,7 +7,6 @@ import styled from 'styled-components';
 import 'react-calendar/dist/Calendar.css';
 import { cookies } from '@shared/cookie';
 import { useRouter } from 'next/router';
-import { Link } from 'react-scroll';
 import { WebWrapper, WebWrapperHeight } from '@components/Atoms/Wrapper';
 import { ButtonText } from '@components/Atoms/Button';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -92,7 +91,7 @@ const MapAppointment = ({ checkedPlace }) => {
       : '';
 
   return (
-    <WebWrapper style={{marginTop: '150px'}}>
+    <WebWrapper style={{marginTop: '150px', marginBottom: '-440px'}}>
       <WebWrapperHeight>
         <FlexRow style={{maxWidth: '100wh'}}>
           {!isLoginMode ? (

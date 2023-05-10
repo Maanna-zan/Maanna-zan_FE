@@ -518,7 +518,7 @@ function MapMidPoint() {
                                             <InputArea       //출발지 받아온 값 Map으로 돌려 그 갯수만큼 input 만들기            
                                                 key={index}  //(""값도 카운트가 되는데 그 경우 filter로 제외하고 map으로 돌리기)                
                                                 value={value} type="text" variant="default" size="lg" readOnly={true}
-                                                style={{width: '273px', height: '34px', margin: '3px 0 3px 10px', padding: '6px',
+                                                style={{width: '273px', height: '34px', margin: '3px 0 3px 10px', padding: '6px', top: '20px',
                                                     border: '1px solid white', borderRadius: '12px', zIndex: '1000',
                                                     backgroundColor: `${LightTheme.WHITE}`,
                                                     font: `${'var(--label1-regular)'} Pretendard sans-serif`,
@@ -585,7 +585,7 @@ function MapMidPoint() {
                                     }}>
                                     <LabelInfoDBClick>리스트  더블  클릭  시  가게  정보로  이동합니다.</LabelInfoDBClick>
                                     <div id="create-appointment"></div>
-                                    <div style={{position: 'absolute', top:'106%', left:'70%'}}>
+                                    <div style={{position: 'absolute', top:'83%', left:'70%'}}>
                                         <ButtonText size="lg" variant="activeRed" label="약속 잡으러 가기" hoverBackgroundColor = {LightTheme.HOVER_BASIC}
                                             style={{width: '170px',paddingRight: '1px', zIndex: '1',
                                                 font: `var(--label2-bold) Pretendard sans-serif`,
@@ -625,7 +625,7 @@ function MapMidPoint() {
     display: flex;
     flex-direction: column;
     width: 319px;
-    top: 76%;
+    top: 65%;
     `
     const CategoryWrapper = styled.div`
         display: flex;
