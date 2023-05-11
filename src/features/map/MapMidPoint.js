@@ -523,7 +523,7 @@ function MapMidPoint() {
                                     }}>
                                     <LabelInfoDBClick>리스트  더블  클릭  시  가게  정보로  이동합니다.</LabelInfoDBClick>
                                     <div id="create-appointment"></div>
-                                    <div style={{position: 'absolute', top:'83%', left:'70%'}}>
+                                    <div style={{position: 'absolute', top:'108%', left:'70%'}}>
                                         <ButtonText size="lg" variant="activeRed" label="약속 잡으러 가기" hoverBackgroundColor = {LightTheme.HOVER_BASIC}
                                             style={{width: '170px',paddingRight: '1px', zIndex: '1',
                                                 font: `var(--label2-bold) Pretendard sans-serif`,
@@ -531,7 +531,6 @@ function MapMidPoint() {
                                                 backgroundRepeat: 'no-repeat', //이미지 한번만
                                                 backgroundPosition: '21px center', // 위치
                                                 backgroundSize: '16px', // 이미지 크기
-                                                boxSizing: 'border-box',
                                             }}
                                             onClick={() => {
                                             const element = document.getElementById('create-appointment');
@@ -563,7 +562,7 @@ function MapMidPoint() {
     display: flex;
     flex-direction: column;
     width: 319px;
-    top: 65%;
+    top: 70%;
     `
     const CategoryWrapper = styled.div`
         display: flex;
@@ -692,25 +691,6 @@ function MapMidPoint() {
         font-size: 11px;
     }
 
-    /* #placesList .share {
-        margin-left: 200px;
-        border: none;
-        background-image: url('/shareButton.png');
-        background-repeat: no-repeat;
-        background-size: contain;
-        width: 20px;
-        height: 15px;
-    } */
-        /* #placesList .share {
-        margin-left: 189px;
-        border: none;
-        background-image: url('/heartButton.png');
-        background-repeat: no-repeat;
-        background-size: contain;
-        width: 20px;
-        height: 15px;
-    } */
-
     #placesList li {
         
     }
@@ -720,7 +700,6 @@ function MapMidPoint() {
         margin: 0 8px 4px -20px;
         border : 1px solid ${LightTheme.GRAY_100};
         border-radius: 8px;
-
     }
     
     #placesList .item .info {
@@ -769,14 +748,10 @@ function MapMidPoint() {
     }
     `;
     const LabelInfoDBClick = styled.div`
-    /* position: absolute;  */
-    /* left: 60rem; */
-    /* top:110vh; */
-    /* margin: 10px 0 0 20px */
-    display: flex;
-    justify-content: flex-end; 
-    padding: 5px 0 0 0;
-    color: ${LightTheme.FONT_SECONDARY};
-    font: var(--label2-regular) Pretendard sans-serif;
-    letter-spacing: 1px; /* 글자 간격을 1px로 설정 */
+        display: flex;
+        justify-content: flex-end; 
+        padding: 5px 0 0 0;
+        color: ${LightTheme.FONT_SECONDARY};
+        font: var(--label2-regular) Pretendard sans-serif;
+        letter-spacing: 1px; /* 글자 간격을 1px로 설정 */
     `
