@@ -1,14 +1,12 @@
 import { FlexRow } from '@components/Atoms/Flex';
 import { ImgCenter, ImgWrapper690x803 } from '@components/Atoms/imgWrapper';
 import { WebWrapper, WebWrapperHeight } from '@components/Atoms/Wrapper';
-import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import React from 'react';
 import styled from 'styled-components';
 
 const MapBeginning = () => {
   //  중간 위치 검색하기 버튼 눌렀을 때, 중간 위치 검색 페이지로 이동 위한 선언들.
-  const queryClient = useQueryClient();
   const router = useRouter();
   //  중간 위치 검색 페이지 이동 버튼 핸들러
   const moveToMapSearchButtonClickHandler = () => {

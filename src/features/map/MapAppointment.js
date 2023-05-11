@@ -158,8 +158,6 @@ const MapAppointment = ({ checkedPlace }) => {
               >
                 <Div className="calendar-container">
                   <Calendar
-                    //196 줄의 핸들러 함수 -> 날짜 얼럿이 뜹니다.
-                    //onChange={clickDayHandler}
                     //유즈스테이트로 달력에서 누른 날의 밸류 값이 밑에 글씨로 떠오릅니다.
                     onChange={onChange}
                     value={value}
@@ -258,7 +256,6 @@ const Div = styled.div`
     width: 470px;
     height: 318px;
     background: rgb(255, 255, 255);
-    /* border: 1px solid #a0a096; */
     border-radius: 8px;
     border: 1px solid #e8ebed;
     font-family: Arial, Helvetica, sans-serif;

@@ -43,7 +43,6 @@ function SearchedKeywordLandingPage() {
     const { x, y } = place;
     //  x,y값 undefined일 시 조건문
     if (!x || !y) {
-      // console.error('Invalid place object:', place);
       return;
     }
     //  place 매개변수 받아 모달창 props의 좌표값 받아서 지도 옮겨줌.
@@ -93,14 +92,7 @@ function SearchedKeywordLandingPage() {
   const onCloseModalHandler = () => {
     setShowModal(false);
   };
-  // X 버튼 Handler(해당 인풋박스 값 초기화(index줘서 각각의 인풋 박스 값 취소 가능) -> 수정(인풋박스값 삭제하더라도 checkedPlace값은 반영 안 되어 서버 페이로드가 잘못 감)
-  // const onInputClearHandler = (index) => {
-  //   setInputValues(prevInputValues => {
-  //     const newInputValues = [...prevInputValues];
-  //     newInputValues[index] = '';
-  //     return newInputValues;
-  //   });
-  // }
+
   useEffect (() => {
     inputValues
   },[inputValues])
@@ -133,8 +125,7 @@ function SearchedKeywordLandingPage() {
           value={inputValues[index]}
           variant="default"
           size="leftIcon"
-          // readOnly={midPoint ? true : false}
-          // disabled={midPoint ? true : false}
+
           readOnly={true}
           onClick={() => onInputClickHandler(index)}
           style={{
@@ -145,7 +136,6 @@ function SearchedKeywordLandingPage() {
             fontFamily: `${'var(--label1-regular)'} Pretendard sans-serif`,
             fontSize: '14px',
             lineHeight: '18px',
-            // cursor: midPoint ? 'default' : 'pointer',
             cursor: 'pointer',
             //Icon style
             // inputValues에 값 들어가면 돋보기 아이콘 사라지게하기. 반대로 X 버튼 나타나기.
@@ -173,8 +163,6 @@ function SearchedKeywordLandingPage() {
               marginLeft: '435px',
               paddingTop: '6px',
               pointerEvents: 'auto',
-              // pointerEvents: midPoint ? 'none' : 'auto', // midPoint가 true이면 pointerEvents를 none으로 지정
-              // opacity: midPoint ? 0.3 : 1, // midPoint가 true이면 투명도를 0.3로 지정
             }}
           >
             <img src="ModalPortalInputXButton.png" alt="X button" />

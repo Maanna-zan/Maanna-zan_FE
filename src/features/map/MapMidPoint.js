@@ -6,7 +6,6 @@ import { FlexColumnCenter, FlexRow } from '@components/Atoms/Flex'
 import styled from 'styled-components';
 import { LightTheme } from '@components/Themes/theme';
 import { ButtonText } from '@components/Atoms/Button';
-import { useRouter } from 'next/router';
 import { InputArea } from '@components/Atoms/Input';
 import MapAppointment from './MapAppointment';
 
@@ -17,8 +16,6 @@ function MapMidPoint() {
     const midPointProp = queryClient.getQueryData({queryKey: ['MIDPOINTPROP']});
     // getQueryData로 캐싱한 값 INPUTVALUESPROP키로 불러오기.
     const InputValuesProp = queryClient.getQueryData({queryKey: ['INPUTVALUESPROP']});
-    //  map page로 뒤로가기 위한 useRouter선언.
-    const router = useRouter();
     //  카테고리 버튼 상태 관리
     const [activeButton, setActiveButton] = useState(null);
     //  카테고리 버튼 상태 관리 Handler
@@ -27,13 +24,7 @@ function MapMidPoint() {
     };
     //  뒤로가기 버튼 핸들러
     const moveBackClickButtonHandler = () => {
-        // 데이터 리셋
-        // queryClient.removeQueries({queryKey: ['MIDPOINTPROP']});
-        // queryClient.setQueryData(['MIDPOINTPROP'], null);
-        // 이전 페이지로 이동
-        // router.push('/map');
-
-        //라우터의 이점을 활용하지 못한다는 단점있지만, 새로고침 하며 키값 초기화. 다른 방법 고민해보기
+        //라우터의 이점을 활용하지 못한다는 단점있지만, 새로고침 하며 키값 초기화.
         window.location.href = '/map';
     }
     // midPoint값 없으면 오류가는데 방지. midPoint값 없으면 뒤로가기(일부러 새로고침하며 뒤로 = queryKey리셋위해)
@@ -45,15 +36,11 @@ function MapMidPoint() {
     //  클릭 선택된 장소를 저장할 state 변수
     const [checkedPlace, setCheckedPlace] = useState('')
     // 중간지점 좌표 받아온 값으로 서버와 통신하여 kakaoAPI값 DB저장 및 목록 불러오기
-        const { data, isLoading, isError, refetch } = useQuery({
+        const { data } = useQuery({
         queryKey: ['GET_KAKAOAPI'],
         queryFn: async () => {
         const response = await apis.get(
-            // 서버 URL
             `/kakaoApi?y=${midPointProp?.lat}&x=%20${midPointProp?.lng}&query=술집&radius=1500&page=1&size=15&sort=distance`,
-            //테스트용 서버 URL
-            // '/kakaoApi?y=37.534485&x=%20126.994369&query=술집&radius=1500&page=1&size=15&sort=distance',
-            // 중간지점 lat,lng값
             midPointProp
         );
         return response;
@@ -71,10 +58,23 @@ function MapMidPoint() {
             alert(data);
         }
     });
+    //  술집 종합 Submit 버튼 Handler (GetSpotsNearbyMidPoint함수 실행)
+    const keywordSearchSubmitHandler = (e) => {
+        e.preventDefault();
+        // 지도 불러오기 및 마커 및 인포윈도우, pagination생성 함수 실행
+        GetSpotsNearbyMidPoint(kakaoApi)
+    };
     //  카테고리별 술집 Data 불러오기
     const kakaoApi = data?.data?.documents
-    //  칵테일바 마커 및 리스트 불러오기
+    //  카테고리별 state
     const [cocktailPage, setCocktailPage] = useState(null);
+    const [izakayaPage, setIzakayaPage] = useState(null);
+    const [pochaPage, setPochaPage] = useState(null);
+    const [diningPubPage, setDiningPubPage] = useState(null);
+    const [hofPage, setHofPage] = useState(null);
+    const [winePage, setWinePage] = useState(null);
+    const [fishCakePage, setFishCakePage] = useState(null);
+    //  칵테일바 마커 및 리스트 불러오기
     async function getCocktailPage() {
         const response = await apis.get(`/kakaoApi?y=${midPointProp?.lat}&x=%20${midPointProp?.lng}&query=칵테일바&radius=1500&page=1&size=15&sort=distance`, midPointProp);
         setCocktailPage(response?.data);
@@ -90,7 +90,6 @@ function MapMidPoint() {
     };
     const kakaoApiCocktail = cocktailPage?.documents
     //  일본식주점 마커 및 리스트 불러오기
-    const [izakayaPage, setIzakayaPage] = useState(null);
     async function getIzakayaPage() {
         const response = await apis.get(`/kakaoApi?y=${midPointProp?.lat}&x=%20${midPointProp?.lng}&query=일본식주점&radius=1500&page=1&size=15&sort=distance`, midPointProp);
         setIzakayaPage(response?.data);
@@ -106,7 +105,6 @@ function MapMidPoint() {
     };
     const kakaoApiIzakaya = izakayaPage?.documents
     //  실내포장마차 마커 및 리스트 불러오기
-    const [pochaPage, setPochaPage] = useState(null);
     async function getPochaPage() {
         const response = await apis.get(`/kakaoApi?y=${midPointProp?.lat}&x=%20${midPointProp?.lng}&query=실내포장마차&radius=1500&page=1&size=15&sort=distance`, midPointProp);
         setPochaPage(response?.data);
@@ -122,7 +120,6 @@ function MapMidPoint() {
     };
     const kakaoApiPocha = pochaPage?.documents
     //  요리주점 마커 및 리스트 불러오기
-    const [diningPubPage, setDiningPubPage] = useState(null);
     async function getDiningPubPage() {
         const response = await apis.get(`/kakaoApi?y=${midPointProp?.lat}&x=%20${midPointProp?.lng}&query=요리주점&radius=1500&page=1&size=15&sort=distance`, midPointProp);
         setDiningPubPage(response?.data);
@@ -138,7 +135,6 @@ function MapMidPoint() {
     };
     const kakaoApiDiningPub = diningPubPage?.documents
         //  호프 마커 및 리스트 불러오기
-        const [hofPage, setHofPage] = useState(null);
         async function getHofPage() {
             const response = await apis.get(`/kakaoApi?y=${midPointProp?.lat}&x=%20${midPointProp?.lng}&query=호프&radius=1500&page=1&size=15&sort=distance`, midPointProp);
             setHofPage(response?.data);
@@ -154,7 +150,6 @@ function MapMidPoint() {
         };
         const kakaoApiHof = hofPage?.documents
         //  와인바 마커 및 리스트 불러오기
-        const [winePage, setWinePage] = useState(null);
         async function getWinePage() {
             const response = await apis.get(`/kakaoApi?y=${midPointProp?.lat}&x=%20${midPointProp?.lng}&query=와인바&radius=1500&page=1&size=15&sort=distance`, midPointProp);
             setWinePage(response?.data);
@@ -170,7 +165,6 @@ function MapMidPoint() {
         };
         const kakaoApiWine = winePage?.documents
         //  오뎅바 마커 및 리스트 불러오기
-        const [fishCakePage, setFishCakePage] = useState(null);
         async function getFishCakPage() {
             const response = await apis.get(`/kakaoApi?y=${midPointProp?.lat}&x=%20${midPointProp?.lng}&query=오뎅바바&radius=1500&page=1&size=15&sort=distance`, midPointProp);
             setFishCakePage(response?.data);
@@ -185,28 +179,11 @@ function MapMidPoint() {
             GetSpotsNearbyMidPoint(kakaoApiFishCake)
         };
         const kakaoApiFishCake = fishCakePage?.documents
-
-    //  술집 종합 Submit 버튼 Handler (GetSpotsNearbyMidPoint함수 실행)
-    const keywordSearchSubmitHandler = (e) => {
-        e.preventDefault();
-        // 지도 불러오기 및 마커 및 인포윈도우, pagination생성 함수 실행
-        GetSpotsNearbyMidPoint(kakaoApi)
-    };
     
     // 페이지 렌더링 되자마자 지도 불러오기.@@(한 번 더 실행이 되어야 마커들찍히는 문제 해결 필요)@@
-    // useEffect(() => {
-    //     keywordSearchSubmitHandler({ preventDefault: () => {} });
-    // }, [kakaoApi]);
-
-    useEffect(() => {GetSpotsNearbyMidPoint(kakaoApi, kakaoApiCocktail, kakaoApiIzakaya, kakaoApiPocha)}, [])
-    useEffect(() => {GetSpotsNearbyMidPoint(kakaoApi)},[kakaoApi])
-    useEffect(() => {GetSpotsNearbyMidPoint(kakaoApiCocktail)},[kakaoApiCocktail])
-    useEffect(() => {GetSpotsNearbyMidPoint(kakaoApiIzakaya)},[kakaoApiIzakaya])
-    useEffect(() => {GetSpotsNearbyMidPoint(kakaoApiPocha)},[kakaoApiPocha])
-    useEffect(() => {GetSpotsNearbyMidPoint(kakaoApiPocha)},[kakaoApiDiningPub])
-    useEffect(() => {GetSpotsNearbyMidPoint(kakaoApiPocha)},[kakaoApiHof])
-    useEffect(() => {GetSpotsNearbyMidPoint(kakaoApiPocha)},[kakaoApiWine])
-    // useEffect(() => {GetSpotsNearbyMidPoint(kakaoApiPocha)},[kakaoApiFishCake])
+    useEffect(() => {
+        GetSpotsNearbyMidPoint(kakaoApi, kakaoApiCocktail, kakaoApiIzakaya, kakaoApiPocha, kakaoApiDiningPub, kakaoApiHof, kakaoApiWine, kakaoApiFishCake);
+    }, [kakaoApi, kakaoApiCocktail, kakaoApiIzakaya, kakaoApiPocha, kakaoApiDiningPub, kakaoApiHof, kakaoApiWine, kakaoApiFishCake]);
 
     //  키워드 검색 로직
     const GetSpotsNearbyMidPoint =() => {
@@ -219,69 +196,32 @@ function MapMidPoint() {
         };
         //지도 생성 및 객체 리턴
         const map = new kakao.maps.Map(container, options); 
-        const ps = new kakao.maps.services.Places();
         //  인포윈도우 선언(카카오map api에서 부르기)
         const infowindow = new kakao.maps.InfoWindow({ zIndex: 1 });
         // // 마커를 담을 배열입니다
         let markers = [];
     
-        const searchForm = document.getElementById('submit_btn');
-        if (kakaoApi) {
-            searchForm?.addEventListener('click', function (e) {
-            e.preventDefault();
-            //kakaoApi넣어줘야 작동
-            showingOnMap(kakaoApi)
-            });
-        }
-        const searchFormCocktail = document.getElementById('submit_btn2');
-        if (kakaoApiCocktail) {
-            searchFormCocktail?.addEventListener('click', function (e) {
-            e.preventDefault();
-            showingOnMap(kakaoApiCocktail)
-            });
-        }
-        const searchFormIzakaya = document.getElementById('submit_btn3');
-        if (kakaoApiIzakaya) {
-            searchFormIzakaya?.addEventListener('click', function (e) {
-            e.preventDefault();
-            showingOnMap(kakaoApiIzakaya)
-            });
-        }
-        const searchFormPocha = document.getElementById('submit_btn4');
-        if (kakaoApiPocha) {
-            searchFormPocha?.addEventListener('click', function (e) {
-            e.preventDefault();
-            showingOnMap(kakaoApiPocha)
-            });
-        }
-        const searchFormDiningPub = document.getElementById('submit_btn5');
-        if (kakaoApiDiningPub) {
-            searchFormDiningPub?.addEventListener('click', function (e) {
-            e.preventDefault();
-            showingOnMap(kakaoApiDiningPub)
-            });
-        }
-        const searchFormHof = document.getElementById('submit_btn6');
-        if (kakaoApiHof) {
-            searchFormHof?.addEventListener('click', function (e) {
-            e.preventDefault();
-            showingOnMap(kakaoApiHof)
-            });
-        }
-        const searchFormWine = document.getElementById('submit_btn7');
-        if (kakaoApiWine) {
-            searchFormWine?.addEventListener('click', function (e) {
-            e.preventDefault();
-            showingOnMap(kakaoApiWine)
-            });
-        }
-        const searchFormFishCake = document.getElementById('submit_btn8');
-        if (kakaoApiFishCake) {
-            searchFormFishCake?.addEventListener('click', function (e) {
-            e.preventDefault();
-            showingOnMap(kakaoApiFishCake)
-            });
-        }
+        const searchForms = [
+            { id: 'submit_btn', api: kakaoApi },
+            { id: 'submit_btn2', api: kakaoApiCocktail },
+            { id: 'submit_btn3', api: kakaoApiIzakaya },
+            { id: 'submit_btn4', api: kakaoApiPocha },
+            { id: 'submit_btn5', api: kakaoApiDiningPub },
+            { id: 'submit_btn6', api: kakaoApiHof },
+            { id: 'submit_btn7', api: kakaoApiWine },
+            { id: 'submit_btn8', api: kakaoApiFishCake }
+        ];
+            
+        searchForms.forEach(form => {
+            const searchForm = document.getElementById(form.id);
+            if (form.api) {
+                searchForm?.addEventListener('click', function (e) {
+                e.preventDefault();
+                showingOnMap(form.api);
+                });
+            }
+        });
+        
         // 마커 및 인포윈도우, pagination
         function showingOnMap(data) {
                 // 검색 목록과 마커를 표출합니다
@@ -384,7 +324,6 @@ function MapMidPoint() {
         }
         // 검색결과 항목을 Element로 반환하는 함수
         function getListItem(index, places) {
-            console.log("places",places)
             // 카테고리 추출 ("음식점 > 술집" 문자열과 "음식점 > 술집 >"문자열 구분.)
             let category_array = places.category_name.split(" > ");
             let filtedCategory = "";
@@ -398,7 +337,6 @@ function MapMidPoint() {
             if (filtedCategory === "") {
                 filtedCategory = "술집";
             }
-            console.log('카테고리',filtedCategory);
             //
             const el = document.createElement('li');
             let itemStr =

@@ -32,10 +32,6 @@ export default function KeywordSearchModal({ onClose, onUpdate}) {
                     });
                 return;
             }
-            // if (!checkedPlace) {
-            //     alert("장소를 선택하고 확인 버튼을 눌러주세요.");
-            //     return;
-            // }
             //  부모 컴포넌트로 선택된 장소 값 전달 props
             onUpdate(checkedPlace);
             //  모달 창 닫기 props
@@ -76,10 +72,6 @@ export default function KeywordSearchModal({ onClose, onUpdate}) {
         function searchPlaces() 
         {
             const keyword = document.getElementById("keyword").value;
-        //     if (!keyword?.replace(/^\s+|\s+$/g, "")) {
-        //         alert("키워드를 입력해주세요!");
-        //         return;
-        // }
         // 장소검색 객체를 통해 키워드로 장소검색을 요청
         ps.keywordSearch(keyword, placesSearchCB);
         }
@@ -424,7 +416,6 @@ const MapSection = styled.div`
         position: relative;
         z-index: 2;
         font-size: 4px;
-        /* background-color: green; */
         //지도랑 붙이고 z-index로 가림
         overflow: hidden;
         right: 10px
@@ -491,12 +482,7 @@ const MapSection = styled.div`
 }
 
     #placesList .listTitle {
-
-        /* font-size: 14px;
-        font-weight: 700;
-        line-height: 20px; */
         color: black;
-
         font: var(--body2-bold) Pretendard sans-serif;
     }
     
