@@ -91,7 +91,7 @@ const MapAppointment = ({ checkedPlace }) => {
       : '';
 
   return (
-    <WebWrapper style={{marginTop: '150px', marginBottom: '-440px'}}>
+    <WebWrapper style={{marginTop: '150px', /*marginBottom: '-440px'*/}}>
       <WebWrapperHeight>
         <FlexRow style={{maxWidth: '100wh'}}>
           {!isLoginMode ? (
