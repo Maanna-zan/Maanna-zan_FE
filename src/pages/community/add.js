@@ -45,6 +45,15 @@ const AddPostForm = () => {
   });
   const [hoveredStar, setHoveredStar] = useState(0);
 
+  const [currentTitleLength, setCurrentTitleLength] = useState(
+    setPost?.title ? setPost?.title?.length : 0,
+  );
+  const [currentDesLength, setCurrentDesLength] = useState(
+    setPost?.description ? setPost?.description?.length : 0,
+  );
+  const [maxTitleLength] = useState(50);
+  const [maxDesLength] = useState(500);
+
   const handleStarClick = (clickedStar) => {
     const newPost = {
       ...post,
@@ -57,10 +66,11 @@ const AddPostForm = () => {
     setHoveredStar(hoveredStar);
   };
 
-  const changeInputHandler = (e) => {
-    const { value, name } = e.target;
-    setPost((pre) => ({ ...pre, [name]: value }));
-  };
+  // const changeInputHandler = (e) => {
+  //   const { value, name } = e.target;
+  //   setPost((pre) => ({ ...pre, [name]: value }));
+  // };
+
   const changeFileHandler = (e) => {
     const file = e.target.files[0];
     const formData = new FormData();
@@ -150,7 +160,7 @@ const AddPostForm = () => {
                           font: `var(--body1-bold) Pretendard sans-serif`,
                         }}
                       >
-                        해당 가게의 평가를 작성해주세요.
+                        {post?.storename} 해당 가게의 평가를 작성해주세요.
                       </span>
                       <span
                         onClick={() => setShowReviewForm(!showReviewForm)}
@@ -178,12 +188,20 @@ const AddPostForm = () => {
                 </FlexRow>
               </BoxTextReal>
             </FlexColumn>
+            <span style={{ textAlign: 'right' }}>
+              {currentTitleLength}/{maxTitleLength}
+            </span>
             <input
               type="text"
               value={post.title}
               name="title"
-              onChange={changeInputHandler}
+              onChange={(e) => {
+                const trimmedValue = e.target.value.slice(0, maxTitleLength);
+                setPost({ ...post, title: trimmedValue });
+                setCurrentTitleLength(trimmedValue.length);
+              }}
               placeholder="제목을 작성해주세요"
+              required
               style={{
                 borderBottom: '1px solid #eee',
                 height: '50px',
@@ -196,6 +214,9 @@ const AddPostForm = () => {
               }}
             />
             {/* 내용 입력란 */}
+            <span style={{ textAlign: 'right' }}>
+              {currentDesLength}/{maxDesLength}
+            </span>
             <textarea
               type="text"
               style={{
@@ -211,7 +232,12 @@ const AddPostForm = () => {
               }}
               value={post.description}
               name="description"
-              onChange={changeInputHandler}
+              onChange={(e) => {
+                const trimmedValue2 = e.target.value.slice(0, maxDesLength);
+                setPost({ ...setPost, description: trimmedValue2 });
+                setCurrentDesLength(trimmedValue2.length);
+              }}
+              required
               placeholder="내용을 입력해주세요"
             />
             <FlexRow

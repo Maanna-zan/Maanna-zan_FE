@@ -14,7 +14,12 @@ import {
   useGetLikePost,
   useGetPostdetail,
 } from '../../hook/post/useGetPost';
-import { FlexColumn, FlexRow } from '@components/Atoms/Flex';
+import {
+  FlexColumn,
+  FlexRow,
+  FlexRowCenter,
+  FlexRowSPB,
+} from '@components/Atoms/Flex';
 import { BoxTextReal } from '@components/Atoms/BoxTextReal';
 import { LikeHeartIcon, DisLikeHeartIcon } from '@components/Atoms/HeartIcon';
 import { ShareBtn } from '@components/Atoms/ShareBtn';
@@ -37,7 +42,7 @@ import Link from 'next/link';
 import { LoadingArea } from '@components/Modals/LoadingArea';
 import { routeChangeCompleteHandler } from '@utils/routeChangeCompleteHandler';
 
-const Community = () => {
+const Community = ({ post }) => {
   const { query } = useRouter();
   const router = useRouter();
   const { id } = router.query;
@@ -54,42 +59,29 @@ const Community = () => {
     }
   };
 
-  const token = cookies.get('access_token');
-  // const { data, isLoading, isError, isSuccess } = useQuery({
-  //   queryKey: ['GET_COMMENTS'],
-  //   queryFn: async () => {
-  //     const { data } = await apis.get(`/posts/${query.id}`, {
-  //       // headers: {
-  //       //   Access_Token: `${token}`,
-  //       // },
-  //     });
-  //     return data.data;
-  //   },
-  //   //enabled: -> 참일 때 실행시켜준다.
-  //   // enabled: Boolean(query.id),
-  //   onSuccess: () => {},
-  // });
-
-  // const {
-  //   postDetailData: [data],
-  //   postDetailIsLoading,
-  // } = useGetPostdetail({
-  //   postId: router.query.id,
-  // });
   const postId = query?.id;
   const { postDetailData: data, postDetailIsLoading } = useGetPostdetail({
     postId,
   });
 
   const [newPost, setNewPost] = useState({
-    title: '',
-    description: '',
+    title: data.title,
+    description: data.description,
     s3Url: null,
     taste: '',
     service: '',
     atmosphere: '',
     satisfaction: '',
   });
+
+  const [currentTitleLength, setCurrentTitleLength] = useState(
+    newPost?.title ? newPost?.title?.length : 0,
+  );
+  const [currentDesLength, setCurrentDesLength] = useState(
+    newPost?.description ? newPost?.description?.length : 0,
+  );
+  const [maxTitleLength] = useState(50);
+  const [maxDesLength] = useState(500);
 
   const { updatePost } = useUpdatePost(postId);
   const { deletePost, onSuccess } = useDeletePost();
@@ -110,14 +102,12 @@ const Community = () => {
     potLikeMatch = postsLike.data.posts;
   }
 
-
   const postLikeMine =
     potLikeMatch.find((p) => p.id === Number(query.id)) || {};
   const [like, setLike] = useState(postLikeMine.like);
   const postId2 = query.id;
   // console.log('좋아요찾기', postLikeMine);
   const likePostHandler = async (postId2) => {
-
     try {
       await likePost(postId);
       setLike(!like);
@@ -197,8 +187,8 @@ const Community = () => {
       return;
     }
     const formData = new FormData();
-    formData.append('title', newPost.title);
-    formData.append('description', newPost.description);
+    formData.append('title', data.title);
+    formData.append('description', data.description);
     formData.append('taste', data.taste);
     formData.append('service', data.service);
     formData.append('atmosphere', data.atmosphere);
@@ -212,19 +202,18 @@ const Community = () => {
     try {
       await updatePost(formData);
       setIsEditMode(false);
-      alert('게시물 내용이 변경되었습니다.');
       setNewPost({
         title: newPost.title,
         description: newPost.description,
         s3Url: newPost.s3Url || '',
       }); // 새로운 데이터로 상태 업데이트
+      // router.push(`/community/${data?.id}`);
     } catch (error) {
       // console.error(error);
     }
   };
 
   if (postDetailIsLoading) return <LoadingArea />;
-  console.log('data', data);
 
   //카테고리
   const categoryNames = data?.categoryName;
@@ -342,11 +331,19 @@ const Community = () => {
                     type="text"
                     id="title"
                     name="title"
-                    value={newPost?.title ?? ''}
-                    onChange={(e) =>
-                      setNewPost({ ...newPost, title: e.target.value })
-                    }
+                    value={newPost.title}
+                    onChange={(e) => {
+                      const trimmedValue = e.target.value.slice(
+                        0,
+                        maxTitleLength,
+                      );
+                      setNewPost({ ...newPost, title: trimmedValue });
+                      setCurrentTitleLength(trimmedValue.length);
+                    }}
                   />
+                  <span style={{ float: 'right' }}>
+                    {currentTitleLength}/{maxTitleLength}
+                  </span>
                 </FlexRow>
               </div>
               <FlexRow
@@ -449,16 +446,26 @@ const Community = () => {
                   marginTop: '8px',
                 }}
               >
-                <label
-                  htmlFor="description"
+                <FlexRowSPB
                   style={{
-                    font: `var(--label1-regular) Pretendard sans-serif`,
-                    marginBottom: '4px',
-                    marginLeft: '4px',
+                    padding: '4px',
+                    overflow: 'hidden',
+                    boxSizing: 'border-box',
                   }}
                 >
-                  내용
-                </label>
+                  <label
+                    htmlFor="description"
+                    style={{
+                      font: `var(--label1-regular) Pretendard sans-serif`,
+                      marginBottom: '4px',
+                    }}
+                  >
+                    내용
+                  </label>
+                  <span>
+                    {currentDesLength}/{maxDesLength}
+                  </span>
+                </FlexRowSPB>
                 <textarea
                   style={{
                     margin: '4px 8px',
@@ -472,9 +479,11 @@ const Community = () => {
                   id="description"
                   name="description"
                   value={newPost?.description ?? ''}
-                  onChange={(e) =>
-                    setNewPost({ ...newPost, description: e.target.value })
-                  }
+                  onChange={(e) => {
+                    const trimmedValue2 = e.target.value.slice(0, maxDesLength);
+                    setNewPost({ ...newPost, description: trimmedValue2 });
+                    setCurrentDesLength(trimmedValue2.length);
+                  }}
                   required
                 />
               </FlexColumn>
@@ -494,6 +503,9 @@ const Community = () => {
                   float: 'right',
                   marginTop: '18px',
                 }}
+                // onClick={() => {
+                //   router.push(`/community/${data?.id}`);
+                // }}
                 type="submit"
               >
                 <BoxTextReal

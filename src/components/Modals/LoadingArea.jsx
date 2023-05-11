@@ -18,6 +18,7 @@ export const LoadingArea = () => {
         height: 'calc(100vh - 80px)',
         alignItems: 'center',
         justifyContent: 'center',
+        gap: '30px',
       }}
     >
       <SpinningLoading>

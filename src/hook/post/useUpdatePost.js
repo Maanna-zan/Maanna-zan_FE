@@ -23,6 +23,8 @@ export const useUpdatePost = (postId) => {
     },
     {
       onSuccess: (data) => {
+        alert('게시물 내용이 변경되었습니다.');
+        router.push(`/community/${postId}`);
         queryClient.invalidateQueries(keys.GET_POSTS_UPDATE);
         // TODO: onSuccess 콜백 함수에서 필요한 작업 수행
       },
