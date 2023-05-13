@@ -189,6 +189,7 @@ const AddPostForm = () => {
               </BoxTextReal>
             </FlexColumn>
             <span style={{ textAlign: 'right' }}>
+              ``
               {currentTitleLength}/{maxTitleLength}
             </span>
             <input

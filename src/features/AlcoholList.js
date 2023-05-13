@@ -53,7 +53,7 @@ const AlcoholList = () => {
     fetchData();
   }, [useGetLikeStore]);
 
-  console.log('getView4', parseInt(getView2.totalElements));
+  //console.log('getView4', parseInt(getView2.totalElements));
   const totalSize = Math.ceil(parseInt(getView2.totalElements));
   const propTotalSize = Math.ceil(parseInt(getView2.totalElements));
   //탭
