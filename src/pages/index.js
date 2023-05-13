@@ -7,7 +7,7 @@ import React from 'react';
 const App = () => {
   return (
     <div>
-      <HeadInfo title="만나잔에 오신걸 환영합니다!" />
+      <HeadInfo title={`만나잔에 오신걸 환영합니다!`} />
       <MainFirstSection />
       <div style={{ margin: '145px 0 161px 0' }}>
         <MainSecondSection />
