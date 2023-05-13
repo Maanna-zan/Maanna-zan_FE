@@ -1,6 +1,7 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 import { ServerStyleSheet } from 'styled-components';
 import Script from 'next/script';
+import { HeadInfo } from '@components/Atoms/SEO/HeadInfo';
 //
 export default class MyDocument extends Document {
   static async getInitialProps(ctx) {
@@ -34,6 +35,7 @@ export default class MyDocument extends Document {
       <Html style={{ fontFamily: 'Pretendard, sans-serif' }}>
         <Head>
           {/* 폰트 CSS CDN */}
+          <HeadInfo />
 
           <link
             rel="stylesheet"
@@ -46,6 +48,11 @@ export default class MyDocument extends Document {
             }
           `}</style>
           <script src="https://developers.kakao.com/sdk/js/kakao.js"></script>
+          <Script
+            async
+            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5600473647639943"
+            crossorigin="anonymous"
+          ></Script>
         </Head>
         <body>
           <Main />
